@@ -53,7 +53,7 @@ CITIES = [
         "country": "Australia",
         "lat": -28.0167,
         "lon": 153.4000,
-    },  # 衝浪聖地
+    },  # 衝浪勝地
     {"name": "Lisbon", "country": "Portugal", "lat": 38.7223, "lon": -9.1393},
     {"name": "Hong Kong", "country": "China", "lat": 22.3193, "lon": 114.1694},
 ]
@@ -220,7 +220,7 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
 1. 💥 **熱血開場**
 2. 🏆 **精選焦點賽事 (2 個)**（看點、選手焦點、線上直播/觀賽途徑）
 3. 💡 **新手觀賽/入門小指南**
-4. 🏷️ 標籤：{cat_info['tag']} #AKOMARO_xGame
+4. 🏷️ 標籤：{cat_info['tag']} #xGameRadar #ExtremeSports
 """
   else:
     venue_name = fetch_osm_venue(category_key, city)
@@ -243,7 +243,7 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
 1. 📍 **場地介紹與地形亮點**（碗池/街式道具/浪況/岩壁特色）
 2. 🔰 **新手友善指南（Beginner Tips）**（入場時段、必備裝備）
 3. 🛹/🧗/🌊 **安全與玩家禮儀**（1 條核心安全潛規則）
-4. 🏷️ 標籤：{cat_info['tag']} #{city['name']} #AKOMARO_xGame
+4. 🏷️ 標籤：{cat_info['tag']} #{city['name']} #xGameRadar #ExtremeSports
 """
 
   try:
@@ -252,7 +252,6 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
     )
     full_text = response.text.strip()
 
-    # 解析封面標題與正文
     cover_title = f"{city['name']} · {cat_info['title'][:10]}"
     caption_text = full_text
 
@@ -269,7 +268,7 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
     print(f"❌ Gemini 生成失敗: {e}")
     return (
         f"{category_key} SPOTLIGHT",
-        "AKOMARO RADAR",
+        "XGAME RADAR",
         f"【{cat_info['title']}】今日最新情報更新！",
     )
 
@@ -280,7 +279,7 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
 def generate_cover_image(
     image_url,
     main_title,
-    sub_title="AKOMARO RADAR",
+    sub_title="XGAME RADAR",
     output_path="cover_output.jpg",
 ):
   """下載背景圖，繪製底部暗色漸層保護層並壓印標題"""
@@ -291,11 +290,9 @@ def generate_cover_image(
     print(f"⚠️ 背景圖片載入失敗，使用備用黑底: {e}")
     img = Image.new("RGBA", (1080, 1080), (20, 20, 20, 255))
 
-  # 統一為社群最佳 1080x1080 尺寸
   img = img.resize((1080, 1080), Image.Resampling.LANCZOS)
   width, height = img.size
 
-  # 建立黑曜漸層遮罩 (從 50% 高度向下漸暗)
   overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
   draw_overlay = ImageDraw.Draw(overlay)
   grad_start = int(height * 0.50)
@@ -307,7 +304,6 @@ def generate_cover_image(
   img = Image.alpha_composite(img, overlay)
   draw = ImageDraw.Draw(img)
 
-  # 載入中文字型 (支援 GitHub Actions Linux 環境與本機 Fallback)
   font_paths = [
       "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
       "/usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc",
@@ -330,7 +326,7 @@ def generate_cover_image(
     font_sub = ImageFont.load_default()
     font_brand = ImageFont.load_default()
 
-  # 繪製分類副標題 (亮黃色)
+  # 繪製分類副標題
   sub_y = int(height * 0.68)
   draw.text(
       (60, sub_y),
@@ -339,17 +335,17 @@ def generate_cover_image(
       fill=(255, 215, 0),
   )
 
-  # 繪製主標題 (白色粗體，每 12 字自動折行)
+  # 繪製主標題
   title_y = sub_y + 48
   lines = [main_title[i : i + 12] for i in range(0, len(main_title), 12)]
   for line in lines[:2]:
     draw.text((60, title_y), line, font=font_main, fill=(255, 255, 255))
     title_y += 68
 
-  # 繪製品牌微水印
+  # 繪製獨立專案浮水印
   draw.text(
       (60, int(height * 0.92)),
-      "AKOMARO · xGame Global Dispatch",
+      "xGame Radar · Global Action Sports Dispatch",
       font=font_brand,
       fill=(180, 180, 180),
   )
@@ -364,7 +360,6 @@ def generate_cover_image(
 # ==========================================
 def send_telegram_post(photo_path, message_text):
   url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendPhoto"
-  # Telegram Photo Caption 限制長度
   caption = (
       message_text[:950] + "..." if len(message_text) > 950 else message_text
   )
@@ -386,7 +381,6 @@ def send_telegram_post(photo_path, message_text):
   except Exception as e:
     print(f"⚠️ 圖片發布異常: {e}")
 
-  # 降級純文字發送
   print("🔄 切換為純文字訊息發送...")
   text_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
   requests.post(
@@ -404,7 +398,7 @@ def send_telegram_post(photo_path, message_text):
 # 8. 主程式排程進入點
 # ==========================================
 if __name__ == "__main__":
-  parser = argparse.ArgumentParser(description="AKOMARO xGame 自動發報系統")
+  parser = argparse.ArgumentParser(description="xGame Radar 全球發報系統")
   parser.add_argument(
       "-c",
       "--category",
@@ -414,7 +408,6 @@ if __name__ == "__main__":
   parser.add_argument("-l", "--lang", default="zh-hk")
   args = parser.parse_args()
 
-  # 自動輪播判定 (依據天數 4 篇一循環)
   if args.category == "AUTO":
     epoch_days = (
         datetime.now(timezone.utc) - datetime(1970, 1, 1, tzinfo=timezone.utc)
@@ -424,8 +417,8 @@ if __name__ == "__main__":
     cat = args.category
 
   print(
-      f"🚀 啟動 xGame 發報 -> 主題: [{cat}] | 語言: [{args.lang}] | 時間:"
-      f" {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+      f"🚀 啟動 xGame Radar 發報 -> 主題: [{cat}] | 語言: [{args.lang}] |"
+      f" 時間: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
   )
 
   # 1. 產生文案與封面標題
