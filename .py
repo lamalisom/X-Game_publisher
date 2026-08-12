@@ -1,10 +1,12 @@
 import argparse
 from datetime import datetime, timezone
+from io import BytesIO
 import os
 import random
 import feedparser
 from google import genai
 from google.genai.errors import APIError
+from PIL import Image, ImageDraw, ImageFont
 import requests
 
 # ==========================================
@@ -29,7 +31,7 @@ if missing_vars:
 client = genai.Client(api_key=GEMINI_API_KEY)
 
 # ==========================================
-# 2. 全球城市庫與輪播主題配置
+# 2. 全球城市與主題矩陣配置
 # ==========================================
 CITIES = [
     {"name": "Tokyo", "country": "Japan", "lat": 35.6762, "lon": 139.6503},
@@ -51,7 +53,7 @@ CITIES = [
         "country": "Australia",
         "lat": -28.0167,
         "lon": 153.4000,
-    },  # 衝浪勝地
+    },  # 衝浪聖地
     {"name": "Lisbon", "country": "Portugal", "lat": 38.7223, "lon": -9.1393},
     {"name": "Hong Kong", "country": "China", "lat": 22.3193, "lon": 114.1694},
 ]
@@ -83,7 +85,7 @@ XGAME_CATEGORIES = {
         "default_img": "https://images.pexels.com/photos/1126384/pexels-photo-1126384.jpeg",
     },
     "EVENT": {
-        "title": "🏆 全球 xGame 賽事與盛事雷達 (未來 2 個月)",
+        "title": "🏆 全球 xGame 賽事盛事雷達",
         "tag": "#XGames #WorldSkate #WSL #極限賽事 #賽事速報",
         "osm_tag": None,
         "pexels_queries": [
@@ -99,19 +101,19 @@ ROTATION_CYCLE = ["SKATE", "SURF", "CLIMB", "EVENT"]
 
 EVENT_RSS_FEEDS = [
     {
-        "org": "World Skate (官方賽事)",
+        "org": "World Skate",
         "url": "https://www.worldskate.org/events.feed?type=rss",
     },
     {
-        "org": "Red Bull Extreme Sports",
+        "org": "Red Bull Sports",
         "url": "https://www.redbull.com/feed/events.rss",
     },
-    {"org": "SurferToday Events", "url": "https://www.surfertoday.com/feed/rss"},
+    {"org": "SurferToday", "url": "https://www.surfertoday.com/feed/rss"},
 ]
 
 
 # ==========================================
-# 3. 數據獲取：OpenStreetMap & RSS
+# 3. 數據抓取：OpenStreetMap & RSS
 # ==========================================
 def fetch_osm_venue(category_key, city_obj):
   """調用開源 OpenStreetMap Overpass API 撈取該城市真實場地"""
@@ -185,9 +187,9 @@ def get_pexels_media(category_key):
 
 
 # ==========================================
-# 5. Gemini 2.5 Flash 智能文案生成
+# 5. Gemini 文案與封面標題生成
 # ==========================================
-def generate_xgame_post(category_key, target_lang="zh-hk"):
+def generate_xgame_content(category_key, target_lang="zh-hk"):
   city = random.choice(CITIES)
   cat_info = XGAME_CATEGORIES[category_key]
 
@@ -205,18 +207,19 @@ def generate_xgame_post(category_key, target_lang="zh-hk"):
 
     prompt = f"""
 你是一位全球極限運動（Action Sports / xGame）資深情報員。
-請以【{target_lang}】為社交媒體（Instagram / Telegram）撰寫一篇吸引人的「未來 2 個月全球極限運動賽事雷達」。
+請以【{target_lang}】為社交媒體（Instagram / Telegram）撰寫一篇「未來 2 個月全球極限運動賽事雷達」。
 
 {event_snippet}
 
 【目標受眾】：極限運動愛好者及剛接觸的新手
-【風格要求】：熱血、清晰、排版俐落、多用 Emoji，字數精簡在 300-450 字內。
+【風格要求】：熱血、清晰、排版俐落、多用 Emoji，字數精簡在 300-400 字內。
 
-【文案結構】：
-1. 💥 **熱血開場**：帶出極限賽季氛圍。
-2. 🏆 **未來 2 個月精選焦點賽事 (2-3 個)**：
-   - 介紹看點、選手技術焦點、線上直播/觀賽途徑。
-3. 💡 **新手觀賽/入門小指南**：給想開始嘗試該運動的新手 1 點入門心態或裝備建議。
+【輸出格式嚴格要求】：
+請務必在文案的最第一行輸出：`COVER_TITLE: [簡短有力的封面大標題，10-14字以內]`
+接著換兩行輸出正文內容：
+1. 💥 **熱血開場**
+2. 🏆 **精選焦點賽事 (2 個)**（看點、選手焦點、線上直播/觀賽途徑）
+3. 💡 **新手觀賽/入門小指南**
 4. 🏷️ 標籤：{cat_info['tag']} #AKOMARO_xGame
 """
   else:
@@ -232,12 +235,14 @@ def generate_xgame_post(category_key, target_lang="zh-hk"):
 
 【場地情境】：{venue_context}
 【目標受眾】：極限運動玩家與初學者（Beginners）
-【風格要求】：充滿熱情、具備實用指南價值、條理分明、避免生硬文字，字數約 300-450 字。
+【風格要求】：充滿熱情、具備實用指南價值、條理分明，字數約 300-400 字。
 
-【文案結構】：
-1. 📍 **場地介紹與地形亮點**：解析地形規格（如：碗池Bowl、街式Street道具、浪況或抱石壁面難度）。
-2. 🔰 **新手友善指南（Beginner Tips）**：入場時段建議（避開擁擠）、必備防護裝備。
-3. 🛹/🧗/🌊 **玩家禮儀與安全守則**：分享 1 條場地必知的安全禮儀（如：掉板警示、等待順序）。
+【輸出格式嚴格要求】：
+請務必在文案的最第一行輸出：`COVER_TITLE: [簡短有力的封面大標題，10-14字以內]`
+接著換兩行輸出正文內容：
+1. 📍 **場地介紹與地形亮點**（碗池/街式道具/浪況/岩壁特色）
+2. 🔰 **新手友善指南（Beginner Tips）**（入場時段、必備裝備）
+3. 🛹/🧗/🌊 **安全與玩家禮儀**（1 條核心安全潛規則）
 4. 🏷️ 標籤：{cat_info['tag']} #{city['name']} #AKOMARO_xGame
 """
 
@@ -245,37 +250,161 @@ def generate_xgame_post(category_key, target_lang="zh-hk"):
     response = client.models.generate_content(
         model="gemini-2.5-flash", contents=prompt
     )
-    return response.text
+    full_text = response.text.strip()
+
+    # 解析封面標題與正文
+    cover_title = f"{city['name']} · {cat_info['title'][:10]}"
+    caption_text = full_text
+
+    if "COVER_TITLE:" in full_text:
+      parts = full_text.split("COVER_TITLE:", 1)[1].split("\n", 1)
+      cover_title = (
+          parts[0].strip().replace("[", "").replace("]", "").replace("*", "")
+      )
+      caption_text = parts[1].strip() if len(parts) > 1 else full_text
+
+    sub_title = f"{city['name'].upper()} · {category_key}"
+    return cover_title, sub_title, caption_text
   except APIError as e:
     print(f"❌ Gemini 生成失敗: {e}")
-    return f"【{cat_info['title']}】今日最新情報更新！歡迎持續追蹤。"
+    return (
+        f"{category_key} SPOTLIGHT",
+        "AKOMARO RADAR",
+        f"【{cat_info['title']}】今日最新情報更新！",
+    )
 
 
 # ==========================================
-# 6. Telegram 智慧發布 (處理字數超限)
+# 6. 封面圖片合成 (Pillow 漸層遮罩 + 標題排版)
 # ==========================================
-def send_telegram_local_photo(photo_path, caption_text):
-  """上傳本地壓好字體的圖片與文案至 Telegram"""
+def generate_cover_image(
+    image_url,
+    main_title,
+    sub_title="AKOMARO RADAR",
+    output_path="cover_output.jpg",
+):
+  """下載背景圖，繪製底部暗色漸層保護層並壓印標題"""
+  try:
+    res = requests.get(image_url, timeout=15)
+    img = Image.open(BytesIO(res.content)).convert("RGBA")
+  except Exception as e:
+    print(f"⚠️ 背景圖片載入失敗，使用備用黑底: {e}")
+    img = Image.new("RGBA", (1080, 1080), (20, 20, 20, 255))
+
+  # 統一為社群最佳 1080x1080 尺寸
+  img = img.resize((1080, 1080), Image.Resampling.LANCZOS)
+  width, height = img.size
+
+  # 建立黑曜漸層遮罩 (從 50% 高度向下漸暗)
+  overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
+  draw_overlay = ImageDraw.Draw(overlay)
+  grad_start = int(height * 0.50)
+
+  for y in range(grad_start, height):
+    alpha = int(210 * ((y - grad_start) / (height - grad_start)))
+    draw_overlay.line([(0, y), (width, y)], fill=(0, 0, 0, alpha))
+
+  img = Image.alpha_composite(img, overlay)
+  draw = ImageDraw.Draw(img)
+
+  # 載入中文字型 (支援 GitHub Actions Linux 環境與本機 Fallback)
+  font_paths = [
+      "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
+      "/usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc",
+      "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+      "msjh.ttc",
+  ]
+  font_main, font_sub, font_brand = None, None, None
+  for path in font_paths:
+    if os.path.exists(path):
+      try:
+        font_main = ImageFont.truetype(path, 52)
+        font_sub = ImageFont.truetype(path, 28)
+        font_brand = ImageFont.truetype(path, 22)
+        break
+      except Exception:
+        continue
+
+  if not font_main:
+    font_main = ImageFont.load_default()
+    font_sub = ImageFont.load_default()
+    font_brand = ImageFont.load_default()
+
+  # 繪製分類副標題 (亮黃色)
+  sub_y = int(height * 0.68)
+  draw.text(
+      (60, sub_y),
+      f"● {sub_title}",
+      font=font_sub,
+      fill=(255, 215, 0),
+  )
+
+  # 繪製主標題 (白色粗體，每 12 字自動折行)
+  title_y = sub_y + 48
+  lines = [main_title[i : i + 12] for i in range(0, len(main_title), 12)]
+  for line in lines[:2]:
+    draw.text((60, title_y), line, font=font_main, fill=(255, 255, 255))
+    title_y += 68
+
+  # 繪製品牌微水印
+  draw.text(
+      (60, int(height * 0.92)),
+      "AKOMARO · xGame Global Dispatch",
+      font=font_brand,
+      fill=(180, 180, 180),
+  )
+
+  final_img = img.convert("RGB")
+  final_img.save(output_path, "JPEG", quality=92)
+  return output_path
+
+
+# ==========================================
+# 7. Telegram 本地合成圖文發布
+# ==========================================
+def send_telegram_post(photo_path, message_text):
   url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendPhoto"
-  with open(photo_path, "rb") as photo_file:
-    payload = {
-        "chat_id": TELEGRAM_CHAT_ID,
-        "caption": caption_text[:1000],  # 截取在安全字元長度
-        "parse_mode": "Markdown",
-    }
-    files = {"photo": photo_file}
-    res = requests.post(url, data=payload, files=files, timeout=20)
-    if res.status_code == 200:
-      print("✅ 成功發送「壓字封面圖 + 完整排版」至 Telegram！")
-  else:
-    print(f"⚠️ 發送失敗: {res_text.text}")
+  # Telegram Photo Caption 限制長度
+  caption = (
+      message_text[:950] + "..." if len(message_text) > 950 else message_text
+  )
+
+  try:
+    with open(photo_path, "rb") as photo_file:
+      payload = {
+          "chat_id": TELEGRAM_CHAT_ID,
+          "caption": caption,
+          "parse_mode": "Markdown",
+      }
+      files = {"photo": photo_file}
+      res = requests.post(url, data=payload, files=files, timeout=20)
+      if res.status_code == 200:
+        print("✅ 成功以【封面圖 + 完整排版】發布至 Telegram！")
+        return
+      else:
+        print(f"⚠️ 圖片發布返回錯誤: {res.text}")
+  except Exception as e:
+    print(f"⚠️ 圖片發布異常: {e}")
+
+  # 降級純文字發送
+  print("🔄 切換為純文字訊息發送...")
+  text_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+  requests.post(
+      text_url,
+      json={
+          "chat_id": TELEGRAM_CHAT_ID,
+          "text": message_text,
+          "parse_mode": "Markdown",
+      },
+      timeout=10,
+  )
 
 
 # ==========================================
-# 7. 主排程進入點 (每週 3 篇自動輪替)
+# 8. 主程式排程進入點
 # ==========================================
 if __name__ == "__main__":
-  parser = argparse.ArgumentParser(description="AKOMARO xGame 全球發布系統")
+  parser = argparse.ArgumentParser(description="AKOMARO xGame 自動發報系統")
   parser.add_argument(
       "-c",
       "--category",
@@ -285,7 +414,7 @@ if __name__ == "__main__":
   parser.add_argument("-l", "--lang", default="zh-hk")
   args = parser.parse_args()
 
-  # 自動輪播：基於天數推算，每週一三五發布時自動推進主題
+  # 自動輪播判定 (依據天數 4 篇一循環)
   if args.category == "AUTO":
     epoch_days = (
         datetime.now(timezone.utc) - datetime(1970, 1, 1, tzinfo=timezone.utc)
@@ -295,18 +424,24 @@ if __name__ == "__main__":
     cat = args.category
 
   print(
-      f"🚀 啟動 xGame 自動發報 -> 語言: [{args.lang}] | 主題: [{cat}] |"
-      f" 時間: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+      f"🚀 啟動 xGame 發報 -> 主題: [{cat}] | 語言: [{args.lang}] | 時間:"
+      f" {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
   )
 
-  # 1. AI 智能文案
-  post_content = generate_xgame_post(cat, args.lang)
+  # 1. 產生文案與封面標題
+  cover_title, sub_title, post_caption = generate_xgame_content(cat, args.lang)
+  print(f"📌 封面大標: {cover_title}")
   print("--------------------------------------------------")
-  print(post_content)
+  print(post_caption)
   print("--------------------------------------------------")
 
-  # 2. 抓取高畫質動態素材
-  media_url = get_pexels_media(cat)
+  # 2. 獲取背景底圖
+  bg_image_url = get_pexels_media(cat)
 
-  # 3. 發送至社群
-  send_telegram_post(media_url, post_content)
+  # 3. 本地合成封面圖片 (Pillow)
+  local_cover_file = generate_cover_image(
+      bg_image_url, cover_title, sub_title, "xgame_cover.jpg"
+  )
+
+  # 4. 發布至社群
+  send_telegram_post(local_cover_file, post_caption)
