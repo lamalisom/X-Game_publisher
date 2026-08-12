@@ -254,41 +254,19 @@ def generate_xgame_post(category_key, target_lang="zh-hk"):
 # ==========================================
 # 6. Telegram 智慧發布 (處理字數超限)
 # ==========================================
-def send_telegram_post(image_url, message_text):
-  # Telegram Caption 最大限制 1024 字元
-  if len(message_text) <= 1000:
-    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendPhoto"
+def send_telegram_local_photo(photo_path, caption_text):
+  """上傳本地壓好字體的圖片與文案至 Telegram"""
+  url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendPhoto"
+  with open(photo_path, "rb") as photo_file:
     payload = {
         "chat_id": TELEGRAM_CHAT_ID,
-        "photo": image_url,
-        "caption": message_text,
+        "caption": caption_text[:1000],  # 截取在安全字元長度
         "parse_mode": "Markdown",
     }
-    res = requests.post(url, json=payload, timeout=15)
+    files = {"photo": photo_file}
+    res = requests.post(url, data=payload, files=files, timeout=20)
     if res.status_code == 200:
-      print("✅ 成功以圖文模式發布至 Telegram！")
-      return
-
-  # 若字數較長或圖片發布失敗，先發照片再發文字訊息
-  photo_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendPhoto"
-  requests.post(
-      photo_url,
-      json={"chat_id": TELEGRAM_CHAT_ID, "photo": image_url},
-      timeout=10,
-  )
-
-  text_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-  res_text = requests.post(
-      text_url,
-      json={
-          "chat_id": TELEGRAM_CHAT_ID,
-          "text": message_text,
-          "parse_mode": "Markdown",
-      },
-      timeout=10,
-  )
-  if res_text.status_code == 200:
-    print("✅ 成功發送完整文案至 Telegram！")
+      print("✅ 成功發送「壓字封面圖 + 完整排版」至 Telegram！")
   else:
     print(f"⚠️ 發送失敗: {res_text.text}")
 
