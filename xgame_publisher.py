@@ -39,7 +39,7 @@ XGAME_CATEGORIES = {
     "EVENT": {
         "title": "全球賽事總覽 GLOBAL EVENTS",
         "osm_tag": None,
-        "tag": "#XGames #WorldSkate #WSL #ActionSports",
+        "tag": "#XGames #WorldSkate #WSL #極限運動",
     },
 }
 
@@ -109,7 +109,7 @@ def fetch_real_upcoming_events():
 
 
 # ==========================================
-# 5. Gemini 文案生成 (精準細節約束)
+# 5. Gemini 文案生成 (嚴格具體事實數據 Prompt)
 # ==========================================
 def generate_xgame_content(category_key, target_lang="zh-hk"):
   city = random.choice(CITIES)
@@ -130,23 +130,31 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
             for e in real_events
         ])
         if real_events
-        else "【熱門賽事】：X Games, World Skate 巡迴賽, WSL 錦標賽"
+        else "【熱門賽事參考】：X Games, World Skate 巡迴賽, WSL 錦標賽"
     )
 
     prompt = f"""
-你是一位極限運動快訊編輯 xGame Radar。請以【{target_lang}】撰寫一份精簡極限運動「賽事快報」。
+你是一位極限運動專業編輯 xGame Radar。請以【{target_lang}】針對主題 [{category_key}] 生成 Telegram 報報文案。
 
 {event_snippet}
 
 【嚴格要求】：
-1. 拒絕籠統套話（例如「全球高手雲集」、「各大平台直播」），必須包含具體賽事名稱、看點或資訊。
-2. 總字數必須控制在 150 字以內，清晰易讀。
+1. 拒絕籠統套話（例如：「各大平台同步直播」、「全球高手雲集」等抽象詞彙）。
+2. 必須提供【具體事實數據】：
+   - 具體比賽日期與時間 (例如 YYYY/MM/DD 或具體時間)
+   - 具體舉辦城市與場館
+   - 焦點選手或熱門項目 (至少舉出 2 個具體人名或項目)
+   - 官方直播/售票網址連結
 3. 第一行必須輸出：`COVER_TITLE: [簡短封面大標題，10-12字以內]`
-4. 正文格式：
-   🏆 **重點賽事**：[具體賽事名稱與舉辦地點]
-   ⚡ **核心看點**：[賽程亮點/熱門項目]
-   📺 **觀賽途徑**：[官方直播/轉播渠道]
-5. 結尾加上標籤：{cat_info['tag']} #xGameRadar
+4. 正文排版請嚴格保持以下結構：
+
+🏆 賽事名稱：[具體全名]
+📅 舉辦時間：[YYYY/MM/DD 或具體時區時間]
+📍 比賽地點：[城市, 場館]
+🔥 核心看點：[具體選手/熱門對決項目]
+📺 直播/官網：[附上官方網址]
+
+{cat_info['tag']} #xGameRadar
 """
   else:
     venue_name = fetch_osm_venue(category_key, city)
@@ -157,19 +165,22 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
     )
 
     prompt = f"""
-你是一位極限運動快訊編輯 xGame Radar。請以【{target_lang}】撰寫一份「{cat_info['title']}」精簡焦點情報。
+你是一位極限運動專業編輯 xGame Radar。請以【{target_lang}】針對主題 [{cat_info['title']}] 生成 Telegram 報報文案。
 
-【情境】：{venue_context}
+【情境資訊】：{venue_context}
 
 【嚴格要求】：
-1. 拒絕抽象套話，請給出明確特色與建議。
-2. 總字數必須控制在 150 字以內。
-3. 第一行必須輸出：`COVER_TITLE: [簡短封面大標題，10-12字以內]`
-4. 正文格式：
-   📍 **焦點場地**：[場地名稱與核心特色]
-   🔰 **新手必知**：[具體裝備或入門提醒]
-   ⚠️ **核心規則**：[具體安全或禮儀規範]
-5. 結尾加上標籤：{cat_info['tag']} #{city['name']} #xGameRadar
+1. 拒絕籠統套話，必須提供具體場地資訊、裝備建議與實用連結。
+2. 第一行必須輸出：`COVER_TITLE: [簡短封面大標題，10-12字以內]`
+3. 正文排版請嚴格保持以下結構：
+
+📍 焦點場地：[場地名稱與具體位置]
+🔥 核心特色：[具體設施/地形/浪況/岩壁特色]
+🔰 新手建議：[具體裝備或入門提醒]
+⚠️ 注意事項：[具體安全或場地禮儀規範]
+🌐 相關資訊：[官方或社群搜尋關鍵字/連結]
+
+{cat_info['tag']} #{city['name']} #xGameRadar
 """
 
   try:
@@ -195,7 +206,7 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
     return (
         f"{category_key} SPOTLIGHT",
         "XGAME RADAR",
-        f"【{cat_info['title']}】今日最新情報更新！\n\n#xGameRadar",
+        f"🏆 賽事名稱：{cat_info['title']} 今日最新情報\n#xGameRadar",
     )
 
 
