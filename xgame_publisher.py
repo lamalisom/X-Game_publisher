@@ -20,7 +20,7 @@ TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 PEXELS_API_KEY = os.getenv("PEXELS_API_KEY")
 
 # ==========================================
-# 2. 基本資料與分類設定 (擴充全球地點與印尼)
+# 2. 基本資料與分類設定 (全球熱門地點)
 # ==========================================
 XGAME_CATEGORIES = {
     "SKATE": {
@@ -49,24 +49,24 @@ XGAME_CATEGORIES = {
     },
 }
 
-# 全球城市與地點清單（含香港、台灣、瑞典、葡萄牙、印尼等衝浪/極限運動勝地）
+# 城市與地點清單（含香港、台灣、印尼、葡萄牙、瑞典等極限運動勝地）
 CITIES = [
     # 亞洲 Asia & 印尼專區 Indonesia
-    {"name": "Bali", "country": "Indonesia", "lat": -8.4095, "lon": 115.1889},      # 印尼峇里島（烏魯瓦圖/長谷）
-    {"name": "Mentawai", "country": "Indonesia", "lat": -2.1333, "lon": 99.5500},    # 印尼棉蘭威群島（頂級巨浪）
+    {"name": "Bali", "country": "Indonesia", "lat": -8.4095, "lon": 115.1889},      # 印尼峇里島
+    {"name": "Mentawai", "country": "Indonesia", "lat": -2.1333, "lon": 99.5500},    # 印尼棉蘭威群島
     {"name": "Lombok", "country": "Indonesia", "lat": -8.6509, "lon": 116.3249},     # 印尼龍目島
     {"name": "Jakarta", "country": "Indonesia", "lat": -6.2088, "lon": 106.8456},   # 印尼雅加達
     {"name": "Hong Kong", "country": "Hong Kong", "lat": 22.3193, "lon": 114.1694}, # 香港
     {"name": "Taipei", "country": "Taiwan", "lat": 25.0330, "lon": 121.5654},       # 台灣台北
-    {"name": "Taitung", "country": "Taiwan", "lat": 22.7583, "lon": 121.1444},      # 台灣台東（國際衝浪賽場）
-    {"name": "Yilan", "country": "Taiwan", "lat": 24.7570, "lon": 121.7530},        # 台灣宜蘭（外澳/蜜月灣）
+    {"name": "Taitung", "country": "Taiwan", "lat": 22.7583, "lon": 121.1444},      # 台灣台東
+    {"name": "Yilan", "country": "Taiwan", "lat": 24.7570, "lon": 121.7530},        # 台灣宜蘭
     {"name": "Tokyo", "country": "Japan", "lat": 35.6762, "lon": 139.6503},         # 日本東京
 
     # 歐洲 Europe
     {"name": "Stockholm", "country": "Sweden", "lat": 59.3293, "lon": 18.0686},     # 瑞典斯德哥爾摩
     {"name": "Lisbon", "country": "Portugal", "lat": 38.7223, "lon": -9.1393},      # 葡萄牙里斯本
-    {"name": "Nazaré", "country": "Portugal", "lat": 39.6028, "lon": -9.0717},      # 葡萄牙 Nazaré（世界巨浪天堂）
-    {"name": "Ericeira", "country": "Portugal", "lat": 38.9622, "lon": -9.4172},    # 葡萄牙世界衝浪保護區
+    {"name": "Nazaré", "country": "Portugal", "lat": 39.6028, "lon": -9.0717},      # 葡萄牙 Nazaré 巨浪鎮
+    {"name": "Ericeira", "country": "Portugal", "lat": 38.9622, "lon": -9.4172},    # 葡萄牙衝浪區
     {"name": "Barcelona", "country": "Spain", "lat": 41.3851, "lon": 2.1734},       # 西班牙巴塞隆納
     {"name": "Paris", "country": "France", "lat": 48.8566, "lon": 2.3522},          # 法國巴黎
     {"name": "Innsbruck", "country": "Austria", "lat": 47.2692, "lon": 11.4041},    # 奧地利因斯布魯克
@@ -82,7 +82,6 @@ CITIES = [
 # 3. 抓取 Pexels 實景圖片
 # ==========================================
 def fetch_pexels_image(keyword, width=1200, height=630):
-    """使用 Pexels API 抓取高畫質地點/運動實景圖"""
     if not PEXELS_API_KEY:
         print("ℹ️ 未檢測到 PEXELS_API_KEY，將切換至預設幾何底圖。")
         return None
@@ -178,7 +177,7 @@ def fetch_real_upcoming_events():
 
 
 # ==========================================
-# 5. Gemini 文案生成 (含 Una 個人簡介 + 全方位資訊)
+# 5. Gemini 文案生成 (嚴格分類 + 精簡字數)
 # ==========================================
 def generate_xgame_content(category_key, target_lang="zh-hk"):
     city = random.choice(CITIES)
@@ -195,28 +194,26 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
         event_snippet = "【最新賽程數據】：\n" + "\n".join([f"- {e['org']}: {e['title']} ({e['published']})" for e in real_events]) if real_events else "【熱門賽事參考】：X Games, World Skate 巡迴賽, WSL 錦標賽, IFSC 攀岩世界盃"
         
         prompt = f"""
-你是一位極限運動與浪人特派員 Una (IG: @Una_next)。請以【{target_lang}】針對主題 [{category_key}] 生成 Telegram/IG 報報文案。
+你是一位極限運動特派員 Una (IG: @Una_next)。請以【{target_lang}】針對全球極限賽事生成 Telegram/IG 精簡速報。
 
 {event_snippet}
 
 【嚴格要求】：
-1. 開頭必須包含 Una 的親切簡短招呼（例如：「👋 我係 Una (@Una_next)，今日為大家帶來全球極限賽事報導...」）。
-2. 拒絕抽象套話，必須提供【具體事實數據】：
-   - 比賽日期與時間
-   - 舉辦城市與具體場館
-   - 焦點選手 (舉出至少 2 位具體頂尖選手，例如：Janja Garnbret, Yuto Horigome, Gabriel Medina 等)
-   - 核心看點對決與官方直播/售票網址連結
-3. 第一行必須輸出：`COVER_TITLE: [簡短封面大標題，10-12字以內]`
-4. 正文排版請嚴格保持以下結構：
+1. 開頭包含 Una 短招呼語（如：「👋 我係 Una (@Una_next)！」）。
+2. 資訊必須【嚴格分開類別，獨立介紹】，絕不可揉杂在一起。
+3. 每個類別 1~2 句，總字數控制在 250 字內，精簡乾淨。
+4. 第一行必須輸出：`COVER_TITLE: [簡短封面大標題，10-12字以內]`
+5. 正文格式必須完全符合以下獨立分區：
 
-👋 我係 Una (@Una_next)！今日帶大家睇最新極限賽事情報：
+👋 我係 Una (@Una_next)！今日賽事情報速遞：
 
-🏆 賽事名稱：[具體全名]
-📅 舉辦時間：[YYYY/MM/DD 或具體時區時間]
-📍 比賽地點：[城市, 場館]
-👤 焦點選手：[具體選手人名 2 位]
-🔥 核心看點：[熱門對決項目/觀賽亮點]
-📺 直播/官網：[附上官方網址]
+📍【比賽場地】：[具體賽事場館/城市與環境重點]
+
+👤【參賽選手】：[具體列出 1-2 位焦點選手與亮點]
+
+🏆【比賽資料】：[賽事全名 + 舉辦時間/階段 + 官方連結]
+
+🔰【觀賽建議】：[1點重點注意事項或觀賽指南]
 
 — By Una (@Una_next)
 {cat_info['tag']} #xGameRadar
@@ -226,28 +223,26 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
         venue_context = f"地點：{city['country']} {city['name']}「{venue_name}」" if venue_name else f"地點：{city['country']} {city['name']} 知名{cat_info['title']}場地"
 
         prompt = f"""
-你是一位極限運動與浪人特派員 Una (IG: @Una_next)。請以【{target_lang}】針對主題 [{cat_info['title']}] 生成深度 Telegram/IG 介紹文案。
+你是一位極限運動與浪人特派員 Una (IG: @Una_next)。請以【{target_lang}】針對主題 [{cat_info['title']}] 生成 Telegram/IG 精簡介紹。
 
 【情境資訊】：{venue_context}
 
 【嚴格要求】：
-1. 開頭必須包含 Una 的個人化簡介語（例如：「👋 我係 Una (@Una_next)，今日帶大家探索...」）。
-2. 內容必須【全面包含場地、知名選手、裝備與賽事資訊】：
-   - 📍 焦點場地：介紹 {city['name']} 的該項運動知名場地/岩場/浪點。
-   - 👤 代表選手：必須列出至少 1-2 位該項目全球或當地的代表性選手（例如攀岩可提到 Janja Garnbret, Adam Ondra 或當地知名選手）。
-   - 🔥 核心特色：具體設施、地形、岩壁類型/難度分級 (如抱石 V等級 / 攀岩 5.x 路線 / 浪況浪型)。
-   - 🔰 裝備與新手建議：具體裝備必備清單（如岩鞋、粉袋、抱石墊/防寒衣/滑板板型）與入場安全須知。
-   - 🌐 賽事與官方資訊：相關國際組織 (如 IFSC / WSL / World Skate) 或賽事關鍵字連結。
-3. 第一行必須輸出：`COVER_TITLE: [簡短封面大標題，10-12字以內]`
-4. 正文排版請嚴格保持以下結構：
+1. 開頭包含 Una 短招呼語（如：「👋 我係 Una (@Una_next)！」）。
+2. 資訊必須【嚴格分開類別，獨立介紹】，絕不可混在一起。
+3. 每個類別 1~2 句即可，字數精簡短練（總字數 250 字內）。
+4. 第一行必須輸出：`COVER_TITLE: [簡短封面大標題，10-12字以內]`
+5. 正文格式必須完全符合以下獨立分區：
 
-👋 我係 Una (@Una_next)！今日帶大家深入認識【{cat_info['title']}】：
+👋 我係 Una (@Una_next)！今日極限情報：
 
-📍 焦點場地：[具體場場館/地點/岩場名稱]
-👤 代表選手：[具體知名選手 1-2 位與簡介]
-🔥 核心特色：[難度分級/岩壁地形/浪況設施]
-🔰 裝備與新手建議：[必備裝備與入場規範]
-🌐 賽事與官方資訊：[相關國際賽事/協會/官網關鍵字]
+📍【場地介紹】：[地點/場館名稱 + 地形/浪況/難度分級]
+
+👤【代表選手】：[列出 1-2 位具體知名選手與簡短背景]
+
+🏆【比賽資料】：[相關賽事名稱/國際巡迴賽/協會資訊]
+
+🔰【裝備與建議】：[必備裝備 + 1點安全提醒]
 
 — By Una (@Una_next)
 {cat_info['tag']} #{city['name']} #xGameRadar
@@ -269,8 +264,6 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
             caption_text = parts[1].strip() if len(parts) > 1 else full_text
 
         sub_title = f"{city['name'].upper()} · {category_key}"
-        
-        # 組合成 Pexels 搜尋關鍵字，例如 "surfing Mentawai Indonesia"
         search_query = f"{cat_info['query']} {city['name']} {city['country']}"
         return cover_title, sub_title, caption_text, search_query
     except APIError as e:
@@ -326,7 +319,6 @@ def get_font(size):
 
 
 def create_cover_image(cover_title, sub_title, query_keyword, output_path="cover.jpg"):
-    """優先抓取 Pexels 實景圖，若無則退回黑曜石底圖並壓字"""
     img = fetch_pexels_image(query_keyword)
     if img is None:
         img = create_obsidian_background(1200, 630)
@@ -428,7 +420,7 @@ def main():
 
     print(f"🚀 啟動 xGame Radar -> 主題: [{category_key}] | 語言: [{args.lang}]")
 
-    # 1. 生成文案與大標題 (含 Una 簡介 + 全方位內容 + 搜尋關鍵字)
+    # 1. 生成精簡分區文案與封面標題
     cover_title, sub_title, caption_text, query_keyword = generate_xgame_content(category_key, args.lang)
 
     # 2. 下載 Pexels 實景圖片並生成壓字封面
