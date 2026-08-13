@@ -173,7 +173,6 @@ def get_local_media(category_key):
   print("⚠️ 找不到本地圖片素材，將使用預設黑曜石幾何底圖。")
   return None
 
-
 # ==========================================
 # 5. Gemini 文案與封面標題生成
 # ==========================================
@@ -259,7 +258,87 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
         "XGAME RADAR",
         f"【{cat_info['title']}】今日最新情報更新！",
     )
+# ==========================================
+# 5. Gemini 文案與封面標題生成 (極簡精華版)
+# ==========================================
+def generate_xgame_content(category_key, target_lang="zh-hk"):
+  city = random.choice(CITIES)
+  cat_info = XGAME_CATEGORIES[category_key]
 
+  if category_key == "EVENT":
+    real_events = fetch_real_upcoming_events()
+    event_snippet = (
+        "【最新賽程數據】：\n"
+        + "\n".join([
+            f"- {e['org']}: {e['title']} ({e['published']})"
+            for e in real_events
+        ])
+        if real_events
+        else "【熱門賽事】：X Games, World Skate 巡迴賽, WSL 錦標賽"
+    )
+
+    prompt = f"""
+你是一位極限運動快訊編輯。請以【{target_lang}】撰寫一份「極簡賽事快報」。
+
+{event_snippet}
+
+【嚴格字數與格式要求】：
+1. 總字數必須控制在 120 字以內（不含標籤），只保留核心重要標題與重點，禁止長篇大論。
+2. 必須在第一行輸出：`COVER_TITLE: [簡短封面大標題，10-12字以內]`
+3. 正文只輸出 3 個極短列點：
+   - 🏆 **重點賽事**
+   - ⚡ **看點/時間**
+   - 📺 **觀賽途徑**
+4. 結尾加上標籤：{cat_info['tag']} #xGameRadar
+"""
+  else:
+    venue_name = fetch_osm_venue(category_key, city)
+    venue_context = (
+        f"地點：{city['country']} {city['name']}「{venue_name}」"
+        if venue_name
+        else f"地點：{city['country']} {city['name']}"
+    )
+
+    prompt = f"""
+你是一位極限運動快訊編輯。請以【{target_lang}】撰寫一份「{cat_info['title']}」極簡重點情報。
+
+【情境】：{venue_context}
+
+【嚴格字數與格式要求】：
+1. 總字數必須控制在 120 字以內（不含標籤），只保留核心重要標題與重點，禁止長篇大論。
+2. 必須在第一行輸出：`COVER_TITLE: [簡短封面大標題，10-12字以內]`
+3. 正文只輸出 3 個極短列點：
+   - 📍 **焦點場地**（一句話講述亮點）
+   - 🔰 **新手必知**（一句話重點提醒）
+   - ⚠️ **核心規則**（一句話安全/禮儀）
+4. 結尾加上標籤：{cat_info['tag']} #{city['name']} #xGameRadar
+"""
+
+  try:
+    response = client.models.generate_content(
+        model="gemini-2.5-flash", contents=prompt
+    )
+    full_text = response.text.strip()
+
+    cover_title = f"{city['name']} · {cat_info['title'][:10]}"
+    caption_text = full_text
+
+    if "COVER_TITLE:" in full_text:
+      parts = full_text.split("COVER_TITLE:", 1)[1].split("\n", 1)
+      cover_title = (
+          parts[0].strip().replace("[", "").replace("]", "").replace("*", "")
+      )
+      caption_text = parts[1].strip() if len(parts) > 1 else full_text
+
+    sub_title = f"{city['name'].upper()} · {category_key}"
+    return cover_title, sub_title, caption_text
+  except APIError as e:
+    print(f"❌ Gemini 生成失敗: {e}")
+    return (
+        f"{category_key} SPOTLIGHT",
+        "XGAME RADAR",
+        f"【{cat_info['title']}】今日最新情報更新！",
+    ) 
 
 # ==========================================
 # 6. 封面圖片合成 (Pillow 本地圖片 + 遮罩排版)
