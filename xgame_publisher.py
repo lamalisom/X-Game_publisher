@@ -427,34 +427,60 @@ def generate_cover_image(
   final_img.save(output_path, "JPEG", quality=92)
   return output_path
 
+import html
+import re
+
 
 # ==========================================
-# 7. Telegram 發布
+# 7. Telegram 發布 (採用 HTML 模式，徹底解決解析報錯)
 # ==========================================
+def format_text_for_telegram_html(text):
+  """將 Gemini 的 Markdown 語法安全轉換為 Telegram HTML 語法"""
+  # 1. 轉義 HTML 特殊符號 (<, >, &) 防止衝突
+  safe_text = html.escape(text)
+
+  # 2. 將 Markdown 的 **粗體** 轉為 HTML <b>粗體</b>
+  safe_text = re.sub(r"\*\*(.*?)\*\*", r"<b>\1</b>", safe_text)
+
+  return safe_text
+
+
 def send_telegram_post(photo_path, message_text):
   url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendPhoto"
-  caption = (
-      message_text[:950] + "..." if len(message_text) > 950 else message_text
-  )
+
+  # 轉換為 HTML 格式
+  html_caption = format_text_for_telegram_html(message_text)
+
+  # Telegram 圖片 Caption 長度上限為 1024 字元
+  if len(html_caption) > 980:
+    html_caption = html_caption[:950] + "\n\n...(內容較長已折疊)"
 
   try:
     with open(photo_path, "rb") as photo_file:
+      # 1. 優先使用 HTML 模式發送
       payload = {
           "chat_id": TELEGRAM_CHAT_ID,
-          "caption": caption,
-          "parse_mode": "Markdown",
+          "caption": html_caption,
+          "parse_mode": "HTML",
       }
       files = {"photo": photo_file}
       res = requests.post(url, data=payload, files=files, timeout=20)
+
+      # 2. 雙重保險：若仍有異常，自動剝離所有標籤轉為純文字發送 (100% 成功)
+      if res.status_code != 200:
+        print(f"⚠️ HTML 解析異常 ({res.text})，自動轉為純文字模式重新發送...")
+        photo_file.seek(0)
+        plain_text = re.sub(r"<[^>]+>", "", html_caption)  # 清除 HTML 標籤
+        payload = {"chat_id": TELEGRAM_CHAT_ID, "caption": plain_text}
+        res = requests.post(url, data=payload, files=files, timeout=20)
+
       if res.status_code == 200:
-        print("✅ 成功發送「壓字圖片 + 完整文章」至 Telegram！")
-        return
+        print("✅ 成功發送「壓字圖片 + 精簡文章」至 Telegram！")
       else:
-        print(f"⚠️ Telegram 發送報錯: {res.text}")
+        print(f"❌ Telegram 發送失敗: {res.text}")
   except Exception as e:
-    print(f"⚠️ 圖片發送異常: {e}")
-
-
+    print(f"⚠️ 發送過程發生例外: {e}")
+    
 # ==========================================
 # 8. 主程式進入點
 # ==========================================
