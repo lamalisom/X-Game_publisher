@@ -1,269 +1,125 @@
 import argparse
-from datetime import datetime, timezone
-import glob
+import html
 import os
 import random
+import re
+import sys
 import feedparser
 from google import genai
 from google.genai.errors import APIError
-from PIL import Image, ImageDraw, ImageFont
 import requests
+from PIL import Image, ImageDraw, ImageFont
 
 # ==========================================
-# 1. 環境變數驗證 (已移除 Pexels API Key)
+# 1. 環境變數設定
 # ==========================================
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
-missing_vars = []
-if not GEMINI_API_KEY:
-  missing_vars.append("GEMINI_API_KEY")
-if not TELEGRAM_BOT_TOKEN:
-  missing_vars.append("TELEGRAM_BOT_TOKEN")
-if not TELEGRAM_CHAT_ID:
-  missing_vars.append("TELEGRAM_CHAT_ID")
-
-if missing_vars:
-  raise ValueError(f"❌ 缺少必要環境變數: {', '.join(missing_vars)}")
-
-client = genai.Client(api_key=GEMINI_API_KEY)
-
 # ==========================================
-# 2. 全球城市與主題矩陣配置
+# 2. 基本資料與分類設定
 # ==========================================
-CITIES = [
-    {"name": "Tokyo", "country": "Japan", "lat": 35.6762, "lon": 139.6503},
-    {
-        "name": "Barcelona",
-        "country": "Spain",
-        "lat": 41.3851,
-        "lon": 2.1734,
-    },  # 滑板聖地
-    {
-        "name": "Los Angeles",
-        "country": "USA",
-        "lat": 34.0522,
-        "lon": -118.2437,
-    },  # Venice Beach
-    {"name": "London", "country": "UK", "lat": 51.5074, "lon": -0.1278},
-    {
-        "name": "Gold Coast",
-        "country": "Australia",
-        "lat": -28.0167,
-        "lon": 153.4000,
-    },  # 衝浪聖地
-    {"name": "Lisbon", "country": "Portugal", "lat": 38.7223, "lon": -9.1393},
-    {"name": "Hong Kong", "country": "China", "lat": 22.3193, "lon": 114.1694},
-]
-
 XGAME_CATEGORIES = {
     "SKATE": {
-        "title": "🛹 全球滑板場與街頭 Spot 探索",
-        "tag": "#Skateboarding #Skatepark #街頭滑板 #滑板新手",
-        "osm_tag": '["sport"="skateboard"]',
+        "title": "滑板 SKATEBOARDING",
+        "osm_tag": 'node["sport"="skateboard"]',
+        "tag": "#Skateboarding #SkatePark",
     },
     "SURF": {
-        "title": "🌊 全球浪點與衝浪指南",
-        "tag": "#Surfing #SurfSpot #衝浪人生 #浪人日記",
-        "osm_tag": '["sport"="surfing"]',
+        "title": "衝浪 SURFING",
+        "osm_tag": 'node["sport"="surfing"]',
+        "tag": "#Surfing #WaveRider",
     },
     "CLIMB": {
-        "title": "🧗 抱石與攀岩場地指南",
-        "tag": "#Bouldering #RockClimbing #抱石日常 #攀岩初學者",
-        "osm_tag": '["sport"="climbing"]',
+        "title": "攀岩 CLIMBING",
+        "osm_tag": 'node["sport"="climbing"]',
+        "tag": "#Bouldering #Climbing",
     },
     "EVENT": {
-        "title": "🏆 全球 xGame 賽事盛事雷達",
-        "tag": "#XGames #WorldSkate #WSL #極限賽事 #賽事速報",
+        "title": "全球賽事總覽 GLOBAL EVENTS",
         "osm_tag": None,
+        "tag": "#XGames #WorldSkate #WSL #ActionSports",
     },
 }
 
-ROTATION_CYCLE = ["SKATE", "SURF", "CLIMB", "EVENT"]
-
-EVENT_RSS_FEEDS = [
-    {
-        "org": "World Skate",
-        "url": "https://www.worldskate.org/events.feed?type=rss",
-    },
-    {
-        "org": "Red Bull Sports",
-        "url": "https://www.redbull.com/feed/events.rss",
-    },
-    {"org": "SurferToday", "url": "https://www.surfertoday.com/feed/rss"},
+CITIES = [
+    {"name": "Tokyo", "country": "Japan", "lat": 35.6762, "lon": 139.6503},
+    {"name": "Barcelona", "country": "Spain", "lat": 41.3851, "lon": 2.1734},
+    {"name": "Los Angeles", "country": "USA", "lat": 34.0522, "lon": -118.2437},
+    {"name": "Paris", "country": "France", "lat": 48.8566, "lon": 2.3522},
+    {"name": "Sydney", "country": "Australia", "lat": -33.8688, "lon": 151.2093},
 ]
 
 
 # ==========================================
-# 3. 數據抓取：OpenStreetMap & RSS
+# 3. 抓取 OpenStreetMap 場地資料
 # ==========================================
-def fetch_osm_venue(category_key, city_obj):
-  """調用開源 OpenStreetMap Overpass API 撈取該城市真實場地"""
-  osm_filter = XGAME_CATEGORIES[category_key]["osm_tag"]
-  if not osm_filter:
+def fetch_osm_venue(category_key, city):
+  cat_info = XGAME_CATEGORIES.get(category_key)
+  if not cat_info or not cat_info["osm_tag"]:
     return None
 
-  lat, lon = city_obj["lat"], city_obj["lon"]
+  lat, lon = city["lat"], city["lon"]
+  overpass_url = "https://overpass-api.de/api/interpreter"
   query = f"""
-    [out:json][timeout:15];
+    [out:json][timeout:10];
     (
-      node{osm_filter}(around:25000, {lat}, {lon});
-      way{osm_filter}(around:25000, {lat}, {lon});
+      {cat_info['osm_tag']}(around:20000, {lat}, {lon});
     );
-    out tags 5;
+    out body 5;
     """
   try:
-    url = "https://overpass-api.de/api/interpreter"
-    res = requests.post(url, data={"data": query}, timeout=12)
+    res = requests.post(overpass_url, data={"data": query}, timeout=10)
     if res.status_code == 200:
-      elements = res.json().get("elements", [])
-      named_venues = [
-          e["tags"]["name"] for e in elements if "name" in e.get("tags", {})
+      data = res.json()
+      elements = data.get("elements", [])
+      named_elements = [
+          e for e in elements if "tags" in e and "name" in e["tags"]
       ]
-      if named_venues:
-        return random.choice(named_venues)
+      if named_elements:
+        chosen = random.choice(named_elements)
+        return chosen["tags"].get("name")
   except Exception as e:
-    print(f"⚠️ OpenStreetMap 請求跳過: {e}")
+    print(f"⚠️ Overpass API 查詢失敗: {e}")
   return None
 
 
+# ==========================================
+# 4. 抓取 RSS 賽事資料
+# ==========================================
 def fetch_real_upcoming_events():
-  """從開源賽事 RSS 抓取最新官方發布賽程"""
+  rss_urls = [
+      ("World Skate", "http://www.worldskate.org/news?format=feed&type=rss"),
+      ("WSL Surfing", "https://www.worldsurfleague.com/rss"),
+  ]
   events = []
-  for source in EVENT_RSS_FEEDS:
+  for org, url in rss_urls:
     try:
-      feed = feedparser.parse(source["url"])
+      feed = feedparser.parse(url)
       for entry in feed.entries[:2]:
         events.append({
-            "org": source["org"],
+            "org": org,
             "title": entry.title,
-            "published": getattr(entry, "published", "近期舉辦"),
+            "published": getattr(entry, "published", "近期"),
         })
     except Exception as e:
-      print(f"⚠️ 賽事 RSS 抓取跳過 ({source['org']}): {e}")
+      print(f"⚠️ RSS ({org}) 解析失敗: {e}")
   return events
 
 
 # ==========================================
-# 4. 本地圖片讀取 (方案 A 核心邏輯)
-# ==========================================
-def get_local_media(category_key):
-  """隨機讀取 assets/<category>/ 資料夾內的圖片"""
-  category_dir = os.path.join("assets", category_key.lower())
-
-  image_extensions = ("*.jpg", "*.jpeg", "*.png", "*.webp")
-  image_files = []
-
-  # 1. 優先從專屬主題資料夾撈圖 (如 assets/skate/)
-  if os.path.exists(category_dir):
-    for ext in image_extensions:
-      image_files.extend(glob.glob(os.path.join(category_dir, ext)))
-
-  # 2. 若專屬資料夾沒圖，嘗試從 assets/ 根目錄撈圖
-  if not image_files and os.path.exists("assets"):
-    for ext in image_extensions:
-      image_files.extend(glob.glob(os.path.join("assets", ext)))
-
-  if image_files:
-    chosen_file = random.choice(image_files)
-    print(f"🖼️ 使用本地素材照片: {chosen_file}")
-    return chosen_file
-
-  print("⚠️ 找不到本地圖片素材，將使用預設黑曜石幾何底圖。")
-  return None
-
-# ==========================================
-# 5. Gemini 文案與封面標題生成
+# 5. Gemini 文案生成 (精準細節約束)
 # ==========================================
 def generate_xgame_content(category_key, target_lang="zh-hk"):
   city = random.choice(CITIES)
-  cat_info = XGAME_CATEGORIES[category_key]
+  cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES["EVENT"])
 
-  if category_key == "EVENT":
-    real_events = fetch_real_upcoming_events()
-    event_snippet = (
-        "【官方最新公開賽程】：\n"
-        + "\n".join([
-            f"- {e['org']}: {e['title']} ({e['published']})"
-            for e in real_events
-        ])
-        if real_events
-        else "【即將來臨的經典賽事】：X Games, World Skate 巡迴賽, WSL 冠軍巡迴賽"
-    )
+  if not GEMINI_API_KEY:
+    print("❌ 錯誤: 未設定 GEMINI_API_KEY 環境變數")
+    sys.exit(1)
 
-    prompt = f"""
-你是一位全球極限運動（Action Sports / xGame）資深情報員。
-請以【{target_lang}】為社交媒體（Instagram / Telegram）撰寫一篇「未來 2 個月全球極限運動賽事雷達」。
-
-{event_snippet}
-
-【目標受眾】：極限運動愛好者及剛接觸的新手
-【風格要求】：熱血、清晰、排版俐落、多用 Emoji，字數精簡在 300-400 字內。
-
-【輸出格式嚴格要求】：
-請務必在文案的最第一行輸出：`COVER_TITLE: [簡短有力的封面大標題，10-14字以內]`
-接著換兩行輸出正文內容：
-1. 💥 **熱血開場**
-2. 🏆 **精選焦點賽事 (2 個)**（看點、選手焦點、線上直播/觀賽途徑）
-3. 💡 **新手觀賽/入門小指南**
-4. 🏷️ 標籤：{cat_info['tag']} #xGameRadar #ExtremeSports
-"""
-  else:
-    venue_name = fetch_osm_venue(category_key, city)
-    venue_context = (
-        f"位於 {city['country']} {city['name']} 的真實熱門點「{venue_name}」"
-        if venue_name
-        else f"{city['country']} {city['name']} 的代表性極限運動場地"
-    )
-
-    prompt = f"""
-你是一位專業極限運動嚮導。請以【{target_lang}】為社交媒體撰寫一篇關於【{cat_info['title']}】的實用指南。
-
-【場地情境】：{venue_context}
-【目標受眾】：極限運動玩家與初學者（Beginners）
-【風格要求】：充滿熱情、具備實用指南價值、條理分明，字數約 300-400 字。
-
-【輸出格式嚴格要求】：
-請務必在文案的最第一行輸出：`COVER_TITLE: [簡短有力的封面大標題，10-14字以內]`
-接著換兩行輸出正文內容：
-1. 📍 **場地介紹與地形亮點**（碗池/街式道具/浪況/岩壁特色）
-2. 🔰 **新手友善指南（Beginner Tips）**（入場時段、必備裝備）
-3. 🛹/🧗/🌊 **安全與玩家禮儀**（1 條核心安全潛規則）
-4. 🏷️ 標籤：{cat_info['tag']} #{city['name']} #xGameRadar #ExtremeSports
-"""
-
-  try:
-    response = client.models.generate_content(
-        model="gemini-2.5-flash", contents=prompt
-    )
-    full_text = response.text.strip()
-
-    cover_title = f"{city['name']} · {cat_info['title'][:10]}"
-    caption_text = full_text
-
-    if "COVER_TITLE:" in full_text:
-      parts = full_text.split("COVER_TITLE:", 1)[1].split("\n", 1)
-      cover_title = (
-          parts[0].strip().replace("[", "").replace("]", "").replace("*", "")
-      )
-      caption_text = parts[1].strip() if len(parts) > 1 else full_text
-
-    sub_title = f"{city['name'].upper()} · {category_key}"
-    return cover_title, sub_title, caption_text
-  except APIError as e:
-    print(f"❌ Gemini 生成失敗: {e}")
-    return (
-        f"{category_key} SPOTLIGHT",
-        "XGAME RADAR",
-        f"【{cat_info['title']}】今日最新情報更新！",
-    )
-# ==========================================
-# 5. Gemini 文案與封面標題生成 (極簡精華版)
-# ==========================================
-def generate_xgame_content(category_key, target_lang="zh-hk"):
-  city = random.choice(CITIES)
-  cat_info = XGAME_CATEGORIES[category_key]
+  client = genai.Client(api_key=GEMINI_API_KEY)
 
   if category_key == "EVENT":
     real_events = fetch_real_upcoming_events()
@@ -278,18 +134,19 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
     )
 
     prompt = f"""
-你是一位極限運動快訊編輯。請以【{target_lang}】撰寫一份「極簡賽事快報」。
+你是一位極限運動快訊編輯 xGame Radar。請以【{target_lang}】撰寫一份精簡極限運動「賽事快報」。
 
 {event_snippet}
 
-【嚴格字數與格式要求】：
-1. 總字數必須控制在 120 字以內（不含標籤），只保留核心重要標題與重點，禁止長篇大論。
-2. 必須在第一行輸出：`COVER_TITLE: [簡短封面大標題，10-12字以內]`
-3. 正文只輸出 3 個極短列點：
-   - 🏆 **重點賽事**
-   - ⚡ **看點/時間**
-   - 📺 **觀賽途徑**
-4. 結尾加上標籤：{cat_info['tag']} #xGameRadar
+【嚴格要求】：
+1. 拒絕籠統套話（例如「全球高手雲集」、「各大平台直播」），必須包含具體賽事名稱、看點或資訊。
+2. 總字數必須控制在 150 字以內，清晰易讀。
+3. 第一行必須輸出：`COVER_TITLE: [簡短封面大標題，10-12字以內]`
+4. 正文格式：
+   🏆 **重點賽事**：[具體賽事名稱與舉辦地點]
+   ⚡ **核心看點**：[賽程亮點/熱門項目]
+   📺 **觀賽途徑**：[官方直播/轉播渠道]
+5. 結尾加上標籤：{cat_info['tag']} #xGameRadar
 """
   else:
     venue_name = fetch_osm_venue(category_key, city)
@@ -300,18 +157,19 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
     )
 
     prompt = f"""
-你是一位極限運動快訊編輯。請以【{target_lang}】撰寫一份「{cat_info['title']}」極簡重點情報。
+你是一位極限運動快訊編輯 xGame Radar。請以【{target_lang}】撰寫一份「{cat_info['title']}」精簡焦點情報。
 
 【情境】：{venue_context}
 
-【嚴格字數與格式要求】：
-1. 總字數必須控制在 120 字以內（不含標籤），只保留核心重要標題與重點，禁止長篇大論。
-2. 必須在第一行輸出：`COVER_TITLE: [簡短封面大標題，10-12字以內]`
-3. 正文只輸出 3 個極短列點：
-   - 📍 **焦點場地**（一句話講述亮點）
-   - 🔰 **新手必知**（一句話重點提醒）
-   - ⚠️ **核心規則**（一句話安全/禮儀）
-4. 結尾加上標籤：{cat_info['tag']} #{city['name']} #xGameRadar
+【嚴格要求】：
+1. 拒絕抽象套話，請給出明確特色與建議。
+2. 總字數必須控制在 150 字以內。
+3. 第一行必須輸出：`COVER_TITLE: [簡短封面大標題，10-12字以內]`
+4. 正文格式：
+   📍 **焦點場地**：[場地名稱與核心特色]
+   🔰 **新手必知**：[具體裝備或入門提醒]
+   ⚠️ **核心規則**：[具體安全或禮儀規範]
+5. 結尾加上標籤：{cat_info['tag']} #{city['name']} #xGameRadar
 """
 
   try:
@@ -337,127 +195,136 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
     return (
         f"{category_key} SPOTLIGHT",
         "XGAME RADAR",
-        f"【{cat_info['title']}】今日最新情報更新！",
-    ) 
+        f"【{cat_info['title']}】今日最新情報更新！\n\n#xGameRadar",
+    )
+
 
 # ==========================================
-# 6. 封面圖片合成 (Pillow 本地圖片 + 遮罩排版)
+# 6. 底圖與繪製 (黑曜石科技漸層風格)
 # ==========================================
-def generate_cover_image(
-    image_path,
-    main_title,
-    sub_title="XGAME RADAR",
-    output_path="cover_output.jpg",
-):
-  """載入本地圖片，繪製漸層遮罩並壓印標題"""
-  if image_path and os.path.exists(image_path):
-    try:
-      img = Image.open(image_path).convert("RGBA")
-    except Exception as e:
-      print(f"⚠️ 開啟本地圖片失敗: {e}，改用深色底圖")
-      img = Image.new("RGBA", (1080, 1080), (18, 18, 18, 255))
-  else:
-    # 若沒有圖片素材，使用黑曜石極簡底底色
-    img = Image.new("RGBA", (1080, 1080), (18, 18, 18, 255))
+def create_obsidian_background(width=1200, height=630):
+  """產生深色霓虹幾何漸層底圖，避免圖片純黑質感差"""
+  base = Image.new("RGB", (width, height))
+  draw = ImageDraw.Draw(base)
 
-  # 統一裁切與縮放為正方形 1080x1080
-  img = img.resize((1080, 1080), Image.Resampling.LANCZOS)
-  width, height = img.size
+  # 1. 繪製深紫藍至黑色的漸層
+  for y in range(height):
+    r = int(18 - (y / height) * 12)
+    g = int(14 - (y / height) * 10)
+    b = int(38 - (y / height) * 24)
+    draw.line([(0, y), (width, y)], fill=(r, g, b))
 
-  # 建立底部暗色漸層遮罩
-  overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
+  # 2. 科技感網格與霓虹光斑
+  overlay = Image.new("RGBA", (width, height), (0, 0, 0, 0))
   draw_overlay = ImageDraw.Draw(overlay)
-  grad_start = int(height * 0.48)
 
-  for y in range(grad_start, height):
-    alpha = int(220 * ((y - grad_start) / (height - grad_start)))
-    draw_overlay.line([(0, y), (width, y)], fill=(0, 0, 0, alpha))
+  grid_size = 40
+  grid_color = (0, 210, 255, 12)
 
-  img = Image.alpha_composite(img, overlay)
-  draw = ImageDraw.Draw(img)
+  for x in range(0, width, grid_size):
+    draw_overlay.line([(x, 0), (x, height)], fill=grid_color, width=1)
+  for y in range(0, height, grid_size):
+    draw_overlay.line([(0, y), (width, y)], fill=grid_color, width=1)
 
-  # 載入字型
+  # 光斑
+  draw_overlay.ellipse([-100, -100, 450, 450], fill=(138, 43, 226, 30))
+  draw_overlay.ellipse(
+      [width - 350, height - 350, width + 100, height + 100],
+      fill=(0, 212, 255, 25),
+  )
+
+  final_bg = Image.alpha_composite(base.convert("RGBA"), overlay)
+  return final_bg.convert("RGB")
+
+
+def get_font(size):
+  """尋找可用中文字型"""
   font_paths = [
       "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
       "/usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc",
-      "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-      "msjh.ttc",
+      "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+      "C:/Windows/Fonts/msjh.ttc",
+      "/System/Library/Fonts/PingFang.ttc",
   ]
-  font_main, font_sub, font_brand = None, None, None
   for path in font_paths:
     if os.path.exists(path):
       try:
-        font_main = ImageFont.truetype(path, 52)
-        font_sub = ImageFont.truetype(path, 28)
-        font_brand = ImageFont.truetype(path, 22)
-        break
+        return ImageFont.truetype(path, size)
       except Exception:
-        continue
+        pass
+  return ImageFont.load_default()
 
-  if not font_main:
-    font_main = ImageFont.load_default()
-    font_sub = ImageFont.load_default()
-    font_brand = ImageFont.load_default()
 
-  # 繪製分類副標題 (螢光黃)
-  sub_y = int(height * 0.68)
-  draw.text(
-      (60, sub_y),
-      f"● {sub_title}",
-      font=font_sub,
-      fill=(255, 215, 0),
-  )
+def create_cover_image(cover_title, sub_title, output_path="cover.jpg"):
+  """生成帶有幾何質感與大標題壓字的封面圖"""
+  img = create_obsidian_background(1200, 630)
+  draw = ImageDraw.Draw(img)
 
-  # 繪製主標題
-  title_y = sub_y + 48
-  lines = [main_title[i : i + 12] for i in range(0, len(main_title), 12)]
+  font_sub = get_font(24)
+  font_main = get_font(52)
+  font_footer = get_font(20)
+
+  # 黃色圓點 + 副標題
+  draw.ellipse([80, 215, 92, 227], fill=(255, 204, 0))
+  draw.text((102, 208), sub_title, font=font_sub, fill=(255, 204, 0))
+
+  # 主標題自動分行
+  max_width = 1000
+  lines = []
+  current_line = ""
+  for char in cover_title:
+    test_line = current_line + char
+    bbox = draw.textbbox((0, 0), test_line, font=font_main)
+    if bbox[2] - bbox[0] > max_width:
+      lines.append(current_line)
+      current_line = char
+    else:
+      current_line = test_line
+  if current_line:
+    lines.append(current_line)
+
+  y_offset = 260
   for line in lines[:2]:
-    draw.text((60, title_y), line, font=font_main, fill=(255, 255, 255))
-    title_y += 68
+    draw.text((80, y_offset), line, font=font_main, fill=(255, 255, 255))
+    y_offset += 70
 
-  # 繪製品牌標籤
+  # 頁尾
   draw.text(
-      (60, int(height * 0.92)),
+      (80, 530),
       "xGame Radar · Global Action Sports Dispatch",
-      font=font_brand,
-      fill=(180, 180, 180),
+      font=font_footer,
+      fill=(160, 160, 170),
   )
 
-  final_img = img.convert("RGB")
-  final_img.save(output_path, "JPEG", quality=92)
+  img.save(output_path, quality=95)
+  print(f"🎨 封面圖片已成功生成: {output_path}")
   return output_path
 
-import html
-import re
-
 
 # ==========================================
-# 7. Telegram 發布 (採用 HTML 模式，徹底解決解析報錯)
+# 7. Telegram 發布 (HTML 模式 + 降級保護)
 # ==========================================
 def format_text_for_telegram_html(text):
-  """將 Gemini 的 Markdown 語法安全轉換為 Telegram HTML 語法"""
-  # 1. 轉義 HTML 特殊符號 (<, >, &) 防止衝突
+  """將 Markdown 安全轉義為 Telegram HTML"""
   safe_text = html.escape(text)
-
-  # 2. 將 Markdown 的 **粗體** 轉為 HTML <b>粗體</b>
   safe_text = re.sub(r"\*\*(.*?)\*\*", r"<b>\1</b>", safe_text)
-
   return safe_text
 
 
 def send_telegram_post(photo_path, message_text):
-  url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendPhoto"
+  if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
+    print("❌ 缺少 TELEGRAM_BOT_TOKEN 或 TELEGRAM_CHAT_ID 環境變數")
+    return
 
-  # 轉換為 HTML 格式
+  url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendPhoto"
   html_caption = format_text_for_telegram_html(message_text)
 
-  # Telegram 圖片 Caption 長度上限為 1024 字元
   if len(html_caption) > 980:
     html_caption = html_caption[:950] + "\n\n...(內容較長已折疊)"
 
   try:
     with open(photo_path, "rb") as photo_file:
-      # 1. 優先使用 HTML 模式發送
+      # 1. 優先使用 HTML 發送
       payload = {
           "chat_id": TELEGRAM_CHAT_ID,
           "caption": html_caption,
@@ -466,11 +333,13 @@ def send_telegram_post(photo_path, message_text):
       files = {"photo": photo_file}
       res = requests.post(url, data=payload, files=files, timeout=20)
 
-      # 2. 雙重保險：若仍有異常，自動剝離所有標籤轉為純文字發送 (100% 成功)
+      # 2. 自動降級為純文字發送 (防止語法解析崩潰)
       if res.status_code != 200:
-        print(f"⚠️ HTML 解析異常 ({res.text})，自動轉為純文字模式重新發送...")
+        print(
+            f"⚠️ HTML 解析異常 ({res.text})，自動降級為純文字模式重新發送..."
+        )
         photo_file.seek(0)
-        plain_text = re.sub(r"<[^>]+>", "", html_caption)  # 清除 HTML 標籤
+        plain_text = re.sub(r"<[^>]+>", "", html_caption)
         payload = {"chat_id": TELEGRAM_CHAT_ID, "caption": plain_text}
         res = requests.post(url, data=payload, files=files, timeout=20)
 
@@ -479,42 +348,49 @@ def send_telegram_post(photo_path, message_text):
       else:
         print(f"❌ Telegram 發送失敗: {res.text}")
   except Exception as e:
-    print(f"⚠️ 發送過程發生例外: {e}")
-    
+    print(f"⚠️ Telegram 發送過程異常: {e}")
+
+
 # ==========================================
 # 8. 主程式進入點
 # ==========================================
-if __name__ == "__main__":
-  parser = argparse.ArgumentParser(description="xGame Radar 全球發報系統")
+def main():
+  parser = argparse.ArgumentParser(description="xGame Publisher Script")
   parser.add_argument(
       "-c",
       "--category",
       default="AUTO",
       choices=["AUTO", "SKATE", "SURF", "CLIMB", "EVENT"],
+      help="主題類別",
   )
-  parser.add_argument("-l", "--lang", default="zh-hk")
+  parser.add_argument(
+      "-l",
+      "--lang",
+      default="zh-hk",
+      choices=["zh-hk", "zh-cn", "ja", "en"],
+      help="發布語言",
+  )
   args = parser.parse_args()
 
-  if args.category == "AUTO":
-    epoch_days = (
-        datetime.now(timezone.utc) - datetime(1970, 1, 1, tzinfo=timezone.utc)
-    ).days
-    cat = ROTATION_CYCLE[epoch_days % len(ROTATION_CYCLE)]
-  else:
-    cat = args.category
+  category_key = args.category
+  if category_key == "AUTO":
+    category_key = random.choice(["SKATE", "SURF", "CLIMB", "EVENT"])
 
-  print(f"🚀 啟動 xGame Radar -> 主題: [{cat}] | 語言: [{args.lang}]")
-
-  # 1. 產生文案與封面標題
-  cover_title, sub_title, post_caption = generate_xgame_content(cat, args.lang)
-
-  # 2. 獲取本地圖片路徑 (方案 A)
-  local_image_path = get_local_media(cat)
-
-  # 3. 合成封面圖片
-  cover_file = generate_cover_image(
-      local_image_path, cover_title, sub_title, "xgame_cover.jpg"
+  print(
+      f"🚀 啟動 xGame Radar -> 主題: [{category_key}] | 語言: [{args.lang}]"
   )
 
-  # 4. 發布至 Telegram
-  send_telegram_post(cover_file, post_caption)
+  # 1. 生成文案與大標題
+  cover_title, sub_title, caption_text = generate_xgame_content(
+      category_key, args.lang
+  )
+
+  # 2. 生成黑曜石幾何壓字圖片
+  photo_path = create_cover_image(cover_title, sub_title, "xgame_post.jpg")
+
+  # 3. 發布至 Telegram
+  send_telegram_post(photo_path, caption_text)
+
+
+if __name__ == "__main__":
+  main()
