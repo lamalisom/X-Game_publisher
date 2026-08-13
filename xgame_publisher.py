@@ -1,5 +1,6 @@
 import argparse
 import html
+import io
 import os
 import random
 import re
@@ -8,7 +9,7 @@ import feedparser
 from google import genai
 from google.genai.errors import APIError
 import requests
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageEnhance, ImageFont
 
 # ==========================================
 # 1. 環境變數設定
@@ -16,6 +17,7 @@ from PIL import Image, ImageDraw, ImageFont
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+PEXELS_API_KEY = os.getenv("PEXELS_API_KEY")  # Pexels API 金鑰
 
 # ==========================================
 # 2. 基本資料與分類設定
@@ -23,21 +25,25 @@ TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 XGAME_CATEGORIES = {
     "SKATE": {
         "title": "滑板 SKATEBOARDING",
+        "query": "skateboarding park",
         "osm_tag": 'node["sport"="skateboard"]',
         "tag": "#Skateboarding #SkatePark",
     },
     "SURF": {
         "title": "衝浪 SURFING",
+        "query": "surfing ocean waves",
         "osm_tag": 'node["sport"="surfing"]',
-        "tag": "#Surfing #WaveRider",
+        "tag": "#Surfing #WaveRider #浪人日常",
     },
     "CLIMB": {
         "title": "攀岩 CLIMBING",
+        "query": "bouldering climbing wall",
         "osm_tag": 'node["sport"="climbing"]',
         "tag": "#Bouldering #Climbing",
     },
     "EVENT": {
         "title": "全球賽事總覽 GLOBAL EVENTS",
+        "query": "action sports event",
         "osm_tag": None,
         "tag": "#XGames #WorldSkate #WSL #極限運動",
     },
@@ -53,7 +59,56 @@ CITIES = [
 
 
 # ==========================================
-# 3. 抓取 OpenStreetMap 場地資料
+# 3. 抓取 Pexels 實景圖片
+# ==========================================
+def fetch_pexels_image(keyword, width=1200, height=630):
+  """使用 Pexels API 抓取高畫質地點/運動實景圖"""
+  if not PEXELS_API_KEY:
+    print("ℹ️ 未檢測到 PEXELS_API_KEY，將切換至預設幾何底圖。")
+    return None
+
+  url = f"https://api.pexels.com/v1/search?query={keyword}&per_page=5&orientation=landscape"
+  headers = {"Authorization": PEXELS_API_KEY}
+
+  try:
+    res = requests.get(url, headers=headers, timeout=10)
+    if res.status_code == 200:
+      data = res.json()
+      photos = data.get("photos", [])
+      if photos:
+        # 隨機挑選一張圖片避免重複
+        photo_url = random.choice(photos)["src"]["large2x"]
+        img_res = requests.get(photo_url, timeout=10)
+        img = Image.open(io.BytesIO(img_res.content)).convert("RGB")
+
+        # 裁切與縮放至 1200x630
+        img_ratio = img.width / img.height
+        target_ratio = width / height
+
+        if img_ratio > target_ratio:
+          new_width = int(target_ratio * img.height)
+          left = (img.width - new_width) // 2
+          img = img.crop((left, 0, left + new_width, img.height))
+        else:
+          new_height = int(img.width / target_ratio)
+          top = (img.height - new_height) // 2
+          img = img.crop((0, top, img.width, top + new_height))
+
+        img = img.resize((width, height), Image.Resampling.LANCZOS)
+
+        # 壓暗圖片以利文字閱讀
+        enhancer = ImageEnhance.Brightness(img)
+        img = enhancer.enhance(0.45)
+        print(f"📸 成功抓取 Pexels 實景圖片: [{keyword}]")
+        return img
+  except Exception as e:
+    print(f"⚠️ Pexels 圖片抓取失敗: {e}")
+
+  return None
+
+
+# ==========================================
+# 4. OpenStreetMap & RSS
 # ==========================================
 def fetch_osm_venue(category_key, city):
   cat_info = XGAME_CATEGORIES.get(category_key)
@@ -85,9 +140,6 @@ def fetch_osm_venue(category_key, city):
   return None
 
 
-# ==========================================
-# 4. 抓取 RSS 賽事資料
-# ==========================================
 def fetch_real_upcoming_events():
   rss_urls = [
       ("World Skate", "http://www.worldskate.org/news?format=feed&type=rss"),
@@ -109,7 +161,7 @@ def fetch_real_upcoming_events():
 
 
 # ==========================================
-# 5. Gemini 文案生成 (嚴格具體事實數據 Prompt)
+# 5. Gemini 文案生成 (含 Una 個人簡介)
 # ==========================================
 def generate_xgame_content(category_key, target_lang="zh-hk"):
   city = random.choice(CITIES)
@@ -134,17 +186,13 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
     )
 
     prompt = f"""
-你是一位極限運動專業編輯 xGame Radar。請以【{target_lang}】針對主題 [{category_key}] 生成 Telegram 報報文案。
+你是一位極限運動與浪人特派員 Una (IG: @Una_next)。請以【{target_lang}】針對主題 [{category_key}] 生成 Telegram 報報文案。
 
 {event_snippet}
 
 【嚴格要求】：
-1. 拒絕籠統套話（例如：「各大平台同步直播」、「全球高手雲集」等抽象詞彙）。
-2. 必須提供【具體事實數據】：
-   - 具體比賽日期與時間 (例如 YYYY/MM/DD 或具體時間)
-   - 具體舉辦城市與場館
-   - 焦點選手或熱門項目 (至少舉出 2 個具體人名或項目)
-   - 官方直播/售票網址連結
+1. 開頭必須包含 Una 的簡短招呼（例如：「👋 我係 Una (@Una_next)，今日為大家帶來...」）。
+2. 拒絕籠統套話，必須提供具體比賽日期、舉辦城市場館、重點選手與官方連結。
 3. 第一行必須輸出：`COVER_TITLE: [簡短封面大標題，10-12字以內]`
 4. 正文排版請嚴格保持以下結構：
 
@@ -154,6 +202,7 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
 🔥 核心看點：[具體選手/熱門對決項目]
 📺 直播/官網：[附上官方網址]
 
+— By Una (@Una_next)
 {cat_info['tag']} #xGameRadar
 """
   else:
@@ -165,21 +214,23 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
     )
 
     prompt = f"""
-你是一位極限運動專業編輯 xGame Radar。請以【{target_lang}】針對主題 [{cat_info['title']}] 生成 Telegram 報報文案。
+你是一位極限運動與浪人特派員 Una (IG: @Una_next)。請以【{target_lang}】針對主題 [{cat_info['title']}] 生成 Telegram/IG 報報文案。
 
 【情境資訊】：{venue_context}
 
 【嚴格要求】：
-1. 拒絕籠統套話，必須提供具體場地資訊、裝備建議與實用連結。
-2. 第一行必須輸出：`COVER_TITLE: [簡短封面大標題，10-12字以內]`
-3. 正文排版請嚴格保持以下結構：
+1. 開頭必須包含 Una 的個人化簡介語（例如：「👋 我係 Una (@Una_next)，今日帶大家探索...」）。
+2. 若為滑浪點/場地，請提供具體浪況/場地特色與裝備建議。
+3. 第一行必須輸出：`COVER_TITLE: [簡短封面大標題，10-12字以內]`
+4. 正文排版請嚴格保持以下結構：
 
 📍 焦點場地：[場地名稱與具體位置]
-🔥 核心特色：[具體設施/地形/浪況/岩壁特色]
-🔰 新手建議：[具體裝備或入門提醒]
-⚠️ 注意事項：[具體安全或場地禮儀規範]
+🔥 核心特色：[浪況/地形/場地設施]
+🔰 新手建議：[具體裝備或浪況提醒]
+⚠️ 注意事項：[安全規範或在地禮儀]
 🌐 相關資訊：[官方或社群搜尋關鍵字/連結]
 
+— By Una (@Una_next)
 {cat_info['tag']} #{city['name']} #xGameRadar
 """
 
@@ -200,32 +251,34 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
       caption_text = parts[1].strip() if len(parts) > 1 else full_text
 
     sub_title = f"{city['name'].upper()} · {category_key}"
-    return cover_title, sub_title, caption_text
+    return cover_title, sub_title, caption_text, cat_info["query"]
   except APIError as e:
     print(f"❌ Gemini 生成失敗: {e}")
     return (
         f"{category_key} SPOTLIGHT",
         "XGAME RADAR",
-        f"🏆 賽事名稱：{cat_info['title']} 今日最新情報\n#xGameRadar",
+        (
+            "👋 我係 Una (@Una_next)！今日最新極限情報更新～\n\n"
+            f"#xGameRadar"
+        ),
+        cat_info["query"],
     )
 
 
 # ==========================================
-# 6. 底圖與繪製 (黑曜石科技漸層風格)
+# 6. 底圖與壓字繪製
 # ==========================================
 def create_obsidian_background(width=1200, height=630):
-  """產生深色霓虹幾何漸層底圖，避免圖片純黑質感差"""
+  """預設備用底圖"""
   base = Image.new("RGB", (width, height))
   draw = ImageDraw.Draw(base)
 
-  # 1. 繪製深紫藍至黑色的漸層
   for y in range(height):
     r = int(18 - (y / height) * 12)
     g = int(14 - (y / height) * 10)
     b = int(38 - (y / height) * 24)
     draw.line([(0, y), (width, y)], fill=(r, g, b))
 
-  # 2. 科技感網格與霓虹光斑
   overlay = Image.new("RGBA", (width, height), (0, 0, 0, 0))
   draw_overlay = ImageDraw.Draw(overlay)
 
@@ -237,19 +290,16 @@ def create_obsidian_background(width=1200, height=630):
   for y in range(0, height, grid_size):
     draw_overlay.line([(0, y), (width, y)], fill=grid_color, width=1)
 
-  # 光斑
   draw_overlay.ellipse([-100, -100, 450, 450], fill=(138, 43, 226, 30))
   draw_overlay.ellipse(
       [width - 350, height - 350, width + 100, height + 100],
       fill=(0, 212, 255, 25),
   )
 
-  final_bg = Image.alpha_composite(base.convert("RGBA"), overlay)
-  return final_bg.convert("RGB")
+  return Image.alpha_composite(base.convert("RGBA"), overlay).convert("RGB")
 
 
 def get_font(size):
-  """尋找可用中文字型"""
   font_paths = [
       "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
       "/usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc",
@@ -266,11 +316,15 @@ def get_font(size):
   return ImageFont.load_default()
 
 
-def create_cover_image(cover_title, sub_title, output_path="cover.jpg"):
-  """生成帶有幾何質感與大標題壓字的封面圖"""
-  img = create_obsidian_background(1200, 630)
-  draw = ImageDraw.Draw(img)
+def create_cover_image(
+    cover_title, sub_title, query_keyword, output_path="cover.jpg"
+):
+  """優先抓取 Pexels 實景圖，抓不到則退回備用底圖並壓字"""
+  img = fetch_pexels_image(query_keyword)
+  if img is None:
+    img = create_obsidian_background(1200, 630)
 
+  draw = ImageDraw.Draw(img)
   font_sub = get_font(24)
   font_main = get_font(52)
   font_footer = get_font(20)
@@ -299,12 +353,12 @@ def create_cover_image(cover_title, sub_title, output_path="cover.jpg"):
     draw.text((80, y_offset), line, font=font_main, fill=(255, 255, 255))
     y_offset += 70
 
-  # 頁尾
+  # 頁尾標註 Una_next 專屬 Sign-off
   draw.text(
       (80, 530),
-      "xGame Radar · Global Action Sports Dispatch",
+      "xGame Radar · Curated by Una (@Una_next)",
       font=font_footer,
-      fill=(160, 160, 170),
+      fill=(200, 200, 210),
   )
 
   img.save(output_path, quality=95)
@@ -316,7 +370,6 @@ def create_cover_image(cover_title, sub_title, output_path="cover.jpg"):
 # 7. Telegram 發布 (HTML 模式 + 降級保護)
 # ==========================================
 def format_text_for_telegram_html(text):
-  """將 Markdown 安全轉義為 Telegram HTML"""
   safe_text = html.escape(text)
   safe_text = re.sub(r"\*\*(.*?)\*\*", r"<b>\1</b>", safe_text)
   return safe_text
@@ -335,7 +388,6 @@ def send_telegram_post(photo_path, message_text):
 
   try:
     with open(photo_path, "rb") as photo_file:
-      # 1. 優先使用 HTML 發送
       payload = {
           "chat_id": TELEGRAM_CHAT_ID,
           "caption": html_caption,
@@ -344,7 +396,6 @@ def send_telegram_post(photo_path, message_text):
       files = {"photo": photo_file}
       res = requests.post(url, data=payload, files=files, timeout=20)
 
-      # 2. 自動降級為純文字發送 (防止語法解析崩潰)
       if res.status_code != 200:
         print(
             f"⚠️ HTML 解析異常 ({res.text})，自動降級為純文字模式重新發送..."
@@ -391,13 +442,15 @@ def main():
       f"🚀 啟動 xGame Radar -> 主題: [{category_key}] | 語言: [{args.lang}]"
   )
 
-  # 1. 生成文案與大標題
-  cover_title, sub_title, caption_text = generate_xgame_content(
+  # 1. 生成文案與大標題 (含 Una 簡介)
+  cover_title, sub_title, caption_text, query_keyword = generate_xgame_content(
       category_key, args.lang
   )
 
-  # 2. 生成黑曜石幾何壓字圖片
-  photo_path = create_cover_image(cover_title, sub_title, "xgame_post.jpg")
+  # 2. 下載 Pexels 實景圖片並生成壓字封面
+  photo_path = create_cover_image(
+      cover_title, sub_title, query_keyword, "xgame_post.jpg"
+  )
 
   # 3. 發布至 Telegram
   send_telegram_post(photo_path, caption_text)
