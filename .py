@@ -1,6 +1,6 @@
 import argparse
 from datetime import datetime, timezone
-from io import BytesIO
+import glob
 import os
 import random
 import feedparser
@@ -10,12 +10,11 @@ from PIL import Image, ImageDraw, ImageFont
 import requests
 
 # ==========================================
-# 1. 環境變數驗證
+# 1. 環境變數驗證 (已移除 Pexels API Key)
 # ==========================================
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
-PEXELS_API_KEY = os.getenv("PEXELS_API_KEY")
 
 missing_vars = []
 if not GEMINI_API_KEY:
@@ -53,7 +52,7 @@ CITIES = [
         "country": "Australia",
         "lat": -28.0167,
         "lon": 153.4000,
-    },  # 衝浪勝地
+    },  # 衝浪聖地
     {"name": "Lisbon", "country": "Portugal", "lat": 38.7223, "lon": -9.1393},
     {"name": "Hong Kong", "country": "China", "lat": 22.3193, "lon": 114.1694},
 ]
@@ -63,37 +62,21 @@ XGAME_CATEGORIES = {
         "title": "🛹 全球滑板場與街頭 Spot 探索",
         "tag": "#Skateboarding #Skatepark #街頭滑板 #滑板新手",
         "osm_tag": '["sport"="skateboard"]',
-        "pexels_queries": [
-            "skateboarding trick",
-            "skatepark bowl",
-            "street skateboarder",
-        ],
-        "default_img": "https://images.pexels.com/photos/165236/pexels-photo-165236.jpeg",
     },
     "SURF": {
         "title": "🌊 全球浪點與衝浪指南",
         "tag": "#Surfing #SurfSpot #衝浪人生 #浪人日記",
         "osm_tag": '["sport"="surfing"]',
-        "pexels_queries": ["surfing barrel ocean", "surfer wave action"],
-        "default_img": "https://images.pexels.com/photos/67386/pexels-photo-67386.jpeg",
     },
     "CLIMB": {
         "title": "🧗 抱石與攀岩場地指南",
         "tag": "#Bouldering #RockClimbing #抱石日常 #攀岩初學者",
         "osm_tag": '["sport"="climbing"]',
-        "pexels_queries": ["bouldering gym climber", "rock climbing outdoors"],
-        "default_img": "https://images.pexels.com/photos/1126384/pexels-photo-1126384.jpeg",
     },
     "EVENT": {
         "title": "🏆 全球 xGame 賽事盛事雷達",
         "tag": "#XGames #WorldSkate #WSL #極限賽事 #賽事速報",
         "osm_tag": None,
-        "pexels_queries": [
-            "extreme sports action",
-            "bmx air contest",
-            "skate contest",
-        ],
-        "default_img": "https://images.pexels.com/photos/2005992/pexels-photo-2005992.jpeg",
     },
 }
 
@@ -163,27 +146,32 @@ def fetch_real_upcoming_events():
 
 
 # ==========================================
-# 4. 配圖素材抓取 (Pexels API)
+# 4. 本地圖片讀取 (方案 A 核心邏輯)
 # ==========================================
-def get_pexels_media(category_key):
-  if not PEXELS_API_KEY:
-    return XGAME_CATEGORIES[category_key]["default_img"]
+def get_local_media(category_key):
+  """隨機讀取 assets/<category>/ 資料夾內的圖片"""
+  category_dir = os.path.join("assets", category_key.lower())
 
-  queries = XGAME_CATEGORIES[category_key]["pexels_queries"]
-  query = random.choice(queries)
-  headers = {"Authorization": PEXELS_API_KEY}
-  url = f"https://api.pexels.com/v1/search?query={query}&per_page=8&page={random.randint(1, 2)}&orientation=landscape"
+  image_extensions = ("*.jpg", "*.jpeg", "*.png", "*.webp")
+  image_files = []
 
-  try:
-    res = requests.get(url, headers=headers, timeout=10)
-    if res.status_code == 200:
-      photos = res.json().get("photos", [])
-      if photos:
-        return random.choice(photos)["src"]["large"]
-  except Exception as e:
-    print(f"⚠️ Pexels 抓圖跳過: {e}")
+  # 1. 優先從專屬主題資料夾撈圖 (如 assets/skate/)
+  if os.path.exists(category_dir):
+    for ext in image_extensions:
+      image_files.extend(glob.glob(os.path.join(category_dir, ext)))
 
-  return XGAME_CATEGORIES[category_key]["default_img"]
+  # 2. 若專屬資料夾沒圖，嘗試從 assets/ 根目錄撈圖
+  if not image_files and os.path.exists("assets"):
+    for ext in image_extensions:
+      image_files.extend(glob.glob(os.path.join("assets", ext)))
+
+  if image_files:
+    chosen_file = random.choice(image_files)
+    print(f"🖼️ 使用本地素材照片: {chosen_file}")
+    return chosen_file
+
+  print("⚠️ 找不到本地圖片素材，將使用預設黑曜石幾何底圖。")
+  return None
 
 
 # ==========================================
@@ -274,36 +262,42 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
 
 
 # ==========================================
-# 6. 封面圖片合成 (Pillow 漸層遮罩 + 標題排版)
+# 6. 封面圖片合成 (Pillow 本地圖片 + 遮罩排版)
 # ==========================================
 def generate_cover_image(
-    image_url,
+    image_path,
     main_title,
     sub_title="XGAME RADAR",
     output_path="cover_output.jpg",
 ):
-  """下載背景圖，繪製底部暗色漸層保護層並壓印標題"""
-  try:
-    res = requests.get(image_url, timeout=15)
-    img = Image.open(BytesIO(res.content)).convert("RGBA")
-  except Exception as e:
-    print(f"⚠️ 背景圖片載入失敗，使用備用黑底: {e}")
-    img = Image.new("RGBA", (1080, 1080), (20, 20, 20, 255))
+  """載入本地圖片，繪製漸層遮罩並壓印標題"""
+  if image_path and os.path.exists(image_path):
+    try:
+      img = Image.open(image_path).convert("RGBA")
+    except Exception as e:
+      print(f"⚠️ 開啟本地圖片失敗: {e}，改用深色底圖")
+      img = Image.new("RGBA", (1080, 1080), (18, 18, 18, 255))
+  else:
+    # 若沒有圖片素材，使用黑曜石極簡底底色
+    img = Image.new("RGBA", (1080, 1080), (18, 18, 18, 255))
 
+  # 統一裁切與縮放為正方形 1080x1080
   img = img.resize((1080, 1080), Image.Resampling.LANCZOS)
   width, height = img.size
 
+  # 建立底部暗色漸層遮罩
   overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
   draw_overlay = ImageDraw.Draw(overlay)
-  grad_start = int(height * 0.50)
+  grad_start = int(height * 0.48)
 
   for y in range(grad_start, height):
-    alpha = int(210 * ((y - grad_start) / (height - grad_start)))
+    alpha = int(220 * ((y - grad_start) / (height - grad_start)))
     draw_overlay.line([(0, y), (width, y)], fill=(0, 0, 0, alpha))
 
   img = Image.alpha_composite(img, overlay)
   draw = ImageDraw.Draw(img)
 
+  # 載入字型
   font_paths = [
       "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
       "/usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc",
@@ -326,7 +320,7 @@ def generate_cover_image(
     font_sub = ImageFont.load_default()
     font_brand = ImageFont.load_default()
 
-  # 繪製分類副標題
+  # 繪製分類副標題 (螢光黃)
   sub_y = int(height * 0.68)
   draw.text(
       (60, sub_y),
@@ -342,7 +336,7 @@ def generate_cover_image(
     draw.text((60, title_y), line, font=font_main, fill=(255, 255, 255))
     title_y += 68
 
-  # 繪製獨立專案浮水印
+  # 繪製品牌標籤
   draw.text(
       (60, int(height * 0.92)),
       "xGame Radar · Global Action Sports Dispatch",
@@ -356,7 +350,7 @@ def generate_cover_image(
 
 
 # ==========================================
-# 7. Telegram 本地合成圖文發布
+# 7. Telegram 發布
 # ==========================================
 def send_telegram_post(photo_path, message_text):
   url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendPhoto"
@@ -374,28 +368,16 @@ def send_telegram_post(photo_path, message_text):
       files = {"photo": photo_file}
       res = requests.post(url, data=payload, files=files, timeout=20)
       if res.status_code == 200:
-        print("✅ 成功以【封面圖 + 完整排版】發布至 Telegram！")
+        print("✅ 成功發送「壓字圖片 + 完整文章」至 Telegram！")
         return
       else:
-        print(f"⚠️ 圖片發布返回錯誤: {res.text}")
+        print(f"⚠️ Telegram 發送報錯: {res.text}")
   except Exception as e:
-    print(f"⚠️ 圖片發布異常: {e}")
-
-  print("🔄 切換為純文字訊息發送...")
-  text_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-  requests.post(
-      text_url,
-      json={
-          "chat_id": TELEGRAM_CHAT_ID,
-          "text": message_text,
-          "parse_mode": "Markdown",
-      },
-      timeout=10,
-  )
+    print(f"⚠️ 圖片發送異常: {e}")
 
 
 # ==========================================
-# 8. 主程式排程進入點
+# 8. 主程式進入點
 # ==========================================
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(description="xGame Radar 全球發報系統")
@@ -416,25 +398,18 @@ if __name__ == "__main__":
   else:
     cat = args.category
 
-  print(
-      f"🚀 啟動 xGame Radar 發報 -> 主題: [{cat}] | 語言: [{args.lang}] |"
-      f" 時間: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-  )
+  print(f"🚀 啟動 xGame Radar -> 主題: [{cat}] | 語言: [{args.lang}]")
 
   # 1. 產生文案與封面標題
   cover_title, sub_title, post_caption = generate_xgame_content(cat, args.lang)
-  print(f"📌 封面大標: {cover_title}")
-  print("--------------------------------------------------")
-  print(post_caption)
-  print("--------------------------------------------------")
 
-  # 2. 獲取背景底圖
-  bg_image_url = get_pexels_media(cat)
+  # 2. 獲取本地圖片路徑 (方案 A)
+  local_image_path = get_local_media(cat)
 
-  # 3. 本地合成封面圖片 (Pillow)
-  local_cover_file = generate_cover_image(
-      bg_image_url, cover_title, sub_title, "xgame_cover.jpg"
+  # 3. 合成封面圖片
+  cover_file = generate_cover_image(
+      local_image_path, cover_title, sub_title, "xgame_cover.jpg"
   )
 
-  # 4. 發布至社群
-  send_telegram_post(local_cover_file, post_caption)
+  # 4. 發布至 Telegram
+  send_telegram_post(cover_file, post_caption)
