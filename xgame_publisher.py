@@ -22,7 +22,7 @@ TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 PEXELS_API_KEY = os.getenv("PEXELS_API_KEY")
 
 # ==========================================
-# 2. 基本資料與分類設定 (新增 BIKE 單車類別)
+# 2. 基本資料與分類設定 (含 BIKE 極限單車)
 # ==========================================
 XGAME_CATEGORIES = {
     "SKATE": {
@@ -105,7 +105,6 @@ def fetch_pexels_image(keyword, width=1200, height=630):
         img_res = requests.get(photo_url, timeout=10)
         img = Image.open(io.BytesIO(img_res.content)).convert("RGB")
 
-        # 裁切與縮放至 1200x630
         img_ratio = img.width / img.height
         target_ratio = width / height
 
@@ -120,7 +119,6 @@ def fetch_pexels_image(keyword, width=1200, height=630):
 
         img = img.resize((width, height), Image.Resampling.LANCZOS)
 
-        # 壓暗圖片以利文字閱讀
         enhancer = ImageEnhance.Brightness(img)
         img = enhancer.enhance(0.40)
         print(f"📸 成功抓取 Pexels 實景圖片: [{keyword}]")
@@ -132,7 +130,7 @@ def fetch_pexels_image(keyword, width=1200, height=630):
 
 
 # ==========================================
-# 4. OpenStreetMap & RSS 賽事抓取 (含 BMX/單車)
+# 4. OpenStreetMap & RSS 賽事抓取
 # ==========================================
 def fetch_osm_venue(category_key, city):
   cat_info = XGAME_CATEGORIES.get(category_key)
@@ -166,19 +164,14 @@ def fetch_osm_venue(category_key, city):
 
 def fetch_real_upcoming_events():
   rss_urls = [
-      # 滑板 & 街頭 (Skateboarding)
       ("World Skate", "http://www.worldskate.org/news?format=feed&type=rss"),
       ("Dew Tour", "https://www.dewtour.com/feed/"),
-      # 衝浪 (Surfing)
       ("WSL Surfing", "https://www.worldsurfleague.com/rss"),
       ("Surfer Magazine", "https://www.surfer.com/.rss/excerpt/"),
-      # 攀岩 (Climbing)
       ("Climbing Magazine", "https://www.climbing.com/feed/"),
       ("Gripped Climbing", "https://gripped.com/feed/"),
-      # 極限單車 (BMX & MTB)
       ("Vital BMX", "https://www.vitalbmx.com/news/rss"),
       ("Pinkbike MTB", "https://www.pinkbike.com/pinkbike_xml_feed.php"),
-      # 綜合極限 (Action Sports)
       ("Red Bull Action Sports", "https://www.redbull.com/us-en/feed.xml"),
   ]
 
@@ -239,8 +232,7 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
         ])
         if real_events
         else (
-            "【熱門賽事參考】：X Games, World Skate 巡迴賽, WSL 錦標賽, IFSC"
-            " 攀岩世界盃"
+            "【熱門賽事參考】：X Games, World Skate 巡迴賽, WSL 錦標賽, IFSC 攀岩世界盃, UCI BMX/MTB 錦標賽"
         )
     )
 
@@ -291,7 +283,7 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
 
 👋 我係 Una (@Una_next)！今日極限情報：
 
-📍【場地介紹】：[地點/場館名稱 + 地形/浪況/難度分級]
+📍【場地介紹】：[地點/場館名稱 + 地形/設施/難度分級]
 
 👤【代表選手】：[列出 1-2 位具體知名選手與簡短背景]
 
@@ -334,7 +326,7 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
 
 
 # ==========================================
-# 6. 底圖與壓字繪製 (修復 IG 剪裁安全邊界)
+# 6. 底圖與壓字繪製 (IG 安全區域最適化)
 # ==========================================
 def create_obsidian_background(width=1200, height=630):
   base = Image.new("RGB", (width, height))
@@ -392,12 +384,12 @@ def create_cover_image(
 
   draw = ImageDraw.Draw(img)
   font_sub = get_font(24)
-  font_main = get_font(42)  # 調微至 42pt 確保字體精緻且不溢出
+  font_main = get_font(42)
   font_footer = get_font(18)
 
   width, height = img.size  # 1200, 630
 
-  # 1. 主標題自動分行：將寬度限制縮減至 410px（符合 IG 4:5 及 1:1 預覽框中心安全區）
+  # 控制寬度至 410px 以符合 IG 正方形裁切安全區域
   max_width = 410
   lines = []
   current_line = ""
@@ -412,15 +404,13 @@ def create_cover_image(
   if current_line:
     lines.append(current_line)
 
-  display_lines = lines[:3]  # 最多顯示 3 行
+  display_lines = lines[:3]
   line_height = 56
   title_block_height = len(display_lines) * line_height
 
-  # 2. 計算總區塊高度並進行垂直居中
   total_block_height = 30 + 18 + title_block_height + 35 + 20
   start_y = (height - total_block_height) // 2
 
-  # 3. 繪製副標題
   dot_radius = 5
   dot_spacing = 8
   sub_bbox = draw.textbbox((0, 0), sub_title, font=font_sub)
@@ -446,21 +436,18 @@ def create_cover_image(
   text_x = dot_x + (dot_radius * 2) + dot_spacing
   draw.text((text_x, y_sub), sub_title, font=font_sub, fill=(255, 204, 0))
 
-  # 4. 繪製主標題 (強制在中心 410px 區域居中)
   y_title = y_sub + 45
   for line in display_lines:
     line_bbox = draw.textbbox((0, 0), line, font=font_main)
     line_w = line_bbox[2] - line_bbox[0]
     line_x = (width - line_w) // 2
 
-    # 黑色文字陰影增加對比度
     draw.text(
         (line_x + 2, y_title + 2), line, font=font_main, fill=(0, 0, 0, 220)
     )
     draw.text((line_x, y_title), line, font=font_main, fill=(255, 255, 255))
     y_title += line_height
 
-  # 5. 繪製頁尾標註
   footer_text = "xGame Radar · Curated by Una (@Una_next)"
   footer_bbox = draw.textbbox((0, 0), footer_text, font=font_footer)
   footer_w = footer_bbox[2] - footer_bbox[0]
@@ -472,12 +459,12 @@ def create_cover_image(
   )
 
   img.save(output_path, quality=95)
-  print(f"🎨 封面圖片已成功生成（完美適應 IG Feed 安全邊界）: {output_path}")
+  print(f"🎨 封面圖片已成功生成（已適應 IG 裁切安全區域）: {output_path}")
   return output_path
 
 
 # ==========================================
-# 7. Telegram 發布 (HTML 模式 + 降級保護)
+# 7. Telegram 發布
 # ==========================================
 def format_text_for_telegram_html(text):
   safe_text = html.escape(text)
@@ -524,7 +511,7 @@ def send_telegram_post(photo_path, message_text):
 
 
 # ==========================================
-# 8. 主程式進入點
+# 8. 主程式進入點 (明確註冊 BIKE 選項)
 # ==========================================
 def main():
   parser = argparse.ArgumentParser(description="xGame Publisher Script")
@@ -533,7 +520,7 @@ def main():
       "--category",
       default="AUTO",
       choices=["AUTO", "SKATE", "SURF", "CLIMB", "BIKE", "EVENT"],
-      help="主題類別",
+      help="主題類別 (AUTO, SKATE, SURF, CLIMB, BIKE, EVENT)",
   )
   parser.add_argument(
       "-l",
@@ -550,17 +537,14 @@ def main():
 
   print(f"🚀 啟動 xGame Radar -> 主題: [{category_key}] | 語言: [{args.lang}]")
 
-  # 1. 生成精簡分區文案與封面標題
   cover_title, sub_title, caption_text, query_keyword = generate_xgame_content(
       category_key, args.lang
   )
 
-  # 2. 下載 Pexels 實景圖片並生成適應 IG 邊界的壓字封面
   photo_path = create_cover_image(
       cover_title, sub_title, query_keyword, "xgame_post.jpg"
   )
 
-  # 3. 發布至 Telegram
   send_telegram_post(photo_path, caption_text)
 
 
