@@ -16,6 +16,7 @@ on:
           - SKATE
           - SURF
           - CLIMB
+          - BIKE
           - EVENT
       lang:
         description: '選擇發布語言 (Select Language)'
