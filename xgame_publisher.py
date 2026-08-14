@@ -22,7 +22,7 @@ TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 PEXELS_API_KEY = os.getenv("PEXELS_API_KEY")
 
 # ==========================================
-# 2. 基本資料與分類設定 (全球熱門地點)
+# 2. 基本資料與分類設定 (新增 BIKE 單車類別)
 # ==========================================
 XGAME_CATEGORIES = {
     "SKATE": {
@@ -43,123 +43,44 @@ XGAME_CATEGORIES = {
         "osm_tag": 'node["sport"="climbing"]',
         "tag": "#Bouldering #Climbing #攀岩 #抱石",
     },
+    "BIKE": {
+        "title": "極限單車 BMX & MTB",
+        "query": "bmx freestyle mountain bike athlete",
+        "osm_tag": 'node["sport"~"bmx|cycling"]',
+        "tag": "#BMX #MTB #FreestyleBMX #極限單車 #越野單車",
+    },
     "EVENT": {
         "title": "全球賽事總覽 GLOBAL EVENTS",
         "query": "action sports competition xgames",
         "osm_tag": None,
-        "tag": "#XGames #WorldSkate #WSL #IFSC #極限運動",
+        "tag": "#XGames #WorldSkate #WSL #IFSC #UCI #極限運動",
     },
 }
 
 # 城市與地點清單（含香港、台灣、印尼、葡萄牙、瑞典等極限運動勝地）
 CITIES = [
     # 亞洲 Asia & 印尼專區 Indonesia
-    {
-        "name": "Bali",
-        "country": "Indonesia",
-        "lat": -8.4095,
-        "lon": 115.1889,
-    },  # 印尼峇里島
-    {
-        "name": "Mentawai",
-        "country": "Indonesia",
-        "lat": -2.1333,
-        "lon": 99.5500,
-    },  # 印尼棉蘭威群島
-    {
-        "name": "Lombok",
-        "country": "Indonesia",
-        "lat": -8.6509,
-        "lon": 116.3249,
-    },  # 印尼龍目島
-    {
-        "name": "Jakarta",
-        "country": "Indonesia",
-        "lat": -6.2088,
-        "lon": 106.8456,
-    },  # 印尼雅加達
-    {
-        "name": "Hong Kong",
-        "country": "Hong Kong",
-        "lat": 22.3193,
-        "lon": 114.1694,
-    },  # 香港
-    {
-        "name": "Taipei",
-        "country": "Taiwan",
-        "lat": 25.0330,
-        "lon": 121.5654,
-    },  # 台灣台北
-    {
-        "name": "Taitung",
-        "country": "Taiwan",
-        "lat": 22.7583,
-        "lon": 121.1444,
-    },  # 台灣台東
-    {
-        "name": "Yilan",
-        "country": "Taiwan",
-        "lat": 24.7570,
-        "lon": 121.7530,
-    },  # 台灣宜蘭
-    {
-        "name": "Tokyo",
-        "country": "Japan",
-        "lat": 35.6762,
-        "lon": 139.6503,
-    },  # 日本東京
+    {"name": "Bali", "country": "Indonesia", "lat": -8.4095, "lon": 115.1889},
+    {"name": "Mentawai", "country": "Indonesia", "lat": -2.1333, "lon": 99.5500},
+    {"name": "Lombok", "country": "Indonesia", "lat": -8.6509, "lon": 116.3249},
+    {"name": "Jakarta", "country": "Indonesia", "lat": -6.2088, "lon": 106.8456},
+    {"name": "Hong Kong", "country": "Hong Kong", "lat": 22.3193, "lon": 114.1694},
+    {"name": "Taipei", "country": "Taiwan", "lat": 25.0330, "lon": 121.5654},
+    {"name": "Taitung", "country": "Taiwan", "lat": 22.7583, "lon": 121.1444},
+    {"name": "Yilan", "country": "Taiwan", "lat": 24.7570, "lon": 121.7530},
+    {"name": "Tokyo", "country": "Japan", "lat": 35.6762, "lon": 139.6503},
     # 歐洲 Europe
-    {
-        "name": "Stockholm",
-        "country": "Sweden",
-        "lat": 59.3293,
-        "lon": 18.0686,
-    },  # 瑞典斯德哥爾摩
-    {
-        "name": "Lisbon",
-        "country": "Portugal",
-        "lat": 38.7223,
-        "lon": -9.1393,
-    },  # 葡萄牙里斯本
-    {
-        "name": "Nazaré",
-        "country": "Portugal",
-        "lat": 39.6028,
-        "lon": -9.0717,
-    },  # 葡萄牙 Nazaré 巨浪鎮
-    {
-        "name": "Ericeira",
-        "country": "Portugal",
-        "lat": 38.9622,
-        "lon": -9.4172,
-    },  # 葡萄牙衝浪區
-    {
-        "name": "Barcelona",
-        "country": "Spain",
-        "lat": 41.3851,
-        "lon": 2.1734,
-    },  # 西班牙巴塞隆納
-    {
-        "name": "Paris",
-        "country": "France",
-        "lat": 48.8566,
-        "lon": 2.3522,
-    },  # 法國巴黎
-    {
-        "name": "Innsbruck",
-        "country": "Austria",
-        "lat": 47.2692,
-        "lon": 11.4041,
-    },  # 奧地利因斯布魯克
+    {"name": "Stockholm", "country": "Sweden", "lat": 59.3293, "lon": 18.0686},
+    {"name": "Lisbon", "country": "Portugal", "lat": 38.7223, "lon": -9.1393},
+    {"name": "Nazaré", "country": "Portugal", "lat": 39.6028, "lon": -9.0717},
+    {"name": "Ericeira", "country": "Portugal", "lat": 38.9622, "lon": -9.4172},
+    {"name": "Barcelona", "country": "Spain", "lat": 41.3851, "lon": 2.1734},
+    {"name": "Paris", "country": "France", "lat": 48.8566, "lon": 2.3522},
+    {"name": "Innsbruck", "country": "Austria", "lat": 47.2692, "lon": 11.4041},
     # 美洲 & 澳洲 Americas & Oceania
     {"name": "Los Angeles", "country": "USA", "lat": 34.0522, "lon": -118.2437},
     {"name": "Sydney", "country": "Australia", "lat": -33.8688, "lon": 151.2093},
-    {
-        "name": "Gold Coast",
-        "country": "Australia",
-        "lat": -28.0167,
-        "lon": 153.4000,
-    },
+    {"name": "Gold Coast", "country": "Australia", "lat": -28.0167, "lon": 153.4000},
 ]
 
 
@@ -211,7 +132,7 @@ def fetch_pexels_image(keyword, width=1200, height=630):
 
 
 # ==========================================
-# 4. OpenStreetMap & RSS 賽事抓取
+# 4. OpenStreetMap & RSS 賽事抓取 (含 BMX/單車)
 # ==========================================
 def fetch_osm_venue(category_key, city):
   cat_info = XGAME_CATEGORIES.get(category_key)
@@ -244,26 +165,27 @@ def fetch_osm_venue(category_key, city):
 
 
 def fetch_real_upcoming_events():
-  # 擴充多領域極限運動賽事 RSS 來源 (Skate, Surf, Climb, Snowboard, Action Sports)
   rss_urls = [
-      # 滑板 & 街頭極限 (Skateboarding & Street)
+      # 滑板 & 街頭 (Skateboarding)
       ("World Skate", "http://www.worldskate.org/news?format=feed&type=rss"),
       ("Dew Tour", "https://www.dewtour.com/feed/"),
       # 衝浪 (Surfing)
       ("WSL Surfing", "https://www.worldsurfleague.com/rss"),
       ("Surfer Magazine", "https://www.surfer.com/.rss/excerpt/"),
-      # 攀岩 & 抱石 (Climbing & Bouldering)
+      # 攀岩 (Climbing)
       ("Climbing Magazine", "https://www.climbing.com/feed/"),
       ("Gripped Climbing", "https://gripped.com/feed/"),
-      # 滑雪 & 極限綜合 (Snowboarding & Action Sports)
-      ("Whitelines Snowboarding", "https://whitelines.com/feed"),
+      # 極限單車 (BMX & MTB)
+      ("Vital BMX", "https://www.vitalbmx.com/news/rss"),
+      ("Pinkbike MTB", "https://www.pinkbike.com/pinkbike_xml_feed.php"),
+      # 綜合極限 (Action Sports)
       ("Red Bull Action Sports", "https://www.redbull.com/us-en/feed.xml"),
   ]
 
   events = []
   now = datetime.now()
-  past_margin = now - timedelta(days=14)  # 包含最近兩週發布的最新情報
-  future_3_months = now + timedelta(days=90)  # 涵蓋未來3個月
+  past_margin = now - timedelta(days=14)
+  future_3_months = now + timedelta(days=90)
 
   for org, url in rss_urls:
     try:
@@ -271,23 +193,18 @@ def fetch_real_upcoming_events():
       for entry in feed.entries:
         pub_date = None
 
-        # 1. 優先使用 feedparser 自動解析的結構化時間 (免除 dateutil 依賴)
         if hasattr(entry, "published_parsed") and entry.published_parsed:
           try:
             pub_date = datetime(*entry.published_parsed[:6])
           except Exception:
             pub_date = None
 
-        # 2. 備用標準庫 email.utils 解析 RFC822 格式
         if not pub_date and hasattr(entry, "published"):
           try:
-            pub_date = parsedate_to_datetime(entry.published).replace(
-                tzinfo=None
-            )
+            pub_date = parsedate_to_datetime(entry.published).replace(tzinfo=None)
           except Exception:
             pub_date = None
 
-        # 篩選時間範圍內的賽事與最新動態
         if pub_date and (past_margin <= pub_date <= future_3_months):
           events.append({
               "org": org,
@@ -297,11 +214,11 @@ def fetch_real_upcoming_events():
     except Exception as e:
       print(f"⚠️ RSS ({org}) 解析失敗: {e}")
 
-  return events[:6]  # 回傳最新與未來 3 個月內最多 6 筆賽事情報
+  return events[:6]
 
 
 # ==========================================
-# 5. Gemini 文案生成 (嚴格分類 + 精簡字數)
+# 5. Gemini 文案生成
 # ==========================================
 def generate_xgame_content(category_key, target_lang="zh-hk"):
   city = random.choice(CITIES)
@@ -336,7 +253,7 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
 1. 開頭包含 Una 短招呼語（如：「👋 我係 Una (@Una_next)！」）。
 2. 資訊必須【嚴格分開類別，獨立介紹】，絕不可揉杂在一起。
 3. 每個類別 1~2 句，總字數控制在 250 字內，精簡乾淨。
-4. 第一行必須輸出：`COVER_TITLE: [簡短封面大標題，10-12字以內]`
+4. 第一行必須輸出：`COVER_TITLE: [簡短封面大標題，8-10字以內]`
 5. 正文格式必須完全符合以下獨立分區：
 
 👋 我係 Una (@Una_next)！今日賽事情報速遞：
@@ -369,7 +286,7 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
 1. 開頭包含 Una 短招呼語（如：「👋 我係 Una (@Una_next)！」）。
 2. 資訊必須【嚴格分開類別，獨立介紹】，絕不可混在一起。
 3. 每個類別 1~2 句即可，字數精簡短練（總字數 250 字內）。
-4. 第一行必須輸出：`COVER_TITLE: [簡短封面大標題，10-12字以內]`
+4. 第一行必須輸出：`COVER_TITLE: [簡短封面大標題，8-10字以內]`
 5. 正文格式必須完全符合以下獨立分區：
 
 👋 我係 Una (@Una_next)！今日極限情報：
@@ -417,7 +334,7 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
 
 
 # ==========================================
-# 6. 底圖與壓字繪製 (標題完美居中優化)
+# 6. 底圖與壓字繪製 (修復 IG 剪裁安全邊界)
 # ==========================================
 def create_obsidian_background(width=1200, height=630):
   base = Image.new("RGB", (width, height))
@@ -474,14 +391,14 @@ def create_cover_image(
     img = create_obsidian_background(1200, 630)
 
   draw = ImageDraw.Draw(img)
-  font_sub = get_font(26)
-  font_main = get_font(52)
-  font_footer = get_font(20)
+  font_sub = get_font(24)
+  font_main = get_font(42)  # 調微至 42pt 確保字體精緻且不溢出
+  font_footer = get_font(18)
 
   width, height = img.size  # 1200, 630
 
-  # 1. 主標題自動分行 (限制在中央 580px 寬度內，確保社群媒體 1:1 裁切時完整顯示)
-  max_width = 580
+  # 1. 主標題自動分行：將寬度限制縮減至 410px（符合 IG 4:5 及 1:1 預覽框中心安全區）
+  max_width = 410
   lines = []
   current_line = ""
   for char in cover_title:
@@ -495,17 +412,17 @@ def create_cover_image(
   if current_line:
     lines.append(current_line)
 
-  display_lines = lines[:2]
-  line_height = 70
+  display_lines = lines[:3]  # 最多顯示 3 行
+  line_height = 56
   title_block_height = len(display_lines) * line_height
 
   # 2. 計算總區塊高度並進行垂直居中
-  total_block_height = 35 + 20 + title_block_height + 40 + 25
+  total_block_height = 30 + 18 + title_block_height + 35 + 20
   start_y = (height - total_block_height) // 2
 
-  # 3. 繪製副標題 (黃色圓點 + 副標題，組件水平居中)
-  dot_radius = 6
-  dot_spacing = 10
+  # 3. 繪製副標題
+  dot_radius = 5
+  dot_spacing = 8
   sub_bbox = draw.textbbox((0, 0), sub_title, font=font_sub)
   sub_w = sub_bbox[2] - sub_bbox[0]
   sub_h = sub_bbox[3] - sub_bbox[1]
@@ -529,33 +446,33 @@ def create_cover_image(
   text_x = dot_x + (dot_radius * 2) + dot_spacing
   draw.text((text_x, y_sub), sub_title, font=font_sub, fill=(255, 204, 0))
 
-  # 4. 繪製主標題 (每行水平居中，並加入文字陰影提升閱讀對比度)
-  y_title = y_sub + 55
+  # 4. 繪製主標題 (強制在中心 410px 區域居中)
+  y_title = y_sub + 45
   for line in display_lines:
     line_bbox = draw.textbbox((0, 0), line, font=font_main)
     line_w = line_bbox[2] - line_bbox[0]
     line_x = (width - line_w) // 2
 
-    # 微弱黑色陰影
+    # 黑色文字陰影增加對比度
     draw.text(
-        (line_x + 2, y_title + 2), line, font=font_main, fill=(0, 0, 0, 200)
+        (line_x + 2, y_title + 2), line, font=font_main, fill=(0, 0, 0, 220)
     )
     draw.text((line_x, y_title), line, font=font_main, fill=(255, 255, 255))
     y_title += line_height
 
-  # 5. 繪製頁尾標註 (水平居中)
+  # 5. 繪製頁尾標註
   footer_text = "xGame Radar · Curated by Una (@Una_next)"
   footer_bbox = draw.textbbox((0, 0), footer_text, font=font_footer)
   footer_w = footer_bbox[2] - footer_bbox[0]
   footer_x = (width - footer_w) // 2
-  y_footer = y_title + 15
+  y_footer = y_title + 10
 
   draw.text(
       (footer_x, y_footer), footer_text, font=font_footer, fill=(210, 210, 220)
   )
 
   img.save(output_path, quality=95)
-  print(f"🎨 封面圖片已成功生成（已完美雙向居中）: {output_path}")
+  print(f"🎨 封面圖片已成功生成（完美適應 IG Feed 安全邊界）: {output_path}")
   return output_path
 
 
@@ -615,7 +532,7 @@ def main():
       "-c",
       "--category",
       default="AUTO",
-      choices=["AUTO", "SKATE", "SURF", "CLIMB", "EVENT"],
+      choices=["AUTO", "SKATE", "SURF", "CLIMB", "BIKE", "EVENT"],
       help="主題類別",
   )
   parser.add_argument(
@@ -629,7 +546,7 @@ def main():
 
   category_key = args.category
   if category_key == "AUTO":
-    category_key = random.choice(["SKATE", "SURF", "CLIMB", "EVENT"])
+    category_key = random.choice(["SKATE", "SURF", "CLIMB", "BIKE", "EVENT"])
 
   print(f"🚀 啟動 xGame Radar -> 主題: [{category_key}] | 語言: [{args.lang}]")
 
@@ -638,7 +555,7 @@ def main():
       category_key, args.lang
   )
 
-  # 2. 下載 Pexels 實景圖片並生成雙向居中壓字封面
+  # 2. 下載 Pexels 實景圖片並生成適應 IG 邊界的壓字封面
   photo_path = create_cover_image(
       cover_title, sub_title, query_keyword, "xgame_post.jpg"
   )
