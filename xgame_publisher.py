@@ -1,4 +1,6 @@
 import argparse
+from datetime import datetime, timedelta
+from email.utils import parsedate_to_datetime
 import html
 import io
 import os
@@ -8,11 +10,8 @@ import sys
 import feedparser
 from google import genai
 from google.genai.errors import APIError
-import requests
 from PIL import Image, ImageDraw, ImageEnhance, ImageFont
-from datetime import datetime, timedelta
-from dateutil import parser  # 需 pip install python-dateutil
-
+import requests
 
 # ==========================================
 # 1. 環境變數設定
@@ -245,36 +244,62 @@ def fetch_osm_venue(category_key, city):
 
 
 def fetch_real_upcoming_events():
+  # 擴充多領域極限運動賽事 RSS 來源 (Skate, Surf, Climb, Snowboard, Action Sports)
   rss_urls = [
+      # 滑板 & 街頭極限 (Skateboarding & Street)
       ("World Skate", "http://www.worldskate.org/news?format=feed&type=rss"),
+      ("Dew Tour", "https://www.dewtour.com/feed/"),
+      # 衝浪 (Surfing)
       ("WSL Surfing", "https://www.worldsurfleague.com/rss"),
+      ("Surfer Magazine", "https://www.surfer.com/.rss/excerpt/"),
+      # 攀岩 & 抱石 (Climbing & Bouldering)
+      ("Climbing Magazine", "https://www.climbing.com/feed/"),
+      ("Gripped Climbing", "https://gripped.com/feed/"),
+      # 滑雪 & 極限綜合 (Snowboarding & Action Sports)
+      ("Whitelines Snowboarding", "https://whitelines.com/feed"),
+      ("Red Bull Action Sports", "https://www.redbull.com/us-en/feed.xml"),
   ]
+
   events = []
   now = datetime.now()
-  future_3_months = now + timedelta(days=90)
+  past_margin = now - timedelta(days=14)  # 包含最近兩週發布的最新情報
+  future_3_months = now + timedelta(days=90)  # 涵蓋未來3個月
 
   for org, url in rss_urls:
     try:
       feed = feedparser.parse(url)
       for entry in feed.entries:
-        pub_date_str = getattr(entry, "published", None)
-        if pub_date_str:
+        pub_date = None
+
+        # 1. 優先使用 feedparser 自動解析的結構化時間 (免除 dateutil 依賴)
+        if hasattr(entry, "published_parsed") and entry.published_parsed:
           try:
-            pub_date = parser.parse(pub_date_str).replace(tzinfo=None)
-            # 篩選日期落在：今天 ~ 未來 90 天之內（或過去近期發布的未來賽事）
-            if now <= pub_date <= future_3_months:
-              events.append({
-                  "org": org,
-                  "title": entry.title,
-                  "published": pub_date.strftime("%Y-%m-%d"),
-              })
+            pub_date = datetime(*entry.published_parsed[:6])
           except Exception:
-            continue
+            pub_date = None
+
+        # 2. 備用標準庫 email.utils 解析 RFC822 格式
+        if not pub_date and hasattr(entry, "published"):
+          try:
+            pub_date = parsedate_to_datetime(entry.published).replace(
+                tzinfo=None
+            )
+          except Exception:
+            pub_date = None
+
+        # 篩選時間範圍內的賽事與最新動態
+        if pub_date and (past_margin <= pub_date <= future_3_months):
+          events.append({
+              "org": org,
+              "title": entry.title,
+              "published": pub_date.strftime("%Y-%m-%d"),
+          })
     except Exception as e:
       print(f"⚠️ RSS ({org}) 解析失敗: {e}")
 
-  return events[:5]  # 回傳未來3個月內最多 5 筆重點賽事
-    
+  return events[:6]  # 回傳最新與未來 3 個月內最多 6 筆賽事情報
+
+
 # ==========================================
 # 5. Gemini 文案生成 (嚴格分類 + 精簡字數)
 # ==========================================
