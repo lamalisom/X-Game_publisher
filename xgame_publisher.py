@@ -10,6 +10,9 @@ from google import genai
 from google.genai.errors import APIError
 import requests
 from PIL import Image, ImageDraw, ImageEnhance, ImageFont
+from datetime import datetime, timedelta
+from dateutil import parser  # 需 pip install python-dateutil
+
 
 # ==========================================
 # 1. 環境變數設定
@@ -247,20 +250,31 @@ def fetch_real_upcoming_events():
       ("WSL Surfing", "https://www.worldsurfleague.com/rss"),
   ]
   events = []
+  now = datetime.now()
+  future_3_months = now + timedelta(days=90)
+
   for org, url in rss_urls:
     try:
       feed = feedparser.parse(url)
-      for entry in feed.entries[:2]:
-        events.append({
-            "org": org,
-            "title": entry.title,
-            "published": getattr(entry, "published", "近期"),
-        })
+      for entry in feed.entries:
+        pub_date_str = getattr(entry, "published", None)
+        if pub_date_str:
+          try:
+            pub_date = parser.parse(pub_date_str).replace(tzinfo=None)
+            # 篩選日期落在：今天 ~ 未來 90 天之內（或過去近期發布的未來賽事）
+            if now <= pub_date <= future_3_months:
+              events.append({
+                  "org": org,
+                  "title": entry.title,
+                  "published": pub_date.strftime("%Y-%m-%d"),
+              })
+          except Exception:
+            continue
     except Exception as e:
       print(f"⚠️ RSS ({org}) 解析失敗: {e}")
-  return events
 
-
+  return events[:5]  # 回傳未來3個月內最多 5 筆重點賽事
+    
 # ==========================================
 # 5. Gemini 文案生成 (嚴格分類 + 精簡字數)
 # ==========================================
