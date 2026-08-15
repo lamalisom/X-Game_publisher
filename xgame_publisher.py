@@ -23,128 +23,119 @@ PEXELS_API_KEY = os.getenv("PEXELS_API_KEY")
 PREDICTHQ_TOKEN = os.getenv("PREDICTHQ_TOKEN")
 
 # ==========================================
-# 2. 基本資料與分類設定 (含 BIKE 極限單車)
+# 2. 基本資料與分類設定
 # ==========================================
 XGAME_CATEGORIES = {
     "SKATE": {
         "title": "滑板 SKATEBOARDING",
-        "query": "skateboarding park athlete",
+        "query": "skateboarding skate park skater athlete",
         "osm_tag": 'node["sport"="skateboard"]',
         "tag": "#Skateboarding #SkatePark #滑板",
     },
     "SURF": {
         "title": "衝浪 SURFING",
-        "query": "surfing ocean waves surfer",
+        "query": "surfing ocean wave surfer athlete",
         "osm_tag": 'node["sport"="surfing"]',
         "tag": "#Surfing #WaveRider #浪人日常 #衝浪",
     },
     "CLIMB": {
         "title": "攀岩 CLIMBING",
-        "query": "bouldering indoor rock climbing athlete",
+        "query": "rock climbing bouldering climber rock wall",
         "osm_tag": 'node["sport"="climbing"]',
         "tag": "#Bouldering #Climbing #攀岩 #抱石",
     },
     "BIKE": {
         "title": "極限單車 BMX & MTB",
-        "query": "bmx freestyle mountain bike athlete",
+        "query": "bmx freestyle mountain biking cyclist",
         "osm_tag": 'node["sport"~"bmx|cycling"]',
         "tag": "#BMX #MTB #FreestyleBMX #極限單車 #越野單車",
     },
     "EVENT": {
         "title": "全球賽事總覽 GLOBAL EVENTS",
-        "query": "action sports competition xgames",
+        "query": "action sports competition extreme sports athlete",
         "osm_tag": None,
         "tag": "#XGames #WorldSkate #WSL #IFSC #UCI #RedBull #極限運動",
     },
 }
 
 CITIES = [
+    {"name": "Yosemite", "country": "USA", "lat": 37.8651, "lon": -119.5383},
     {"name": "Bali", "country": "Indonesia", "lat": -8.4095, "lon": 115.1889},
     {"name": "Mentawai", "country": "Indonesia", "lat": -2.1333, "lon": 99.5500},
     {"name": "Lombok", "country": "Indonesia", "lat": -8.6509, "lon": 116.3249},
     {"name": "Jakarta", "country": "Indonesia", "lat": -6.2088, "lon": 106.8456},
     {"name": "Hong Kong", "country": "Hong Kong", "lat": 22.3193, "lon": 114.1694},
     {"name": "Taipei", "country": "Taiwan", "lat": 25.0330, "lon": 121.5654},
-    {"name": "Taitung", "country": "Taiwan", "lat": 22.7583, "lon": 121.1444},
-    {"name": "Yilan", "country": "Taiwan", "lat": 24.7570, "lon": 121.7530},
     {"name": "Tokyo", "country": "Japan", "lat": 35.6762, "lon": 139.6503},
     {"name": "Stockholm", "country": "Sweden", "lat": 59.3293, "lon": 18.0686},
     {"name": "Lisbon", "country": "Portugal", "lat": 38.7223, "lon": -9.1393},
-    {"name": "Nazaré", "country": "Portugal", "lat": 39.6028, "lon": -9.0717},
-    {"name": "Ericeira", "country": "Portugal", "lat": 38.9622, "lon": -9.4172},
     {"name": "Barcelona", "country": "Spain", "lat": 41.3851, "lon": 2.1734},
     {"name": "Paris", "country": "France", "lat": 48.8566, "lon": 2.3522},
-    {"name": "Innsbruck", "country": "Austria", "lat": 47.2692, "lon": 11.4041},
     {"name": "Los Angeles", "country": "USA", "lat": 34.0522, "lon": -118.2437},
     {"name": "Sydney", "country": "Australia", "lat": -33.8688, "lon": 151.2093},
-    {"name": "Gold Coast", "country": "Australia", "lat": -28.0167, "lon": 153.4000},
 ]
 
 
 # ==========================================
-# 3. Pexels 圖片抓取
+# 3. Pexels 圖片抓取 (精準運動類型鎖定)
 # ==========================================
 def fetch_pexels_image(category_key, city_name, width=1200, height=630):
     if not PEXELS_API_KEY:
         print("ℹ️ 未檢測到 PEXELS_API_KEY，將切換至預設幾何底圖。")
         return None
 
-    # 1. 根據分類建立極精準、排除球類的圖片搜尋關鍵字
-    category_queries = {
-        "SKATE": f"skateboarding skater {city_name}",
-        "SURF": f"surfing surfer ocean {city_name}",
-        "CLIMB": f"rock climbing bouldering climber {city_name}",  # 強制鎖定攀岩/抱石
-        "BIKE": f"bmx freestyle mountain biking {city_name}",
-        "EVENT": f"action sports extreme competition {city_name}"
-    }
-    
-    search_keyword = category_queries.get(category_key, f"extreme sports {city_name}")
+    cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES["EVENT"])
+    # 強制將運動關鍵字放在首位，避免城市名導致搜尋出球類或風景照片
+    search_keyword = f"{cat_info['query']} {city_name}".strip()
 
     url = f"https://api.pexels.com/v1/search?query={requests.utils.quote(search_keyword)}&per_page=10&orientation=landscape"
     headers = {"Authorization": PEXELS_API_KEY}
 
     try:
         res = requests.get(url, headers=headers, timeout=10)
+        photos = []
         if res.status_code == 200:
-            data = res.json()
-            photos = data.get("photos", [])
-            
-            # 若帶有城市名稱搜尋不到圖片，則降級為純運動關鍵字搜尋，避免抓到無關圖片
-            if not photos:
-                fallback_keyword = category_queries[category_key].replace(f" {city_name}", "")
-                url = f"https://api.pexels.com/v1/search?query={requests.utils.quote(fallback_keyword)}&per_page=10&orientation=landscape"
-                res = requests.get(url, headers=headers, timeout=10)
-                if res.status_code == 200:
-                    photos = res.json().get("photos", [])
+            photos = res.json().get("photos", [])
 
-            if photos:
-                photo_url = random.choice(photos)["src"]["large2x"]
-                img_res = requests.get(photo_url, timeout=10)
-                img = Image.open(io.BytesIO(img_res.content)).convert("RGB")
+        # 若加上城市名找不到圖片，退回純運動項目搜尋
+        if not photos:
+            search_keyword = cat_info['query']
+            url = f"https://api.pexels.com/v1/search?query={requests.utils.quote(search_keyword)}&per_page=10&orientation=landscape"
+            res = requests.get(url, headers=headers, timeout=10)
+            if res.status_code == 200:
+                photos = res.json().get("photos", [])
 
-                # 裁切與暗化處理 (保持原有邏輯)
-                img_ratio = img.width / img.height
-                target_ratio = width / height
+        if photos:
+            photo_url = random.choice(photos)["src"]["large2x"]
+            img_res = requests.get(photo_url, timeout=10)
+            img = Image.open(io.BytesIO(img_res.content)).convert("RGB")
 
-                if img_ratio > target_ratio:
-                    new_width = int(target_ratio * img.height)
-                    left = (img.width - new_width) // 2
-                    img = img.crop((left, 0, left + new_width, img.height))
-                else:
-                    new_height = int(img.width / target_ratio)
-                    top = (img.height - new_height) // 2
-                    img = img.crop((0, top, img.width, top + new_height))
+            # 裁切為 1200x630
+            img_ratio = img.width / img.height
+            target_ratio = width / height
 
-                img = img.resize((width, height), Image.Resampling.LANCZOS)
-                enhancer = ImageEnhance.Brightness(img)
-                img = enhancer.enhance(0.40)
-                print(f"📸 成功抓取精準主題圖片: [{search_keyword}]")
-                return img
+            if img_ratio > target_ratio:
+                new_width = int(target_ratio * img.height)
+                left = (img.width - new_width) // 2
+                img = img.crop((left, 0, left + new_width, img.height))
+            else:
+                new_height = int(img.width / target_ratio)
+                top = (img.height - new_height) // 2
+                img = img.crop((0, top, img.width, top + new_height))
+
+            img = img.resize((width, height), Image.Resampling.LANCZOS)
+
+            # 適度壓暗底圖以突出標題文字
+            enhancer = ImageEnhance.Brightness(img)
+            img = enhancer.enhance(0.40)
+            print(f"📸 成功抓取精準主題圖片: [{search_keyword}]")
+            return img
     except Exception as e:
         print(f"⚠️ Pexels 圖片抓取失敗: {e}")
 
     return None
-    
+
+
 # ==========================================
 # 4. OpenStreetMap, PredictHQ & RSS 賽事抓取
 # ==========================================
@@ -269,7 +260,7 @@ def fetch_real_upcoming_events():
 
 
 # ==========================================
-# 5. Gemini 文案生成 (修正圖文一致與結果/預告邏輯)
+# 5. Gemini 文案與標題生成
 # ==========================================
 def generate_xgame_content(category_key, target_lang="zh-hk"):
     cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES["EVENT"])
@@ -309,8 +300,8 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
    - 若賽事在今天之前（已發生）：必須報導**比賽結果、獲勝者或創新紀錄亮點**。
    - 若賽事在未來 3 個月內：必須報導**舉行時間、地點及看點預告**。
 5. 前兩行必須嚴格按照以下格式輸出提取出的標題與地點：
-   `COVER_TITLE: [簡短封面大標題，8-10字以內]`
-   `CITY_NAME: [主要賽事發生的真實城市或國家英文名稱，例如 Yosemite / California / Paris / Tokyo / Global]`
+   `COVER_TITLE: [簡短封面大標題，8-12字以內，例如：極限速報：攀岩新線·滑板解禁！]`
+   `CITY_NAME: [主要賽事發生的真實城市或國家英文名稱，例如 Yosemite / Paris / Tokyo / Global]`
 6. 正文格式必須完全符合以下獨立分區：
 
 👋 我係 Una (@Una_next)！今日賽事情報速遞：
@@ -345,7 +336,7 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
 2. 資訊必須【嚴格分開類別，獨立介紹】，絕不可混在一起。
 3. 每個類別 1~2 句即可，字數精簡短練（總字數 250 字內）。
 4. 前兩行必須嚴格按照以下格式輸出：
-   `COVER_TITLE: [簡短封面大標題，8-10字以內]`
+   `COVER_TITLE: [簡短封面大標題，8-12字以內]`
    `CITY_NAME: {city['name']}`
 5. 正文格式必須完全符合以下獨立分區：
 
@@ -372,7 +363,6 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
 
         cover_title = f"{cat_info['title'][:10]} SPOTLIGHT"
         city_name = "GLOBAL"
-        caption_text = full_text
 
         # 解析 COVER_TITLE 與 CITY_NAME
         lines = full_text.split("\n")
@@ -386,22 +376,21 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
                 parsed_caption_lines.append(line)
 
         caption_text = "\n".join(parsed_caption_lines).strip()
-        sub_title = f"{city_name.upper()} · {category_key}"
-        search_query = f"{cat_info['query']} {city_name}"
+        sub_title = f"{city_name.upper()} · EVENT" if category_key == "EVENT" else f"{city_name.upper()} · {category_key}"
 
-        return cover_title, sub_title, caption_text, search_query
+        return cover_title, sub_title, caption_text, city_name
     except APIError as e:
         print(f"❌ Gemini 生成失敗: {e}")
         return (
             f"{category_key} SPOTLIGHT",
             "GLOBAL · XGAME RADAR",
             "👋 我係 Una (@Una_next)！今日最新極限情報更新～\n\n#xGameRadar",
-            cat_info["query"],
+            "GLOBAL",
         )
 
 
 # ==========================================
-# 6. 底圖與壓字繪製 (IG 安全區域最適化)
+# 6. 底圖與壓字繪製 (確定標題壓印與視覺置中)
 # ==========================================
 def create_obsidian_background(width=1200, height=630):
     base = Image.new("RGB", (width, height))
@@ -449,35 +438,29 @@ def get_font(size):
                 pass
     return ImageFont.load_default()
 
-       
+
 def create_cover_image(
     cover_title, sub_title, category_key, city_name, output_path="cover.jpg"
 ):
-    # 呼叫更新後的 Pexels 抓圖函數，精準帶入類別與城市
     img = fetch_pexels_image(category_key, city_name)
     if img is None:
         img = create_obsidian_background(1200, 630)
 
-    # ...（後續繪製文字與標題的邏輯保持不變）...
-    
-    img.save(output_path, quality=95)
-    return output_path
-
-
     draw = ImageDraw.Draw(img)
-    font_sub = get_font(24)
-    font_main = get_font(42)
+    font_sub = get_font(26)
+    font_main = get_font(44)
     font_footer = get_font(18)
 
     width, height = img.size  # 1200, 630
 
-    max_width = 410
+    # 1. 斷詞處理 (確保主標題完美顯示)
+    max_line_width = 800
     lines = []
     current_line = ""
     for char in cover_title:
         test_line = current_line + char
         bbox = draw.textbbox((0, 0), test_line, font=font_main)
-        if bbox[2] - bbox[0] > max_width:
+        if bbox[2] - bbox[0] > max_line_width:
             lines.append(current_line)
             current_line = char
         else:
@@ -485,15 +468,16 @@ def create_cover_image(
     if current_line:
         lines.append(current_line)
 
-    display_lines = lines[:3]
-    line_height = 56
+    display_lines = lines[:2]  # 最多顯示 2 行標題
+    line_height = 58
     title_block_height = len(display_lines) * line_height
 
-    total_block_height = 30 + 18 + title_block_height + 35 + 20
+    total_block_height = 35 + title_block_height + 40
     start_y = (height - total_block_height) // 2
 
+    # 2. 繪製副標題 (黃點 + 黃字)
     dot_radius = 5
-    dot_spacing = 8
+    dot_spacing = 10
     sub_bbox = draw.textbbox((0, 0), sub_title, font=font_sub)
     sub_w = sub_bbox[2] - sub_bbox[0]
     sub_h = sub_bbox[3] - sub_bbox[1]
@@ -517,30 +501,30 @@ def create_cover_image(
     text_x = dot_x + (dot_radius * 2) + dot_spacing
     draw.text((text_x, y_sub), sub_title, font=font_sub, fill=(255, 204, 0))
 
+    # 3. 繪製主標題 (帶陰影，確保清楚突出)
     y_title = y_sub + 45
     for line in display_lines:
         line_bbox = draw.textbbox((0, 0), line, font=font_main)
         line_w = line_bbox[2] - line_bbox[0]
         line_x = (width - line_w) // 2
 
-        draw.text(
-            (line_x + 2, y_title + 2), line, font=font_main, fill=(0, 0, 0, 220)
-        )
+        # 暗黑陰影
+        draw.text((line_x + 2, y_title + 2), line, font=font_main, fill=(0, 0, 0, 240))
+        # 主白字
         draw.text((line_x, y_title), line, font=font_main, fill=(255, 255, 255))
         y_title += line_height
 
+    # 4. 繪製 Footer 落款
     footer_text = "xGame Radar · Curated by Una (@Una_next)"
     footer_bbox = draw.textbbox((0, 0), footer_text, font=font_footer)
     footer_w = footer_bbox[2] - footer_bbox[0]
     footer_x = (width - footer_w) // 2
-    y_footer = y_title + 10
+    y_footer = y_title + 15
 
-    draw.text(
-        (footer_x, y_footer), footer_text, font=font_footer, fill=(210, 210, 220)
-    )
+    draw.text((footer_x, y_footer), footer_text, font=font_footer, fill=(210, 210, 220))
 
     img.save(output_path, quality=95)
-    print(f"🎨 封面圖片已成功生成（副標題: {sub_title} | 搜尋關鍵字: {query_keyword}）: {output_path}")
+    print(f"🎨 封面圖片已成功繪製並儲存: {output_path} (標題: {cover_title} | 副標題: {sub_title})")
     return output_path
 
 
@@ -590,6 +574,7 @@ def send_telegram_post(photo_path, message_text):
     except Exception as e:
         print(f"⚠️ Telegram 發送過程異常: {e}")
 
+
 # ==========================================
 # 8. 主程式進入點
 # ==========================================
@@ -622,10 +607,7 @@ def main():
         category_key, args.lang
     )
 
-    # -----------------------------------------------------------------
-    # 📍【放置在這裏】：呼叫圖片生成
-    # 帶入 category_key 與 city_name，確保 Pexels 抓圖精準鎖定運動項目
-    # -----------------------------------------------------------------
+    # 2. 呼叫圖片生成 (帶入 category_key 與 city_name 精準配對圖片與繪製標題)
     photo_path = create_cover_image(
         cover_title=cover_title,
         sub_title=sub_title,
@@ -634,7 +616,7 @@ def main():
         output_path="xgame_post.jpg"
     )
 
-    # 3. 將生成的圖片與文案發送到 Telegram
+    # 3. 發送至 Telegram
     send_telegram_post(photo_path, caption_text)
 
 
