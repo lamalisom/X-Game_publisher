@@ -84,12 +84,23 @@ CITIES = [
 # ==========================================
 # 3. Pexels 圖片抓取
 # ==========================================
-def fetch_pexels_image(keyword, width=1200, height=630):
+def fetch_pexels_image(category_key, city_name, width=1200, height=630):
     if not PEXELS_API_KEY:
         print("ℹ️ 未檢測到 PEXELS_API_KEY，將切換至預設幾何底圖。")
         return None
 
-    url = f"https://api.pexels.com/v1/search?query={keyword}&per_page=8&orientation=landscape"
+    # 1. 根據分類建立極精準、排除球類的圖片搜尋關鍵字
+    category_queries = {
+        "SKATE": f"skateboarding skater {city_name}",
+        "SURF": f"surfing surfer ocean {city_name}",
+        "CLIMB": f"rock climbing bouldering climber {city_name}",  # 強制鎖定攀岩/抱石
+        "BIKE": f"bmx freestyle mountain biking {city_name}",
+        "EVENT": f"action sports extreme competition {city_name}"
+    }
+    
+    search_keyword = category_queries.get(category_key, f"extreme sports {city_name}")
+
+    url = f"https://api.pexels.com/v1/search?query={requests.utils.quote(search_keyword)}&per_page=10&orientation=landscape"
     headers = {"Authorization": PEXELS_API_KEY}
 
     try:
@@ -97,11 +108,21 @@ def fetch_pexels_image(keyword, width=1200, height=630):
         if res.status_code == 200:
             data = res.json()
             photos = data.get("photos", [])
+            
+            # 若帶有城市名稱搜尋不到圖片，則降級為純運動關鍵字搜尋，避免抓到無關圖片
+            if not photos:
+                fallback_keyword = category_queries[category_key].replace(f" {city_name}", "")
+                url = f"https://api.pexels.com/v1/search?query={requests.utils.quote(fallback_keyword)}&per_page=10&orientation=landscape"
+                res = requests.get(url, headers=headers, timeout=10)
+                if res.status_code == 200:
+                    photos = res.json().get("photos", [])
+
             if photos:
                 photo_url = random.choice(photos)["src"]["large2x"]
                 img_res = requests.get(photo_url, timeout=10)
                 img = Image.open(io.BytesIO(img_res.content)).convert("RGB")
 
+                # 裁切與暗化處理 (保持原有邏輯)
                 img_ratio = img.width / img.height
                 target_ratio = width / height
 
@@ -115,17 +136,15 @@ def fetch_pexels_image(keyword, width=1200, height=630):
                     img = img.crop((0, top, img.width, top + new_height))
 
                 img = img.resize((width, height), Image.Resampling.LANCZOS)
-
                 enhancer = ImageEnhance.Brightness(img)
                 img = enhancer.enhance(0.40)
-                print(f"📸 成功抓取 Pexels 實景圖片: [{keyword}]")
+                print(f"📸 成功抓取精準主題圖片: [{search_keyword}]")
                 return img
     except Exception as e:
         print(f"⚠️ Pexels 圖片抓取失敗: {e}")
 
     return None
-
-
+    
 # ==========================================
 # 4. OpenStreetMap, PredictHQ & RSS 賽事抓取
 # ==========================================
@@ -430,13 +449,20 @@ def get_font(size):
                 pass
     return ImageFont.load_default()
 
-
+       
 def create_cover_image(
-    cover_title, sub_title, query_keyword, output_path="cover.jpg"
+    cover_title, sub_title, category_key, city_name, output_path="cover.jpg"
 ):
-    img = fetch_pexels_image(query_keyword)
+    # 呼叫更新後的 Pexels 抓圖函數，精準帶入類別與城市
+    img = fetch_pexels_image(category_key, city_name)
     if img is None:
         img = create_obsidian_background(1200, 630)
+
+    # ...（後續繪製文字與標題的邏輯保持不變）...
+    
+    img.save(output_path, quality=95)
+    return output_path
+
 
     draw = ImageDraw.Draw(img)
     font_sub = get_font(24)
@@ -564,7 +590,6 @@ def send_telegram_post(photo_path, message_text):
     except Exception as e:
         print(f"⚠️ Telegram 發送過程異常: {e}")
 
-
 # ==========================================
 # 8. 主程式進入點
 # ==========================================
@@ -592,14 +617,24 @@ def main():
 
     print(f"🚀 啟動 xGame Radar -> 主題: [{category_key}] | 語言: [{args.lang}]")
 
-    cover_title, sub_title, caption_text, query_keyword = generate_xgame_content(
+    # 1. 呼叫 Gemini 生成文案與提取標題/城市名稱
+    cover_title, sub_title, caption_text, city_name = generate_xgame_content(
         category_key, args.lang
     )
 
+    # -----------------------------------------------------------------
+    # 📍【放置在這裏】：呼叫圖片生成
+    # 帶入 category_key 與 city_name，確保 Pexels 抓圖精準鎖定運動項目
+    # -----------------------------------------------------------------
     photo_path = create_cover_image(
-        cover_title, sub_title, query_keyword, "xgame_post.jpg"
+        cover_title=cover_title,
+        sub_title=sub_title,
+        category_key=category_key,
+        city_name=city_name,
+        output_path="xgame_post.jpg"
     )
 
+    # 3. 將生成的圖片與文案發送到 Telegram
     send_telegram_post(photo_path, caption_text)
 
 
