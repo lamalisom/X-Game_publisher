@@ -20,7 +20,7 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 PEXELS_API_KEY = os.getenv("PEXELS_API_KEY")
-PREDICTHQ_TOKEN = os.getenv("PREDICTHQ_TOKEN")  # 可選：PredictHQ API Access Token
+PREDICTHQ_TOKEN = os.getenv("PREDICTHQ_TOKEN")
 
 # ==========================================
 # 2. 基本資料與分類設定 (含 BIKE 極限單車)
@@ -58,9 +58,7 @@ XGAME_CATEGORIES = {
     },
 }
 
-# 城市與地點清單（含香港、台灣、印尼、葡萄牙、瑞典等極限運動勝地）
 CITIES = [
-    # 亞洲 Asia & 印尼專區 Indonesia
     {"name": "Bali", "country": "Indonesia", "lat": -8.4095, "lon": 115.1889},
     {"name": "Mentawai", "country": "Indonesia", "lat": -2.1333, "lon": 99.5500},
     {"name": "Lombok", "country": "Indonesia", "lat": -8.6509, "lon": 116.3249},
@@ -70,7 +68,6 @@ CITIES = [
     {"name": "Taitung", "country": "Taiwan", "lat": 22.7583, "lon": 121.1444},
     {"name": "Yilan", "country": "Taiwan", "lat": 24.7570, "lon": 121.7530},
     {"name": "Tokyo", "country": "Japan", "lat": 35.6762, "lon": 139.6503},
-    # 歐洲 Europe
     {"name": "Stockholm", "country": "Sweden", "lat": 59.3293, "lon": 18.0686},
     {"name": "Lisbon", "country": "Portugal", "lat": 38.7223, "lon": -9.1393},
     {"name": "Nazaré", "country": "Portugal", "lat": 39.6028, "lon": -9.0717},
@@ -78,7 +75,6 @@ CITIES = [
     {"name": "Barcelona", "country": "Spain", "lat": 41.3851, "lon": 2.1734},
     {"name": "Paris", "country": "France", "lat": 48.8566, "lon": 2.3522},
     {"name": "Innsbruck", "country": "Austria", "lat": 47.2692, "lon": 11.4041},
-    # 美洲 & 澳洲 Americas & Oceania
     {"name": "Los Angeles", "country": "USA", "lat": 34.0522, "lon": -118.2437},
     {"name": "Sydney", "country": "Australia", "lat": -33.8688, "lon": 151.2093},
     {"name": "Gold Coast", "country": "Australia", "lat": -28.0167, "lon": 153.4000},
@@ -86,7 +82,7 @@ CITIES = [
 
 
 # ==========================================
-# 3. 抓取 Pexels 實景圖片
+# 3. Pexels 圖片抓取
 # ==========================================
 def fetch_pexels_image(keyword, width=1200, height=630):
     if not PEXELS_API_KEY:
@@ -164,7 +160,6 @@ def fetch_osm_venue(category_key, city):
 
 
 def fetch_predicthq_events():
-    """從 PredictHQ Sports API 抓取極限運動與體育賽事"""
     if not PREDICTHQ_TOKEN:
         return []
 
@@ -189,11 +184,11 @@ def fetch_predicthq_events():
             results = res.json().get("results", [])
             for item in results:
                 start_date = item.get("start", "")[:10]
-                location = item.get("location", [])
                 events.append({
                     "org": "PredictHQ Sports",
                     "title": item.get("title", "Extreme Sport Event"),
                     "published": start_date,
+                    "status": "UPCOMING"
                 })
             print(f"✅ 成功從 PredictHQ API 抓取到 {len(events)} 筆賽事")
     except Exception as e:
@@ -203,14 +198,9 @@ def fetch_predicthq_events():
 
 
 def fetch_real_upcoming_events():
-    """抓取 PredictHQ API 及修復後的有效 RSS Feed 數據"""
     events = []
-    
-    # 1. 先嘗試抓取 PredictHQ
-    predicthq_events = fetch_predicthq_events()
-    events.extend(predicthq_events)
+    events.extend(fetch_predicthq_events())
 
-    # 2. 修正與擴充 RSS 清單
     rss_urls = [
         ("WSL Surfing", "https://www.worldsurfleague.com/rss"),
         ("IFSC Climbing World Cup", "https://www.ifsc-climbing.org/index.php?option=com_content&view=featured&format=feed&type=rss"),
@@ -246,10 +236,12 @@ def fetch_real_upcoming_events():
                         pub_date = None
 
                 if pub_date and (past_margin <= pub_date <= future_3_months):
+                    status = "PAST_RESULT" if pub_date <= now else "UPCOMING"
                     events.append({
                         "org": org,
                         "title": entry.title,
                         "published": pub_date.strftime("%Y-%m-%d"),
+                        "status": status
                     })
         except Exception as e:
             print(f"⚠️ RSS ({org}) 解析失敗: {e}")
@@ -258,10 +250,9 @@ def fetch_real_upcoming_events():
 
 
 # ==========================================
-# 5. Gemini 文案生成
+# 5. Gemini 文案生成 (修正圖文一致與結果/預告邏輯)
 # ==========================================
 def generate_xgame_content(category_key, target_lang="zh-hk"):
-    city = random.choice(CITIES)
     cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES["EVENT"])
 
     if not GEMINI_API_KEY:
@@ -272,36 +263,44 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
 
     if category_key == "EVENT":
         real_events = fetch_real_upcoming_events()
+        now_str = datetime.now().strftime("%Y-%m-%d")
         event_snippet = (
+            f"【今天日期】：{now_str}\n"
             "【最新賽程與新聞數據】：\n"
             + "\n".join([
-                f"- [{e['org']}] {e['title']} ({e['published']})" for e in real_events
+                f"- [{e['org']}] {e['title']} (日期: {e['published']}, 狀態標記: {e['status']})" for e in real_events
             ])
             if real_events
             else (
+                f"【今天日期】：{now_str}\n"
                 "【熱門賽事參考】：Red Bull Content Pool 極限賽事, PredictHQ 體育盛事, WSL 衝浪錦標賽, IFSC 攀岩世界盃, World Skate 巡迴賽"
             )
         )
 
         prompt = f"""
-你是一位極限運動特派員 Una (IG: @Una_next)。請以【{target_lang}】針對全球極限賽事生成 Telegram/IG 精簡速報。
+你是一位極限運動特派員 Una (IG: @Una_next)。請以【{target_lang}】針對提供的真實數據生成 Telegram/IG 精簡速報。
 
 {event_snippet}
 
 【嚴格要求】：
 1. 開頭包含 Una 短招呼語（如：「👋 我係 Una (@Una_next)！」）。
-2. 資訊必須【嚴格分開類別，獨立介紹】，絕不可揉杂在一起。
+2. 資訊必須【嚴格分開類別，獨立介紹】，絕不可混在一起。
 3. 每個類別 1~2 句，總字數控制在 250 字內，精簡乾淨。
-4. 第一行必須輸出：`COVER_TITLE: [簡短封面大標題，8-10字以內]`
-5. 正文格式必須完全符合以下獨立分區：
+4. 【賽事時態要求】：
+   - 若賽事在今天之前（已發生）：必須報導**比賽結果、獲勝者或創新紀錄亮點**。
+   - 若賽事在未來 3 個月內：必須報導**舉行時間、地點及看點預告**。
+5. 前兩行必須嚴格按照以下格式輸出提取出的標題與地點：
+   `COVER_TITLE: [簡短封面大標題，8-10字以內]`
+   `CITY_NAME: [主要賽事發生的真實城市或國家英文名稱，例如 Yosemite / California / Paris / Tokyo / Global]`
+6. 正文格式必須完全符合以下獨立分區：
 
 👋 我係 Una (@Una_next)！今日賽事情報速遞：
 
 📍【比賽場地】：[具體賽事場館/城市與環境重點]
 
-👤【參賽選手】：[具體列出 1-2 位焦點選手與亮點]
+👤【參賽選手】：[具體列出 1-2 位焦點選手與亮點/成績]
 
-🏆【比賽資料】：[賽事全名 + 舉辦時間/階段 + 官方連結]
+🏆【比賽資料】：[賽事全名 + 時間/階段 + 結果或賽程預告]
 
 🔰【觀賽建議】：[1點重點注意事項或觀賽指南]
 
@@ -309,6 +308,7 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
 {cat_info['tag']} #xGameRadar
 """
     else:
+        city = random.choice(CITIES)
         venue_name = fetch_osm_venue(category_key, city)
         venue_context = (
             f"地點：{city['country']} {city['name']}「{venue_name}」"
@@ -325,7 +325,9 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
 1. 開頭包含 Una 短招呼語（如：「👋 我係 Una (@Una_next)！」）。
 2. 資訊必須【嚴格分開類別，獨立介紹】，絕不可混在一起。
 3. 每個類別 1~2 句即可，字數精簡短練（總字數 250 字內）。
-4. 第一行必須輸出：`COVER_TITLE: [簡短封面大標題，8-10字以內]`
+4. 前兩行必須嚴格按照以下格式輸出：
+   `COVER_TITLE: [簡短封面大標題，8-10字以內]`
+   `CITY_NAME: {city['name']}`
 5. 正文格式必須完全符合以下獨立分區：
 
 👋 我係 Una (@Una_next)！今日極限情報：
@@ -349,24 +351,31 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
         )
         full_text = response.text.strip()
 
-        cover_title = f"{city['name']} · {cat_info['title'][:10]}"
+        cover_title = f"{cat_info['title'][:10]} SPOTLIGHT"
+        city_name = "GLOBAL"
         caption_text = full_text
 
-        if "COVER_TITLE:" in full_text:
-            parts = full_text.split("COVER_TITLE:", 1)[1].split("\n", 1)
-            cover_title = (
-                parts[0].strip().replace("[", "").replace("]", "").replace("*", "")
-            )
-            caption_text = parts[1].strip() if len(parts) > 1 else full_text
+        # 解析 COVER_TITLE 與 CITY_NAME
+        lines = full_text.split("\n")
+        parsed_caption_lines = []
+        for line in lines:
+            if line.startswith("COVER_TITLE:"):
+                cover_title = line.replace("COVER_TITLE:", "").strip().replace("[", "").replace("]", "").replace("*", "")
+            elif line.startswith("CITY_NAME:"):
+                city_name = line.replace("CITY_NAME:", "").strip().replace("[", "").replace("]", "").replace("*", "")
+            else:
+                parsed_caption_lines.append(line)
 
-        sub_title = f"{city['name'].upper()} · {category_key}"
-        search_query = f"{cat_info['query']} {city['name']} {city['country']}"
+        caption_text = "\n".join(parsed_caption_lines).strip()
+        sub_title = f"{city_name.upper()} · {category_key}"
+        search_query = f"{cat_info['query']} {city_name}"
+
         return cover_title, sub_title, caption_text, search_query
     except APIError as e:
         print(f"❌ Gemini 生成失敗: {e}")
         return (
             f"{category_key} SPOTLIGHT",
-            "XGAME RADAR",
+            "GLOBAL · XGAME RADAR",
             "👋 我係 Una (@Una_next)！今日最新極限情報更新～\n\n#xGameRadar",
             cat_info["query"],
         )
@@ -436,7 +445,6 @@ def create_cover_image(
 
     width, height = img.size  # 1200, 630
 
-    # 控制寬度至 410px 以符合 IG 正方形裁切安全區域
     max_width = 410
     lines = []
     current_line = ""
@@ -506,7 +514,7 @@ def create_cover_image(
     )
 
     img.save(output_path, quality=95)
-    print(f"🎨 封面圖片已成功生成（已適應 IG 裁切安全區域）: {output_path}")
+    print(f"🎨 封面圖片已成功生成（副標題: {sub_title} | 搜尋關鍵字: {query_keyword}）: {output_path}")
     return output_path
 
 
@@ -558,7 +566,7 @@ def send_telegram_post(photo_path, message_text):
 
 
 # ==========================================
-# 8. 主程式進入點 (明確註冊 BIKE 選項)
+# 8. 主程式進入點
 # ==========================================
 def main():
     parser = argparse.ArgumentParser(description="xGame Publisher Script")
