@@ -339,15 +339,14 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
 — By Una (@Una_next)
 {cat_info['tag']} #{city['name']} #xGameRadar
 """
-
     try:
         response = client.models.generate_content(
             model="gemini-2.5-flash",
             contents=prompt,
+            config={"tools": []}  # 關閉 AFC 警告
         )
         raw_text = response.text.strip()
         
-        # 清理 JSON 標記
         cleaned_json = re.sub(r"^```json\s*", "", raw_text, flags=re.MULTILINE)
         cleaned_json = re.sub(r"```$", "", cleaned_json, flags=re.MULTILINE).strip()
         
@@ -355,7 +354,7 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
         
         cover_title = data.get("cover_title", f"{category_key} SPOTLIGHT")
         city_name_en = data.get("city_name_en", "GLOBAL")
-        caption_text = data.get("caption", full_text if 'full_text' in locals() else "")
+        caption_text = data.get("caption", raw_text)
         
         sub_title = f"{city_name_en.upper()} · {category_key}"
 
@@ -369,7 +368,6 @@ def generate_xgame_content(category_key, target_lang="zh-hk"):
             f"👋 我係 Una (@Una_next)！今日最新極限情報更新～\n\n{cat_info['tag']} #xGameRadar",
             "GLOBAL",
         )
-
 
 # ==========================================
 # 6. 底圖與繪製 (高對比標題壓字)
@@ -520,13 +518,17 @@ def format_text_for_telegram_html(text):
     safe_text = re.sub(r"\*\*(.*?)\*\*", r"<b>\1</b>", safe_text)
     return safe_text
 
-
 def send_telegram_post(photo_path, message_text):
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
         print("❌ 缺少 TELEGRAM_BOT_TOKEN 或 TELEGRAM_CHAT_ID 環境變數")
         return
 
-    url = f"[https://api.telegram.org/bot](https://api.telegram.org/bot){TELEGRAM_BOT_TOKEN}/sendPhoto"
+    # 清理 Token：若不小心填入完整 URL 或包含 brackets，自動提煉純 Token
+    token = TELEGRAM_BOT_TOKEN.strip()
+    token = re.sub(r"^https?://api\.telegram\.org/bot", "", token, flags=re.IGNORECASE)
+    token = token.strip("[]/'\"")
+
+    url = f"https://api.telegram.org/bot{token}/sendPhoto"
     html_caption = format_text_for_telegram_html(message_text)
 
     if len(html_caption) > 980:
@@ -535,7 +537,7 @@ def send_telegram_post(photo_path, message_text):
     try:
         with open(photo_path, "rb") as photo_file:
             payload = {
-                "chat_id": TELEGRAM_CHAT_ID,
+                "chat_id": TELEGRAM_CHAT_ID.strip("[]'\""),
                 "caption": html_caption,
                 "parse_mode": "HTML",
             }
@@ -546,7 +548,8 @@ def send_telegram_post(photo_path, message_text):
                 print(f"⚠️ HTML 解析異常 ({res.text})，自動降級為純文字模式重新發送...")
                 photo_file.seek(0)
                 plain_text = re.sub(r"<[^>]+>", "", html_caption)
-                payload = {"chat_id": TELEGRAM_CHAT_ID, "caption": plain_text}
+                payload["caption"] = plain_text
+                payload.pop("parse_mode", None)
                 res = requests.post(url, data=payload, files=files, timeout=20)
 
             if res.status_code == 200:
@@ -555,8 +558,7 @@ def send_telegram_post(photo_path, message_text):
                 print(f"❌ Telegram 發送失敗: {res.text}")
     except Exception as e:
         print(f"⚠️ Telegram 發送過程異常: {e}")
-
-
+        
 # ==========================================
 # 8. 主程式進入點
 # ==========================================
