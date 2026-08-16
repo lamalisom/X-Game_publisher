@@ -79,22 +79,35 @@ CITIES = [
 # ==========================================
 # 3. Pexels 圖片抓取 (絕對鎖定運動種類)
 # ==========================================
-def fetch_pexels_image(category_key, city_name, width=1200, height=630):
+def fetch_pexels_image(category_key, city_name, cover_title="", width=1200, height=630):
     if not PEXELS_API_KEY:
         print("ℹ️ 未檢測到 PEXELS_API_KEY，將切換至預設幾何底圖。")
         return None
 
     cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES["EVENT"])
     base_keywords = cat_info["keywords"]
-    
-    # 清理城市名稱，確保為英文單字
+
+    # 若為 EVENT 類別，嘗試從標題或城市推斷更精準的運動關鍵字
+    if category_key == "EVENT":
+        if any(w in cover_title for w in ["攀岩", "攀山", "Rock", "Climb"]):
+            base_keywords = XGAME_CATEGORIES["CLIMB"]["keywords"]
+        elif any(w in cover_title for w in ["滑板", "Skate"]):
+            base_keywords = XGAME_CATEGORIES["SKATE"]["keywords"]
+        elif any(w in cover_title for w in ["衝浪", "Surf"]):
+            base_keywords = XGAME_CATEGORIES["SURF"]["keywords"]
+        elif any(w in cover_title for w in ["單車", "BMX", "MTB"]):
+            base_keywords = XGAME_CATEGORIES["BIKE"]["keywords"]
+
     clean_city = re.sub(r'[^a-zA-Z\s]', '', city_name).strip()
-    
-    # 搜尋優先順序：1. 運動關鍵字 + 地點  2. 純運動關鍵字
-    search_queries = [
-        f"{base_keywords} {clean_city}".strip(),
-        base_keywords
-    ]
+    if clean_city.upper() in ["GLOBAL", "WORLD", "NONE", ""]:
+        clean_city = ""
+
+    # 建立多層級搜尋順序
+    search_queries = []
+    if clean_city:
+        search_queries.append(f"{clean_city} {base_keywords}".strip())
+        search_queries.append(clean_city)
+    search_queries.append(base_keywords)
 
     headers = {"Authorization": PEXELS_API_KEY}
 
@@ -133,8 +146,6 @@ def fetch_pexels_image(category_key, city_name, width=1200, height=630):
             print(f"⚠️ Pexels 抓圖失敗 ({query}): {e}")
 
     return None
-
-
 # ==========================================
 # 4. OpenStreetMap, PredictHQ & RSS 賽事抓取
 # ==========================================
@@ -418,12 +429,11 @@ def get_font(size):
                 pass
     return ImageFont.load_default()
 
-
 def create_cover_image(
     cover_title, sub_title, category_key, city_name, output_path="cover.jpg"
 ):
-    # 抓取極度精準的主題圖片
-    img = fetch_pexels_image(category_key, city_name)
+    # 帶入 cover_title 以便 EVENT 模式自動分析主運動類別
+    img = fetch_pexels_image(category_key, city_name, cover_title=cover_title)
     if img is None:
         img = create_obsidian_background(1200, 630)
 
@@ -432,7 +442,7 @@ def create_cover_image(
     font_main = get_font(44)
     font_footer = get_font(18)
 
-    width, height = img.size  # 1200, 630
+    width, height = img.size
 
     # 1. 自動斷行處理
     max_line_width = 850
@@ -489,10 +499,9 @@ def create_cover_image(
         line_w = line_bbox[2] - line_bbox[0]
         line_x = (width - line_w) // 2
 
-        # 多重陰影增強文字清晰度
         for dx, dy in [(-2, -2), (2, -2), (-2, 2), (2, 2), (0, 3)]:
             draw.text((line_x + dx, y_title + dy), line, font=font_main, fill=(0, 0, 0, 255))
-            
+
         draw.text((line_x, y_title), line, font=font_main, fill=(255, 255, 255))
         y_title += line_height
 
@@ -508,7 +517,6 @@ def create_cover_image(
     img.save(output_path, quality=95)
     print(f"🎨 封面成功繪製（主標題: [{cover_title}] | 副標題: [{sub_title}]）: {output_path}")
     return output_path
-
 
 # ==========================================
 # 7. Telegram 發布
