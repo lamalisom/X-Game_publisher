@@ -72,4 +72,4 @@ jobs:
           [ -z "$CAT_INPUT" ] && CAT_INPUT="AUTO"
           [ -z "$LANG_INPUT" ] && LANG_INPUT="zh-hk"
 
-          python xgame_radar_engine.py
+          python xgame_publisher.py
