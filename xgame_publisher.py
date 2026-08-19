@@ -28,13 +28,62 @@ R2_PUBLIC_DOMAIN = os.getenv("R2_PUBLIC_DOMAIN")  # 例: https://pub-xxx.r2.dev
 
 DB_FILE = "xgame_radar.db"
 
-# 運動類別標籤與圖示配置
+# 運動類別標籤、圖示與專屬 Hashtags
 XGAME_CATEGORIES = {
-    "CLIMBING": {"title": "運動攀登 / Climbing", "icon": "🧗", "tag": "#Climbing #Bouldering #攀岩"},
-    "SKATE": {"title": "滑板 / Skateboarding", "icon": "🛹", "tag": "#Skateboarding #SkateLife #滑板"},
-    "SURF": {"title": "衝浪 / Surfing", "icon": "🏄", "tag": "#Surfing #SurfLife #衝浪"},
-    "BMX": {"title": "BMX 越野單車", "icon": "🚲", "tag": "#BMX #BMXFreestyle #極限單車"},
-    "EVENT": {"title": "全球極限賽事前瞻", "icon": "🏆", "tag": "#xGames #RedBull #ExtremeSports"},
+    "CLIMBING": {
+        "title": "運動攀登 / Climbing",
+        "icon": "🧗",
+        "tags": "#Climbing #Bouldering #攀岩 #抱石 #攀登 #OutdoorLife #xGameRadar"
+    },
+    "SKATE": {
+        "title": "滑板 / Skateboarding",
+        "icon": "🛹",
+        "tags": "#Skateboarding #SkateLife #SkatePark #滑板 #極限運動 #StreetCulture #xGameRadar"
+    },
+    "SURF": {
+        "title": "衝浪 / Surfing",
+        "icon": "🏄",
+        "tags": "#Surfing #SurfLife #WaveRider #衝浪 #海浪 #OceanVibes #xGameRadar"
+    },
+    "BMX": {
+        "title": "BMX 越野單車",
+        "icon": "🚲",
+        "tags": "#BMX #BMXFreestyle #BMXLife #極限單車 #單車 #xGameRadar"
+    },
+    "EVENT": {
+        "title": "全球極限賽事前瞻",
+        "icon": "🏆",
+        "tags": "#xGames #RedBull #WorldSkate #WSL #IFSC #ExtremeSports #極限賽事 #xGameRadar"
+    },
+}
+
+# 根據主題類別定義的 CTA (Call To Action) 庫
+CTA_LIBRARY = {
+    "VENUE": [
+        "💬 你有去過這個場地嗎？或者有更邪惡的私房打卡點？留言話我知！",
+        "📌 快啲 Save 低呢個 Post，下次飛過去玩/打卡就唔會搵唔到路！",
+        "🏷️ Tag 你個 Ready 一齊去刷場地嘅 Plate/Bouldering Buddy！"
+    ],
+    "ATHLETE": [
+        "🔥 你最心水嘅極限運動員係邊位？留言話我知，下次為你開箱佢嘅故事！",
+        "💬 佢呢招招牌動作你有冇試過？歡迎喺下面留言交流！",
+        "❤️ 覺得呢位選手好 Pro 嘅話，記得點讚支持同 Share 給朋友！"
+    ],
+    "COMPETITION": [
+        "🏆 呢場經典賽事你最印象深刻係哪一幕？留言一齊討論！",
+        "🔔 記得 Follow 我哋 @Una_next，第一時間獲取全球極限賽事最新情報！",
+        "📲 分享俾身邊同你一齊睇比賽嘅發燒友！"
+    ],
+    "EQUIPMENT": [
+        "⚙️ 你平時用緊咩牌子/裝備？留言分享你嘅實戰心得！",
+        "📌 裝備保養指南快啲 Bookmark 起來，延長你戰友嘅壽命！",
+        "💬 有冇其他裝備問題想問？留言話我知，下集話你知！"
+    ],
+    "EVENT_OVERVIEW": [
+        "🗓️ 未來 3-4 週賽事精采絕倫，你最期待邊一場？留言交流！",
+        "📲 記得 Save 低呢份預測清單，順便 Share 俾一齊睇直播嘅 Bro！",
+        "🔔 追蹤 @Una_next，緊貼全球最新預測賽期與賽況！"
+    ]
 }
 
 # 全球極限運動熱點城市
@@ -47,15 +96,6 @@ CITIES = [
     {"name": "Barcelona", "country": "Spain", "lat": 41.3851, "lon": 2.1734},
 ]
 
-# 5 週主題循環對照表
-TOPIC_ROTATION = {
-    1: {"type": "VENUE", "desc": "世界級極限場館與地標開箱"},
-    2: {"type": "ATHLETE", "desc": "傳奇與當紅極限選手人物誌"},
-    3: {"type": "COMPETITION", "desc": "經典極限賽事歷史與賽制解析"},
-    4: {"type": "EQUIPMENT", "desc": "專業裝備挑選與實戰保養指南"},
-    5: {"type": "EVENT_OVERVIEW", "desc": "未來 3-4 週全球極限賽事預測與情報"},
-}
-
 
 # ==========================================
 # 2. SQLite 數據庫初始化與操作
@@ -63,7 +103,6 @@ TOPIC_ROTATION = {
 def init_db():
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
-    # 建立抓取的賽事資料表
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS fetched_events (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -74,7 +113,6 @@ def init_db():
             fetched_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
-    # 建立發佈紀錄表
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS posts_history (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -162,7 +200,6 @@ def fetch_predicthq_events():
         "Accept": "application/json",
     }
 
-    # 計算未來第 3 週至第 4 週的時間範圍 (21天至30天後)
     now = datetime.now()
     start_3w = (now + timedelta(days=21)).strftime("%Y-%m-%d")
     end_4w = (now + timedelta(days=30)).strftime("%Y-%m-%d")
@@ -197,7 +234,6 @@ def fetch_predicthq_events():
 
 def fetch_real_upcoming_events():
     events = []
-    # 優先載入 PredictHQ 未來 3-4 週預測賽事
     events.extend(fetch_predicthq_events())
 
     rss_urls = [
@@ -213,7 +249,6 @@ def fetch_real_upcoming_events():
     ]
 
     now = datetime.now()
-    # 時間窗口過濾：只保留未來 21 至 30 天內的賽事預告
     future_3w_start = now + timedelta(days=21)
     future_4w_end = now + timedelta(days=30)
 
@@ -235,7 +270,6 @@ def fetch_real_upcoming_events():
                     except Exception:
                         pub_date = None
 
-                # 嚴格篩選未來 3-4 週 (21-30天後) 的比賽項目
                 if pub_date and (future_3w_start <= pub_date <= future_4w_end):
                     events.append({
                         "org": org,
@@ -252,7 +286,7 @@ def fetch_real_upcoming_events():
 
 
 # ==========================================
-# 5. Gemini 動態專題文案生成 (格式隨主題自動適配)
+# 5. Gemini 動態專題文案生成 (含 Tag 與 CTA 拼接)
 # ==========================================
 def generate_xgame_content(category_key, topic_type="VENUE", topic_desc="", target_lang="zh-hk"):
     cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES["EVENT"])
@@ -264,7 +298,7 @@ def generate_xgame_content(category_key, topic_type="VENUE", topic_desc="", targ
     client = genai.Client(api_key=GEMINI_API_KEY)
     city = random.choice(CITIES)
 
-    # 1. 根據 topic_type 定義專屬的正文模組結構與參考資料
+    # 1. 根據 topic_type 定義專屬的正文模組結構
     if topic_type == "EVENT_OVERVIEW" or category_key == "EVENT":
         real_events = fetch_real_upcoming_events()
         now_str = datetime.now().strftime("%Y-%m-%d")
@@ -364,9 +398,6 @@ def generate_xgame_content(category_key, topic_type="VENUE", topic_desc="", targ
 
 【正文結構範本（必須嚴格按照以下標題格式輸出 caption）】：
 {template_structure}
-
-— By Una (@Una_next)
-{cat_info['tag']} #xGameRadar
 """
 
     try:
@@ -384,18 +415,29 @@ def generate_xgame_content(category_key, topic_type="VENUE", topic_desc="", targ
 
         cover_title = data.get("cover_title", f"{category_key} {topic_type}")
         city_name_en = data.get("city_name_en", "GLOBAL")
-        caption_text = data.get("caption", raw_text)
+        raw_caption = data.get("caption", raw_text)
 
+        # 3. 自動附加 CTA 與 Hashtags
+        selected_cta = random.choice(CTA_LIBRARY.get(topic_type, CTA_LIBRARY["VENUE"]))
+        category_tags = cat_info["tags"]
+
+        full_caption = f"{raw_caption.strip()}\n\n---\n{selected_cta}\n\n— By Una (@Una_next)\n{category_tags}"
         sub_title = f"{city_name_en.upper()} · {category_key}"
 
-        return cover_title, sub_title, caption_text, city_name_en
+        return cover_title, sub_title, full_caption, city_name_en
 
     except Exception as e:
         print(f"⚠️ Gemini JSON 解析失敗，啟用後備設定: {e}")
+        selected_cta = random.choice(CTA_LIBRARY.get(topic_type, CTA_LIBRARY["VENUE"]))
+        category_tags = cat_info["tags"]
+        fallback_caption = (
+            f"👋 我係 Una (@Una_next)！今日【{topic_desc}】專題更新～\n\n"
+            f"---\n{selected_cta}\n\n— By Una (@Una_next)\n{category_tags}"
+        )
         return (
             f"{category_key} {topic_type}",
             f"GLOBAL · {category_key}",
-            f"👋 我係 Una (@Una_next)！今日【{topic_desc}】專題更新～\n\n{cat_info['tag']} #xGameRadar",
+            fallback_caption,
             "GLOBAL",
         )
 
@@ -559,24 +601,40 @@ def upload_to_r2(file_path, object_name):
 
 
 # ==========================================
-# 8. 主流程控制器
+# 8. 主流程控制器 (每日發帖模式)
 # ==========================================
 async def main():
-    print("🚀 啟動 xGame Radar 自動化內容生成引擎...")
+    print("🚀 啟動 xGame Radar 每日自動化內容生成引擎...")
     init_db()
 
-    # 1. 計算週數以進行 5 週話題輪替
-    week_num = datetime.now().isocalendar()[1]
-    rotation_key = ((week_num - 1) % 5) + 1
-    current_topic = TOPIC_ROTATION[rotation_key]
+    now = datetime.now()
+    weekday = now.weekday()  # 0=Mon, 1=Tue, ..., 6=Sun
+    day_of_year = now.timetuple().tm_yday
 
+    # 1. 每日主題輪替 (星期一至星期日)
+    DAILY_TOPICS = [
+        {"type": "VENUE", "desc": "世界級極限場館與地標開箱"},          # Mon
+        {"type": "ATHLETE", "desc": "傳奇與當紅極限選手人物誌"},        # Tue
+        {"type": "COMPETITION", "desc": "經典極限賽事歷史與賽制解析"}, # Wed
+        {"type": "EQUIPMENT", "desc": "專業裝備挑選與實戰保養指南"},   # Thu
+        {"type": "EVENT_OVERVIEW", "desc": "未來 3-4 週全球極限賽事預測與情報"}, # Fri
+        {"type": "VENUE", "desc": "週末熱門極限場地與玩家打卡點"},      # Sat
+        {"type": "EQUIPMENT", "desc": "週末裝備實戰保養與選購技巧"},    # Sun
+    ]
+
+    current_topic = DAILY_TOPICS[weekday]
     topic_type = current_topic["type"]
     topic_desc = current_topic["desc"]
 
-    # 2. 隨機選擇運動項目類別
-    category_key = random.choice(["CLIMBING", "SKATE", "SURF", "BMX", "EVENT"])
+    # 2. 每日運動類別輪替
+    sports_rotation = ["CLIMBING", "SKATE", "SURF", "BMX"]
+    if topic_type == "EVENT_OVERVIEW":
+        category_key = "EVENT"
+    else:
+        category_key = sports_rotation[day_of_year % len(sports_rotation)]
 
-    print(f"📅 本週輪替 (W{week_num}): 【{topic_type}】 - {topic_desc}")
+    print(f"📅 今日日期: {now.strftime('%Y-%m-%d')} (星期{weekday+1})")
+    print(f"📌 今日主題: 【{topic_type}】 - {topic_desc}")
     print(f"🏷️ 選用極限運動項目: {category_key}")
 
     # 3. 呼叫 Gemini 生成內容
@@ -590,11 +648,11 @@ async def main():
     print("\n--- [生成標題] ---")
     print(f"主標題: {cover_title}")
     print(f"副標題: {sub_title}")
-    print("\n--- [正文預覽] ---")
-    print(caption_text[:200] + "...\n")
+    print("\n--- [正文預覽 (含 CTA & Tag)] ---")
+    print(caption_text[-300:])  # 預覽底部 CTA 與 Tags
 
     # 4. 生成卡片圖片
-    image_filename = f"xgame_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+    image_filename = f"xgame_{now.strftime('%Y%m%d_%H%M%S')}.png"
     await generate_card_image(category_key, cover_title, sub_title, image_filename)
 
     # 5. 上傳圖片至 R2
@@ -610,7 +668,7 @@ async def main():
         image_url=image_url or image_filename,
     )
 
-    print("🎉 自動化任務執行 completed！")
+    print("🎉 每日自動發帖任務執行完成！")
 
 
 if __name__ == "__main__":
