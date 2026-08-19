@@ -66,9 +66,10 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          CAT_INPUT="${{ inputs.category }}"
-          LANG_INPUT="${{ inputs.lang }}"
-
+          env:
+          CAT_INPUT: ${{ inputs.category }}
+          LANG_INPUT: ${{ inputs.lang }}
+          
           [ -z "$CAT_INPUT" ] && CAT_INPUT="AUTO"
           [ -z "$LANG_INPUT" ] && LANG_INPUT="zh-hk"
 
