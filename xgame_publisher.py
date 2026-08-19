@@ -598,18 +598,20 @@ def upload_to_r2(file_path, object_name):
     except Exception as e:
         print(f"❌ R2 上傳失敗: {e}")
         return None
-
-
 # ==========================================
-# 8. 主流程控制器 (每日發帖模式)
+# 8. 主流程控制器 (每日發帖模式 + 支援手動觸發覆寫)
 # ==========================================
 async def main():
-    print("🚀 啟動 xGame Radar 每日自動化內容生成引擎...")
+    print("🚀 啟動 xGame Radar 自動化內容生成引擎...")
     init_db()
 
     now = datetime.now()
     weekday = now.weekday()  # 0=Mon, 1=Tue, ..., 6=Sun
     day_of_year = now.timetuple().tm_yday
+
+    # 讀取 GitHub Actions 傳入的環境變數 (若無則使用預設值)
+    cat_input = os.getenv("CAT_INPUT", "AUTO").upper()
+    lang_input = os.getenv("LANG_INPUT", "zh-hk").lower()
 
     # 1. 每日主題輪替 (星期一至星期日)
     DAILY_TOPICS = [
@@ -626,23 +628,29 @@ async def main():
     topic_type = current_topic["type"]
     topic_desc = current_topic["desc"]
 
-    # 2. 每日運動類別輪替
+    # 2. 運動類別判斷 (支援手動指定類別)
     sports_rotation = ["CLIMBING", "SKATE", "SURF", "BMX"]
-    if topic_type == "EVENT_OVERVIEW":
-        category_key = "EVENT"
+    
+    if cat_input != "AUTO":
+        category_key = cat_input
+        print(f"🎯 手動指定類別: {category_key}")
     else:
-        category_key = sports_rotation[day_of_year % len(sports_rotation)]
+        if topic_type == "EVENT_OVERVIEW":
+            category_key = "EVENT"
+        else:
+            category_key = sports_rotation[day_of_year % len(sports_rotation)]
+        print(f"🔄 自動輪替類別: {category_key}")
 
     print(f"📅 今日日期: {now.strftime('%Y-%m-%d')} (星期{weekday+1})")
     print(f"📌 今日主題: 【{topic_type}】 - {topic_desc}")
-    print(f"🏷️ 選用極限運動項目: {category_key}")
+    print(f"🌐 語言設定: {lang_input}")
 
     # 3. 呼叫 Gemini 生成內容
     cover_title, sub_title, caption_text, city_name_en = generate_xgame_content(
         category_key=category_key,
         topic_type=topic_type,
         topic_desc=topic_desc,
-        target_lang="zh-hk",
+        target_lang=lang_input,
     )
 
     print("\n--- [生成標題] ---")
@@ -668,8 +676,9 @@ async def main():
         image_url=image_url or image_filename,
     )
 
-    print("🎉 每日自動發帖任務執行完成！")
+    # 7. 發送至 Telegram 頻道/群組 (關鍵補齊)
+    send_telegram_post(caption_text=caption_text, image_path=image_filename)
 
-
+    print("🎉 自動發帖任務執行完成！")
 if __name__ == "__main__":
     asyncio.run(main())
