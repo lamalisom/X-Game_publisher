@@ -1,4 +1,4 @@
-name: xGame Global Spots & Events Publisher
+name: xgame_publisher
 
 on:
   schedule:
