@@ -2,9 +2,10 @@ name: xGame Global Spots & Events Publisher
 
 on:
   schedule:
-    # Runs automatically at 04:00 UTC on Monday, Wednesday, and Friday
-    - cron: '0 4 * * 1,3,5'
-  workflow_dispatch:
+    # Runs automatically every day at 04:00 UTC (12:00 PM HKT/MST)
+    - cron: '0 4 * * *'
+
+workflow_dispatch:
     inputs:
       category:
         description: '選擇主題 (Select Category)'
@@ -15,8 +16,8 @@ on:
           - AUTO
           - SKATE
           - SURF
-          - CLIMB
-          - BIKE
+          - CLIMBING
+          - BMX
           - EVENT
       lang:
         description: '選擇發布語言 (Select Language)'
@@ -46,21 +47,29 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y fonts-noto-cjk
           python -m pip install --upgrade pip
-          pip install requests google-genai feedparser Pillow
+          pip install requests google-genai feedparser Pillow playwright boto3 python-dateutil
 
-      - name: Run xGame Publisher friendship
+      - name: Install Playwright Browsers & System Dependencies
+        run: |
+          npx playwright install-deps
+          python -m playwright install chromium
+
+      - name: Run xGame Radar Engine
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PREDICTHQ_TOKEN: ${{ secrets.PREDICTHQ_TOKEN }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
+          R2_PUBLIC_DOMAIN: ${{ secrets.R2_PUBLIC_DOMAIN }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}  
-          
         run: |
           CAT_INPUT="${{ inputs.category }}"
           LANG_INPUT="${{ inputs.lang }}"
 
-          # Fallback defaults when triggered by cron schedule (inputs are empty)
           [ -z "$CAT_INPUT" ] && CAT_INPUT="AUTO"
           [ -z "$LANG_INPUT" ] && LANG_INPUT="zh-hk"
 
-          python xgame_publisher.py -c "$CAT_INPUT" -l "$LANG_INPUT"
+          python xgame_radar_engine.py
