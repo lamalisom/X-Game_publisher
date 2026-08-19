@@ -598,6 +598,54 @@ def upload_to_r2(file_path, object_name):
     except Exception as e:
         print(f"❌ R2 上傳失敗: {e}")
         return None
+
+import requests
+
+def send_telegram_post(caption_text, image_path=None):
+    # 從環境變數讀取 GitHub Secrets
+    telegram_token = os.getenv("TELEGRAM_BOT_TOKEN")
+    chat_id = os.getenv("TELEGRAM_CHAT_ID")
+
+    if not telegram_token or not chat_id:
+        print("⚠️ 未偵測到 TELEGRAM_BOT_TOKEN 或 TELEGRAM_CHAT_ID，跳過 Telegram 發送")
+        return
+
+    print("🚀 正在發送帖文與圖片至 Telegram...")
+
+    # 1. 優先嘗試發送圖片 + Caption
+    if image_path and os.path.exists(image_path):
+        url = f"https://api.telegram.org/bot{telegram_token}/sendPhoto"
+        try:
+            with open(image_path, "rb") as photo:
+                payload = {
+                    "chat_id": chat_id,
+                    "caption": caption_text
+                }
+                files = {"photo": photo}
+                res = requests.post(url, data=payload, files=files, timeout=15)
+                if res.status_code == 200:
+                    print("✅ Telegram 圖片卡片與文案已成功發送！")
+                    return
+                else:
+                    print(f"⚠️ 發送圖片失敗 ({res.status_code}): {res.text}，轉為純文字發送...")
+        except Exception as e:
+            print(f"⚠️ 發送 Telegram 圖片時發生例外: {e}")
+
+    # 2. 若發送圖片失敗或無圖片，降級發送純文字
+    url = f"https://api.telegram.org/bot{telegram_token}/sendMessage"
+    payload = {
+        "chat_id": chat_id,
+        "text": caption_text
+    }
+    try:
+        res = requests.post(url, data=payload, timeout=15)
+        if res.status_code == 200:
+            print("✅ Telegram 純文字訊息成功發送！")
+        else:
+            print(f"❌ Telegram 文字發送失敗: {res.text}")
+    except Exception as e:
+        print(f"❌ 發送 Telegram 文字時發生例外: {e}")
+        
 # ==========================================
 # 8. 主流程控制器 (每日發帖模式 + 支援手動觸發覆寫)
 # ==========================================
