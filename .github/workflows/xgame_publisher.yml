@@ -5,7 +5,7 @@ on:
     # Runs automatically every day at 04:00 UTC (12:00 PM HKT/MST)
     - cron: '0 4 * * *'
 
-workflow_dispatch:
+  workflow_dispatch:
     inputs:
       category:
         description: '選擇主題 (Select Category)'
