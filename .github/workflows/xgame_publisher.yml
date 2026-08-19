@@ -53,9 +53,10 @@ jobs:
         run: |
           npx playwright install-deps
           python -m playwright install chromium
-
+    
       - name: Run xGame Radar Engine
         env:
+          # 1. 系統 API 金鑰與憑證
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PREDICTHQ_TOKEN: ${{ secrets.PREDICTHQ_TOKEN }}
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
@@ -65,7 +66,12 @@ jobs:
           R2_PUBLIC_DOMAIN: ${{ secrets.R2_PUBLIC_DOMAIN }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          # 2. 將選單輸入傳遞為環境變數給 Python
+          CAT_INPUT: ${{ inputs.category }}
+          LANG_INPUT: ${{ inputs.lang }}
         run: |
+          python xgame_publisher.py
+ 
           env:
           CAT_INPUT: ${{ inputs.category }}
           LANG_INPUT: ${{ inputs.lang }}
