@@ -296,7 +296,7 @@ def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh
     """
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
-        print("❌ 未偵測到 GEMINI_API_KEY，請檢查 GitHub Secrets 設定！")
+        print("❌ 錯誤：未偵測到 GEMINI_API_KEY 環境變數，請檢查 GitHub Secrets！")
 
     client = genai.Client(api_key=api_key)
 
@@ -316,7 +316,7 @@ def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh
 - 請完全使用 **{selected_lang_desc}** 撰寫。
 
 【字數與結構嚴格限制】:
-1. 全文總字數務必控制在 **500 至 600 字以內**（絕對不可超過 800 字）。
+1. 全文總字數務必控制在 **400 至 500 字以內**（絕對不可超過 600 字）。
 2. 採用「重點條列式」，內容精煉流暢。
 
 請嚴格按照以下格式輸出，並用三條橫線 `---` 將各部分分開，不要輸出任何 Markdown 代碼塊（如 ```）：
@@ -330,10 +330,10 @@ def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh
 正文內容
 """
 
-    print(f"🤖 正在呼叫 Gemini 生成【{category_key}】帖文...")
+    print(f"🤖 正在呼叫 Gemini API 生成【{category_key}】內容...")
 
     try:
-        # 使用最穩定的模型呼叫方式
+        # 使用 Google GenAI Client 官方標準語法
         response = client.models.generate_content(
             model="gemini-2.0-flash",
             contents=prompt,
@@ -341,9 +341,9 @@ def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh
 
         raw_text = response.text.strip()
         
-        # 去除 Gemini 可能誤加的 ```markdown 包裹
-        raw_text = re.sub(r'^```\w*\n', '', raw_text)
-        raw_text = re.sub(r'\n```$', '', raw_text)
+        # 清除可能包裹的 ``` 標籤
+        raw_text = re.sub(r'^```\w*\n?', '', raw_text)
+        raw_text = re.sub(r'\n?```$', '', raw_text)
 
         parts = [p.strip() for p in raw_text.split("---")]
 
@@ -358,7 +358,8 @@ def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh
             city_name_en = "GLOBAL"
             caption_text = parts[2]
         else:
-            cover_title = f"{category_key} 極限突破"
+            # 如果 Gemini 沒有用 --- 分割，嘗試直接使用其產出的內文
+            cover_title = f"{category_key} 突破極限"
             sub_title = f"GLOBAL · {category_key}"
             city_name_en = "GLOBAL"
             caption_text = raw_text
@@ -366,11 +367,13 @@ def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh
         cover_title = re.sub(r'[*"\'«»]', '', cover_title)
         sub_title = re.sub(r'[*"\'«»]', '', sub_title)
 
+        print("✅ Gemini 內容生成成功！")
         return cover_title, sub_title, caption_text, city_name_en
 
     except Exception as e:
-        # 印出精確錯誤，避免默默走向保底內容
-        print(f"❌ Gemini 生成內容時發生詳細錯誤: {type(e).__name__} - {e}")
+        # 關鍵：將精確的錯誤訊息列印至 Actions console
+        print(f"❌ Gemini 呼叫失敗！詳細錯誤類型: {type(e).__name__}")
+        print(f"❌ 錯誤詳細內容: {str(e)}")
         
         fallback_title = f"{category_key} 焦點企劃"
         fallback_sub = f"GLOBAL · {category_key}"
