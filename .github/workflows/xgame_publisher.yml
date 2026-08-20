@@ -71,11 +71,7 @@ jobs:
           LANG_INPUT: ${{ inputs.lang }}
         run: |
           python xgame_publisher.py
- 
-        env:
-          CAT_INPUT: ${{ inputs.category }}
-          LANG_INPUT: ${{ inputs.lang }}
-          
+    
           [ -z "$CAT_INPUT" ] && CAT_INPUT="AUTO"
           [ -z "$LANG_INPUT" ] && LANG_INPUT="zh-hk"
 
