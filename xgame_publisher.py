@@ -289,15 +289,17 @@ def fetch_real_upcoming_events():
 # 5. Gemini 動態專題文案生成 (含 Tag 與 CTA 拼接)
 # ==========================================
 
+
 def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh-hk"):
     """
     呼叫 Gemini 2.0 Flash 生成 xGame 內容與卡片文字
-    保留原有所有功能，並嚴格控制正文字數在 500-600 字內，確保 Telegram 圖片發送順暢
     """
-    # 初始化 Gemini Client (使用最新 google-genai SDK)
-    client = genai.Client()
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        print("❌ 未偵測到 GEMINI_API_KEY，請檢查 GitHub Secrets 設定！")
 
-    # 語言對應設定
+    client = genai.Client(api_key=api_key)
+
     lang_map = {
         "zh-hk": "繁體中文（廣東話/香港口語，語氣熱血且極具社群吸引力）",
         "zh-cn": "簡體中文（專業熱血的極限運動社群口吻）",
@@ -306,52 +308,45 @@ def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh
     }
     selected_lang_desc = lang_map.get(target_lang, lang_map["zh-hk"])
 
-    # 構造系統與任務 Prompt
     prompt = f"""
-你是一位專注於全球極限運動（Skateboarding, Surfing, Rock Climbing, BMX 等）的極限運動社群小編 Una (@Una_next)。
+你是一位專注於全球極限運動的社群小編 Una (@Una_next)。
 請針對極限運動項目【{category_key}】，以及今日主題【{topic_type}: {topic_desc}】，撰寫一份高品質的社群帖文與圖文卡片文字。
 
 【語言要求】:
 - 請完全使用 **{selected_lang_desc}** 撰寫。
 
-【⚠️ 字數與結構嚴格限制 - 關鍵限制】:
-1. **全文總字數必須控制在 500 至 600 字以內**（絕對不可超過 800 字，否則會因超過 Telegram Caption 限制而無法顯示圖片）。
-2. 採用「重點條列式」，內容精簡流暢，拒絕冗長無用的教科書式大段文字。
+【字數與結構嚴格限制】:
+1. 全文總字數務必控制在 **500 至 600 字以內**（絕對不可超過 800 字）。
+2. 採用「重點條列式」，內容精煉流暢。
 
-【輸出格式】:
-請嚴格按照以下格式輸出，並用三條橫線 `---` 將各部分分開，不要輸出任何額外 Markdown 標籤或說明：
+請嚴格按照以下格式輸出，並用三條橫線 `---` 將各部分分開，不要輸出任何 Markdown 代碼塊（如 ```）：
 
-封面主標題 (4-8字，簡短有力、極具爆發力的短語)
+封面主標題
 ---
-封面副標題 (城市/地區 + 主題英文名，例如: BARCELONA · BMX)
+封面副標題
 ---
-城市英文名 (用於地圖卡片渲染，如: BARCELONA，若無特定城市請填寫 GLOBAL)
+城市英文名
 ---
-正文內容 (必須包含以下結構)：
-- Una 個人親切開場（例如：👋 我係 Una (@Una_next)！...）
-- 3-4 個精煉的極限運動核心重點/技巧/亮點分析（請使用 Emoji 條列）
-- 1 個【Una 實戰貼士/避坑指南】
-- 社群互動 CTA (Call to Action)
-- 4-6 個熱門 Hashtag（例如：#xGameRadar #BMX #SkateLife ...）
+正文內容
 """
 
-    print(f"🤖 正在呼叫 Gemini 生成【{category_key}】帖文 (語言: {target_lang})...")
+    print(f"🤖 正在呼叫 Gemini 生成【{category_key}】帖文...")
 
     try:
-        # 使用 Gemini 2.0 Flash 進行內容生成
+        # 使用最穩定的模型呼叫方式
         response = client.models.generate_content(
             model="gemini-2.0-flash",
             contents=prompt,
-            config=types.GenerateContentConfig(
-                temperature=0.7,
-                top_p=0.9,
-            )
         )
 
         raw_text = response.text.strip()
+        
+        # 去除 Gemini 可能誤加的 ```markdown 包裹
+        raw_text = re.sub(r'^```\w*\n', '', raw_text)
+        raw_text = re.sub(r'\n```$', '', raw_text)
+
         parts = [p.strip() for p in raw_text.split("---")]
 
-        # 解析四個回傳部分（若 Gemini 未嚴格依 --- 分隔，提供安全回退）
         if len(parts) >= 4:
             cover_title = parts[0]
             sub_title = parts[1]
@@ -363,26 +358,25 @@ def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh
             city_name_en = "GLOBAL"
             caption_text = parts[2]
         else:
-            # 備用保底解析
-            cover_title = f"{category_key} 極限指南"
+            cover_title = f"{category_key} 極限突破"
             sub_title = f"GLOBAL · {category_key}"
             city_name_en = "GLOBAL"
             caption_text = raw_text
 
-        # 清理標題文字（去除可能的粗體或引號標點）
         cover_title = re.sub(r'[*"\'«»]', '', cover_title)
         sub_title = re.sub(r'[*"\'«»]', '', sub_title)
 
         return cover_title, sub_title, caption_text, city_name_en
 
     except Exception as e:
-        print(f"❌ Gemini 生成內容時發生錯誤: {e}")
-        # 保底備用內容
+        # 印出精確錯誤，避免默默走向保底內容
+        print(f"❌ Gemini 生成內容時發生詳細錯誤: {type(e).__name__} - {e}")
+        
         fallback_title = f"{category_key} 焦點企劃"
         fallback_sub = f"GLOBAL · {category_key}"
         fallback_caption = f"👋 我係 Una (@Una_next)！今日同大家關注【{category_key}】嘅最新戰術與裝備情報！\n\n📌 記得關注我哋，獲取第一手極限情報！\n— By Una (@Una_next)\n#xGameRadar #{category_key}"
         return fallback_title, fallback_sub, fallback_caption, "GLOBAL"
-
+        
 # ==========================================
 # 6. HTML/CSS 卡片渲染與 Playwright 截圖生成
 # ==========================================
