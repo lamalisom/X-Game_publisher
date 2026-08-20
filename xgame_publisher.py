@@ -599,10 +599,7 @@ def upload_to_r2(file_path, object_name):
         print(f"❌ R2 上傳失敗: {e}")
         return None
 
-import requests
-
 def send_telegram_post(caption_text, image_path=None):
-    # 從環境變數讀取 GitHub Secrets
     telegram_token = os.getenv("TELEGRAM_BOT_TOKEN")
     chat_id = os.getenv("TELEGRAM_CHAT_ID")
 
@@ -612,7 +609,13 @@ def send_telegram_post(caption_text, image_path=None):
 
     print("🚀 正在發送帖文與圖片至 Telegram...")
 
-    # 1. 優先嘗試發送圖片 + Caption
+    # 1. 嚴格安全截斷：Telegram Photo Caption 上限為 1024 字元
+    SAFE_CAPTION_LIMIT = 1000
+    if len(caption_text) > SAFE_CAPTION_LIMIT:
+        print(f"⚠️ 內文長度 ({len(caption_text)} 字) 超過 Telegram Caption 上限，自動精簡截斷...")
+        caption_text = caption_text[:SAFE_CAPTION_LIMIT - 30] + "\n\n...(文字過長已截斷)\n\n— By Una (@Una_next)\n#xGameRadar"
+
+    # 2. 發送圖片卡片 + 內文
     if image_path and os.path.exists(image_path):
         url = f"https://api.telegram.org/bot{telegram_token}/sendPhoto"
         try:
@@ -631,12 +634,9 @@ def send_telegram_post(caption_text, image_path=None):
         except Exception as e:
             print(f"⚠️ 發送 Telegram 圖片時發生例外: {e}")
 
-    # 2. 若發送圖片失敗或無圖片，降級發送純文字
+    # 3. 降級備用：純文字發送
     url = f"https://api.telegram.org/bot{telegram_token}/sendMessage"
-    payload = {
-        "chat_id": chat_id,
-        "text": caption_text
-    }
+    payload = {"chat_id": chat_id, "text": caption_text}
     try:
         res = requests.post(url, data=payload, timeout=15)
         if res.status_code == 200:
