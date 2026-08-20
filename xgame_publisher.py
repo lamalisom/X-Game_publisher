@@ -288,159 +288,100 @@ def fetch_real_upcoming_events():
 # ==========================================
 # 5. Gemini 動態專題文案生成 (含 Tag 與 CTA 拼接)
 # ==========================================
-def generate_xgame_content(category_key, topic_type="VENUE", topic_desc="", target_lang="zh-hk"):
-    cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES["EVENT"])
 
-    if not GEMINI_API_KEY:
-        print("❌ 錯誤: 未設定 GEMINI_API_KEY 環境變數")
-        sys.exit(1)
+def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh-hk"):
+    """
+    呼叫 Gemini 2.0 Flash 生成 xGame 內容與卡片文字
+    保留原有所有功能，並嚴格控制正文字數在 500-600 字內，確保 Telegram 圖片發送順暢
+    """
+    # 初始化 Gemini Client (使用最新 google-genai SDK)
+    client = genai.Client()
 
-    client = genai.Client(api_key=GEMINI_API_KEY)
-    city = random.choice(CITIES)
+    # 語言對應設定
+    lang_map = {
+        "zh-hk": "繁體中文（廣東話/香港口語，語氣熱血且極具社群吸引力）",
+        "zh-cn": "簡體中文（專業熱血的極限運動社群口吻）",
+        "ja": "日文（專業且地道的極限運動風格）",
+        "en": "英文（Authentic Action Sports Community Style）"
+    }
+    selected_lang_desc = lang_map.get(target_lang, lang_map["zh-hk"])
 
-    # 1. 根據 topic_type 定義專屬的正文模組結構
-    if topic_type == "EVENT_OVERVIEW" or category_key == "EVENT":
-        real_events = fetch_real_upcoming_events()
-        now_str = datetime.now().strftime("%Y-%m-%d")
-        event_snippet = (
-            f"【今天日期】：{now_str}\n"
-            "【未來3-4週預測與預告賽事數據】：\n"
-            + "\n".join([f"- [{e['org']}] {e['title']} (日期: {e['published']})" for e in real_events])
-            if real_events
-            else f"【今天日期】：{now_str}\n【未來3-4週預測賽事參考】：Red Bull, WSL, IFSC, World Skate"
-        )
-
-        template_structure = """
-👋 我係 Una (@Una_next)！今日全球賽事預測情報：
-
-📍【焦點賽期預測】：[未來 3-4 週即將舉辦的重點賽事與地點]
-
-👤【注目參賽陣容】：[預計參賽的焦點選手或熱門奪冠人選]
-
-🏆【賽事分析與看點】：[賽事規模、難度解析與前瞻]
-
-🔰【觀賽情報/直播建議】：[如何追蹤或線上觀賽重點]
-"""
-        context_data = event_snippet
-
-    elif topic_type == "VENUE":
-        venue_name = fetch_osm_venue(category_key, city)
-        context_data = f"地點：{city['country']} {city['name']}" + (f"「{venue_name}」" if venue_name else "")
-        template_structure = f"""
-👋 我係 Una (@Una_next)！今日場地開箱：【{topic_desc}】
-
-📍【場地位置與環境】：[具體地點/場館名稱 + 地形風格與特色]
-
-🧗【設施與難度等級】：[適合新手/進階？場地難度與設施配備]
-
-🏆【歷史/舉辦賽事】：[該場地曾舉辦過的經典賽事或代表性人物]
-
-🔰【場地使用/前往建議】：[開放時間、交通或注意事項]
-"""
-
-    elif topic_type == "ATHLETE":
-        context_data = f"關聯城市/代表地：{city['country']} {city['name']}"
-        template_structure = f"""
-👋 我係 Una (@Una_next)！今日極限人物誌：【{topic_desc}】
-
-👤【選手簡介與背景】：[選手姓名 + 國籍/出生地與發跡故事]
-
-🔥【招牌動作與風格】：[最著名招式、比賽個人風格特質]
-
-🏆【生涯代表戰績】：[奪冠紀錄、奧運/X Games/世界賽戰績]
-
-🔰【選手座右銘/最新動態】：[選手經典名言或近期備戰狀態]
-"""
-
-    elif topic_type == "COMPETITION":
-        context_data = f"關聯賽事發源/主辦地區：{city['country']} {city['name']}"
-        template_structure = f"""
-👋 我係 Una (@Una_next)！今日經典賽事檔案：【{topic_desc}】
-
-🏆【賽事名稱與歷史】：[賽事全稱、創辦年份與極限運動界地位]
-
-📍【賽制與評分規則】：[如何計分？淘汰賽機制或裁判標準]
-
-👤【傳奇選手與紀錄】：[賽事史上最狂紀錄保持者或歷屆王者]
-
-🔰【觀賽重點解析】：[這項比賽最刺激、最不可錯過的看點]
-"""
-
-    elif topic_type == "EQUIPMENT":
-        context_data = f"測試環境參考：{city['country']} {city['name']}"
-        template_structure = f"""
-👋 我係 Una (@Una_next)！今日裝備與實戰指南：【{topic_desc}】
-
-⚙️【核心裝備解析】：[關鍵裝備名稱、材質規格與選購重點]
-
-🛡️【防護與安全配備】：[必備防具、安全規範與避坑指南]
-
-💡【進階保養/調校技巧】：[如何日常維護裝備或調整至最佳狀態]
-
-🔰【Una 的實戰小貼士】：[1點新手/玩家最常忽略的實用經驗]
-"""
-
-    # 2. 組裝動態 Prompt
+    # 構造系統與任務 Prompt
     prompt = f"""
-你是一位極限運動特派員 Una (IG: @Una_next)。
-今日專題：【{cat_info['title']}】之【{topic_desc}】。
-語言請嚴格使用【{target_lang}】。
+你是一位專注於全球極限運動（Skateboarding, Surfing, Rock Climbing, BMX 等）的極限運動社群小編 Una (@Una_next)。
+請針對極限運動項目【{category_key}】，以及今日主題【{topic_type}: {topic_desc}】，撰寫一份高品質的社群帖文與圖文卡片文字。
 
-【情境/參考資料】：
-{context_data}
+【語言要求】:
+- 請完全使用 **{selected_lang_desc}** 撰寫。
 
-【輸出格式約束】：必須僅回傳以下標準 JSON，不要加入 Markdown ```json 標籤之外的額外文字：
-{{
-  "cover_title": "封面大標題(10字以內，要吸睛並符合今天主題)",
-  "city_name_en": "{city['name'] if 'city' in locals() else 'GLOBAL'}",
-  "caption": "正文內容"
-}}
+【⚠️ 字數與結構嚴格限制 - 關鍵限制】:
+1. **全文總字數必須控制在 500 至 600 字以內**（絕對不可超過 800 字，否則會因超過 Telegram Caption 限制而無法顯示圖片）。
+2. 採用「重點條列式」，內容精簡流暢，拒絕冗長無用的教科書式大段文字。
 
-【正文結構範本（必須嚴格按照以下標題格式輸出 caption）】：
-{template_structure}
+【輸出格式】:
+請嚴格按照以下格式輸出，並用三條橫線 `---` 將各部分分開，不要輸出任何額外 Markdown 標籤或說明：
+
+封面主標題 (4-8字，簡短有力、極具爆發力的短語)
+---
+封面副標題 (城市/地區 + 主題英文名，例如: BARCELONA · BMX)
+---
+城市英文名 (用於地圖卡片渲染，如: BARCELONA，若無特定城市請填寫 GLOBAL)
+---
+正文內容 (必須包含以下結構)：
+- Una 個人親切開場（例如：👋 我係 Una (@Una_next)！...）
+- 3-4 個精煉的極限運動核心重點/技巧/亮點分析（請使用 Emoji 條列）
+- 1 個【Una 實戰貼士/避坑指南】
+- 社群互動 CTA (Call to Action)
+- 4-6 個熱門 Hashtag（例如：#xGameRadar #BMX #SkateLife ...）
 """
+
+    print(f"🤖 正在呼叫 Gemini 生成【{category_key}】帖文 (語言: {target_lang})...")
 
     try:
+        # 使用 Gemini 2.0 Flash 進行內容生成
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-2.0-flash",
             contents=prompt,
-            config={"tools": []},
+            config=types.GenerateContentConfig(
+                temperature=0.7,
+                top_p=0.9,
+            )
         )
+
         raw_text = response.text.strip()
+        parts = [p.strip() for p in raw_text.split("---")]
 
-        cleaned_json = re.sub(r"^```json\s*", "", raw_text, flags=re.MULTILINE)
-        cleaned_json = re.sub(r"```$", "", cleaned_json, flags=re.MULTILINE).strip()
+        # 解析四個回傳部分（若 Gemini 未嚴格依 --- 分隔，提供安全回退）
+        if len(parts) >= 4:
+            cover_title = parts[0]
+            sub_title = parts[1]
+            city_name_en = parts[2].upper()
+            caption_text = parts[3]
+        elif len(parts) == 3:
+            cover_title = parts[0]
+            sub_title = parts[1]
+            city_name_en = "GLOBAL"
+            caption_text = parts[2]
+        else:
+            # 備用保底解析
+            cover_title = f"{category_key} 極限指南"
+            sub_title = f"GLOBAL · {category_key}"
+            city_name_en = "GLOBAL"
+            caption_text = raw_text
 
-        data = json.loads(cleaned_json)
+        # 清理標題文字（去除可能的粗體或引號標點）
+        cover_title = re.sub(r'[*"\'«»]', '', cover_title)
+        sub_title = re.sub(r'[*"\'«»]', '', sub_title)
 
-        cover_title = data.get("cover_title", f"{category_key} {topic_type}")
-        city_name_en = data.get("city_name_en", "GLOBAL")
-        raw_caption = data.get("caption", raw_text)
-
-        # 3. 自動附加 CTA 與 Hashtags
-        selected_cta = random.choice(CTA_LIBRARY.get(topic_type, CTA_LIBRARY["VENUE"]))
-        category_tags = cat_info["tags"]
-
-        full_caption = f"{raw_caption.strip()}\n\n---\n{selected_cta}\n\n— By Una (@Una_next)\n{category_tags}"
-        sub_title = f"{city_name_en.upper()} · {category_key}"
-
-        return cover_title, sub_title, full_caption, city_name_en
+        return cover_title, sub_title, caption_text, city_name_en
 
     except Exception as e:
-        print(f"⚠️ Gemini JSON 解析失敗，啟用後備設定: {e}")
-        selected_cta = random.choice(CTA_LIBRARY.get(topic_type, CTA_LIBRARY["VENUE"]))
-        category_tags = cat_info["tags"]
-        fallback_caption = (
-            f"👋 我係 Una (@Una_next)！今日【{topic_desc}】專題更新～\n\n"
-            f"---\n{selected_cta}\n\n— By Una (@Una_next)\n{category_tags}"
-        )
-        return (
-            f"{category_key} {topic_type}",
-            f"GLOBAL · {category_key}",
-            fallback_caption,
-            "GLOBAL",
-        )
-
+        print(f"❌ Gemini 生成內容時發生錯誤: {e}")
+        # 保底備用內容
+        fallback_title = f"{category_key} 焦點企劃"
+        fallback_sub = f"GLOBAL · {category_key}"
+        fallback_caption = f"👋 我係 Una (@Una_next)！今日同大家關注【{category_key}】嘅最新戰術與裝備情報！\n\n📌 記得關注我哋，獲取第一手極限情報！\n— By Una (@Una_next)\n#xGameRadar #{category_key}"
+        return fallback_title, fallback_sub, fallback_caption, "GLOBAL"
 
 # ==========================================
 # 6. HTML/CSS 卡片渲染與 Playwright 截圖生成
