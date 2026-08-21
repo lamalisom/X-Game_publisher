@@ -320,7 +320,7 @@ def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh
 - 請完全使用 **{selected_lang_desc}** 撰寫。
 
 【字數與結構嚴格限制】:
-1. 全文總字數務必控制在 **400 至 500 字以內**（絕對不可超過 600 字）。
+1. 全文總字數務必控制在 **250 至 300 字以內**（絕對不可超過 300 字）。
 2. 採用「重點條列式」，內容精練流暢。
 
 請嚴格按照以下格式輸出，並用三條橫線 `---` 將各部分分開，不要輸出任何 Markdown 代碼塊（如 ```）：
