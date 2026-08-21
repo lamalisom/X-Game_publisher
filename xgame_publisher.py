@@ -288,14 +288,19 @@ def fetch_real_upcoming_events():
 # ==========================================
 # 5. Gemini 動態專題文案生成 (含 Tag 與 CTA 拼接)
 # ==========================================
+import os
+import re
+from google import genai
+from google.genai import types  # 修正：匯入 types 解決 NameError
 
 def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh-hk"):
     """
-    呼叫 Gemini 生成 xGame 內容與卡片文字 (更新至 gemini-2.5-flash / gemini-1.5-flash)
+    呼叫 Gemini 生成 xGame 內容與卡片文字
     """
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         print("❌ 錯誤：未偵測到 GEMINI_API_KEY 環境變數！")
+        return f"{category_key} 焦點企劃", f"GLOBAL · {category_key}", f"👋 我係 Una (@Una_next)！今日同大家關注【{category_key}】嘅最新戰術與裝備情報！\n\n📌 記得關注我哋，獲取第一手極限情報！\n— By Una (@Una_next)\n#xGameRadar #{category_key}", "GLOBAL"
 
     client = genai.Client(api_key=api_key)
 
@@ -316,7 +321,7 @@ def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh
 
 【字數與結構嚴格限制】:
 1. 全文總字數務必控制在 **400 至 500 字以內**（絕對不可超過 600 字）。
-2. 採用「重點條列式」，內容精煉流暢。
+2. 採用「重點條列式」，內容精練流暢。
 
 請嚴格按照以下格式輸出，並用三條橫線 `---` 將各部分分開，不要輸出任何 Markdown 代碼塊（如 ```）：
 
@@ -332,13 +337,12 @@ def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh
     print(f"🤖 正在呼叫 Gemini API 生成【{category_key}】內容...")
 
     try:
-        # 更新為最新的可用模型名稱：gemini-2.5-flash (或 gemini-1.5-flash)
-        # 並加入 config 停用工具（AFC）警告
+        # 使用 google-genai 官方標準模型名稱: gemini-2.5-flash
         response = client.models.generate_content(
             model="gemini-2.5-flash",
             contents=prompt,
             config=types.GenerateContentConfig(
-                tools=[]  # 停用 AFC 避免出現控制台警告
+                temperature=0.7,
             )
         )
 
@@ -373,23 +377,27 @@ def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh
         return cover_title, sub_title, caption_text, city_name_en
 
     except Exception as e:
-        print(f"❌ Gemini 呼叫失敗！詳細錯誤類型: {type(e).__name__}")
-        print(f"❌ 錯誤詳細內容: {str(e)}")
+        print(f"❌ Gemini 主模型呼叫失敗！詳細錯誤: {type(e).__name__} - {str(e)}")
         
-        # 若 2.5 失敗，嘗試回退至 1.5-flash 備用
-        try:
-            print("🔄 嘗試使用 gemini-1.5-flash 備用模型...")
-            response = client.models.generate_content(
-                model="gemini-1.5-flash",
-                contents=prompt,
-            )
-            raw_text = response.text.strip()
-            parts = [p.strip() for p in raw_text.split("---")]
-            if len(parts) >= 4:
-                return parts[0], parts[1], parts[3], parts[2].upper()
-        except Exception as fallback_err:
-            print(f"❌ 備用模型亦呼叫失敗: {fallback_err}")
+        # 自動降級嘗試 gemini-2.5-flash 或 gemini-2.0-flash-lite
+        for fallback_model in ["gemini-2.5-flash", "gemini-2.0-flash-lite"]:
+            try:
+                print(f"🔄 嘗試使用備用模型 [{fallback_model}]...")
+                response = client.models.generate_content(
+                    model=fallback_model,
+                    contents=prompt,
+                )
+                raw_text = response.text.strip()
+                raw_text = re.sub(r'^```\w*\n?', '', raw_text)
+                raw_text = re.sub(r'\n?```$', '', raw_text)
+                parts = [p.strip() for p in raw_text.split("---")]
+                if len(parts) >= 4:
+                    print(f"✅ 備用模型 [{fallback_model}] 生成成功！")
+                    return parts[0], parts[1], parts[3], parts[2].upper()
+            except Exception as fb_err:
+                print(f"❌ 備用模型 [{fallback_model}] 失敗: {fb_err}")
 
+        # 若全部失敗才返回保底內容
         fallback_title = f"{category_key} 焦點企劃"
         fallback_sub = f"GLOBAL · {category_key}"
         fallback_caption = f"👋 我係 Una (@Una_next)！今日同大家關注【{category_key}】嘅最新戰術與裝備情報！\n\n📌 記得關注我哋，獲取第一手極限情報！\n— By Una (@Una_next)\n#xGameRadar #{category_key}"
