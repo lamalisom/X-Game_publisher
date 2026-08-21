@@ -406,9 +406,44 @@ def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh
 # ==========================================
 # 6. HTML/CSS 卡片渲染與 Playwright 截圖生成
 # ==========================================
+# ==========================================
+# 6. HTML/CSS 卡片渲染與 Playwright 截圖生成
+# ==========================================
+
+def get_pexels_bg_url(category_key):
+    """ 從 Pexels 抓取高畫質背景圖 URL（帶防呆） """
+    pexels_api_key = os.getenv("PEXELS_API_KEY")
+    clean_query = category_key.split()[0].lower() # 簡化搜尋字詞，如 BMX, SURF
+    
+    if pexels_api_key:
+        try:
+            url = f"https://api.pexels.com/v1/search?query={clean_query}+action+sports&per_page=10&orientation=sq"
+            headers = {"Authorization": pexels_api_key}
+            res = requests.get(url, headers=headers, timeout=8)
+            if res.status_code == 200:
+                photos = res.json().get("photos", [])
+                if photos:
+                    print(f"✅ Pexels 成功抓取【{clean_query}】背景圖！")
+                    return photos[0]["src"]["large2x"]
+        except Exception as e:
+            print(f"⚠️ Pexels 抓取失敗: {e}")
+            
+    print("ℹ️ 使用預設黑色極限風格背景")
+    return ""  # 回傳空字串，自動使用 CSS 預設漸層
+
 async def generate_card_image(category_key, cover_title, sub_title, output_filename="xgame_card.png"):
-    cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES["EVENT"])
-    icon = cat_info["icon"]
+    cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES.get("EVENT", {"icon": "🛹"}))
+    icon = cat_info.get("icon", "🛹")
+
+    # 自動抓取 Pexels 背景圖 URL
+    bg_image_url = get_pexels_bg_url(category_key)
+    
+    # 若有 Pexels 圖，加上深色遮罩 (Dark Overlay) 確保文字清晰；若無則用原漸層
+    bg_css = f"""
+        background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.85)), url('{bg_image_url}');
+        background-size: cover;
+        background-position: center;
+    """ if bg_image_url else "background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);"
 
     html_content = f"""
     <!DOCTYPE html>
@@ -420,7 +455,7 @@ async def generate_card_image(category_key, cover_title, sub_title, output_filen
         body {{
           width: 1080px;
           height: 1080px;
-          background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
+          {bg_css}
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
           color: #ffffff;
           display: flex;
@@ -436,7 +471,7 @@ async def generate_card_image(category_key, cover_title, sub_title, output_filen
           right: -200px;
           width: 600px;
           height: 600px;
-          background: radial-gradient(circle, rgba(255, 69, 0, 0.25) 0%, rgba(0,0,0,0) 70%);
+          background: radial-gradient(circle, rgba(255, 69, 0, 0.35) 0%, rgba(0,0,0,0) 70%);
           border-radius: 50%;
         }}
         .header {{
@@ -454,12 +489,14 @@ async def generate_card_image(category_key, cover_title, sub_title, output_filen
           border-radius: 50px;
           text-transform: uppercase;
           letter-spacing: 2px;
+          box-shadow: 0 4px 15px rgba(255, 69, 0, 0.4);
         }}
         .sub-title {{
           font-size: 28px;
-          color: #a0a0a0;
+          color: #e0e0e0;
           font-weight: 600;
           letter-spacing: 1px;
+          text-shadow: 0 2px 4px rgba(0,0,0,0.8);
         }}
         .center-content {{
           z-index: 10;
@@ -468,30 +505,32 @@ async def generate_card_image(category_key, cover_title, sub_title, output_filen
         .icon {{
           font-size: 110px;
           margin-bottom: 20px;
+          filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
         }}
         .main-title {{
-          font-size: 80px;
+          font-size: 76px;
           font-weight: 900;
           line-height: 1.15;
           color: #ffffff;
-          text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+          text-shadow: 0 10px 30px rgba(0,0,0,0.9);
         }}
         .footer {{
           display: flex;
           justify-content: space-between;
           align-items: flex-end;
           z-index: 10;
-          border-top: 2px solid #333;
+          border-top: 2px solid rgba(255, 255, 255, 0.2);
           padding-top: 30px;
         }}
         .author {{
           font-size: 32px;
           font-weight: 700;
           color: #ff4500;
+          text-shadow: 0 2px 4px rgba(0,0,0,0.8);
         }}
         .tagline {{
           font-size: 22px;
-          color: #666;
+          color: #ccc;
         }}
       </style>
     </head>
@@ -517,6 +556,8 @@ async def generate_card_image(category_key, cover_title, sub_title, output_filen
         browser = await p.chromium.launch(headless=True)
         page = await browser.new_page(viewport={"width": 1080, "height": 1080})
         await page.set_content(html_content)
+        # 等待圖片載入完成
+        await page.wait_for_timeout(1000)
         await page.screenshot(path=output_filename)
         await browser.close()
 
