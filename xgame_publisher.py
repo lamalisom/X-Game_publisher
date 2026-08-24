@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 from dateutil.parser import parse as parsedate_to_datetime
 import boto3
 from google import genai
+from google.genai import types
 from playwright.async_api import async_playwright
 
 # ==========================================
@@ -288,11 +289,6 @@ def fetch_real_upcoming_events():
 # ==========================================
 # 5. Gemini 動態專題文案生成 (含 Tag 與 CTA 拼接)
 # ==========================================
-import os
-import re
-from google import genai
-from google.genai import types  # 修正：匯入 types 解決 NameError
-
 def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh-hk"):
     """
     呼叫 Gemini 生成 xGame 內容與卡片文字
@@ -337,7 +333,6 @@ def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh
     print(f"🤖 正在呼叫 Gemini API 生成【{category_key}】內容...")
 
     try:
-        # 使用 google-genai 官方標準模型名稱: gemini-2.5-flash
         response = client.models.generate_content(
             model="gemini-2.5-flash",
             contents=prompt,
@@ -347,8 +342,6 @@ def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh
         )
 
         raw_text = response.text.strip()
-        
-        # 清除可能包裹的 ``` 標籤
         raw_text = re.sub(r'^```\w*\n?', '', raw_text)
         raw_text = re.sub(r'\n?```$', '', raw_text)
 
@@ -379,7 +372,6 @@ def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh
     except Exception as e:
         print(f"❌ Gemini 主模型呼叫失敗！詳細錯誤: {type(e).__name__} - {str(e)}")
         
-        # 自動降級嘗試 gemini-2.5-flash 或 gemini-2.0-flash-lite
         for fallback_model in ["gemini-2.5-flash", "gemini-2.0-flash-lite"]:
             try:
                 print(f"🔄 嘗試使用備用模型 [{fallback_model}]...")
@@ -397,24 +389,19 @@ def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh
             except Exception as fb_err:
                 print(f"❌ 備用模型 [{fallback_model}] 失敗: {fb_err}")
 
-        # 若全部失敗才返回保底內容
         fallback_title = f"{category_key} 焦點企劃"
         fallback_sub = f"GLOBAL · {category_key}"
         fallback_caption = f"👋 我係 Una (@Una_next)！今日同大家關注【{category_key}】嘅最新戰術與裝備情報！\n\n📌 記得關注我哋，獲取第一手極限情報！\n— By Una (@Una_next)\n#xGameRadar #{category_key}"
         return fallback_title, fallback_sub, fallback_caption, "GLOBAL"
-        
-# ==========================================
-# 6. HTML/CSS 卡片渲染與 Playwright 截圖生成
-# ==========================================
-# ==========================================
-# 6. HTML/CSS 卡片渲染與 Playwright 截圖生成
-# ==========================================
 
+
+# ==========================================
+# 6. HTML/CSS 卡片渲染與 Playwright 截圖生成
+# ==========================================
 def get_pexels_bg_url(category_key):
-    """ 從 Pexels 抓取高畫質背景圖 URL（帶防呆） """
+    """ 從 Pexels 抓取高畫質背景圖 URL """
     pexels_api_key = os.getenv("PEXELS_API_KEY")
     
-    # 防呆：若 category_key 為空，給予預設關鍵字 "skateboarding"
     if not category_key or not category_key.strip():
         clean_query = "skateboarding"
     else:
@@ -423,30 +410,34 @@ def get_pexels_bg_url(category_key):
     
     if pexels_api_key:
         try:
-            url = f"https://api.pexels.com/v1/search?query={clean_query}+action+sports&per_page=10&orientation=sq"
-            headers = {"Authorization": pexels_api_key}
-            res = requests.get(url, headers=headers, timeout=8)
+            url = f"[https://api.pexels.com/v1/search?query=](https://api.pexels.com/v1/search?query=){clean_query}+action+sports&per_page=15&orientation=square"
+            headers = {
+                "Authorization": pexels_api_key,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            }
+            res = requests.get(url, headers=headers, timeout=10)
             if res.status_code == 200:
                 photos = res.json().get("photos", [])
                 if photos:
-                    print(f"✅ Pexels 成功抓取【{clean_query}】背景圖！")
-                    return photos[0]["src"]["large2x"]
+                    selected_photo = random.choice(photos)
+                    # 優先選取 landscape / large2x 並確保網址可訪問
+                    img_url = selected_photo["src"].get("landscape") or selected_photo["src"].get("large2x")
+                    print(f"✅ Pexels 成功抓取【{clean_query}】背景圖！URL: {img_url}")
+                    return img_url
         except Exception as e:
             print(f"⚠️ Pexels 抓取失敗: {e}")
             
     print("ℹ️ 使用預設黑色極限風格背景")
-    return ""  # 回傳空字串，自動使用 CSS 預設漸層
+    return ""
 
 async def generate_card_image(category_key, cover_title, sub_title, output_filename="xgame_card.png"):
     cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES.get("EVENT", {"icon": "🛹"}))
     icon = cat_info.get("icon", "🛹")
 
-    # 自動抓取 Pexels 背景圖 URL
     bg_image_url = get_pexels_bg_url(category_key)
     
-    # 若有 Pexels 圖，加上深色遮罩 (Dark Overlay) 確保文字清晰；若無則用原漸層
     bg_css = f"""
-        background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.85)), url('{bg_image_url}');
+        background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.85)), url('{bg_image_url}');
         background-size: cover;
         background-position: center;
     """ if bg_image_url else "background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);"
@@ -561,9 +552,9 @@ async def generate_card_image(category_key, cover_title, sub_title, output_filen
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
         page = await browser.new_page(viewport={"width": 1080, "height": 1080})
-        await page.set_content(html_content)
-        # 等待圖片載入完成
-        await page.wait_for_timeout(1000)
+        await page.set_content(html_content, wait_until="networkidle")
+        # 確保外鏈圖片已加載完成
+        await page.wait_for_timeout(2000)
         await page.screenshot(path=output_filename)
         await browser.close()
 
@@ -617,15 +608,13 @@ def send_telegram_post(caption_text, image_path=None):
 
     print("🚀 正在發送帖文與圖片至 Telegram...")
 
-    # 1. 嚴格安全截斷：Telegram Photo Caption 上限為 1024 字元
     SAFE_CAPTION_LIMIT = 1000
     if len(caption_text) > SAFE_CAPTION_LIMIT:
         print(f"⚠️ 內文長度 ({len(caption_text)} 字) 超過 Telegram Caption 上限，自動精簡截斷...")
         caption_text = caption_text[:SAFE_CAPTION_LIMIT - 30] + "\n\n...(文字過長已截斷)\n\n— By Una (@Una_next)\n#xGameRadar"
 
-    # 2. 發送圖片卡片 + 內文
     if image_path and os.path.exists(image_path):
-        url = f"https://api.telegram.org/bot{telegram_token}/sendPhoto"
+        url = f"[https://api.telegram.org/bot](https://api.telegram.org/bot){telegram_token}/sendPhoto"
         try:
             with open(image_path, "rb") as photo:
                 payload = {
@@ -642,8 +631,7 @@ def send_telegram_post(caption_text, image_path=None):
         except Exception as e:
             print(f"⚠️ 發送 Telegram 圖片時發生例外: {e}")
 
-    # 3. 降級備用：純文字發送
-    url = f"https://api.telegram.org/bot{telegram_token}/sendMessage"
+    url = f"[https://api.telegram.org/bot](https://api.telegram.org/bot){telegram_token}/sendMessage"
     payload = {"chat_id": chat_id, "text": caption_text}
     try:
         res = requests.post(url, data=payload, timeout=15)
@@ -653,38 +641,36 @@ def send_telegram_post(caption_text, image_path=None):
             print(f"❌ Telegram 文字發送失敗: {res.text}")
     except Exception as e:
         print(f"❌ 發送 Telegram 文字時發生例外: {e}")
-        
+
+
 # ==========================================
-# 8. 主流程控制器 (每日發帖模式 + 支援手動觸發覆寫)
+# 8. 主流程控制器 (每日發帖模式)
 # ==========================================
 async def main():
     print("🚀 啟動 xGame Radar 自動化內容生成引擎...")
     init_db()
 
     now = datetime.now()
-    weekday = now.weekday()  # 0=Mon, 1=Tue, ..., 6=Sun
+    weekday = now.weekday()
     day_of_year = now.timetuple().tm_yday
 
-    # 讀取 GitHub Actions 傳入的環境變數 (若無則使用預設值)
     cat_input = os.getenv("CAT_INPUT", "AUTO").upper()
     lang_input = os.getenv("LANG_INPUT", "zh-hk").lower()
 
-    # 1. 每日主題輪替 (星期一至星期日)
     DAILY_TOPICS = [
-        {"type": "VENUE", "desc": "世界級極限場館與地標開箱"},          # Mon
-        {"type": "ATHLETE", "desc": "傳奇與當紅極限選手人物誌"},        # Tue
-        {"type": "COMPETITION", "desc": "經典極限賽事歷史與賽制解析"}, # Wed
-        {"type": "EQUIPMENT", "desc": "專業裝備挑選與實戰保養指南"},   # Thu
-        {"type": "EVENT_OVERVIEW", "desc": "未來 3-4 週全球極限賽事預測與情報"}, # Fri
-        {"type": "VENUE", "desc": "週末熱門極限場地與玩家打卡點"},      # Sat
-        {"type": "EQUIPMENT", "desc": "週末裝備實戰保養與選購技巧"},    # Sun
+        {"type": "VENUE", "desc": "世界級極限場館與地標開箱"},
+        {"type": "ATHLETE", "desc": "傳奇與當紅極限選手人物誌"},
+        {"type": "COMPETITION", "desc": "經典極限賽事歷史與賽制解析"},
+        {"type": "EQUIPMENT", "desc": "專業裝備挑選與實戰保養指南"},
+        {"type": "EVENT_OVERVIEW", "desc": "未來 3-4 週全球極限賽事預測與情報"},
+        {"type": "VENUE", "desc": "週末熱門極限場地與玩家打卡點"},
+        {"type": "EQUIPMENT", "desc": "週末裝備實戰保養與選購技巧"},
     ]
 
     current_topic = DAILY_TOPICS[weekday]
     topic_type = current_topic["type"]
     topic_desc = current_topic["desc"]
 
-    # 2. 運動類別判斷 (支援手動指定類別)
     sports_rotation = ["CLIMBING", "SKATE", "SURF", "BMX"]
     
     if cat_input != "AUTO":
@@ -701,7 +687,6 @@ async def main():
     print(f"📌 今日主題: 【{topic_type}】 - {topic_desc}")
     print(f"🌐 語言設定: {lang_input}")
 
-    # 3. 呼叫 Gemini 生成內容
     cover_title, sub_title, caption_text, city_name_en = generate_xgame_content(
         category_key=category_key,
         topic_type=topic_type,
@@ -713,17 +698,14 @@ async def main():
     print(f"主標題: {cover_title}")
     print(f"副標題: {sub_title}")
     print("\n--- [正文預覽 (含 CTA & Tag)] ---")
-    print(caption_text[-300:])  # 預覽底部 CTA 與 Tags
+    print(caption_text[-300:])
 
-    # 4. 生成卡片圖片
     image_filename = f"xgame_{now.strftime('%Y%m%d_%H%M%S')}.png"
     await generate_card_image(category_key, cover_title, sub_title, image_filename)
 
-    # 5. 上傳圖片至 R2
     remote_object_name = f"cards/{image_filename}"
     image_url = upload_to_r2(image_filename, remote_object_name)
 
-    # 6. 保存歷史紀錄至 SQLite
     save_post_history(
         category=category_key,
         topic_type=topic_type,
@@ -732,9 +714,9 @@ async def main():
         image_url=image_url or image_filename,
     )
 
-    # 7. 發送至 Telegram 頻道/群組 (關鍵補齊)
     send_telegram_post(caption_text=caption_text, image_path=image_filename)
 
     print("🎉 自動發帖任務執行完成！")
+
 if __name__ == "__main__":
     asyncio.run(main())
