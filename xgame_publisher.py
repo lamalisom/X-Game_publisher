@@ -290,9 +290,7 @@ def fetch_real_upcoming_events():
 # 5. Gemini 動態專題文案生成 (含 Tag 與 CTA 拼接)
 # ==========================================
 def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh-hk"):
-    """
-    呼叫 Gemini 生成 xGame 內容與卡片文字
-    """
+    """ 呼叫 Gemini 生成 xGame 內容與卡片文字 """
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         print("❌ 錯誤：未偵測到 GEMINI_API_KEY 環境變數！")
@@ -371,7 +369,6 @@ def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh
 
     except Exception as e:
         print(f"❌ Gemini 主模型呼叫失敗！詳細錯誤: {type(e).__name__} - {str(e)}")
-        
         for fallback_model in ["gemini-2.5-flash", "gemini-2.0-flash-lite"]:
             try:
                 print(f"🔄 嘗試使用備用模型 [{fallback_model}]...")
@@ -399,7 +396,7 @@ def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh
 # 6. HTML/CSS 卡片渲染與 Playwright 截圖生成
 # ==========================================
 def get_pexels_bg_url(category_key):
-    """ 從 Pexels 抓取高畫質背景圖 URL """
+    """ 從 Pexels 抓取高畫質背景圖 URL（帶防呆） """
     pexels_api_key = os.getenv("PEXELS_API_KEY")
     
     if not category_key or not category_key.strip():
@@ -410,20 +407,15 @@ def get_pexels_bg_url(category_key):
     
     if pexels_api_key:
         try:
-            url = f"[https://api.pexels.com/v1/search?query=](https://api.pexels.com/v1/search?query=){clean_query}+action+sports&per_page=15&orientation=square"
-            headers = {
-                "Authorization": pexels_api_key,
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-            }
-            res = requests.get(url, headers=headers, timeout=10)
+            url = f"[https://api.pexels.com/v1/search?query=](https://api.pexels.com/v1/search?query=){clean_query}+action+sports&per_page=10&orientation=sq"
+            headers = {"Authorization": pexels_api_key}
+            res = requests.get(url, headers=headers, timeout=8)
             if res.status_code == 200:
                 photos = res.json().get("photos", [])
                 if photos:
-                    selected_photo = random.choice(photos)
-                    # 優先選取 landscape / large2x 並確保網址可訪問
-                    img_url = selected_photo["src"].get("landscape") or selected_photo["src"].get("large2x")
-                    print(f"✅ Pexels 成功抓取【{clean_query}】背景圖！URL: {img_url}")
-                    return img_url
+                    selected_photo = random.choice(photos[:5])["src"]["large2x"]
+                    print(f"✅ Pexels 成功抓取【{clean_query}】背景圖！")
+                    return selected_photo
         except Exception as e:
             print(f"⚠️ Pexels 抓取失敗: {e}")
             
@@ -437,7 +429,7 @@ async def generate_card_image(category_key, cover_title, sub_title, output_filen
     bg_image_url = get_pexels_bg_url(category_key)
     
     bg_css = f"""
-        background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.85)), url('{bg_image_url}');
+        background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.85)), url('{bg_image_url}');
         background-size: cover;
         background-position: center;
     """ if bg_image_url else "background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);"
@@ -552,9 +544,23 @@ async def generate_card_image(category_key, cover_title, sub_title, output_filen
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
         page = await browser.new_page(viewport={"width": 1080, "height": 1080})
+        
+        # 關鍵修復：等待 networkidle 確保 Pexels 圖片下載完成，防止黑圖
         await page.set_content(html_content, wait_until="networkidle")
-        # 確保外鏈圖片已加載完成
-        await page.wait_for_timeout(2000)
+        
+        if bg_image_url:
+            await page.evaluate("""
+                async () => {
+                    const bgUrl = document.body.style.backgroundImage.slice(4, -1).replace(/"/g, "");
+                    if (bgUrl) {
+                        const img = new Image();
+                        img.src = bgUrl;
+                        await img.decode().catch(() => {});
+                    }
+                }
+            """)
+        
+        await page.wait_for_timeout(1000)
         await page.screenshot(path=output_filename)
         await browser.close()
 
@@ -644,27 +650,27 @@ def send_telegram_post(caption_text, image_path=None):
 
 
 # ==========================================
-# 8. 主流程控制器 (每日發帖模式)
+# 8. 主流程控制器
 # ==========================================
 async def main():
     print("🚀 啟動 xGame Radar 自動化內容生成引擎...")
     init_db()
 
     now = datetime.now()
-    weekday = now.weekday()
+    weekday = now.weekday()  # 0=Mon, 1=Tue, ..., 6=Sun
     day_of_year = now.timetuple().tm_yday
 
     cat_input = os.getenv("CAT_INPUT", "AUTO").upper()
     lang_input = os.getenv("LANG_INPUT", "zh-hk").lower()
 
     DAILY_TOPICS = [
-        {"type": "VENUE", "desc": "世界級極限場館與地標開箱"},
-        {"type": "ATHLETE", "desc": "傳奇與當紅極限選手人物誌"},
-        {"type": "COMPETITION", "desc": "經典極限賽事歷史與賽制解析"},
-        {"type": "EQUIPMENT", "desc": "專業裝備挑選與實戰保養指南"},
-        {"type": "EVENT_OVERVIEW", "desc": "未來 3-4 週全球極限賽事預測與情報"},
-        {"type": "VENUE", "desc": "週末熱門極限場地與玩家打卡點"},
-        {"type": "EQUIPMENT", "desc": "週末裝備實戰保養與選購技巧"},
+        {"type": "VENUE", "desc": "世界級極限場館與地標開箱"},          # Mon
+        {"type": "ATHLETE", "desc": "傳奇與當紅極限選手人物誌"},        # Tue
+        {"type": "COMPETITION", "desc": "經典極限賽事歷史與賽制解析"}, # Wed
+        {"type": "EQUIPMENT", "desc": "專業裝備挑選與實戰保養指南"},   # Thu
+        {"type": "EVENT_OVERVIEW", "desc": "未來 3-4 週全球極限賽事預測與情報"}, # Fri
+        {"type": "VENUE", "desc": "週末熱門極限場地與玩家打卡點"},      # Sat
+        {"type": "EQUIPMENT", "desc": "週末裝備實戰保養與選購技巧"},    # Sun
     ]
 
     current_topic = DAILY_TOPICS[weekday]
