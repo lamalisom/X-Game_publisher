@@ -413,7 +413,13 @@ def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh
 def get_pexels_bg_url(category_key):
     """ 從 Pexels 抓取高畫質背景圖 URL（帶防呆） """
     pexels_api_key = os.getenv("PEXELS_API_KEY")
-    clean_query = category_key.split()[0].lower() # 簡化搜尋字詞，如 BMX, SURF
+    
+    # 防呆：若 category_key 為空，給予預設關鍵字 "skateboarding"
+    if not category_key or not category_key.strip():
+        clean_query = "skateboarding"
+    else:
+        parts = category_key.strip().split()
+        clean_query = parts[0].lower() if parts else "skateboarding"
     
     if pexels_api_key:
         try:
