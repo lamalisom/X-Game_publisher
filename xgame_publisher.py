@@ -395,10 +395,12 @@ def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh
 # ==========================================
 # 6. HTML/CSS 卡片渲染與 Playwright 截圖生成
 # ==========================================
+
 def get_pexels_bg_url(category_key):
     """ 從 Pexels 抓取高畫質背景圖 URL（帶防呆） """
     pexels_api_key = os.getenv("PEXELS_API_KEY")
     
+    # 防呆：若 category_key 為空，給予預設關鍵字 "skateboarding"
     if not category_key or not category_key.strip():
         clean_query = "skateboarding"
     else:
@@ -407,21 +409,20 @@ def get_pexels_bg_url(category_key):
     
     if pexels_api_key:
         try:
-            url = f"[https://api.pexels.com/v1/search?query=](https://api.pexels.com/v1/search?query=){clean_query}+action+sports&per_page=10&orientation=sq"
+            url = f"https://api.pexels.com/v1/search?query={clean_query}+action+sports&per_page=10&orientation=sq"
             headers = {"Authorization": pexels_api_key}
             res = requests.get(url, headers=headers, timeout=8)
             if res.status_code == 200:
                 photos = res.json().get("photos", [])
                 if photos:
-                    selected_photo = random.choice(photos[:5])["src"]["large2x"]
                     print(f"✅ Pexels 成功抓取【{clean_query}】背景圖！")
-                    return selected_photo
+                    return photos[0]["src"]["large2x"]
         except Exception as e:
             print(f"⚠️ Pexels 抓取失敗: {e}")
             
     print("ℹ️ 使用預設黑色極限風格背景")
-    return ""
-
+    return ""  # 回傳空字串，自動使用 CSS 預設漸層
+    
 async def generate_card_image(category_key, cover_title, sub_title, output_filename="xgame_card.png"):
     cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES.get("EVENT", {"icon": "🛹"}))
     icon = cat_info.get("icon", "🛹")
