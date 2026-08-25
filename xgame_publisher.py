@@ -15,398 +15,67 @@ from google.genai import types
 from playwright.async_api import async_playwright
 
 # ==========================================
-# 1. 環境變數與配置檢查
+# 1. 類別定義與全局配置 (XGAME_CATEGORIES)
 # ==========================================
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-PREDICTHQ_TOKEN = os.getenv("PREDICTHQ_TOKEN")
-
-# R2 / S3 配置
-R2_ACCOUNT_ID = os.getenv("R2_ACCOUNT_ID")
-R2_ACCESS_KEY_ID = os.getenv("R2_ACCESS_KEY_ID")
-R2_SECRET_ACCESS_KEY = os.getenv("R2_SECRET_ACCESS_KEY")
-R2_BUCKET_NAME = os.getenv("R2_BUCKET_NAME")
-R2_PUBLIC_DOMAIN = os.getenv("R2_PUBLIC_DOMAIN")  # 例: https://pub-xxx.r2.dev
-
-DB_FILE = "xgame_radar.db"
-
-# 運動類別標籤、圖示與專屬 Hashtags
 XGAME_CATEGORIES = {
-    "CLIMBING": {
-        "title": "運動攀登 / Climbing",
-        "icon": "🧗",
-        "tags": "#Climbing #Bouldering #攀岩 #抱石 #攀登 #OutdoorLife #xGameRadar"
-    },
-    "SKATE": {
-        "title": "滑板 / Skateboarding",
-        "icon": "🛹",
-        "tags": "#Skateboarding #SkateLife #SkatePark #滑板 #極限運動 #StreetCulture #xGameRadar"
-    },
-    "SURF": {
-        "title": "衝浪 / Surfing",
-        "icon": "🏄",
-        "tags": "#Surfing #SurfLife #WaveRider #衝浪 #海浪 #OceanVibes #xGameRadar"
-    },
-    "BMX": {
-        "title": "BMX 越野單車",
-        "icon": "🚲",
-        "tags": "#BMX #BMXFreestyle #BMXLife #極限單車 #單車 #xGameRadar"
-    },
-    "EVENT": {
-        "title": "全球極限賽事前瞻",
-        "icon": "🏆",
-        "tags": "#xGames #RedBull #WorldSkate #WSL #IFSC #ExtremeSports #極限賽事 #xGameRadar"
-    },
+    "SKATE": {"name": "Skateboarding", "icon": "🛹"},
+    "BMX": {"name": "BMX Freestyle", "icon": "🚲"},
+    "SURF": {"name": "Surfing", "icon": "🏄‍♂️"},
+    "CLIMB": {"name": "Bouldering & Climbing", "icon": "🧗‍♂️"},
+    "SNOW": {"name": "Snowboarding", "icon": "🏂"},
+    "EVENT": {"name": "Extreme Events", "icon": "🔥"}
 }
 
-# 根據主題類別定義的 CTA (Call To Action) 庫
-CTA_LIBRARY = {
-    "VENUE": [
-        "💬 你有去過這個場地嗎？或者有更邪惡的私房打卡點？留言話我知！",
-        "📌 快啲 Save 低呢個 Post，下次飛過去玩/打卡就唔會搵唔到路！",
-        "🏷️ Tag 你個 Ready 一齊去刷場地嘅 Plate/Bouldering Buddy！"
-    ],
-    "ATHLETE": [
-        "🔥 你最心水嘅極限運動員係邊位？留言話我知，下次為你開箱佢嘅故事！",
-        "💬 佢呢招招牌動作你有冇試過？歡迎喺下面留言交流！",
-        "❤️ 覺得呢位選手好 Pro 嘅話，記得點讚支持同 Share 給朋友！"
-    ],
-    "COMPETITION": [
-        "🏆 呢場經典賽事你最印象深刻係哪一幕？留言一齊討論！",
-        "🔔 記得 Follow 我哋 @Una_next，第一時間獲取全球極限賽事最新情報！",
-        "📲 分享俾身邊同你一齊睇比賽嘅發燒友！"
-    ],
-    "EQUIPMENT": [
-        "⚙️ 你平時用緊咩牌子/裝備？留言分享你嘅實戰心得！",
-        "📌 裝備保養指南快啲 Bookmark 起來，延長你戰友嘅壽命！",
-        "💬 有冇其他裝備問題想問？留言話我知，下集話你知！"
-    ],
-    "EVENT_OVERVIEW": [
-        "🗓️ 未來 3-4 週賽事精采絕倫，你最期待邊一場？留言交流！",
-        "📲 記得 Save 低呢份預測清單，順便 Share 俾一齊睇直播嘅 Bro！",
-        "🔔 追蹤 @Una_next，緊貼全球最新預測賽期與賽況！"
-    ]
-}
-
-# 全球極限運動熱點城市
-CITIES = [
-    {"name": "Tokyo", "country": "Japan", "lat": 35.6762, "lon": 139.6503},
-    {"name": "Paris", "country": "France", "lat": 48.8566, "lon": 2.3522},
-    {"name": "Los Angeles", "country": "USA", "lat": 34.0522, "lon": -118.2437},
-    {"name": "Innsbruck", "country": "Austria", "lat": 47.2692, "lon": 11.4041},
-    {"name": "Gold Coast", "country": "Australia", "lat": -28.0167, "lon": 153.4000},
-    {"name": "Barcelona", "country": "Spain", "lat": 41.3851, "lon": 2.1734},
-]
-
-
 # ==========================================
-# 2. SQLite 數據庫初始化與操作
+# 2. SQLite 數據庫去重與快取機制
 # ==========================================
-def init_db():
-    conn = sqlite3.connect(DB_FILE)
+def init_db(db_path="xgame_rss.db"):
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS fetched_events (
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS processed_posts (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            org TEXT,
+            post_hash TEXT UNIQUE,
             title TEXT,
-            published TEXT,
-            status TEXT,
-            fetched_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    """)
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS posts_history (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            category TEXT,
-            topic_type TEXT,
-            cover_title TEXT,
-            sub_title TEXT,
-            image_url TEXT,
+            published_at TIMESTAMP,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
-    """)
+    ''')
     conn.commit()
     conn.close()
 
-
-def save_fetched_events(events):
-    if not events:
-        return
-    conn = sqlite3.connect(DB_FILE)
+def is_post_processed(post_hash, db_path="xgame_rss.db"):
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
-    for e in events:
-        cursor.execute(
-            "INSERT INTO fetched_events (org, title, published, status) VALUES (?, ?, ?, ?)",
-            (e["org"], e["title"], e["published"], e["status"]),
-        )
-    conn.commit()
+    cursor.execute("SELECT 1 FROM processed_posts WHERE post_hash = ?", (post_hash,))
+    result = cursor.fetchone()
     conn.close()
+    return result is not None
 
-
-def save_post_history(category, topic_type, cover_title, sub_title, image_url):
-    conn = sqlite3.connect(DB_FILE)
+def mark_post_processed(post_hash, title, db_path="xgame_rss.db"):
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     cursor.execute(
-        "INSERT INTO posts_history (category, topic_type, cover_title, sub_title, image_url) VALUES (?, ?, ?, ?, ?)",
-        (category, topic_type, cover_title, sub_title, image_url),
+        "INSERT OR IGNORE INTO processed_posts (post_hash, title, published_at) VALUES (?, ?, ?)",
+        (post_hash, title, datetime.now())
     )
     conn.commit()
     conn.close()
 
-
 # ==========================================
-# 3. OpenStreetMap 地理場地查詢
+# 3. Pexels 圖庫背景抓取 (帶空值防呆)
 # ==========================================
-def fetch_osm_venue(category_key, city):
-    osm_tags = {
-        "CLIMBING": '["sport"="climbing"]',
-        "SKATE": '["leisure"="pitch"]["sport"="skateboarding"]',
-        "SURF": '["natural"="beach"]',
-        "BMX": '["sport"="bmx"]',
-        "EVENT": '["leisure"="stadium"]',
-    }
-    tag = osm_tags.get(category_key, '["leisure"="pitch"]')
-    overpass_url = "http://overpass-api.de/api/interpreter"
-    query = f"""
-    [out:json][timeout:10];
-    (
-      node{tag}(around:20000, {city['lat']}, {city['lon']});
-      way{tag}(around:20000, {city['lat']}, {city['lon']});
-    );
-    out center 3;
-    """
-    try:
-        res = requests.post(overpass_url, data={"data": query}, timeout=12)
-        if res.status_code == 200:
-            elements = res.json().get("elements", [])
-            for elem in elements:
-                name = elem.get("tags", {}).get("name")
-                if name:
-                    return name
-    except Exception as e:
-        print(f"⚠️ OSM 查詢提示: {e}")
-    return None
-
-
-# ==========================================
-# 4. PredictHQ & RSS 賽事抓取 (嚴格預測未來 3-4 週事項)
-# ==========================================
-def fetch_predicthq_events():
-    if not PREDICTHQ_TOKEN:
-        return []
-
-    url = "https://api.predicthq.com/v1/events/"
-    headers = {
-        "Authorization": f"Bearer {PREDICTHQ_TOKEN}",
-        "Accept": "application/json",
-    }
-
-    now = datetime.now()
-    start_3w = (now + timedelta(days=21)).strftime("%Y-%m-%d")
-    end_4w = (now + timedelta(days=30)).strftime("%Y-%m-%d")
-
-    params = {
-        "category": "sports",
-        "q": "extreme sports OR bmx OR surfing OR climbing OR skateboarding OR red bull",
-        "active.gte": start_3w,
-        "active.lte": end_4w,
-        "limit": 5,
-        "sort": "start",
-    }
-
-    events = []
-    try:
-        res = requests.get(url, headers=headers, params=params, timeout=10)
-        if res.status_code == 200:
-            results = res.json().get("results", [])
-            for item in results:
-                start_date = item.get("start", "")[:10]
-                events.append({
-                    "org": "PredictHQ Sports",
-                    "title": item.get("title", "Extreme Sport Event"),
-                    "published": start_date,
-                    "status": "UPCOMING_3_TO_4_WEEKS",
-                })
-    except Exception as e:
-        print(f"⚠️ PredictHQ API 查詢失敗: {e}")
-
-    return events
-
-
-def fetch_real_upcoming_events():
-    events = []
-    events.extend(fetch_predicthq_events())
-
-    rss_urls = [
-        ("WSL Surfing", "https://www.worldsurfleague.com/rss"),
-        ("IFSC Climbing World Cup", "https://www.ifsc-climbing.org/index.php?option=com_content&view=featured&format=feed&type=rss"),
-        ("Red Bull RSS Feed", "https://www.redbull.com/us-en/events/rss"),
-        ("World Skate", "http://www.worldskate.org/news?format=feed&type=rss"),
-        ("Dew Tour", "https://www.dewtour.com/feed/"),
-        ("Surfer Magazine", "https://www.surfer.com/.rss/excerpt/"),
-        ("Climbing Magazine", "https://www.climbing.com/feed/"),
-        ("Vital BMX", "https://www.vitalbmx.com/news/rss"),
-        ("Pinkbike MTB", "https://www.pinkbike.com/pinkbike_xml_feed.php"),
-    ]
-
-    now = datetime.now()
-    future_3w_start = now + timedelta(days=21)
-    future_4w_end = now + timedelta(days=30)
-
-    for org, url in rss_urls:
-        try:
-            feed = feedparser.parse(url)
-            for entry in feed.entries:
-                pub_date = None
-
-                if hasattr(entry, "published_parsed") and entry.published_parsed:
-                    try:
-                        pub_date = datetime(*entry.published_parsed[:6])
-                    except Exception:
-                        pub_date = None
-
-                if not pub_date and hasattr(entry, "published"):
-                    try:
-                        pub_date = parsedate_to_datetime(entry.published).replace(tzinfo=None)
-                    except Exception:
-                        pub_date = None
-
-                if pub_date and (future_3w_start <= pub_date <= future_4w_end):
-                    events.append({
-                        "org": org,
-                        "title": entry.title,
-                        "published": pub_date.strftime("%Y-%m-%d"),
-                        "status": "UPCOMING_PREDICTION",
-                    })
-        except Exception as e:
-            print(f"⚠️ RSS ({org}) 解析失敗: {e}")
-
-    fetched_list = events[:8]
-    save_fetched_events(fetched_list)
-    return fetched_list
-
-
-# ==========================================
-# 5. Gemini 動態專題文案生成 (含 Tag 與 CTA 拼接)
-# ==========================================
-def generate_xgame_content(category_key, topic_type, topic_desc, target_lang="zh-hk"):
-    """ 呼叫 Gemini 生成 xGame 內容與卡片文字 """
-    api_key = os.getenv("GEMINI_API_KEY")
-    if not api_key:
-        print("❌ 錯誤：未偵測到 GEMINI_API_KEY 環境變數！")
-        return f"{category_key} 焦點企劃", f"GLOBAL · {category_key}", f"👋 我係 Una (@Una_next)！今日同大家關注【{category_key}】嘅最新戰術與裝備情報！\n\n📌 記得關注我哋，獲取第一手極限情報！\n— By Una (@Una_next)\n#xGameRadar #{category_key}", "GLOBAL"
-
-    client = genai.Client(api_key=api_key)
-
-    lang_map = {
-        "zh-hk": "繁體中文（廣東話/香港口語，語氣熱血且極具社群吸引力）",
-        "zh-cn": "簡體中文（專業熱血的極限運動社群口吻）",
-        "ja": "日文（專業且地道的極限運動風格）",
-        "en": "英文（Authentic Action Sports Community Style）"
-    }
-    selected_lang_desc = lang_map.get(target_lang, lang_map["zh-hk"])
-
-    prompt = f"""
-你是一位專注於全球極限運動的社群小編 Una (@Una_next)。
-請針對極限運動項目【{category_key}】，以及今日主題【{topic_type}: {topic_desc}】，撰寫一份高品質的社群帖文與圖文卡片文字。
-
-【語言要求】:
-- 請完全使用 **{selected_lang_desc}** 撰寫。
-
-【字數與結構嚴格限制】:
-1. 全文總字數務必控制在 **250 至 300 字以內**（絕對不可超過 300 字）。
-2. 採用「重點條列式」，內容精練流暢。
-
-請嚴格按照以下格式輸出，並用三條橫線 `---` 將各部分分開，不要輸出任何 Markdown 代碼塊（如 ```）：
-
-封面主標題
----
-封面副標題
----
-城市英文名
----
-正文內容
-"""
-
-    print(f"🤖 正在呼叫 Gemini API 生成【{category_key}】內容...")
-
-    try:
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                temperature=0.7,
-            )
-        )
-
-        raw_text = response.text.strip()
-        raw_text = re.sub(r'^```\w*\n?', '', raw_text)
-        raw_text = re.sub(r'\n?```$', '', raw_text)
-
-        parts = [p.strip() for p in raw_text.split("---")]
-
-        if len(parts) >= 4:
-            cover_title = parts[0]
-            sub_title = parts[1]
-            city_name_en = parts[2].upper()
-            caption_text = parts[3]
-        elif len(parts) == 3:
-            cover_title = parts[0]
-            sub_title = parts[1]
-            city_name_en = "GLOBAL"
-            caption_text = parts[2]
-        else:
-            cover_title = f"{category_key} 突破極限"
-            sub_title = f"GLOBAL · {category_key}"
-            city_name_en = "GLOBAL"
-            caption_text = raw_text
-
-        cover_title = re.sub(r'[*"\'«»]', '', cover_title)
-        sub_title = re.sub(r'[*"\'«»]', '', sub_title)
-
-        print("✅ Gemini 內容生成成功！")
-        return cover_title, sub_title, caption_text, city_name_en
-
-    except Exception as e:
-        print(f"❌ Gemini 主模型呼叫失敗！詳細錯誤: {type(e).__name__} - {str(e)}")
-        for fallback_model in ["gemini-2.5-flash", "gemini-2.0-flash-lite"]:
-            try:
-                print(f"🔄 嘗試使用備用模型 [{fallback_model}]...")
-                response = client.models.generate_content(
-                    model=fallback_model,
-                    contents=prompt,
-                )
-                raw_text = response.text.strip()
-                raw_text = re.sub(r'^```\w*\n?', '', raw_text)
-                raw_text = re.sub(r'\n?```$', '', raw_text)
-                parts = [p.strip() for p in raw_text.split("---")]
-                if len(parts) >= 4:
-                    print(f"✅ 備用模型 [{fallback_model}] 生成成功！")
-                    return parts[0], parts[1], parts[3], parts[2].upper()
-            except Exception as fb_err:
-                print(f"❌ 備用模型 [{fallback_model}] 失敗: {fb_err}")
-
-        fallback_title = f"{category_key} 焦點企劃"
-        fallback_sub = f"GLOBAL · {category_key}"
-        fallback_caption = f"👋 我係 Una (@Una_next)！今日同大家關注【{category_key}】嘅最新戰術與裝備情報！\n\n📌 記得關注我哋，獲取第一手極限情報！\n— By Una (@Una_next)\n#xGameRadar #{category_key}"
-        return fallback_title, fallback_sub, fallback_caption, "GLOBAL"
-
-
-# ==========================================
-# 6. HTML/CSS 卡片渲染與 Playwright 截圖生成
-# ==========================================
-
 def get_pexels_bg_url(category_key):
-    """ 從 Pexels 抓取高畫質背景圖 URL（帶防呆） """
+    """ 從 Pexels 抓取高畫質背景圖 URL（帶防錯防呆） """
     pexels_api_key = os.getenv("PEXELS_API_KEY")
     
-    # 防呆：若 category_key 為空，給予預設關鍵字 "skateboarding"
-    if not category_key or not category_key.strip():
+    # 防呆：確保 category_key 不為空，避免 list index out of range
+    if not category_key or not str(category_key).strip():
         clean_query = "skateboarding"
     else:
-        parts = category_key.strip().split()
+        parts = str(category_key).strip().split()
         clean_query = parts[0].lower() if parts else "skateboarding"
-    
+
     if pexels_api_key:
         try:
             url = f"https://api.pexels.com/v1/search?query={clean_query}+action+sports&per_page=10&orientation=sq"
@@ -417,18 +86,24 @@ def get_pexels_bg_url(category_key):
                 if photos:
                     print(f"✅ Pexels 成功抓取【{clean_query}】背景圖！")
                     return photos[0]["src"]["large2x"]
+            print(f"⚠️ Pexels API 回覆狀態: {res.status_code}，切換至純色背景模式。")
         except Exception as e:
-            print(f"⚠️ Pexels 抓取失敗: {e}")
+            print(f"⚠️ Pexels 抓取過程發生例外: {e}")
             
     print("ℹ️ 使用預設黑色極限風格背景")
     return ""  # 回傳空字串，自動使用 CSS 預設漸層
-    
+
+# ==========================================
+# 4. HTML/CSS 卡片渲染與 Playwright 截圖生成
+# ==========================================
 async def generate_card_image(category_key, cover_title, sub_title, output_filename="xgame_card.png"):
     cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES.get("EVENT", {"icon": "🛹"}))
     icon = cat_info.get("icon", "🛹")
 
+    # 抓取 Pexels 背景圖 URL
     bg_image_url = get_pexels_bg_url(category_key)
     
+    # 若有 Pexels 圖，加上深色遮罩 (Dark Overlay) 確保文字清晰；若無則用原漸層
     bg_css = f"""
         background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.85)), url('{bg_image_url}');
         background-size: cover;
@@ -545,22 +220,7 @@ async def generate_card_image(category_key, cover_title, sub_title, output_filen
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
         page = await browser.new_page(viewport={"width": 1080, "height": 1080})
-        
-        # 關鍵修復：等待 networkidle 確保 Pexels 圖片下載完成，防止黑圖
-        await page.set_content(html_content, wait_until="networkidle")
-        
-        if bg_image_url:
-            await page.evaluate("""
-                async () => {
-                    const bgUrl = document.body.style.backgroundImage.slice(4, -1).replace(/"/g, "");
-                    if (bgUrl) {
-                        const img = new Image();
-                        img.src = bgUrl;
-                        await img.decode().catch(() => {});
-                    }
-                }
-            """)
-        
+        await page.set_content(html_content)
         await page.wait_for_timeout(1000)
         await page.screenshot(path=output_filename)
         await browser.close()
@@ -568,160 +228,232 @@ async def generate_card_image(category_key, cover_title, sub_title, output_filen
     print(f"📸 圖片成功生成: {output_filename}")
     return output_filename
 
+# ==========================================
+# 5. Cloudflare R2 / AWS S3 圖床上傳
+# ==========================================
+def upload_to_r2(file_path, object_name=None):
+    account_id = os.getenv("R2_ACCOUNT_ID")
+    access_key = os.getenv("R2_ACCESS_KEY_ID")
+    secret_key = os.getenv("R2_SECRET_ACCESS_KEY")
+    bucket_name = os.getenv("R2_BUCKET_NAME")
+    public_domain = os.getenv("R2_PUBLIC_DOMAIN")
 
-# ==========================================
-# 7. 圖片上傳至 Cloudflare R2 / AWS S3
-# ==========================================
-def upload_to_r2(file_path, object_name):
-    if not all([R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_NAME]):
-        print("⚠️ 未完全設定 R2/S3 認證資訊，跳過圖片上傳")
+    if not all([account_id, access_key, secret_key, bucket_name]):
+        print("⚠️ 未完整設定 Cloudflare R2 環境變數，跳過圖床上傳步驟。")
         return None
 
-    s3_endpoint = f"https://{R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
+    if object_name is None:
+        object_name = f"cards/{os.path.basename(file_path)}"
 
     s3_client = boto3.client(
         "s3",
-        endpoint_url=s3_endpoint,
-        aws_access_key_id=R2_ACCESS_KEY_ID,
-        aws_secret_access_key=R2_SECRET_ACCESS_KEY,
-        region_name="auto",
+        endpoint_url=f"https://{account_id}.r2.cloudflarestorage.com",
+        aws_access_key_id=access_key,
+        aws_secret_access_key=secret_key,
+        region_name="auto"
     )
 
     try:
-        s3_client.upload_file(
-            file_path,
-            R2_BUCKET_NAME,
-            object_name,
-            ExtraArgs={"ContentType": "image/png"},
-        )
-        public_url = (
-            f"{R2_PUBLIC_DOMAIN.rstrip('/')}/{object_name}"
-            if R2_PUBLIC_DOMAIN
-            else f"{s3_endpoint}/{R2_BUCKET_NAME}/{object_name}"
-        )
-        print(f"☁️ 圖片已成功上傳至 R2: {public_url}")
-        return public_url
+        s3_client.upload_file(file_path, bucket_name, object_name, ExtraArgs={"ContentType": "image/png"})
+        if public_domain:
+            url = f"https://{public_domain.rstrip('/')}/{object_name}"
+        else:
+            url = f"https://{bucket_name}.r2.cloudflarestorage.com/{object_name}"
+        print(f"☁️ 圖片已成功上傳至 R2: {url}")
+        return url
     except Exception as e:
-        print(f"❌ R2 上傳失敗: {e}")
+        print(f"❌ 上傳至 R2 失敗: {e}")
         return None
 
+# ==========================================
+# 6. Telegram Bot 推送通知
+# ==========================================
 def send_telegram_post(caption_text, image_path=None):
-    telegram_token = os.getenv("TELEGRAM_BOT_TOKEN")
+    bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
     chat_id = os.getenv("TELEGRAM_CHAT_ID")
 
-    if not telegram_token or not chat_id:
-        print("⚠️ 未偵測到 TELEGRAM_BOT_TOKEN 或 TELEGRAM_CHAT_ID，跳過 Telegram 發送")
-        return
+    if not bot_token or not chat_id:
+        print("⚠️ 未設定 Telegram Bot Token 或 Chat ID，跳過 Telegram 發送。")
+        return False
 
-    print("🚀 正在發送帖文與圖片至 Telegram...")
-
-    SAFE_CAPTION_LIMIT = 1000
-    if len(caption_text) > SAFE_CAPTION_LIMIT:
-        print(f"⚠️ 內文長度 ({len(caption_text)} 字) 超過 Telegram Caption 上限，自動精簡截斷...")
-        caption_text = caption_text[:SAFE_CAPTION_LIMIT - 30] + "\n\n...(文字過長已截斷)\n\n— By Una (@Una_next)\n#xGameRadar"
-
-    if image_path and os.path.exists(image_path):
-        url = f"[https://api.telegram.org/bot](https://api.telegram.org/bot){telegram_token}/sendPhoto"
-        try:
-            with open(image_path, "rb") as photo:
-                payload = {
-                    "chat_id": chat_id,
-                    "caption": caption_text
-                }
-                files = {"photo": photo}
-                res = requests.post(url, data=payload, files=files, timeout=15)
-                if res.status_code == 200:
-                    print("✅ Telegram 圖片卡片與文案已成功發送！")
-                    return
-                else:
-                    print(f"⚠️ 發送圖片失敗 ({res.status_code}): {res.text}，轉為純文字發送...")
-        except Exception as e:
-            print(f"⚠️ 發送 Telegram 圖片時發生例外: {e}")
-
-    url = f"[https://api.telegram.org/bot](https://api.telegram.org/bot){telegram_token}/sendMessage"
-    payload = {"chat_id": chat_id, "text": caption_text}
     try:
-        res = requests.post(url, data=payload, timeout=15)
-        if res.status_code == 200:
-            print("✅ Telegram 純文字訊息成功發送！")
+        if image_path and os.path.exists(image_path):
+            url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
+            with open(image_path, "rb") as photo:
+                payload = {"chat_id": chat_id, "caption": caption_text, "parse_mode": "Markdown"}
+                files = {"photo": photo}
+                res = requests.post(url, data=payload, files=files, timeout=20)
         else:
-            print(f"❌ Telegram 文字發送失敗: {res.text}")
-    except Exception as e:
-        print(f"❌ 發送 Telegram 文字時發生例外: {e}")
+            url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+            payload = {"chat_id": chat_id, "text": caption_text, "parse_mode": "Markdown"}
+            res = requests.post(url, data=payload, timeout=20)
 
+        if res.status_code == 200:
+            print("✅ Telegram 圖片卡片與文案已成功發送！")
+            return True
+        else:
+            print(f"❌ Telegram 發送失敗，HTTP {res.status_code}: {res.text}")
+            return False
+    except Exception as e:
+        print(f"❌ 發送至 Telegram 發生例外: {e}")
+        return False
 
 # ==========================================
-# 8. 主流程控制器
+# 7. Gemini API 核心文案生成器 (全新修正版)
+# ==========================================
+def generate_xgame_content(category_key="", topic_type="", topic_desc="", target_lang="zh-hk"):
+    """
+    呼叫 Gemini API 生成精煉流暢的廣東話社群文案
+    """
+    display_category = category_key.strip() if category_key and category_key.strip() else "SKATE"
+    
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        print("❌ 錯誤：未偵測到 GEMINI_API_KEY 環境變數！")
+        return (
+            f"{display_category} 焦點企劃",
+            f"GLOBAL · {display_category}",
+            f"👋 我係 Una (@Una_next)！今日同大家關注【{display_category}】嘅最新戰術與裝備情報！\n\n📌 記得關注我哋！\n— By Una (@Una_next)\n#xGameRadar #{display_category}",
+            "GLOBAL"
+        )
+
+    client = genai.Client(api_key=api_key)
+
+    lang_map = {
+        "zh-hk": "繁體中文（廣東話/香港口語，語氣熱血且極具社群吸引力）",
+        "zh-cn": "簡體中文（專業熱血的極限運動社群口吻）",
+        "ja": "日文（專業且地道的極限運動風格）",
+        "en": "英文（Authentic Action Sports Community Style）"
+    }
+    selected_lang_desc = lang_map.get(target_lang, lang_map["zh-hk"])
+
+    prompt = f"""
+你是一位專注於全球極限運動的社群小編 Una (@Una_next)。
+請針對極限運動項目【{display_category}】，以及主題【{topic_type}: {topic_desc}】，撰寫一份高品質的社群帖文與圖文卡片文字。
+
+【語言要求】:
+- 請完全使用 **{selected_lang_desc}** 撰寫。
+
+【字數與結構嚴格限制】:
+1. 精簡幹練，開門見山，總字數嚴格控制在 **250 至 350 字以內**。
+2. 採用「重點條列式」，去除非必要的客套開門白與贅詞。
+
+請嚴格按照以下格式輸出，並用三條橫線 `---` 將各部分分開，不要輸出任何 Markdown 代碼塊（如 ```）：
+
+封面主標題
+---
+封面副標題
+---
+城市英文名
+---
+正文內容
+"""
+
+    print(f"🤖 正在呼叫 Gemini API 生成【{display_category}】內容...")
+
+    try:
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                temperature=0.7,
+            )
+        )
+
+        raw_text = response.text.strip()
+        raw_text = re.sub(r'^```\w*\n?', '', raw_text)
+        raw_text = re.sub(r'\n?```$', '', raw_text)
+
+        parts = [p.strip() for p in raw_text.split("---")]
+
+        if len(parts) >= 4:
+            cover_title = parts[0]
+            sub_title = parts[1]
+            city_name_en = parts[2].upper()
+            caption_text = parts[3]
+        elif len(parts) == 3:
+            cover_title = parts[0]
+            sub_title = parts[1]
+            city_name_en = "GLOBAL"
+            caption_text = parts[2]
+        else:
+            cover_title = f"{display_category} 突破極限"
+            sub_title = f"GLOBAL · {display_category}"
+            city_name_en = "GLOBAL"
+            caption_text = raw_text
+
+        cover_title = re.sub(r'[*"\'«»]', '', cover_title)
+        sub_title = re.sub(r'[*"\'«»]', '', sub_title)
+
+        print("✅ Gemini 內容生成成功！")
+        return cover_title, sub_title, caption_text, city_name_en
+
+    except Exception as e:
+        print(f"❌ Gemini 主模型呼叫失敗！詳細錯誤: {type(e).__name__} - {str(e)}")
+        
+        # 降級備用機制
+        for fallback_model in ["gemini-2.0-flash-lite"]:
+            try:
+                print(f"🔄 嘗試使用備用模型 [{fallback_model}]...")
+                response = client.models.generate_content(
+                    model=fallback_model,
+                    contents=prompt,
+                )
+                raw_text = response.text.strip()
+                raw_text = re.sub(r'^```\w*\n?', '', raw_text)
+                raw_text = re.sub(r'\n?```$', '', raw_text)
+                parts = [p.strip() for p in raw_text.split("---")]
+                if len(parts) >= 4:
+                    print(f"✅ 備用模型 [{fallback_model}] 生成成功！")
+                    return parts[0], parts[1], parts[3], parts[2].upper()
+            except Exception as fb_err:
+                print(f"❌ 備用模型 [{fallback_model}] 失敗: {fb_err}")
+
+        fallback_title = f"{display_category} 焦點企劃"
+        fallback_sub = f"GLOBAL · {display_category}"
+        fallback_caption = f"👋 我係 Una (@Una_next)！今日同大家關注【{display_category}】嘅最新情報！\n\n📌 記得關注我哋！\n— By Una (@Una_next)\n#xGameRadar #{display_category}"
+        return fallback_title, fallback_sub, fallback_caption, "GLOBAL"
+
+# ==========================================
+# 8. 主流程運行控制 (Main Execution)
 # ==========================================
 async def main():
     print("🚀 啟動 xGame Radar 自動化內容生成引擎...")
     init_db()
 
-    now = datetime.now()
-    weekday = now.weekday()  # 0=Mon, 1=Tue, ..., 6=Sun
-    day_of_year = now.timetuple().tm_yday
+    category_key = os.getenv("XGAME_CATEGORY", "BMX").strip()
+    topic_type = os.getenv("TOPIC_TYPE", "EVENT_OVERVIEW").strip()
+    topic_desc = os.getenv("TOPIC_DESC", "全球賽事動態情報").strip()
+    target_lang = os.getenv("TARGET_LANG", "zh-hk").strip()
 
-    cat_input = os.getenv("CAT_INPUT", "AUTO").upper()
-    lang_input = os.getenv("LANG_INPUT", "zh-hk").lower()
-
-    DAILY_TOPICS = [
-        {"type": "VENUE", "desc": "世界級極限場館與地標開箱"},          # Mon
-        {"type": "ATHLETE", "desc": "傳奇與當紅極限選手人物誌"},        # Tue
-        {"type": "COMPETITION", "desc": "經典極限賽事歷史與賽制解析"}, # Wed
-        {"type": "EQUIPMENT", "desc": "專業裝備挑選與實戰保養指南"},   # Thu
-        {"type": "EVENT_OVERVIEW", "desc": "未來 3-4 週全球極限賽事預測與情報"}, # Fri
-        {"type": "VENUE", "desc": "週末熱門極限場地與玩家打卡點"},      # Sat
-        {"type": "EQUIPMENT", "desc": "週末裝備實戰保養與選購技巧"},    # Sun
-    ]
-
-    current_topic = DAILY_TOPICS[weekday]
-    topic_type = current_topic["type"]
-    topic_desc = current_topic["desc"]
-
-    sports_rotation = ["CLIMBING", "SKATE", "SURF", "BMX"]
-    
-    if cat_input != "AUTO":
-        category_key = cat_input
-        print(f"🎯 手動指定類別: {category_key}")
-    else:
-        if topic_type == "EVENT_OVERVIEW":
-            category_key = "EVENT"
-        else:
-            category_key = sports_rotation[day_of_year % len(sports_rotation)]
-        print(f"🔄 自動輪替類別: {category_key}")
-
-    print(f"📅 今日日期: {now.strftime('%Y-%m-%d')} (星期{weekday+1})")
+    print(f"🎯 執行類別: {category_key}")
+    print(f"📅 今日日期: {datetime.now().strftime('%Y-%m-%d')}")
     print(f"📌 今日主題: 【{topic_type}】 - {topic_desc}")
-    print(f"🌐 語言設定: {lang_input}")
+    print(f"🌐 語言設定: {target_lang}")
 
     cover_title, sub_title, caption_text, city_name_en = generate_xgame_content(
         category_key=category_key,
         topic_type=topic_type,
         topic_desc=topic_desc,
-        target_lang=lang_input,
+        target_lang=target_lang
     )
+
+    timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
+    image_filename = f"xgame_{timestamp_str}.png"
+
+    await generate_card_image(category_key, cover_title, sub_title, image_filename)
 
     print("\n--- [生成標題] ---")
     print(f"主標題: {cover_title}")
     print(f"副標題: {sub_title}")
     print("\n--- [正文預覽 (含 CTA & Tag)] ---")
-    print(caption_text[-300:])
+    print(caption_text)
 
-    image_filename = f"xgame_{now.strftime('%Y%m%d_%H%M%S')}.png"
-    await generate_card_image(category_key, cover_title, sub_title, image_filename)
+    # 選擇性上傳至 Cloudflare R2
+    upload_to_r2(image_filename)
 
-    remote_object_name = f"cards/{image_filename}"
-    image_url = upload_to_r2(image_filename, remote_object_name)
-
-    save_post_history(
-        category=category_key,
-        topic_type=topic_type,
-        cover_title=cover_title,
-        sub_title=sub_title,
-        image_url=image_url or image_filename,
-    )
-
-    send_telegram_post(caption_text=caption_text, image_path=image_filename)
+    # 發送至 Telegram 社群
+    send_telegram_post(caption_text, image_path=image_filename)
 
     print("🎉 自動發帖任務執行完成！")
 
