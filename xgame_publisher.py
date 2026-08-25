@@ -273,31 +273,47 @@ def send_telegram_post(caption_text, image_path=None):
     chat_id = os.getenv("TELEGRAM_CHAT_ID")
 
     if not bot_token or not chat_id:
-        print("⚠️ 未設定 Telegram Bot Token 或 Chat ID，跳過 Telegram 發送。")
+        print("⚠️ 未設定 TELEGRAM_BOT_TOKEN 或 TELEGRAM_CHAT_ID，跳過 Telegram 發送。")
         return False
+
+    # 防呆處理：替換掉 Telegram Markdown 最容易卡死解析的特殊符號，或改用純文字/HTML
+    # 若文字過長，Telegram Caption 上限為 1024 字元
+    clean_caption = caption_text[:1000]
 
     try:
         if image_path and os.path.exists(image_path):
             url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
             with open(image_path, "rb") as photo:
-                payload = {"chat_id": chat_id, "caption": caption_text, "parse_mode": "Markdown"}
+                payload = {
+                    "chat_id": chat_id,
+                    "caption": clean_caption,
+                    # 如果內文含有未轉義的 _ 或 *，改用 HTML 比 Markdown 更穩定的預設解析
+                    "parse_mode": "HTML" 
+                }
                 files = {"photo": photo}
                 res = requests.post(url, data=payload, files=files, timeout=20)
         else:
             url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-            payload = {"chat_id": chat_id, "text": caption_text, "parse_mode": "Markdown"}
+            payload = {
+                "chat_id": chat_id, 
+                "text": clean_caption, 
+                "parse_mode": "HTML"
+            }
             res = requests.post(url, data=payload, timeout=20)
 
-        if res.status_code == 200:
+        res_json = res.json()
+        if res.status_code == 200 and res_json.get("ok"):
             print("✅ Telegram 圖片卡片與文案已成功發送！")
             return True
         else:
-            print(f"❌ Telegram 發送失敗，HTTP {res.status_code}: {res.text}")
+            # 印出 Telegram 回傳的詳細錯誤原因 (例如 Bad Request: can't parse entities)
+            print(f"❌ Telegram 發送失敗！HTTP {res.status_code} - API 錯誤 response: {res.text}")
             return False
+            
     except Exception as e:
         print(f"❌ 發送至 Telegram 發生例外: {e}")
         return False
-
+        
 # ==========================================
 # 7. Gemini API 核心文案生成器 (全新修正版)
 # ==========================================
