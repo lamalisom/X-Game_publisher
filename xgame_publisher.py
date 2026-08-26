@@ -370,17 +370,12 @@ def send_telegram_post(caption_text, image_path=None):
 # 7. Gemini API 核心文案生成器 (完整保留 Prompt 與模型降級機制)
 # ==========================================
 def generate_xgame_content(category_key="", topic_type="", topic_desc="", target_lang="zh-hk"):
-    display_category = category_key.strip() if category_key and category_key.strip() else "SKATE"
+    display_category = category_key.strip() if category_key and category_key.strip() else "EVENT"
     
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         print("❌ 錯誤：未偵測到 GEMINI_API_KEY 環境變數！")
-        return (
-            f"{display_category} 焦點企劃",
-            f"GLOBAL · {display_category}",
-            f"👋 我係 Una (@Una_next)！今日同大家關注【{display_category}】嘅最新戰術與裝備情報！\n\n📌 記得關注我哋！\n— By Una (@Una_next)\n#xGameRadar #{display_category}",
-            "GLOBAL"
-        )
+        return ("EVENT 焦點企劃", "GLOBAL · EVENT", "請設定 API Key", "GLOBAL")
 
     client = genai.Client(api_key=api_key)
 
@@ -391,23 +386,29 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
         "en": "英文（Authentic Action Sports Community Style）"
     }
     selected_lang_desc = lang_map.get(target_lang, lang_map["zh-hk"])
+
+    # ⚠️ 修改 Prompt：明確要求搜尋並列出未來 4-7 個月的真實賽事資訊
     prompt = f"""
 你是一位專注於全球極限運動的熱血社群小編 Una (@Una_next)。
-請針對極限運動項目【{display_category}】，以及主題【{topic_type}: {topic_desc}】，撰寫一份極簡、重點明確且豐富 Emoji 的社群帖文。
+請搜尋並整理未來 4 至 7 個月內，全球【{display_category}】領域最受矚目的真實極限運動大賽（例如 X Games、SLS、WSL、IFSC、Red Bull 賽事等）。
 
 【語言與風格要求】:
 - 完全使用 **{selected_lang_desc}** 撰寫。
-- 語氣熱血、乾脆利落、極具社群吸引力。
-- **大量善用 Emoji**（例如 🔥 🏄‍♂️ 🛹 💥 🏆 📍 等）來加強排版與視覺感。
+- 語氣熱血、幹脆利落，大量善用 Emoji（🔥 🛹 🏄‍♂️ 🏆 📍 🗓️ 等）。
 
-【字數與結構嚴格限制】:
-1. 總字數嚴格控制在 **150 至 220 字以內**，拒絕任何客套開場白與冗長敘述。
-2. 正文格式必須包含：
-   - ⚡ **一句熱血爆點鉤子**（Hook）
-   - 📌 **3 至 4 個重點條列**（用 Emoji 做 Bullet Points，每點不超過 25 字）
-   - 💬 **1 句簡短 Call to Action (CTA)** + 社群 Tag
+【內容必須包含真實資訊】:
+1. 必須列出 **2 到 3 個未來 4-7 個月內會舉辦的真實比賽**。
+2. 每個比賽必須明確標註：**比賽名稱**、**預計月份/日期**、**舉辦城市/地點**。
 
-請嚴格按照以下格式輸出，並用三條橫線 `---` 將各部分分開，不要輸出任何 Markdown 代碼塊（如 ```）：
+【結構與字數限制】:
+- 總字數控制在 **200 至 300 字以內**。
+- 格式：
+  - ⚡ **1 句熱血開頭**
+  - 🗓️ **未來 4-7 個月賽事預告**（用 Emoji 條列 2-3 個真實比賽，含日期地點）
+  - 🔥 **1 句賽事亮點或觀賽期待**
+  - 💬 **1 句 Call to Action** + 社群 Tag
+
+請嚴格按照以下格式輸出，並用三條橫線 `---` 將各部分分開，不要輸出 Markdown 代碼塊（```）：
 
 封面主標題
 ---
@@ -417,15 +418,17 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 ---
 正文內容
 """
-   
-    print(f"🤖 正在呼叫 Gemini API 生成【{display_category}】內容...")
+
+    print(f"🤖 正在呼叫 Gemini API (開啟即時搜尋模式) 生成【{display_category}】未來賽事情報...")
 
     try:
+        # ⚠️ 關鍵修正：加入 tools=[{"google_search": {}}] 開啟 Google 搜尋實時抓取
         response = client.models.generate_content(
             model="gemini-2.5-flash",
             contents=prompt,
             config=types.GenerateContentConfig(
-                temperature=0.7,
+                temperature=0.5, # 降低溫度以確保資訊準確
+                tools=[{"google_search": {}}] # 強制啟用 Google 搜尋工具
             )
         )
 
@@ -436,29 +439,13 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
         parts = [p.strip() for p in raw_text.split("---")]
 
         if len(parts) >= 4:
-            cover_title = parts[0]
-            sub_title = parts[1]
-            city_name_en = parts[2].upper()
-            caption_text = parts[3]
-        elif len(parts) == 3:
-            cover_title = parts[0]
-            sub_title = parts[1]
-            city_name_en = "GLOBAL"
-            caption_text = parts[2]
+            return parts[0], parts[1], parts[3], parts[2].upper()
         else:
-            cover_title = f"{display_category} 突破極限"
-            sub_title = f"GLOBAL · {display_category}"
-            city_name_en = "GLOBAL"
-            caption_text = raw_text
-
-        cover_title = re.sub(r'[*"\'«»]', '', cover_title)
-        sub_title = re.sub(r'[*"\'«»]', '', sub_title)
-
-        print("✅ Gemini 內容生成成功！")
-        return cover_title, sub_title, caption_text, city_name_en
+            return f"{display_category} 未來賽事熱血預告", "GLOBAL · EVENT", raw_text, "GLOBAL"
 
     except Exception as e:
-        print(f"❌ Gemini 主模型呼叫失敗！詳細錯誤: {type(e).__name__} - {str(e)}")
+        print(f"❌ Gemini 搜尋生成失敗: {e}")
+        return f"{display_category} 賽事情報", "GLOBAL · EVENT", "生成失敗，請檢查 API 與網絡。", "GLOBAL"
         
         # 降級備用機制
         for fallback_model in ["gemini-2.0-flash-lite"]:
