@@ -94,7 +94,7 @@ def get_pexels_bg_url(category_key):
     return ""  # 回傳空字串，自動使用 CSS 預設漸層
 
 # ==========================================
-# 4. HTML/CSS 卡片渲染與 Playwright 截圖生成
+# 4. HTML/CSS 卡片渲染與 Playwright 截圖生成 (修復版)
 # ==========================================
 async def generate_card_image(category_key, cover_title, sub_title, output_filename="xgame_card.png"):
     cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES.get("EVENT", {"icon": "🛹"}))
@@ -103,12 +103,11 @@ async def generate_card_image(category_key, cover_title, sub_title, output_filen
     # 抓取 Pexels 背景圖 URL
     bg_image_url = get_pexels_bg_url(category_key)
     
-    # 若有 Pexels 圖，加上深色遮罩 (Dark Overlay) 確保文字清晰；若無則用原漸層
-    bg_css = f"""
-        background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.85)), url('{bg_image_url}');
-        background-size: cover;
-        background-position: center;
-    """ if bg_image_url else "background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);"
+    # 建立 CSS 背景樣式
+    if bg_image_url:
+        bg_css = f"background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.85)), url('{bg_image_url}') center/cover no-repeat;"
+    else:
+        bg_css = "background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);"
 
     html_content = f"""
     <!DOCTYPE html>
@@ -121,7 +120,8 @@ async def generate_card_image(category_key, cover_title, sub_title, output_filen
           width: 1080px;
           height: 1080px;
           {bg_css}
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+          /* 加入 Noto Color Emoji 確保 Linux / GitHub Actions 正常顯示 Emoji */
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
           color: #ffffff;
           display: flex;
           flex-direction: column;
@@ -171,6 +171,7 @@ async def generate_card_image(category_key, cover_title, sub_title, output_filen
           font-size: 110px;
           margin-bottom: 20px;
           filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+          line-height: 1;
         }}
         .main-title {{
           font-size: 76px;
@@ -220,14 +221,19 @@ async def generate_card_image(category_key, cover_title, sub_title, output_filen
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
         page = await browser.new_page(viewport={"width": 1080, "height": 1080})
-        await page.set_content(html_content)
-        await page.wait_for_timeout(1000)
+        
+        # 使用 data:html 載入並等待網路資源（Pexels 圖片）完全下載完成 (networkidle)
+        await page.goto(f"data:text/html;charset=utf-8,{requests.utils.quote(html_content)}", wait_until="networkidle")
+        
+        # 額外延遲 500ms 確保字型與圖片渲染完成
+        await page.wait_for_timeout(500)
+        
         await page.screenshot(path=output_filename)
         await browser.close()
 
     print(f"📸 圖片成功生成: {output_filename}")
     return output_filename
-
+    
 # ==========================================
 # 5. Cloudflare R2 / AWS S3 圖床上傳
 # ==========================================
