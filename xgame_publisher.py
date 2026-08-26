@@ -82,53 +82,67 @@ def mark_post_processed(post_hash, title, db_path="xgame_rss.db"):
 # 3. Pexels 圖庫背景抓取 (完整保留並強化關鍵字匹配)
 # ==========================================
 def get_pexels_bg_url(category_key):
-    """ 從 Pexels 抓取高畫質背景圖 URL（完整保留防錯防呆） """
+    """ 從 Pexels 抓取高畫質背景圖 URL（加強 User-Agent 與防鎖） """
     pexels_api_key = os.getenv("PEXELS_API_KEY")
     
-    # 優先從 XGAME_CATEGORIES 取得最佳搜尋關鍵字
-    cat_info = XGAME_CATEGORIES.get(category_key, {})
-    query_str = cat_info.get("query", "")
+    if not pexels_api_key:
+        print("⚠️ 未偵測到 PEXELS_API_KEY，使用純色背景。")
+        return ""
 
-    if not query_str:
-        if not category_key or not str(category_key).strip():
-            clean_query = "skateboarding"
+    cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES.get("SKATE", {}))
+    search_term = cat_info.get("query", "surfing ocean wave")
+
+    try:
+        url = f"https://api.pexels.com/v1/search?query={quote(search_term)}&per_page=15&orientation=square"
+        # ⚠️ 關鍵修正：加入真實瀏覽器的 User-Agent 避免被 Pexels 防火牆阻擋
+        headers = {
+            "Authorization": pexels_api_key.strip(),
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+        res = requests.get(url, headers=headers, timeout=10)
+        
+        if res.status_code == 200:
+            photos = res.json().get("photos", [])
+            if photos:
+                # 隨機挑選前 5 張之一，避免每次都抓到同一張
+                selected_photo = random.choice(photos[:5])
+                src_dict = selected_photo.get("src", {})
+                
+                # 順序嘗試取得最佳尺寸
+                img_url = src_dict.get("large2x") or src_dict.get("large") or src_dict.get("original")
+                if img_url:
+                    print(f"✅ Pexels 成功抓取【{search_term}】背景圖: {img_url}")
+                    return img_url
+            else:
+                print(f"⚠️ Pexels 未找到【{search_term}】相關圖片。")
         else:
-            parts = str(category_key).strip().split()
-            clean_query = parts[0].lower() if parts else "skateboarding"
-        search_term = f"{clean_query} action sports"
-    else:
-        search_term = query_str
-
-    if pexels_api_key:
-        try:
-            url = f"https://api.pexels.com/v1/search?query={quote(search_term)}&per_page=10&orientation=sq"
-            headers = {"Authorization": pexels_api_key}
-            res = requests.get(url, headers=headers, timeout=8)
-            if res.status_code == 200:
-                photos = res.json().get("photos", [])
-                if photos:
-                    print(f"✅ Pexels 成功抓取【{search_term}】背景圖！")
-                    return photos[0]["src"]["large2x"]
-            print(f"⚠️ Pexels API 回覆狀態: {res.status_code}，切換至純色背景模式。")
-        except Exception as e:
-            print(f"⚠️ Pexels 抓取過程發生例外: {e}")
+            print(f"❌ Pexels API 請求失敗！HTTP Code: {res.status_code}, Response: {res.text[:100]}")
             
-    print("ℹ️ 使用預設黑色極限風格背景")
-    return ""  # 回傳空字串，自動使用 CSS 預設漸層
-
+    except Exception as e:
+        print(f"❌ Pexels 抓取過程發生例外: {e}")
+            
+    return ""
+    
 # ==========================================
 # 4. HTML/CSS 卡片渲染與 Playwright 截圖生成 (完整保留)
 # ==========================================
 def get_image_base64(url_or_path):
-    """ 下載網路圖片並轉為 Base64 字串，徹底解決 Playwright 外部圖片黑屏問題 """
+    """ 下載網路圖片並轉為 Base64 字串 """
     if not url_or_path:
         return None
     try:
         if url_or_path.startswith("http"):
-            resp = requests.get(url_or_path, timeout=10)
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
+            }
+            resp = requests.get(url_or_path, headers=headers, timeout=12)
             if resp.status_code == 200:
                 encoded = base64.b64encode(resp.content).decode("utf-8")
-                return f"data:image/jpeg;base64,{encoded}"
+                # 自動判斷圖片格式 (png / jpeg)
+                mime_type = "image/png" if ".png" in url_or_path.lower() else "image/jpeg"
+                return f"data:{mime_type};base64,{encoded}"
+            else:
+                print(f"⚠️ 背景圖片下載失敗，HTTP Code: {resp.status_code}")
         elif os.path.exists(url_or_path):
             with open(url_or_path, "rb") as f:
                 encoded = base64.b64encode(f.read()).decode("utf-8")
@@ -136,7 +150,7 @@ def get_image_base64(url_or_path):
     except Exception as e:
         print(f"⚠️ 圖片轉換 Base64 失敗: {e}")
     return None
-
+    
 async def generate_card_image(category_key, cover_title, sub_title, output_filename="xgame_card.png"):
     cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES.get("EVENT"))
     icon = cat_info.get("icon", "🛹")
@@ -257,13 +271,13 @@ async def generate_card_image(category_key, cover_title, sub_title, output_filen
     </body>
     </html>
     """
-
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
         page = await browser.new_page(viewport={"width": 1080, "height": 1080})
         
-        await page.set_content(html_content, wait_until="domcontentloaded")
-        await page.wait_for_timeout(300)
+        # 改用 load 確保 CSS 背景與圖片資源徹底渲染完成
+        await page.set_content(html_content, wait_until="load")
+        await page.wait_for_timeout(800) # 給予 0.8 秒繪製時間
         
         await page.screenshot(path=output_filename)
         await browser.close()
