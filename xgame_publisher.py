@@ -392,17 +392,21 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
         "en": "英文（Authentic Action Sports Community Style）"
     }
     selected_lang_desc = lang_map.get(target_lang, lang_map["zh-hk"])
-
     prompt = f"""
-你是一位專注於全球極限運動的社群小編 Una (@Una_next)。
-請針對極限運動項目【{display_category}】，以及主題【{topic_type}: {topic_desc}】，撰寫一份高品質的社群帖文與圖文卡片文字。
+你是一位專注於全球極限運動的熱血社群小編 Una (@Una_next)。
+請針對極限運動項目【{display_category}】，以及主題【{topic_type}: {topic_desc}】，撰寫一份極簡、重點明確且豐富 Emoji 的社群帖文。
 
-【語言要求】:
-- 請完全使用 **{selected_lang_desc}** 撰寫。
+【語言與風格要求】:
+- 完全使用 **{selected_lang_desc}** 撰寫。
+- 語氣熱血、乾脆利落、極具社群吸引力。
+- **大量善用 Emoji**（例如 🔥 🏄‍♂️ 🛹 💥 🏆 📍 等）來加強排版與視覺感。
 
 【字數與結構嚴格限制】:
-1. 精簡幹練，開門見山，總字數嚴格控制在 **250 至 350 字以內**。
-2. 採用「重點條列式」，去除非必要的客套開門白與贅詞。
+1. 總字數嚴格控制在 **150 至 220 字以內**，拒絕任何客套開場白與冗長敘述。
+2. 正文格式必須包含：
+   - ⚡ **一句熱血爆點鉤子**（Hook）
+   - 📌 **3 至 4 個重點條列**（用 Emoji 做 Bullet Points，每點不超過 25 字）
+   - 💬 **1 句簡短 Call to Action (CTA)** + 社群 Tag
 
 請嚴格按照以下格式輸出，並用三條橫線 `---` 將各部分分開，不要輸出任何 Markdown 代碼塊（如 ```）：
 
@@ -414,7 +418,7 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 ---
 正文內容
 """
-
+   
     print(f"🤖 正在呼叫 Gemini API 生成【{display_category}】內容...")
 
     try:
