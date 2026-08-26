@@ -127,41 +127,40 @@ def get_pexels_bg_url(category_key):
 # 4. HTML/CSS 卡片渲染與 Playwright 截圖生成 (完整保留)
 # ==========================================
 def get_image_base64(url_or_path):
-    """ 下載網路圖片並轉為 Base64 字串 """
     if not url_or_path:
+        print("⚠️ 警告: 傳入的圖片 URL 為空，無法轉碼 Base64！")
         return None
     try:
         if url_or_path.startswith("http"):
-            headers = {
-                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
-            }
-            resp = requests.get(url_or_path, headers=headers, timeout=12)
+            headers = {"User-Agent": "Mozilla/5.0"}
+            resp = requests.get(url_or_path, headers=headers, timeout=10)
             if resp.status_code == 200:
                 encoded = base64.b64encode(resp.content).decode("utf-8")
-                # 自動判斷圖片格式 (png / jpeg)
-                mime_type = "image/png" if ".png" in url_or_path.lower() else "image/jpeg"
-                return f"data:{mime_type};base64,{encoded}"
-            else:
-                print(f"⚠️ 背景圖片下載失敗，HTTP Code: {resp.status_code}")
-        elif os.path.exists(url_or_path):
-            with open(url_or_path, "rb") as f:
-                encoded = base64.b64encode(f.read()).decode("utf-8")
+                print(f"🖼️ Base64 轉換成功！字串長度: {len(encoded)}")
                 return f"data:image/jpeg;base64,{encoded}"
+            else:
+                print(f"❌ 下載圖片失敗 HTTP {resp.status_code}")
     except Exception as e:
-        print(f"⚠️ 圖片轉換 Base64 失敗: {e}")
+        print(f"❌ 圖片轉換 Base64 例外錯誤: {e}")
     return None
     
 async def generate_card_image(category_key, cover_title, sub_title, output_filename="xgame_card.png"):
     cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES.get("EVENT"))
     icon = cat_info.get("icon", "🛹")
 
-    # 抓取 Pexels 圖片 URL 並轉為 Base64
     bg_image_url = get_pexels_bg_url(category_key)
     base64_bg = get_image_base64(bg_image_url) if bg_image_url else None
     
+    # ⚠️ 修正：減輕黑罩濃度 (0.3 ~ 0.65)，讓背景圖清晰可見；同時將底色設為透明防遮蓋
     if base64_bg:
-        bg_css = f"background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.85)), url('{base64_bg}') center/cover no-repeat;"
+        bg_css = f"""
+          background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.75) 100%), url('{base64_bg}');
+          background-position: center center;
+          background-size: cover;
+          background-repeat: no-repeat;
+        """
     else:
+        # 當圖片抓取失敗時的備用漸層
         bg_css = "background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);"
 
     html_content = f"""
