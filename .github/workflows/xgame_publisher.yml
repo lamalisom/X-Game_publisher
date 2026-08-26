@@ -42,10 +42,11 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install System CJK Fonts & Python Dependencies
+      - name: Install System CJK & Emoji Fonts, Python Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y fonts-noto-cjk
+          # 加入 fonts-noto-color-emoji 確保 Emoji 正常顯示
+          sudo apt-get install -y fonts-noto-cjk fonts-noto-color-emoji fonts-wqy-zenhei
           python -m pip install --upgrade pip
           pip install requests google-genai feedparser Pillow playwright boto3 python-dateutil
 
@@ -53,7 +54,7 @@ jobs:
         run: |
           npx playwright install-deps
           python -m playwright install chromium
-    
+
       - name: Run xGame Radar Engine
         env:
           # 1. 系統 API 金鑰與憑證
@@ -66,13 +67,8 @@ jobs:
           R2_PUBLIC_DOMAIN: ${{ secrets.R2_PUBLIC_DOMAIN }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          # 2. 將選單輸入傳遞為環境變數給 Python
-          CAT_INPUT: ${{ inputs.category }}
-          LANG_INPUT: ${{ inputs.lang }}
+          # 2. 處理定時觸發 (Cron) 時 inputs 為空的情況，設定預設值
+          CAT_INPUT: ${{ inputs.category || 'AUTO' }}
+          LANG_INPUT: ${{ inputs.lang || 'zh-hk' }}
         run: |
-          python xgame_publisher.py
-    
-          [ -z "$CAT_INPUT" ] && CAT_INPUT="AUTO"
-          [ -z "$LANG_INPUT" ] && LANG_INPUT="zh-hk"
-
           python xgame_publisher.py
