@@ -4,11 +4,14 @@ import sys
 import json
 import random
 import sqlite3
+import base64
 import requests
 import feedparser
 import asyncio
 from datetime import datetime, timedelta
 from dateutil.parser import parse as parsedate_to_datetime
+from urllib.parse import quote
+
 import boto3
 from google import genai
 from google.genai import types
@@ -17,17 +20,30 @@ from playwright.async_api import async_playwright
 # ==========================================
 # 1. 類別定義與全局配置 (XGAME_CATEGORIES)
 # ==========================================
+
+# 分類字典映射
 XGAME_CATEGORIES = {
-    "SKATE": {"name": "Skateboarding", "icon": "🛹"},
-    "BMX": {"name": "BMX Freestyle", "icon": "🚲"},
-    "SURF": {"name": "Surfing", "icon": "🏄‍♂️"},
-    "CLIMB": {"name": "Bouldering & Climbing", "icon": "🧗‍♂️"},
-    "SNOW": {"name": "Snowboarding", "icon": "🏂"},
-    "EVENT": {"name": "Extreme Events", "icon": "🔥"}
+    "SKATE": {"name": "Skateboarding", "icon": "🛹", "query": "skateboarding action"},
+    "SURF": {"name": "Surfing", "icon": "🏄‍♂️", "query": "surfing ocean wave"},
+    "CLIMBING": {"name": "Rock Climbing", "icon": "🧗‍♂️", "query": "rock climbing extreme"},
+    "BMX": {"name": "BMX", "icon": "🚲", "query": "bmx trick park"},
+    "EVENT": {"name": "xGame Event", "icon": "🏆", "query": "extreme sports event"}
 }
 
+def resolve_selected_category():
+    """ 優先讀取 CAT_INPUT / XGAME_CATEGORY，保留原有的 AUTO 隨機機制 """
+    category_input = os.getenv("CAT_INPUT", os.getenv("XGAME_CATEGORY", "AUTO")).upper().strip()
+
+    if category_input == "AUTO" or category_input not in XGAME_CATEGORIES:
+        # 保留原 AUTO 隨機選擇邏輯
+        selected = random.choice(list(XGAME_CATEGORIES.keys()))
+        print(f"🎲 AUTO 模式自動選擇主題: {selected}")
+        return selected
+    else:
+        return category_input
+
 # ==========================================
-# 2. SQLite 數據庫去重與快取機制
+# 2. SQLite 數據庫去重與快取機制 (完整保留)
 # ==========================================
 def init_db(db_path="xgame_rss.db"):
     conn = sqlite3.connect(db_path)
@@ -63,28 +79,35 @@ def mark_post_processed(post_hash, title, db_path="xgame_rss.db"):
     conn.close()
 
 # ==========================================
-# 3. Pexels 圖庫背景抓取 (帶空值防呆)
+# 3. Pexels 圖庫背景抓取 (完整保留並強化關鍵字匹配)
 # ==========================================
 def get_pexels_bg_url(category_key):
-    """ 從 Pexels 抓取高畫質背景圖 URL（帶防錯防呆） """
+    """ 從 Pexels 抓取高畫質背景圖 URL（完整保留防錯防呆） """
     pexels_api_key = os.getenv("PEXELS_API_KEY")
     
-    # 防呆：確保 category_key 不為空，避免 list index out of range
-    if not category_key or not str(category_key).strip():
-        clean_query = "skateboarding"
+    # 優先從 XGAME_CATEGORIES 取得最佳搜尋關鍵字
+    cat_info = XGAME_CATEGORIES.get(category_key, {})
+    query_str = cat_info.get("query", "")
+
+    if not query_str:
+        if not category_key or not str(category_key).strip():
+            clean_query = "skateboarding"
+        else:
+            parts = str(category_key).strip().split()
+            clean_query = parts[0].lower() if parts else "skateboarding"
+        search_term = f"{clean_query} action sports"
     else:
-        parts = str(category_key).strip().split()
-        clean_query = parts[0].lower() if parts else "skateboarding"
+        search_term = query_str
 
     if pexels_api_key:
         try:
-            url = f"https://api.pexels.com/v1/search?query={clean_query}+action+sports&per_page=10&orientation=sq"
+            url = f"https://api.pexels.com/v1/search?query={quote(search_term)}&per_page=10&orientation=sq"
             headers = {"Authorization": pexels_api_key}
             res = requests.get(url, headers=headers, timeout=8)
             if res.status_code == 200:
                 photos = res.json().get("photos", [])
                 if photos:
-                    print(f"✅ Pexels 成功抓取【{clean_query}】背景圖！")
+                    print(f"✅ Pexels 成功抓取【{search_term}】背景圖！")
                     return photos[0]["src"]["large2x"]
             print(f"⚠️ Pexels API 回覆狀態: {res.status_code}，切換至純色背景模式。")
         except Exception as e:
@@ -94,18 +117,36 @@ def get_pexels_bg_url(category_key):
     return ""  # 回傳空字串，自動使用 CSS 預設漸層
 
 # ==========================================
-# 4. HTML/CSS 卡片渲染與 Playwright 截圖生成 (修復版)
+# 4. HTML/CSS 卡片渲染與 Playwright 截圖生成 (完整保留)
 # ==========================================
+def get_image_base64(url_or_path):
+    """ 下載網路圖片並轉為 Base64 字串，徹底解決 Playwright 外部圖片黑屏問題 """
+    if not url_or_path:
+        return None
+    try:
+        if url_or_path.startswith("http"):
+            resp = requests.get(url_or_path, timeout=10)
+            if resp.status_code == 200:
+                encoded = base64.b64encode(resp.content).decode("utf-8")
+                return f"data:image/jpeg;base64,{encoded}"
+        elif os.path.exists(url_or_path):
+            with open(url_or_path, "rb") as f:
+                encoded = base64.b64encode(f.read()).decode("utf-8")
+                return f"data:image/jpeg;base64,{encoded}"
+    except Exception as e:
+        print(f"⚠️ 圖片轉換 Base64 失敗: {e}")
+    return None
+
 async def generate_card_image(category_key, cover_title, sub_title, output_filename="xgame_card.png"):
-    cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES.get("EVENT", {"icon": "🛹"}))
+    cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES.get("EVENT"))
     icon = cat_info.get("icon", "🛹")
 
-    # 抓取 Pexels 背景圖 URL
+    # 抓取 Pexels 圖片 URL 並轉為 Base64
     bg_image_url = get_pexels_bg_url(category_key)
+    base64_bg = get_image_base64(bg_image_url) if bg_image_url else None
     
-    # 建立 CSS 背景樣式
-    if bg_image_url:
-        bg_css = f"background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.85)), url('{bg_image_url}') center/cover no-repeat;"
+    if base64_bg:
+        bg_css = f"background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.85)), url('{base64_bg}') center/cover no-repeat;"
     else:
         bg_css = "background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);"
 
@@ -120,7 +161,6 @@ async def generate_card_image(category_key, cover_title, sub_title, output_filen
           width: 1080px;
           height: 1080px;
           {bg_css}
-          /* 加入 Noto Color Emoji 確保 Linux / GitHub Actions 正常顯示 Emoji */
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
           color: #ffffff;
           display: flex;
@@ -222,20 +262,17 @@ async def generate_card_image(category_key, cover_title, sub_title, output_filen
         browser = await p.chromium.launch(headless=True)
         page = await browser.new_page(viewport={"width": 1080, "height": 1080})
         
-        # 使用 data:html 載入並等待網路資源（Pexels 圖片）完全下載完成 (networkidle)
-        await page.goto(f"data:text/html;charset=utf-8,{requests.utils.quote(html_content)}", wait_until="networkidle")
-        
-        # 額外延遲 500ms 確保字型與圖片渲染完成
-        await page.wait_for_timeout(500)
+        await page.set_content(html_content, wait_until="domcontentloaded")
+        await page.wait_for_timeout(300)
         
         await page.screenshot(path=output_filename)
         await browser.close()
 
-    print(f"📸 圖片成功生成: {output_filename}")
+    print(f"📸 卡片圖片生成完畢: {output_filename}")
     return output_filename
-    
+
 # ==========================================
-# 5. Cloudflare R2 / AWS S3 圖床上傳
+# 5. Cloudflare R2 / AWS S3 圖床上傳 (完整保留)
 # ==========================================
 def upload_to_r2(file_path, object_name=None):
     account_id = os.getenv("R2_ACCOUNT_ID")
@@ -272,7 +309,7 @@ def upload_to_r2(file_path, object_name=None):
         return None
 
 # ==========================================
-# 6. Telegram Bot 推送通知
+# 6. Telegram Bot 推送通知 (完整保留)
 # ==========================================
 def send_telegram_post(caption_text, image_path=None):
     bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
@@ -282,8 +319,6 @@ def send_telegram_post(caption_text, image_path=None):
         print("⚠️ 未設定 TELEGRAM_BOT_TOKEN 或 TELEGRAM_CHAT_ID，跳過 Telegram 發送。")
         return False
 
-    # 防呆處理：替換掉 Telegram Markdown 最容易卡死解析的特殊符號，或改用純文字/HTML
-    # 若文字過長，Telegram Caption 上限為 1024 字元
     clean_caption = caption_text[:1000]
 
     try:
@@ -293,7 +328,6 @@ def send_telegram_post(caption_text, image_path=None):
                 payload = {
                     "chat_id": chat_id,
                     "caption": clean_caption,
-                    # 如果內文含有未轉義的 _ 或 *，改用 HTML 比 Markdown 更穩定的預設解析
                     "parse_mode": "HTML" 
                 }
                 files = {"photo": photo}
@@ -312,21 +346,17 @@ def send_telegram_post(caption_text, image_path=None):
             print("✅ Telegram 圖片卡片與文案已成功發送！")
             return True
         else:
-            # 印出 Telegram 回傳的詳細錯誤原因 (例如 Bad Request: can't parse entities)
             print(f"❌ Telegram 發送失敗！HTTP {res.status_code} - API 錯誤 response: {res.text}")
             return False
             
     except Exception as e:
         print(f"❌ 發送至 Telegram 發生例外: {e}")
         return False
-        
+
 # ==========================================
-# 7. Gemini API 核心文案生成器 (全新修正版)
+# 7. Gemini API 核心文案生成器 (完整保留 Prompt 與模型降級機制)
 # ==========================================
 def generate_xgame_content(category_key="", topic_type="", topic_desc="", target_lang="zh-hk"):
-    """
-    呼叫 Gemini API 生成精煉流暢的廣東話社群文案
-    """
     display_category = category_key.strip() if category_key and category_key.strip() else "SKATE"
     
     api_key = os.getenv("GEMINI_API_KEY")
@@ -443,12 +473,14 @@ async def main():
     print("🚀 啟動 xGame Radar 自動化內容生成引擎...")
     init_db()
 
-    category_key = os.getenv("XGAME_CATEGORY", "BMX").strip()
+    # 取得當前執行主題（支援 CAT_INPUT / XGAME_CATEGORY / AUTO）
+    category_key = resolve_selected_category()
+    
     topic_type = os.getenv("TOPIC_TYPE", "EVENT_OVERVIEW").strip()
     topic_desc = os.getenv("TOPIC_DESC", "全球賽事動態情報").strip()
     target_lang = os.getenv("TARGET_LANG", "zh-hk").strip()
 
-    print(f"🎯 執行類別: {category_key}")
+    print(f"🎯 執行類別: {category_key} ({XGAME_CATEGORIES[category_key]['name']})")
     print(f"📅 今日日期: {datetime.now().strftime('%Y-%m-%d')}")
     print(f"📌 今日主題: 【{topic_type}】 - {topic_desc}")
     print(f"🌐 語言設定: {target_lang}")
