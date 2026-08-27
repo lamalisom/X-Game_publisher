@@ -79,49 +79,52 @@ def mark_post_processed(post_hash, title, db_path="xgame_rss.db"):
     conn.close()
 
 # ==========================================
-# 3. Pexels 圖庫背景抓取 (完整保留並強化關鍵字匹配)
+# 3. Pexels 圖庫背景抓取（含 Unsplash 終極保底）
 # ==========================================
 def get_pexels_bg_url(category_key):
-    """ 從 Pexels 抓取高畫質背景圖 URL（加強 User-Agent 與防鎖） """
+    """ 抓取背景圖 URL（Pexels API -> 通用搜尋 -> Unsplash 保底） """
     pexels_api_key = os.getenv("PEXELS_API_KEY")
     
-    if not pexels_api_key:
-        print("⚠️ 未偵測到 PEXELS_API_KEY，使用純色背景。")
-        return ""
-
     cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES.get("SKATE", {}))
-    search_term = cat_info.get("query", "surfing ocean wave")
+    search_term = cat_info.get("query", "action sports")
 
-    try:
-        url = f"https://api.pexels.com/v1/search?query={quote(search_term)}&per_page=15&orientation=square"
-        # ⚠️ 關鍵修正：加入真實瀏覽器的 User-Agent 避免被 Pexels 防火牆阻擋
-        headers = {
-            "Authorization": pexels_api_key.strip(),
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-        }
-        res = requests.get(url, headers=headers, timeout=10)
-        
-        if res.status_code == 200:
-            photos = res.json().get("photos", [])
-            if photos:
-                # 隨機挑選前 5 張之一，避免每次都抓到同一張
-                selected_photo = random.choice(photos[:5])
-                src_dict = selected_photo.get("src", {})
+    # 備用免費極限運動圖片（當 API 失效或未設定時使用，確保絕對不會黑屏）
+    FALLBACK_IMAGES = {
+        "SKATE": "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1080&q=80",
+        "SURF": "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1080&q=80",
+        "CLIMBING": "https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&w=1080&q=80",
+        "BMX": "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=1080&q=80",
+        "EVENT": "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&w=1080&q=80"
+    }
+
+    if pexels_api_key:
+        # 嘗試使用 Pexels API
+        for query_attempt in [search_term, "extreme sports"]:
+            try:
+                url = f"https://api.pexels.com/v1/search?query={quote(query_attempt)}&per_page=10&orientation=square"
+                headers = {
+                    "Authorization": pexels_api_key.strip(),
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+                }
+                res = requests.get(url, headers=headers, timeout=8)
                 
-                # 順序嘗試取得最佳尺寸
-                img_url = src_dict.get("large2x") or src_dict.get("large") or src_dict.get("original")
-                if img_url:
-                    print(f"✅ Pexels 成功抓取【{search_term}】背景圖: {img_url}")
-                    return img_url
-            else:
-                print(f"⚠️ Pexels 未找到【{search_term}】相關圖片。")
-        else:
-            print(f"❌ Pexels API 請求失敗！HTTP Code: {res.status_code}, Response: {res.text[:100]}")
-            
-    except Exception as e:
-        print(f"❌ Pexels 抓取過程發生例外: {e}")
-            
-    return ""
+                if res.status_code == 200:
+                    photos = res.json().get("photos", [])
+                    if photos:
+                        selected = random.choice(photos[:5])
+                        img_url = selected["src"].get("large2x") or selected["src"].get("large")
+                        if img_url:
+                            print(f"✅ Pexels 成功抓取【{query_attempt}】背景圖！")
+                            return img_url
+                else:
+                    print(f"⚠️ Pexels 狀態碼: {res.status_code} - {res.text[:80]}")
+            except Exception as e:
+                print(f"⚠️ Pexels 抓取例外: {e}")
+
+    # 若 Pexels 抓取失敗，觸發第三層保底機制
+    fallback_url = FALLBACK_IMAGES.get(category_key, FALLBACK_IMAGES["EVENT"])
+    print(f"ℹ️ 啟用 Unsplash 極限運動保底背景圖: {category_key}")
+    return fallback_url
     
 # ==========================================
 # 4. HTML/CSS 卡片渲染與 Playwright 截圖生成 (完整保留)
