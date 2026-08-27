@@ -542,7 +542,18 @@ async def main():
 
     # 選擇性上傳至 Cloudflare R2
     upload_to_r2(image_filename)
+   # 1. 上傳 PNG 圖片至 Cloudflare R2 並取得網址
+    r2_image_url = upload_to_r2(image_filename)
 
+    # 2. ⬇️ 呼叫此處：將比賽文案與圖片網址同步存成 JSON 推送至 R2
+    save_post_data_to_r2(
+        category_key=category_key,
+        cover_title=cover_title,
+        sub_title=sub_title,
+        caption_text=caption_text,
+        image_url=r2_image_url
+    )
+    
     # 發送至 Telegram 社群
     send_telegram_post(caption_text, image_path=image_filename)
 
