@@ -324,6 +324,36 @@ def upload_to_r2(file_path, object_name=None):
         print(f"❌ 上傳至 R2 失敗: {e}")
         return None
 
+def save_post_data_to_r2(category_key, cover_title, sub_title, caption_text, image_url):
+    """ 將生成的賽事文案與元數據 (Metadata) 轉為 JSON 並上傳至 Cloudflare R2 """
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    json_filename = f"posts/{timestamp}_{category_key}.json"
+    
+    post_data = {
+        "id": timestamp,
+        "category": category_key,
+        "title": cover_title,
+        "subtitle": sub_title,
+        "content": caption_text,
+        "image_url": image_url,
+        "created_at": datetime.now().isoformat(),
+        "author": "Una (@Una_next)"
+    }
+    
+    # 寫入本地臨時 JSON 檔
+    temp_json_path = f"temp_{timestamp}.json"
+    with open(temp_json_path, "w", encoding="utf-8") as f:
+        json.dump(post_data, f, ensure_ascii=False, indent=2)
+        
+    # 上傳 JSON 至 Cloudflare R2
+    upload_to_r2(temp_json_path, object_name=json_filename)
+    
+    # 清除本地臨時檔
+    if os.path.exists(temp_json_path):
+        os.remove(temp_json_path)
+        
+    print(f"📄 賽事 JSON 資料已成功備份至 R2: {json_filename}")
+
 # ==========================================
 # 6. Telegram Bot 推送通知 (完整保留)
 # ==========================================
