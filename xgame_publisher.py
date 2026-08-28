@@ -439,13 +439,19 @@ def send_telegram_post(caption_text, image_path=None):
 # ==========================================
 # 9. 主流程控制器 (Main Loop)
 # ==========================================
-async def main():
-    print("🚀 啟動 xGame Radar 每日自動化內容生成引擎...")
-    init_db()  # 初始化 SQLite 防重資料庫
 
-    category_key = random.choice(list(XGAME_CATEGORIES.keys()))
-    
-    cover_title, sub_title, caption_text, city_tag = generate_xgame_content(category_key=category_key)
+async def main(category_key="AUTO", target_lang="zh-hk"):
+    print("🚀 啟動 xGame Radar 每日自動化內容生成引擎...")
+    init_db()
+
+    # 如果傳入的是 AUTO 或空字串，則隨機挑選
+    if not category_key or category_key == "AUTO":
+        category_key = random.choice(list(XGAME_CATEGORIES.keys()))
+
+    cover_title, sub_title, caption_text, city_tag = generate_xgame_content(
+        category_key=category_key, 
+        target_lang=target_lang
+    )
 
     # 記錄文章標題防重
     record_posted_article(cover_title)
@@ -468,15 +474,13 @@ async def main():
 
 if __name__ == "__main__":
     import sys
-    
-    # 預設值
+
     cat_arg = "AUTO"
     lang_arg = "zh-hk"
-    
-    # 從命令列讀取傳入的參數
+
     if len(sys.argv) > 1 and sys.argv[1] != "AUTO":
         cat_arg = sys.argv[1]
     if len(sys.argv) > 2:
         lang_arg = sys.argv[2]
-        
+
     asyncio.run(main(category_key=cat_arg, target_lang=lang_arg))
