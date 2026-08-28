@@ -2,7 +2,7 @@ name: xgame_publisher
 
 on:
   schedule:
-    # Runs automatically every day at 04:00 UTC (12:00 PM HKT/MST)
+    # 每日 UTC 04:00 (HKT/MST 12:00 PM) 自動運行
     - cron: '0 4 * * *'
 
   workflow_dispatch:
@@ -45,7 +45,6 @@ jobs:
       - name: Install System CJK & Emoji Fonts, Python Dependencies
         run: |
           sudo apt-get update
-          # 加入 fonts-noto-color-emoji 確保 Emoji 正常顯示
           sudo apt-get install -y fonts-noto-cjk fonts-noto-color-emoji fonts-wqy-zenhei
           python -m pip install --upgrade pip
           pip install requests google-genai feedparser Pillow playwright boto3 python-dateutil
@@ -57,7 +56,6 @@ jobs:
 
       - name: Run xGame Radar Engine
         env:
-          # 1. 系統 API 金鑰與憑證
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PREDICTHQ_TOKEN: ${{ secrets.PREDICTHQ_TOKEN }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
@@ -68,8 +66,17 @@ jobs:
           R2_PUBLIC_DOMAIN: ${{ secrets.R2_PUBLIC_DOMAIN }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          # 2. 處理定時觸發 (Cron) 時 inputs 為空的情況，設定預設值
           CAT_INPUT: ${{ inputs.category || 'AUTO' }}
           LANG_INPUT: ${{ inputs.lang || 'zh-hk' }}
         run: |
-          python xgame_publisher.py
+          # 同時傳遞環境變數與 CLI 參數，確保 Python 能夠讀取 input 類別與語言
+          python xgame_publisher.py "$CAT_INPUT" "$LANG_INPUT"
+
+      - name: Save & Commit SQLite DB (Prevent Duplicate Posts)
+        if: always()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add xgame_radar.db || true
+          git commit -m "chmod: update sqlite post db [skip ci]" || true
+          git push
