@@ -467,4 +467,16 @@ async def main():
     print("🎉 今日自動發帖任務完全執行完成！")
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    import sys
+    
+    # 預設值
+    cat_arg = "AUTO"
+    lang_arg = "zh-hk"
+    
+    # 從命令列讀取傳入的參數
+    if len(sys.argv) > 1 and sys.argv[1] != "AUTO":
+        cat_arg = sys.argv[1]
+    if len(sys.argv) > 2:
+        lang_arg = sys.argv[2]
+        
+    asyncio.run(main(category_key=cat_arg, target_lang=lang_arg))
