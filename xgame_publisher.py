@@ -100,12 +100,16 @@ def fetch_latest_rss_news(category_key):
 # ==========================================
 # 4. Gemini 內容生成模組
 # ==========================================
+# ==========================================
+# 4. Gemini 內容生成模組
+# ==========================================
 def generate_xgame_content(category_key="", topic_type="", topic_desc="", target_lang="zh-hk"):
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         print("❌ 錯誤：未偵測到 GEMINI_API_KEY 環境變數！")
         return ("xGame Radar", "GLOBAL · EVENT", "請設定 API Key", "GLOBAL")
 
+    # 配置客戶端，可調整連線逾時時間（避免 Server disconnected）
     client = genai.Client(api_key=api_key)
 
     if not category_key or not category_key.strip():
@@ -190,19 +194,22 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 
     print(f"🤖 今日專欄: 【{active_title}】，正在呼叫 Gemini API...")
 
-    models_to_try = ["gemini-2.5-flash", "gemini-2.0-flash"]
+    # 更新為目前穩定且支援 grounding 的模型清單
+    models_to_try = ["gemini-2.5-flash", "gemini-1.5-flash"]
+    
     for model_name in models_to_try:
         max_retries = 3
         for attempt in range(1, max_retries + 1):
             try:
-                response = client.models.generate_content(
+                # 使用 chat 介面發送，避免 generate_content 觸發 AFC 警告
+                chat = client.chats.create(
                     model=model_name,
-                    contents=prompt,
                     config=types.GenerateContentConfig(
                         temperature=0.4,
                         tools=[{"google_search": {}}]
                     )
                 )
+                response = chat.send_message(prompt)
 
                 raw_text = response.text.strip()
                 raw_text = re.sub(r'^```\w*\n?', '', raw_text)
@@ -218,8 +225,8 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 
             except Exception as e:
                 err_msg = str(e)
-                print(f"⚠️ [{model_name}] 請求失敗 (第 {attempt} 次): {err_msg[:100]}")
-                if "503" in err_msg or "UNAVAILABLE" in err_msg or "429" in err_msg:
+                print(f"⚠️ [{model_name}] 請求失敗 (第 {attempt} 次): {err_msg[:120]}")
+                if "503" in err_msg or "UNAVAILABLE" in err_msg or "429" in err_msg or "disconnected" in err_msg:
                     if attempt < max_retries:
                         time.sleep(5)
                         continue
