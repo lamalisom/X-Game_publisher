@@ -423,28 +423,56 @@ def save_post_data_to_r2(category_key, cover_title, sub_title, caption_text, ima
 # ==========================================
 # 8. Telegram 推送模組
 # ==========================================
+# ==========================================
+# 8. Telegram 推送模組 (含精確除錯與自動降級)
+# ==========================================
 def send_telegram_post(caption_text, image_path=None):
     bot_token = os.getenv("TELEGRAM_BOT_TOKEN", "").strip("'\" ")
     chat_id = os.getenv("TELEGRAM_CHAT_ID", "").strip("'\" ")
     
     if not bot_token or not chat_id:
-        print("⚠️ 未設定 Telegram Token 或 Chat ID，跳過社群發送。")
+        print("⚠️ 未設定 TELEGRAM_BOT_TOKEN 或 TELEGRAM_CHAT_ID，跳過社群發送。")
         return
 
-    try:
-        # 清除可能導致 Telegram Markdown 解析失敗的語法標記
-        clean_caption = caption_text.replace("**", "*")
-        
+    # 1. 預先清理 Markdown 特殊字元避免解析崩潰
+    clean_caption = caption_text.replace("**", "*")
+
+    def make_tg_request(parse_mode="Markdown"):
         if image_path and os.path.exists(image_path):
             url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
+            payload = {"chat_id": chat_id, "caption": clean_caption}
+            if parse_mode:
+                payload["parse_mode"] = parse_mode
             with open(image_path, "rb") as photo:
-                requests.post(url, data={"chat_id": chat_id, "caption": clean_caption, "parse_mode": "Markdown"}, files={"photo": photo}, timeout=15)
+                return requests.post(url, data=payload, files={"photo": photo}, timeout=15)
         else:
             url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-            requests.post(url, data={"chat_id": chat_id, "text": clean_caption, "parse_mode": "Markdown"}, timeout=15)
-        print("✅ Telegram 卡片與文案成功發送！")
+            payload = {"chat_id": chat_id, "text": clean_caption}
+            if parse_mode:
+                payload["parse_mode"] = parse_mode
+            return requests.post(url, data=payload, timeout=15)
+
+    try:
+        response = make_tg_request(parse_mode="Markdown")
+        res_json = response.json()
+
+        # 如果 Telegram 回應 result: true，代表發送成功
+        if res_json.get("ok"):
+            print("✅ Telegram 卡片與文案成功發送！")
+            return
+
+        # 如果因為 Markdown 格式出錯 (400)，改用無格式降級重試
+        print(f"⚠️ Telegram 第一次發送失敗: {res_json.get('description', '')}，嘗試純文字降級發送...")
+        fallback_res = make_tg_request(parse_mode=None)
+        fallback_json = fallback_res.json()
+
+        if fallback_json.get("ok"):
+            print("✅ Telegram (純文字降級模式) 發送成功！")
+        else:
+            print(f"❌ Telegram 最終發送失敗！錯誤訊息: {fallback_json}")
+
     except Exception as e:
-        print(f"❌ Telegram 發送失敗: {e}")
+        print(f"❌ Telegram 發送過程發生異常例外: {e}")
 
 # ==========================================
 # 9. 主流程控制器
