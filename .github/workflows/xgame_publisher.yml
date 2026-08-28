@@ -29,10 +29,12 @@ on:
           - zh-cn
           - ja
           - en
-
 jobs:
   publish_xgame:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # 💡 賦予 Git Commit & Push 寫入權限
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -72,11 +74,15 @@ jobs:
           # 同時傳遞環境變數與 CLI 參數，確保 Python 能夠讀取 input 類別與語言
           python xgame_publisher.py "$CAT_INPUT" "$LANG_INPUT"
 
-      - name: Save & Commit SQLite DB (Prevent Duplicate Posts)
+      - name: Save & Commit SQLite DB
         if: always()
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add xgame_radar.db || true
-          git commit -m "chmod: update sqlite post db [skip ci]" || true
-          git push
+          if [ -f xgame_radar.db ]; then
+            git add xgame_radar.db
+            git commit -m "chmod: update sqlite post db [skip ci]" || true
+            git push
+          else
+            echo "xgame_radar.db 不存在，跳過提交。"
+          fi
