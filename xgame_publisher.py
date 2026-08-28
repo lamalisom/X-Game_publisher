@@ -229,10 +229,9 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 # 5. Pexels + Unsplash 背景圖片抓取模組
 # ==========================================
 def get_pexels_bg_url(category_key):
-    pexels_api_key = os.getenv("PEXELS_API_KEY")
+    pexels_api_key = os.getenv("PEXELS_API_KEY", "").strip("'\" ") # 自動清除多餘引號與空白
     cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES.get("SKATE", {}))
     search_term = cat_info.get("query", "action sports")
-
     FALLBACK_IMAGES = {
         "SKATE": "[https://source.unsplash.com/featured/1080x1080/?skateboarding,skatepark](https://source.unsplash.com/featured/1080x1080/?skateboarding,skatepark)",
         "SURF": "[https://source.unsplash.com/featured/1080x1080/?surfing,oceanwave](https://source.unsplash.com/featured/1080x1080/?surfing,oceanwave)",
@@ -240,13 +239,13 @@ def get_pexels_bg_url(category_key):
         "BMX": "[https://source.unsplash.com/featured/1080x1080/?bmx,freestyle](https://source.unsplash.com/featured/1080x1080/?bmx,freestyle)",
         "EVENT": "[https://source.unsplash.com/featured/1080x1080/?extremesports,stunt](https://source.unsplash.com/featured/1080x1080/?extremesports,stunt)"
     }
-
     if pexels_api_key:
         for query_attempt in [search_term, "extreme sports"]:
             try:
-                url = f"[https://api.pexels.com/v1/search?query=](https://api.pexels.com/v1/search?query=){quote(query_attempt)}&per_page=10&orientation=square"
+                # 確保 URL 不會被異常字元干擾
+                url = f"https://api.pexels.com/v1/search?query={quote(query_attempt)}&per_page=10&orientation=square"
                 headers = {
-                    "Authorization": pexels_api_key.strip(),
+                    "Authorization": pexels_api_key,
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
                 }
                 res = requests.get(url, headers=headers, timeout=8)
@@ -417,20 +416,22 @@ def save_post_data_to_r2(category_key, cover_title, sub_title, caption_text, ima
 # ==========================================
 # 8. Telegram 推送模組
 # ==========================================
+
 def send_telegram_post(caption_text, image_path=None):
-    bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
-    chat_id = os.getenv("TELEGRAM_CHAT_ID")
+    bot_token = os.getenv("TELEGRAM_BOT_TOKEN", "").strip("'\" ") # 自動清除多餘引號與空白
+    chat_id = os.getenv("TELEGRAM_CHAT_ID", "").strip("'\" ")     # 自動清除多餘引號與空白
+    
     if not bot_token or not chat_id:
         print("⚠️ 未設定 Telegram Token，跳過社群發送。")
         return
 
     try:
         if image_path and os.path.exists(image_path):
-            url = f"[https://api.telegram.org/bot](https://api.telegram.org/bot){bot_token}/sendPhoto"
+            url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
             with open(image_path, "rb") as photo:
                 requests.post(url, data={"chat_id": chat_id, "caption": caption_text, "parse_mode": "Markdown"}, files={"photo": photo}, timeout=15)
         else:
-            url = f"[https://api.telegram.org/bot](https://api.telegram.org/bot){bot_token}/sendMessage"
+            url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
             requests.post(url, data={"chat_id": chat_id, "text": caption_text, "parse_mode": "Markdown"}, timeout=15)
         print("✅ Telegram 卡片與文案成功發送！")
     except Exception as e:
