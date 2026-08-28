@@ -8,6 +8,7 @@ import base64
 import requests
 import feedparser
 import asyncio
+import time
 from datetime import datetime, timedelta
 from dateutil.parser import parse as parsedate_to_datetime
 from urllib.parse import quote
@@ -402,13 +403,14 @@ def send_telegram_post(caption_text, image_path=None):
 # ==========================================
 # 7. Gemini API 核心文案生成器 (完整保留 Prompt 與模型降級機制)
 # ==========================================
+
 def generate_xgame_content(category_key="", topic_type="", topic_desc="", target_lang="zh-hk"):
-    display_category = category_key.strip() if category_key and category_key.strip() else "EVENT"
+    display_category = category_key.strip() if category_key and category_key.strip() else "SKATE"
     
     api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
         print("❌ 錯誤：未偵測到 GEMINI_API_KEY 環境變數！")
-        return ("EVENT 焦點企劃", "GLOBAL · EVENT", "請設定 API Key", "GLOBAL")
+        return ("SKATE 賽事情報", "GLOBAL · EVENT", "請設定 API Key", "GLOBAL")
 
     client = genai.Client(api_key=api_key)
 
@@ -420,7 +422,6 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
     }
     selected_lang_desc = lang_map.get(target_lang, lang_map["zh-hk"])
 
-    # ⚠️ 修改 Prompt：明確要求搜尋並列出未來 4-7 個月的真實賽事資訊
     prompt = f"""
 你是一位專注於全球極限運動的熱血社群小編 Una (@Una_next)。
 請搜尋並整理未來 4 至 7 個月內，全球【{display_category}】領域最受矚目的真實極限運動大賽（例如 X Games、SLS、WSL、IFSC、Red Bull 賽事等）。
@@ -452,57 +453,55 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 正文內容
 """
 
-    print(f"🤖 正在呼叫 Gemini API (開啟即時搜尋模式) 生成【{display_category}】未來賽事情報...")
+    print(f"🤖 正在呼叫 Gemini API 生成【{display_category}】未來賽事情報...")
 
-    try:
-        # ⚠️ 關鍵修正：加入 tools=[{"google_search": {}}] 開啟 Google 搜尋實時抓取
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                temperature=0.5, # 降低溫度以確保資訊準確
-                tools=[{"google_search": {}}] # 強制啟用 Google 搜尋工具
-            )
-        )
+    # 嘗試的模型清單 (優先 2.5-flash，若失敗自動切換 2.0-flash)
+    models_to_try = ["gemini-2.5-flash", "gemini-2.0-flash"]
 
-        raw_text = response.text.strip()
-        raw_text = re.sub(r'^```\w*\n?', '', raw_text)
-        raw_text = re.sub(r'\n?```$', '', raw_text)
-
-        parts = [p.strip() for p in raw_text.split("---")]
-
-        if len(parts) >= 4:
-            return parts[0], parts[1], parts[3], parts[2].upper()
-        else:
-            return f"{display_category} 未來賽事熱血預告", "GLOBAL · EVENT", raw_text, "GLOBAL"
-
-    except Exception as e:
-        print(f"❌ Gemini 搜尋生成失敗: {e}")
-        return f"{display_category} 賽事情報", "GLOBAL · EVENT", "生成失敗，請檢查 API 與網絡。", "GLOBAL"
-        
-        # 降級備用機制
-        for fallback_model in ["gemini-2.0-flash-lite"]:
+    for model_name in models_to_try:
+        max_retries = 3
+        for attempt in range(1, max_retries + 1):
             try:
-                print(f"🔄 嘗試使用備用模型 [{fallback_model}]...")
+                print(f"🔄 嘗試使用模型 [{model_name}] (第 {attempt}/{max_retries} 次請求)...")
                 response = client.models.generate_content(
-                    model=fallback_model,
+                    model=model_name,
                     contents=prompt,
+                    config=types.GenerateContentConfig(
+                        temperature=0.5,
+                        tools=[{"google_search": {}}]
+                    )
                 )
+
                 raw_text = response.text.strip()
                 raw_text = re.sub(r'^```\w*\n?', '', raw_text)
                 raw_text = re.sub(r'\n?```$', '', raw_text)
+
                 parts = [p.strip() for p in raw_text.split("---")]
+
                 if len(parts) >= 4:
-                    print(f"✅ 備用模型 [{fallback_model}] 生成成功！")
+                    print(f"✅ 模型 [{model_name}] 生成成功！")
                     return parts[0], parts[1], parts[3], parts[2].upper()
-            except Exception as fb_err:
-                print(f"❌ 備用模型 [{fallback_model}] 失敗: {fb_err}")
+                else:
+                    return f"{display_category} 未來賽事熱血預告", "GLOBAL · EVENT", raw_text, "GLOBAL"
 
-        fallback_title = f"{display_category} 焦點企劃"
-        fallback_sub = f"GLOBAL · {display_category}"
-        fallback_caption = f"👋 我係 Una (@Una_next)！今日同大家關注【{display_category}】嘅最新情報！\n\n📌 記得關注我哋！\n— By Una (@Una_next)\n#xGameRadar #{display_category}"
-        return fallback_title, fallback_sub, fallback_caption, "GLOBAL"
+            except Exception as e:
+                err_msg = str(e)
+                print(f"⚠️ [{model_name}] 請求失敗 (第 {attempt} 次): {err_msg[:100]}")
+                
+                # 如果是 503 過載或 429 配額限制，等待 5 秒後重試
+                if "503" in err_msg or "UNAVAILABLE" in err_msg or "429" in err_msg:
+                    if attempt < max_retries:
+                        print("⏳ 伺服器繁忙，等待 5 秒後自動重試...")
+                        time.sleep(5)
+                        continue
+                break  # 其他錯誤（如 Prompt 拒絕等）則跳出嘗試下一個模型
 
+    # 萬一所有模型與重試都失敗時的最後保底文案
+    fallback_title = f"{display_category} 極限熱血企劃"
+    fallback_sub = f"GLOBAL · {display_category}"
+    fallback_caption = f"⚡ 各位極限迷！今日【{display_category}】賽事情報熱血更新中！\n\n📌 請密切留意 Una 的最新預告，精彩賽事即將爆發！\n\n💬 你最期待邊個比賽？留言話我知！👇\n#Una_next #{display_category} #xGameRadar"
+    return fallback_title, fallback_sub, fallback_caption, "GLOBAL"
+    
 # ==========================================
 # 8. 主流程運行控制 (Main Execution)
 # ==========================================
