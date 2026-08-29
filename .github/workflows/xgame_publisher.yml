@@ -2,8 +2,9 @@ name: xgame_publisher
 
 on:
   schedule:
-    # 每日 UTC 04:00 (HKT/MST 12:00 PM) 自動運行
-    - cron: '0 4 * * *'
+    # UTC 04:15 = 香港時間 12:15 PM (避開整點排隊高峰)
+    - cron: '15 4 * * *'
+   
 
   workflow_dispatch:
     inputs:
