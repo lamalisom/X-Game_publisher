@@ -9,8 +9,7 @@ import requests
 import feedparser
 import asyncio
 import time
-from datetime import datetime, timedelta
-from dateutil.parser import parse as parsedate_to_datetime
+from datetime import datetime
 from urllib.parse import quote
 
 import boto3
@@ -21,7 +20,12 @@ from playwright.async_api import async_playwright
 # ==========================================
 # 0. CONFIG & AFFILIATE SETTINGS
 # ==========================================
-AMAZON_AFFILIATE_ID = os.getenv("AMAZON_AFFILIATE_ID", "kait02bc-20").strip("'\" ")
+def clean_token_or_url(val):
+    if not val:
+        return ""
+    return re.sub(r'[\[\]\(\)\'"]', '', str(val)).strip()
+
+AMAZON_AFFILIATE_ID = clean_token_or_url(os.getenv("AMAZON_AFFILIATE_ID", "kait02bc-20"))
 
 XGAME_CATEGORIES = {
     "SKATE": "https://www.skateboarding.com/rss",
@@ -31,7 +35,6 @@ XGAME_CATEGORIES = {
     "SNOW": "https://www.snowboarder.com/.rss/full/"
 }
 
-# Keyphrase-to-Category mapping for Amazon Search fallback
 DEFAULT_GEAR_KEYWORDS = {
     "SKATE": "skateboarding shoes helmet protective gear",
     "CLIMB": "climbing shoes chalk bag harness",
@@ -99,10 +102,10 @@ def fetch_latest_rss_news(category_key):
     return ""
 
 # ==========================================
-# 3. GEMINI AI CONTENT ENGINE (MONETIZATION PROMPT)
+# 3. GEMINI AI CONTENT ENGINE
 # ==========================================
 def generate_xgame_content(category_key="", topic_type="", topic_desc="", target_lang="zh-hk"):
-    api_key = os.getenv("GEMINI_API_KEY", "").strip("'\" ")
+    api_key = clean_token_or_url(os.getenv("GEMINI_API_KEY", ""))
     if not api_key:
         print("❌ 錯誤：未偵測到 GEMINI_API_KEY 環境變數！")
         return ("xGame Radar", "GLOBAL · EVENT", "請設定 API Key", "GLOBAL", "skateboarding gear")
@@ -182,9 +185,10 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
                 raw_text = re.sub(r'^```\w*\n?', '', raw_text)
                 raw_text = re.sub(r'\n?```$', '', raw_text)
 
-                parts = [p.strip() for p in raw_text.split("---")]
+                # 最多切成 5 份，防止正文內含破折號導致 IndexError 或順序錯亂
+                parts = [p.strip() for p in raw_text.split("---", 4)]
 
-                if len(parts) >= 5:
+                if len(parts) == 5:
                     print(f"✅ 模型 [{model_name}] 生成成功！")
                     return parts[0], parts[1], parts[4], parts[2].upper(), parts[3]
                 elif len(parts) == 4:
@@ -226,7 +230,7 @@ def attach_affiliate_link(content_text, gear_keyword, category_key):
 # 5. PEXELS IMAGE FETCHING & BASE64 SANITIZER
 # ==========================================
 def get_pexels_image(keyword):
-    pexels_key = os.getenv("PEXELS_API_KEY", "").strip("'\" ")
+    pexels_key = clean_token_or_url(os.getenv("PEXELS_API_KEY", ""))
     fallback_urls = [
         "[https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg](https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg)",
         "[https://images.pexels.com/photos/844322/pexels-photo-844322.jpeg](https://images.pexels.com/photos/844322/pexels-photo-844322.jpeg)",
@@ -240,7 +244,7 @@ def get_pexels_image(keyword):
             
             res = requests.get(url, headers=headers, timeout=10).json()
             if res.get("photos"):
-                img_url = res["photos"][0]["src"]["large2x"].strip()
+                img_url = clean_token_or_url(res["photos"][0]["src"]["large2x"])
                 print(f"✅ Pexels 成功抓取【{keyword}】背景圖！")
                 return img_url
         except Exception as e:
@@ -250,7 +254,7 @@ def get_pexels_image(keyword):
 
 def url_to_base64(image_url):
     try:
-        clean_url = re.sub(r'[\[\]\(\)\'"]', '', str(image_url)).strip()
+        clean_url = clean_token_or_url(image_url)
         res = requests.get(clean_url, timeout=10)
         res.raise_for_status()
         encoded = base64.b64encode(res.content).decode("utf-8")
@@ -319,11 +323,11 @@ async def render_card_image_async(title, subtitle, tag_city, bg_image_url, outpu
 # 7. CLOUDFLARE R2 STORAGE UPLOADER
 # ==========================================
 def upload_to_r2(local_file_path, r2_object_name):
-    account_id = os.getenv("R2_ACCOUNT_ID", "").strip("'\" ")
-    access_key = os.getenv("R2_ACCESS_KEY_ID", "").strip("'\" ")
-    secret_key = os.getenv("R2_SECRET_ACCESS_KEY", "").strip("'\" ")
-    bucket_name = os.getenv("R2_BUCKET_NAME", "xgame-radar-media").strip("'\" ")
-    public_domain = os.getenv("R2_PUBLIC_DOMAIN", "").strip("'\" ").rstrip("/")
+    account_id = clean_token_or_url(os.getenv("R2_ACCOUNT_ID", ""))
+    access_key = clean_token_or_url(os.getenv("R2_ACCESS_KEY_ID", ""))
+    secret_key = clean_token_or_url(os.getenv("R2_SECRET_ACCESS_KEY", ""))
+    bucket_name = clean_token_or_url(os.getenv("R2_BUCKET_NAME", "xgame-radar-media"))
+    public_domain = clean_token_or_url(os.getenv("R2_PUBLIC_DOMAIN", "")).rstrip("/")
 
     if not all([account_id, access_key, secret_key]):
         print("⚠️ 未設置 Cloudflare R2 環境變數，跳過上傳。")
@@ -374,14 +378,11 @@ author: "Una (@Una_next)"
     print(f"📝 Markdown 文章已生成: {filepath}")
 
 # ==========================================
-# 9. TELEGRAM DISPATCHER (SANITIZED URL)
+# 9. TELEGRAM DISPATCHER (SANITIZED & ROBUST)
 # ==========================================
 def send_telegram_post(caption_text, image_path=None):
-    bot_token = os.getenv("TELEGRAM_BOT_TOKEN", "")
-    bot_token = re.sub(r'[\[\]\(\)\'"]', '', bot_token).strip()
-    
-    chat_id = os.getenv("TELEGRAM_CHAT_ID", "")
-    chat_id = re.sub(r'[\[\]\(\)\'"]', '', chat_id).strip()
+    bot_token = clean_token_or_url(os.getenv("TELEGRAM_BOT_TOKEN", ""))
+    chat_id = clean_token_or_url(os.getenv("TELEGRAM_CHAT_ID", ""))
     
     if not bot_token or not chat_id:
         print("⚠️ 未設定 TELEGRAM_BOT_TOKEN 或 TELEGRAM_CHAT_ID，跳過社群發送。")
@@ -412,7 +413,7 @@ def send_telegram_post(caption_text, image_path=None):
             print("✅ Telegram 卡片與文案成功發送！")
             return
 
-        print(f"⚠️ Telegram 第一次發送失敗: {res_json.get('description', '')}，嘗試純文字降級發送...")
+        print(f"⚠️ Telegram 第一次發送失敗 ({res_json.get('description', '')})，嘗試純文字降級模式發送...")
         fallback_res = make_tg_request(parse_mode=None)
         fallback_json = fallback_res.json()
 
@@ -425,7 +426,7 @@ def send_telegram_post(caption_text, image_path=None):
         print(f"❌ Telegram 發送過程發生異常例外: {e}")
 
 # ==========================================
-# 10. MAIN ASYNC PIPELINE (SUPPORTS CLI ARGS)
+# 10. MAIN ASYNC PIPELINE
 # ==========================================
 async def main_async():
     print("🚀 啟動 xGame Radar 每日自動化內容生成引擎...")
