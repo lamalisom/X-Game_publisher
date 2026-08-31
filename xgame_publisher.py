@@ -18,12 +18,24 @@ from google.genai import types
 from playwright.async_api import async_playwright
 
 # ==========================================
-# 0. CONFIG & AFFILIATE SETTINGS
+# 0. CONFIG & SANITIZER UTILS
 # ==========================================
 def clean_token_or_url(val):
+    """徹底清理 Token，移除所有中括號、引號與空白"""
     if not val:
         return ""
     return re.sub(r'[\[\]\(\)\'"]', '', str(val)).strip()
+
+def extract_clean_url(url_str):
+    """從任何字串（包含 Markdown 連結 [text](url)）中萃取出唯一的合法 HTTP/HTTPS 網址"""
+    if not url_str:
+        return ""
+    # 若含有 Markdown 格式 [text](http...)，優先取括號內的 URL
+    match = re.search(r'https?://[^\s\)]+', str(url_str))
+    if match:
+        clean_u = match.group(0).rstrip(']')
+        return re.sub(r'[\[\]\'"]', '', clean_u).strip()
+    return clean_token_or_url(url_str)
 
 AMAZON_AFFILIATE_ID = clean_token_or_url(os.getenv("AMAZON_AFFILIATE_ID", "kait02bc-20"))
 
@@ -185,7 +197,6 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
                 raw_text = re.sub(r'^```\w*\n?', '', raw_text)
                 raw_text = re.sub(r'\n?```$', '', raw_text)
 
-                # 最多切成 5 份，防止正文內含破折號導致 IndexError 或順序錯亂
                 parts = [p.strip() for p in raw_text.split("---", 4)]
 
                 if len(parts) == 5:
@@ -240,11 +251,12 @@ def get_pexels_image(keyword):
         try:
             headers = {"Authorization": pexels_key}
             clean_keyword = quote(keyword.strip())
+            # 強制構造乾淨的 URL 避免任何外加括號
             url = f"[https://api.pexels.com/v1/search?query=](https://api.pexels.com/v1/search?query=){clean_keyword}&per_page=1"
             
             res = requests.get(url, headers=headers, timeout=10).json()
             if res.get("photos"):
-                img_url = clean_token_or_url(res["photos"][0]["src"]["large2x"])
+                img_url = extract_clean_url(res["photos"][0]["src"]["large2x"])
                 print(f"✅ Pexels 成功抓取【{keyword}】背景圖！")
                 return img_url
         except Exception as e:
@@ -254,7 +266,7 @@ def get_pexels_image(keyword):
 
 def url_to_base64(image_url):
     try:
-        clean_url = clean_token_or_url(image_url)
+        clean_url = extract_clean_url(image_url)
         res = requests.get(clean_url, timeout=10)
         res.raise_for_status()
         encoded = base64.b64encode(res.content).decode("utf-8")
@@ -262,7 +274,7 @@ def url_to_base64(image_url):
         return f"data:image/jpeg;base64,{encoded}"
     except Exception as e:
         print(f"⚠️ 圖片 Base64 轉換失敗: {e}")
-        return image_url
+        return extract_clean_url(image_url)
 
 # ==========================================
 # 6. ASYNC PLAYWRIGHT CARD RENDERER
@@ -327,7 +339,7 @@ def upload_to_r2(local_file_path, r2_object_name):
     access_key = clean_token_or_url(os.getenv("R2_ACCESS_KEY_ID", ""))
     secret_key = clean_token_or_url(os.getenv("R2_SECRET_ACCESS_KEY", ""))
     bucket_name = clean_token_or_url(os.getenv("R2_BUCKET_NAME", "xgame-radar-media"))
-    public_domain = clean_token_or_url(os.getenv("R2_PUBLIC_DOMAIN", "")).rstrip("/")
+    public_domain = extract_clean_url(os.getenv("R2_PUBLIC_DOMAIN", "")).rstrip("/")
 
     if not all([account_id, access_key, secret_key]):
         print("⚠️ 未設置 Cloudflare R2 環境變數，跳過上傳。")
@@ -378,7 +390,7 @@ author: "Una (@Una_next)"
     print(f"📝 Markdown 文章已生成: {filepath}")
 
 # ==========================================
-# 9. TELEGRAM DISPATCHER (SANITIZED & ROBUST)
+# 9. TELEGRAM DISPATCHER (STRICT CLEAN URL)
 # ==========================================
 def send_telegram_post(caption_text, image_path=None):
     bot_token = clean_token_or_url(os.getenv("TELEGRAM_BOT_TOKEN", ""))
@@ -392,6 +404,7 @@ def send_telegram_post(caption_text, image_path=None):
 
     def make_tg_request(parse_mode="Markdown"):
         if image_path and os.path.exists(image_path):
+            # 強制構造乾淨的 Telegram API Endpoint URL
             url = f"[https://api.telegram.org/bot](https://api.telegram.org/bot){bot_token}/sendPhoto"
             payload = {"chat_id": chat_id, "caption": clean_caption}
             if parse_mode:
@@ -413,7 +426,7 @@ def send_telegram_post(caption_text, image_path=None):
             print("✅ Telegram 卡片與文案成功發送！")
             return
 
-        print(f"⚠️ Telegram 第一次發送失敗 ({res_json.get('description', '')})，嘗試純文字降級模式發送...")
+        print(f"⚠️ Telegram 第一次發送失敗: {res_json.get('description', '')}，嘗試純文字降級模式發送...")
         fallback_res = make_tg_request(parse_mode=None)
         fallback_json = fallback_res.json()
 
