@@ -193,35 +193,43 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 # 4. Pexels 背景抓圖與 Base64
 # ==========================================
 def get_pexels_image(keyword):
-    pexels_key = os.getenv("PEXELS_API_KEY")
+    pexels_key = os.getenv("PEXELS_API_KEY", "").strip("'\" ")
     fallback_urls = [
-        "[https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg](https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg)",
-        "[https://images.pexels.com/photos/844322/pexels-photo-844322.jpeg](https://images.pexels.com/photos/844322/pexels-photo-844322.jpeg)",
-        "[https://images.pexels.com/photos/1769553/pexels-photo-1769553.jpeg](https://images.pexels.com/photos/1769553/pexels-photo-1769553.jpeg)"
+        "https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg",
+        "https://images.pexels.com/photos/844322/pexels-photo-844322.jpeg",
+        "https://images.pexels.com/photos/1769553/pexels-photo-1769553.jpeg"
     ]
     if pexels_key:
         try:
             headers = {"Authorization": pexels_key}
-            url = f"[https://api.pexels.com/v1/search?query=](https://api.pexels.com/v1/search?query=){keyword}&per_page=1"
+            # 確保 query 有正確進行 URL Encode 並清理 URL 字串
+            clean_keyword = quote(keyword.strip())
+            url = f"https://api.pexels.com/v1/search?query={clean_keyword}&per_page=1"
+            
             res = requests.get(url, headers=headers, timeout=10).json()
             if res.get("photos"):
-                img_url = res["photos"][0]["src"]["large2x"]
+                img_url = res["photos"][0]["src"]["large2x"].strip()
                 print(f"✅ Pexels 成功抓取【{keyword}】背景圖！")
                 return img_url
         except Exception as e:
             print(f"⚠️ Pexels 搜尋失敗: {e}")
+            
     return random.choice(fallback_urls)
-
+    
 def url_to_base64(image_url):
     try:
-        res = requests.get(image_url, timeout=10)
+        # 強制清理 URL 中的多餘字元與 Markdown 符號
+        clean_url = re.sub(r'[\[\]\(\)\'"]', '', str(image_url)).strip()
+        
+        res = requests.get(clean_url, timeout=10)
+        res.raise_for_status()
         encoded = base64.b64encode(res.content).decode("utf-8")
         print(f"🖼️ Base64 轉換成功！字串長度: {len(encoded)}")
         return f"data:image/jpeg;base64,{encoded}"
     except Exception as e:
         print(f"⚠️ 圖片 Base64 轉換失敗: {e}")
         return image_url
-
+        
 # ==========================================
 # 5. Playwright 動態卡片渲染 (異步 async)
 # ==========================================
@@ -339,8 +347,12 @@ author: "Una (@Una_next)"
 # 8. Telegram 推送模組 (含降級機制)
 # ==========================================
 def send_telegram_post(caption_text, image_path=None):
-    bot_token = os.getenv("TELEGRAM_BOT_TOKEN", "").strip("'\" ")
-    chat_id = os.getenv("TELEGRAM_CHAT_ID", "").strip("'\" ")
+    # 徹底去除環境變數中的引號、中括號與空白
+    bot_token = os.getenv("TELEGRAM_BOT_TOKEN", "")
+    bot_token = re.sub(r'[\[\]\(\)\'"]', '', bot_token).strip()
+    
+    chat_id = os.getenv("TELEGRAM_CHAT_ID", "")
+    chat_id = re.sub(r'[\[\]\(\)\'"]', '', chat_id).strip()
     
     if not bot_token or not chat_id:
         print("⚠️ 未設定 TELEGRAM_BOT_TOKEN 或 TELEGRAM_CHAT_ID，跳過社群發送。")
@@ -350,14 +362,14 @@ def send_telegram_post(caption_text, image_path=None):
 
     def make_tg_request(parse_mode="Markdown"):
         if image_path and os.path.exists(image_path):
-            url = f"[https://api.telegram.org/bot](https://api.telegram.org/bot){bot_token}/sendPhoto"
+            url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
             payload = {"chat_id": chat_id, "caption": clean_caption}
             if parse_mode:
                 payload["parse_mode"] = parse_mode
             with open(image_path, "rb") as photo:
                 return requests.post(url, data=payload, files={"photo": photo}, timeout=15)
         else:
-            url = f"[https://api.telegram.org/bot](https://api.telegram.org/bot){bot_token}/sendMessage"
+            url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
             payload = {"chat_id": chat_id, "text": clean_caption}
             if parse_mode:
                 payload["parse_mode"] = parse_mode
@@ -382,7 +394,7 @@ def send_telegram_post(caption_text, image_path=None):
 
     except Exception as e:
         print(f"❌ Telegram 發送過程發生異常例外: {e}")
-
+        
 # ==========================================
 # 9. 主程式執行流程 (支援 CLI 參數傳遞)
 # ==========================================
