@@ -19,8 +19,10 @@ from google.genai import types
 from playwright.async_api import async_playwright
 
 # ==========================================
-# 0. 分類與 RSS 設定
+# 0. CONFIG & AFFILIATE SETTINGS
 # ==========================================
+AMAZON_AFFILIATE_ID = os.getenv("AMAZON_AFFILIATE_ID", "kait02bc-20").strip("'\" ")
+
 XGAME_CATEGORIES = {
     "SKATE": "https://www.skateboarding.com/rss",
     "CLIMB": "https://www.climbing.com/feed/",
@@ -29,8 +31,17 @@ XGAME_CATEGORIES = {
     "SNOW": "https://www.snowboarder.com/.rss/full/"
 }
 
+# Keyphrase-to-Category mapping for Amazon Search fallback
+DEFAULT_GEAR_KEYWORDS = {
+    "SKATE": "skateboarding shoes helmet protective gear",
+    "CLIMB": "climbing shoes chalk bag harness",
+    "BMX": "bmx helmet gloves pads",
+    "SURF": "surfing wetsuit leash traction pad",
+    "SNOW": "snowboard goggles gloves helmet"
+}
+
 # ==========================================
-# 1. SQLite 防重複發帖資料庫
+# 1. SQLITE ANTI-DUPLICATION DATABASE
 # ==========================================
 DB_FILE = "posted_articles.db"
 
@@ -67,7 +78,7 @@ def record_posted_article(title, category):
     conn.close()
 
 # ==========================================
-# 2. RSS 抓取模組
+# 2. RSS FEED FETCHING MODULE
 # ==========================================
 def fetch_latest_rss_news(category_key):
     rss_url = XGAME_CATEGORIES.get(category_key.upper())
@@ -88,19 +99,19 @@ def fetch_latest_rss_news(category_key):
     return ""
 
 # ==========================================
-# 3. Gemini 內容生成模組 (同步修復 404 & 升級商業 Prompt)
+# 3. GEMINI AI CONTENT ENGINE (MONETIZATION PROMPT)
 # ==========================================
 def generate_xgame_content(category_key="", topic_type="", topic_desc="", target_lang="zh-hk"):
-    api_key = os.getenv("GEMINI_API_KEY")
+    api_key = os.getenv("GEMINI_API_KEY", "").strip("'\" ")
     if not api_key:
         print("❌ 錯誤：未偵測到 GEMINI_API_KEY 環境變數！")
-        return ("xGame Radar", "GLOBAL · EVENT", "請設定 API Key", "GLOBAL")
+        return ("xGame Radar", "GLOBAL · EVENT", "請設定 API Key", "GLOBAL", "skateboarding gear")
 
     client = genai.Client(api_key=api_key)
 
     if not category_key or not category_key.strip():
         category_key = random.choice(list(XGAME_CATEGORIES.keys()))
-    display_category = category_key.strip()
+    display_category = category_key.strip().upper()
 
     rss_context = fetch_latest_rss_news(display_category)
 
@@ -127,7 +138,6 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
     }
     selected_lang_desc = lang_map.get(target_lang, lang_map["zh-hk"])
 
-    # 包含商業價值的 Prompt 升級
     prompt = f"""
 你是一位專注於全球極限運動的熱血社群小編 Una (@Una_next)。
 今日專欄主題：【{active_title}】（項目：{display_category}）
@@ -136,7 +146,7 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 【撰寫要求】:
 1. 請以熱血且專業的口吻撰寫一篇關於【{display_category}】的極限運動報導。
 2. 語言格式：完全使用 **{selected_lang_desc}** 撰寫，大量善用 Emoji，總字數控制在 **250 至 350 字以內**。
-3. 商業價值優化：在 Content 正文結尾，請以專家身份推薦 1 款該運動必備的裝備（如特定專業鞋款、防具或配件）或推薦場地，並說明推薦理由。
+3. 商業變現優化：在 Content 正文結尾，請以專家身份推薦 1 款該運動必備的裝備（如特定專業鞋款、護具、配件、鎂粉袋或頭盔），並說明推薦理由。
 
 請嚴格按照以下格式輸出，並用三條橫線 `---` 將各部分分開，不要輸出 Markdown 代碼塊（```）：
 
@@ -145,6 +155,8 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 封面副標題
 ---
 城市英文名或主題關鍵字
+---
+推薦裝備英文關鍵字（例如：skate shoes / climbing chalk bag / bmx helmet）
 ---
 正文內容
 """
@@ -172,11 +184,13 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 
                 parts = [p.strip() for p in raw_text.split("---")]
 
-                if len(parts) >= 4:
+                if len(parts) >= 5:
                     print(f"✅ 模型 [{model_name}] 生成成功！")
-                    return parts[0], parts[1], parts[3], parts[2].upper()
+                    return parts[0], parts[1], parts[4], parts[2].upper(), parts[3]
+                elif len(parts) == 4:
+                    return parts[0], parts[1], parts[3], parts[2].upper(), DEFAULT_GEAR_KEYWORDS.get(display_category, "extreme sports gear")
                 else:
-                    return f"{display_category} {active_title}", f"GLOBAL · {active_topic}", raw_text, "GLOBAL"
+                    return f"{display_category} {active_title}", f"GLOBAL · {active_topic}", raw_text, "GLOBAL", DEFAULT_GEAR_KEYWORDS.get(display_category, "extreme sports gear")
 
             except Exception as e:
                 err_msg = str(e)
@@ -187,24 +201,42 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
                         continue
                 break
 
-    return f"{display_category} 熱血企劃", f"GLOBAL · {active_topic}", f"⚡ 各位極限迷！今日【{display_category}】情報熱血更新中！\n\n💬 留言話我知你最想睇咩！👇\n#Una_next #{display_category} #xGameRadar", "GLOBAL"
+    fallback_gear = DEFAULT_GEAR_KEYWORDS.get(display_category, "gear")
+    return f"{display_category} 熱血企劃", f"GLOBAL · {active_topic}", f"⚡ 各位極限迷！今日【{display_category}】情報熱血更新中！\n\n💬 留言話我知你最想睇咩！👇\n#Una_next #{display_category} #xGameRadar", "GLOBAL", fallback_gear
 
 # ==========================================
-# 4. Pexels 背景抓圖與 Base64
+# 4. AFFILIATE LINK BUILDER
+# ==========================================
+def attach_affiliate_link(content_text, gear_keyword, category_key):
+    clean_kw = re.sub(r'[^\w\s]', '', gear_keyword).strip()
+    if not clean_kw:
+        clean_kw = DEFAULT_GEAR_KEYWORDS.get(category_key.upper(), "sports gear")
+    
+    encoded_kw = quote(clean_kw)
+    amazon_url = f"https://www.amazon.com/s?k={encoded_kw}&tag={AMAZON_AFFILIATE_ID}"
+    
+    affiliate_block = (
+        f"\n\n🛒 *Una 裝備選購建議*:\n"
+        f"👉 [{clean_kw.capitalize()} Amazon 直送門市]({amazon_url})\n"
+        f"*(透過連結購買可支持本頻道運作)*"
+    )
+    return content_text + affiliate_block
+
+# ==========================================
+# 5. PEXELS IMAGE FETCHING & BASE64 SANITIZER
 # ==========================================
 def get_pexels_image(keyword):
     pexels_key = os.getenv("PEXELS_API_KEY", "").strip("'\" ")
     fallback_urls = [
-        "https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg",
-        "https://images.pexels.com/photos/844322/pexels-photo-844322.jpeg",
-        "https://images.pexels.com/photos/1769553/pexels-photo-1769553.jpeg"
+        "[https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg](https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg)",
+        "[https://images.pexels.com/photos/844322/pexels-photo-844322.jpeg](https://images.pexels.com/photos/844322/pexels-photo-844322.jpeg)",
+        "[https://images.pexels.com/photos/1769553/pexels-photo-1769553.jpeg](https://images.pexels.com/photos/1769553/pexels-photo-1769553.jpeg)"
     ]
     if pexels_key:
         try:
             headers = {"Authorization": pexels_key}
-            # 確保 query 有正確進行 URL Encode 並清理 URL 字串
             clean_keyword = quote(keyword.strip())
-            url = f"https://api.pexels.com/v1/search?query={clean_keyword}&per_page=1"
+            url = f"[https://api.pexels.com/v1/search?query=](https://api.pexels.com/v1/search?query=){clean_keyword}&per_page=1"
             
             res = requests.get(url, headers=headers, timeout=10).json()
             if res.get("photos"):
@@ -215,12 +247,10 @@ def get_pexels_image(keyword):
             print(f"⚠️ Pexels 搜尋失敗: {e}")
             
     return random.choice(fallback_urls)
-    
+
 def url_to_base64(image_url):
     try:
-        # 強制清理 URL 中的多餘字元與 Markdown 符號
         clean_url = re.sub(r'[\[\]\(\)\'"]', '', str(image_url)).strip()
-        
         res = requests.get(clean_url, timeout=10)
         res.raise_for_status()
         encoded = base64.b64encode(res.content).decode("utf-8")
@@ -229,9 +259,9 @@ def url_to_base64(image_url):
     except Exception as e:
         print(f"⚠️ 圖片 Base64 轉換失敗: {e}")
         return image_url
-        
+
 # ==========================================
-# 5. Playwright 動態卡片渲染 (異步 async)
+# 6. ASYNC PLAYWRIGHT CARD RENDERER
 # ==========================================
 async def render_card_image_async(title, subtitle, tag_city, bg_image_url, output_path):
     bg_base64 = url_to_base64(bg_image_url)
@@ -286,14 +316,14 @@ async def render_card_image_async(title, subtitle, tag_city, bg_image_url, outpu
     print(f"📸 卡片圖片生成完畢: {output_path}")
 
 # ==========================================
-# 6. Cloudflare R2 備份上傳
+# 7. CLOUDFLARE R2 STORAGE UPLOADER
 # ==========================================
 def upload_to_r2(local_file_path, r2_object_name):
-    account_id = os.getenv("R2_ACCOUNT_ID")
-    access_key = os.getenv("R2_ACCESS_KEY_ID")
-    secret_key = os.getenv("R2_SECRET_ACCESS_KEY")
-    bucket_name = os.getenv("R2_BUCKET_NAME", "xgame-radar-media")
-    public_domain = os.getenv("R2_PUBLIC_DOMAIN", "").rstrip("/")
+    account_id = os.getenv("R2_ACCOUNT_ID", "").strip("'\" ")
+    access_key = os.getenv("R2_ACCESS_KEY_ID", "").strip("'\" ")
+    secret_key = os.getenv("R2_SECRET_ACCESS_KEY", "").strip("'\" ")
+    bucket_name = os.getenv("R2_BUCKET_NAME", "xgame-radar-media").strip("'\" ")
+    public_domain = os.getenv("R2_PUBLIC_DOMAIN", "").strip("'\" ").rstrip("/")
 
     if not all([account_id, access_key, secret_key]):
         print("⚠️ 未設置 Cloudflare R2 環境變數，跳過上傳。")
@@ -318,7 +348,7 @@ def upload_to_r2(local_file_path, r2_object_name):
         return None
 
 # ==========================================
-# 7. 本地 Markdown Post 生成模組
+# 8. MARKDOWN POST GENERATOR
 # ==========================================
 def save_post_as_markdown(category_key, cover_title, sub_title, caption_text, image_url):
     timestamp = datetime.now().strftime("%Y-%m-%d")
@@ -344,10 +374,9 @@ author: "Una (@Una_next)"
     print(f"📝 Markdown 文章已生成: {filepath}")
 
 # ==========================================
-# 8. Telegram 推送模組 (含降級機制)
+# 9. TELEGRAM DISPATCHER (SANITIZED URL)
 # ==========================================
 def send_telegram_post(caption_text, image_path=None):
-    # 徹底去除環境變數中的引號、中括號與空白
     bot_token = os.getenv("TELEGRAM_BOT_TOKEN", "")
     bot_token = re.sub(r'[\[\]\(\)\'"]', '', bot_token).strip()
     
@@ -362,14 +391,14 @@ def send_telegram_post(caption_text, image_path=None):
 
     def make_tg_request(parse_mode="Markdown"):
         if image_path and os.path.exists(image_path):
-            url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
+            url = f"[https://api.telegram.org/bot](https://api.telegram.org/bot){bot_token}/sendPhoto"
             payload = {"chat_id": chat_id, "caption": clean_caption}
             if parse_mode:
                 payload["parse_mode"] = parse_mode
             with open(image_path, "rb") as photo:
                 return requests.post(url, data=payload, files={"photo": photo}, timeout=15)
         else:
-            url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+            url = f"[https://api.telegram.org/bot](https://api.telegram.org/bot){bot_token}/sendMessage"
             payload = {"chat_id": chat_id, "text": clean_caption}
             if parse_mode:
                 payload["parse_mode"] = parse_mode
@@ -394,47 +423,48 @@ def send_telegram_post(caption_text, image_path=None):
 
     except Exception as e:
         print(f"❌ Telegram 發送過程發生異常例外: {e}")
-        
+
 # ==========================================
-# 9. 主程式執行流程 (支援 CLI 參數傳遞)
+# 10. MAIN ASYNC PIPELINE (SUPPORTS CLI ARGS)
 # ==========================================
 async def main_async():
     print("🚀 啟動 xGame Radar 每日自動化內容生成引擎...")
     init_db()
 
-    # 保留 CLI 參數解析功能（如：python main.py SKATE zh-hk）
     category_arg = sys.argv[1] if len(sys.argv) > 1 else ""
     lang_arg = sys.argv[2] if len(sys.argv) > 2 else "zh-hk"
 
     category = category_arg.strip().upper() if category_arg else random.choice(list(XGAME_CATEGORIES.keys()))
 
-    # 1. 生成內容
-    title, subtitle, content, city_tag = generate_xgame_content(category_key=category, target_lang=lang_arg)
+    # 1. AI Content Generation
+    title, subtitle, content, city_tag, gear_kw = generate_xgame_content(category_key=category, target_lang=lang_arg)
 
-    # 防重複檢查
     if is_already_posted(title):
         print(f"ℹ️ 文章 [{title}] 今日已發布過，跳過重複發送。")
         return
 
-    # 2. 獲取圖片與渲染卡片 (異步呼叫 async playwright)
+    # 2. Inject Affiliate Link
+    monetized_content = attach_affiliate_link(content, gear_kw, category)
+
+    # 3. Pexels Image & Card Rendering
     bg_image = get_pexels_image(f"{category.lower()} action")
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     card_filename = f"xgame_{timestamp}.png"
     
     await render_card_image_async(title, subtitle, city_tag, bg_image, card_filename)
 
-    # 3. 上傳圖片卡片至 R2
+    # 4. Upload Image Card to R2
     r2_img_url = upload_to_r2(card_filename, f"cards/{card_filename}")
     img_link_for_record = r2_img_url if r2_img_url else bg_image
 
-    # 4. 生成並上傳 JSON 備份至 R2
+    # 5. Build and Upload JSON Backup to R2
     json_filename = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{category}.json"
     post_data = {
         "id": timestamp,
         "title": title,
         "subtitle": subtitle,
         "category": category,
-        "content": content,
+        "content": monetized_content,
         "image_url": img_link_for_record,
         "created_at": datetime.now().isoformat(),
         "author": "Una (@Una_next)"
@@ -445,17 +475,16 @@ async def main_async():
     upload_to_r2(json_filename, f"posts/{json_filename}")
     print(f"📄 文章 JSON 已成功備份至 R2: posts/{json_filename}")
 
-    # 5. 生成本地 Markdown Post
-    save_post_as_markdown(category, title, subtitle, content, img_link_for_record)
+    # 6. Save Local Markdown Post
+    save_post_as_markdown(category, title, subtitle, monetized_content, img_link_for_record)
 
-    # 6. 發送至 Telegram
-    tg_message = f"🏆 *{title}*\n\n{subtitle}\n\n{content}\n\n#xGameRadar #{category} #Una_next"
+    # 7. Telegram Dispatch
+    tg_message = f"🏆 *{title}*\n\n{subtitle}\n\n{monetized_content}\n\n#xGameRadar #{category} #Una_next"
     send_telegram_post(tg_message, image_path=card_filename)
 
-    # 7. 記錄已發布
+    # 8. Mark Record & Cleanup
     record_posted_article(title, category)
 
-    # 清理臨時本地檔案
     if os.path.exists(card_filename):
         os.remove(card_filename)
     if os.path.exists(json_filename):
