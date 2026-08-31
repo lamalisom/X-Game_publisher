@@ -19,89 +19,76 @@ from google.genai import types
 from playwright.async_api import async_playwright
 
 # ==========================================
-# 1. 全局配置與極限運動類別定義
+# 0. 分類與 RSS 設定
 # ==========================================
-DB_FILE = "xgame_radar.db"
-
 XGAME_CATEGORIES = {
-    "SKATE": {"name": "Skateboarding", "icon": "🛹", "query": "skateboarding action", "rss": "[https://www.skateboarding.com/.rss/full/](https://www.skateboarding.com/.rss/full/)"},
-    "SURF": {"name": "Surfing", "icon": "🏄‍♂️", "query": "surfing big wave", "rss": "[https://www.surfer.com/.rss/full/](https://www.surfer.com/.rss/full/)"},
-    "CLIMBING": {"name": "Rock Climbing", "icon": "🧗‍♂️", "query": "rock climbing extreme", "rss": "[https://www.climbing.com/.rss/full/](https://www.climbing.com/.rss/full/)"},
-    "BMX": {"name": "BMX Racing / Freestyle", "icon": "🚲", "query": "bmx freestyle", "rss": "[https://bmx.transworld.net/feed/](https://bmx.transworld.net/feed/)"},
-    "EVENT": {"name": "Global Extreme Sports Event", "icon": "🏆", "query": "extreme sports event", "rss": "[https://xgames.com/feed](https://xgames.com/feed)"}
-}
-
-# 替換已失效的 source.unsplash.com，改用穩定的高解析度極限運動範例圖片
-FALLBACK_IMAGES = {
-    "SKATE": "[https://images.pexels.com/photos/165236/pexels-photo-165236.jpeg](https://images.pexels.com/photos/165236/pexels-photo-165236.jpeg)",
-    "SURF": "[https://images.pexels.com/photos/67386/pexels-photo-67386.jpeg](https://images.pexels.com/photos/67386/pexels-photo-67386.jpeg)",
-    "CLIMBING": "[https://images.pexels.com/photos/668353/pexels-photo-668353.jpeg](https://images.pexels.com/photos/668353/pexels-photo-668353.jpeg)",
-    "BMX": "[https://images.pexels.com/photos/568805/pexels-photo-568805.jpeg](https://images.pexels.com/photos/568805/pexels-photo-568805.jpeg)",
-    "EVENT": "[https://images.pexels.com/photos/848618/pexels-photo-848618.jpeg](https://images.pexels.com/photos/848618/pexels-photo-848618.jpeg)"
+    "SKATE": "https://www.skateboarding.com/rss",
+    "CLIMB": "https://www.climbing.com/feed/",
+    "BMX": "https://fatbmx.com/bmx-news?format=feed&type=rss",
+    "SURF": "https://www.surfer.com/.rss/full/",
+    "SNOW": "https://www.snowboarder.com/.rss/full/"
 }
 
 # ==========================================
-# 2. SQLite 資料庫模組
+# 1. SQLite 防重複發帖資料庫
 # ==========================================
+DB_FILE = "posted_articles.db"
+
 def init_db():
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
-    cursor.execute("""
+    cursor.execute('''
         CREATE TABLE IF NOT EXISTS posted_articles (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT UNIQUE,
-            link TEXT,
+            category TEXT,
             posted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
-    """)
+    ''')
     conn.commit()
     conn.close()
 
 def is_already_posted(title):
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
-    cursor.execute("SELECT id FROM posted_articles WHERE title = ?", (title,))
+    cursor.execute('SELECT id FROM posted_articles WHERE title = ?', (title,))
     result = cursor.fetchone()
     conn.close()
     return result is not None
 
-def record_posted_article(title, link=""):
+def record_posted_article(title, category):
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
     try:
-        cursor.execute("INSERT INTO posted_articles (title, link) VALUES (?, ?)", (title, link))
+        cursor.execute('INSERT INTO posted_articles (title, category) VALUES (?, ?)', (title, category))
         conn.commit()
     except sqlite3.IntegrityError:
         pass
     conn.close()
 
 # ==========================================
-# 3. RSS Feed 抓取模組
+# 2. RSS 抓取模組
 # ==========================================
 def fetch_latest_rss_news(category_key):
-    cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES["SKATE"])
-    rss_url = cat_info.get("rss")
-    
+    rss_url = XGAME_CATEGORIES.get(category_key.upper())
     if not rss_url:
         return ""
-
     try:
         feed = feedparser.parse(rss_url)
-        for entry in feed.entries[:5]:
-            title = entry.get("title", "")
-            if not is_already_posted(title):
-                summary = entry.get("summary", entry.get("description", ""))
-                clean_summary = re.sub('<[^<]+?>', '', summary)[:200]
-                return f"【RSS 新聞參考】標題: {title}\n摘要: {clean_summary}"
+        articles = []
+        for entry in feed.entries[:3]:
+            title = entry.get('title', '')
+            summary = entry.get('summary', entry.get('description', ''))
+            clean_summary = re.sub('<[^<]+?>', '', summary)[:150]
+            articles.append(f"- {title}: {clean_summary}")
+        if articles:
+            return "【最新 RSS 參考新聞】:\n" + "\n".join(articles)
     except Exception as e:
-        print(f"⚠️ RSS 抓取失敗: {e}")
+        print(f"⚠️ RSS 抓取失敗 ({category_key}): {e}")
     return ""
 
 # ==========================================
-# 4. Gemini 內容生成模組
-# ==========================================
-# ==========================================
-# 4. Gemini 內容生成模組
+# 3. Gemini 內容生成模組 (同步修復 404 & 升級商業 Prompt)
 # ==========================================
 def generate_xgame_content(category_key="", topic_type="", topic_desc="", target_lang="zh-hk"):
     api_key = os.getenv("GEMINI_API_KEY")
@@ -109,7 +96,6 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
         print("❌ 錯誤：未偵測到 GEMINI_API_KEY 環境變數！")
         return ("xGame Radar", "GLOBAL · EVENT", "請設定 API Key", "GLOBAL")
 
-    # 配置客戶端，可調整連線逾時時間（避免 Server disconnected）
     client = genai.Client(api_key=api_key)
 
     if not category_key or not category_key.strip():
@@ -133,27 +119,6 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
     active_topic = topic_type if topic_type else current_schedule["type"]
     active_title = current_schedule["title"]
 
-    if active_topic == "EVENT":
-        detail_instruction = f"""
-請搜尋並整理【{display_category}】領域近期或即將舉辦的 2-3 個真實賽事。
-【必須包含內容】:
-1. 賽事名稱與舉辦日期（如：2026年11月7日 - 11月8日）。
-2. 舉辦地點（城市與場館名稱）。
-3. 賽事特質/亮點（如：世界錦標賽積分賽、頂尖選手雲集等）。
-4. 參賽/觀賽資訊：請明確指出「公開報名/邀請制」以及「官方購票/觀看直播管道（寫出官方名稱或搜尋關鍵字）」。
-* 注意：切勿寫出「未來4-7個月」等字眼，直接呈現日期與資訊即可。
-"""
-    elif active_topic == "SPOT":
-        detail_instruction = f"請搜尋並介紹【{display_category}】領域最著名的 1-2 個國際或區域級極限場地，包含地點、規格與體驗資訊。"
-    elif active_topic == "ATHLETE":
-        detail_instruction = f"請介紹【{display_category}】領域的一位代表性運動員或新星，包含代表國家、招牌動作與重要成就。"
-    elif active_topic == "SAFETY":
-        detail_instruction = f"請針對【{display_category}】極限運動，分享重要的安全意識、防護技巧或裝備知識，並給出 3 個具體建議。"
-    elif active_topic == "RECORD":
-        detail_instruction = f"請介紹【{display_category}】領域一項令人震撼的世界紀錄或歷史性極限挑戰時刻。"
-    else:
-        detail_instruction = f"請分享【{display_category}】極限運動的一項經典招式進階指南，含動作拆解與新手常犯錯誤。"
-
     lang_map = {
         "zh-hk": "繁體中文（廣東話/香港口語，語氣熱血且極具社群吸引力）",
         "zh-cn": "簡體中文（專業熱血的極限運動社群口吻）",
@@ -162,24 +127,16 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
     }
     selected_lang_desc = lang_map.get(target_lang, lang_map["zh-hk"])
 
+    # 包含商業價值的 Prompt 升級
     prompt = f"""
 你是一位專注於全球極限運動的熱血社群小編 Una (@Una_next)。
 今日專欄主題：【{active_title}】（項目：{display_category}）
 {rss_context}
 
-{detail_instruction}
-
-【語言與風格要求】:
-- 完全使用 **{selected_lang_desc}** 撰寫。
-- 語氣熱血、幹脆利落，大量善用 Emoji。
-
-【結構與字數限制】:
-- 總字數控制在 **250 至 350 字以內**。
-- 格式要求：
-  - ⚡ **1 句熱血開頭**
-  - 📌 **主要內容條列**
-  - 🔥 **1 句亮點總結**
-  - 💬 **1 句 Call to Action** + 社群 Tag
+【撰寫要求】:
+1. 請以熱血且專業的口吻撰寫一篇關於【{display_category}】的極限運動報導。
+2. 語言格式：完全使用 **{selected_lang_desc}** 撰寫，大量善用 Emoji，總字數控制在 **250 至 350 字以內**。
+3. 商業價值優化：在 Content 正文結尾，請以專家身份推薦 1 款該運動必備的裝備（如特定專業鞋款、防具或配件）或推薦場地，並說明推薦理由。
 
 請嚴格按照以下格式輸出，並用三條橫線 `---` 將各部分分開，不要輸出 Markdown 代碼塊（```）：
 
@@ -194,14 +151,12 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 
     print(f"🤖 今日專欄: 【{active_title}】，正在呼叫 Gemini API...")
 
-    # 更新為目前穩定且支援 grounding 的模型清單
     models_to_try = ["gemini-2.5-flash", "gemini-1.5-flash"]
     
     for model_name in models_to_try:
         max_retries = 3
         for attempt in range(1, max_retries + 1):
             try:
-                # 使用 chat 介面發送，避免 generate_content 觸發 AFC 警告
                 chat = client.chats.create(
                     model=model_name,
                     config=types.GenerateContentConfig(
@@ -235,196 +190,153 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
     return f"{display_category} 熱血企劃", f"GLOBAL · {active_topic}", f"⚡ 各位極限迷！今日【{display_category}】情報熱血更新中！\n\n💬 留言話我知你最想睇咩！👇\n#Una_next #{display_category} #xGameRadar", "GLOBAL"
 
 # ==========================================
-# 5. Pexels 背景圖片抓取模組
+# 4. Pexels 背景抓圖與 Base64
 # ==========================================
-def get_pexels_bg_url(category_key):
-    pexels_api_key = os.getenv("PEXELS_API_KEY", "").strip("'\" ")
-    cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES.get("SKATE", {}))
-    search_term = cat_info.get("query", "action sports")
+def get_pexels_image(keyword):
+    pexels_key = os.getenv("PEXELS_API_KEY")
+    fallback_urls = [
+        "[https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg](https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg)",
+        "[https://images.pexels.com/photos/844322/pexels-photo-844322.jpeg](https://images.pexels.com/photos/844322/pexels-photo-844322.jpeg)",
+        "[https://images.pexels.com/photos/1769553/pexels-photo-1769553.jpeg](https://images.pexels.com/photos/1769553/pexels-photo-1769553.jpeg)"
+    ]
+    if pexels_key:
+        try:
+            headers = {"Authorization": pexels_key}
+            url = f"[https://api.pexels.com/v1/search?query=](https://api.pexels.com/v1/search?query=){keyword}&per_page=1"
+            res = requests.get(url, headers=headers, timeout=10).json()
+            if res.get("photos"):
+                img_url = res["photos"][0]["src"]["large2x"]
+                print(f"✅ Pexels 成功抓取【{keyword}】背景圖！")
+                return img_url
+        except Exception as e:
+            print(f"⚠️ Pexels 搜尋失敗: {e}")
+    return random.choice(fallback_urls)
 
-    if pexels_api_key:
-        for query_attempt in [search_term, "extreme sports"]:
-            try:
-                url = f"https://api.pexels.com/v1/search?query={quote(query_attempt)}&per_page=10&orientation=square"
-                headers = {
-                    "Authorization": pexels_api_key,
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-                }
-                res = requests.get(url, headers=headers, timeout=8)
-                if res.status_code == 200:
-                    photos = res.json().get("photos", [])
-                    if photos:
-                        selected = random.choice(photos[:5])
-                        img_url = selected["src"].get("large2x") or selected["src"].get("large")
-                        if img_url:
-                            print(f"✅ Pexels 成功抓取【{query_attempt}】背景圖！")
-                            return img_url
-            except Exception as e:
-                print(f"⚠️ Pexels 抓取例外: {e}")
-
-    fallback_url = FALLBACK_IMAGES.get(category_key, FALLBACK_IMAGES["EVENT"])
-    print(f"ℹ️ 啟用保底背景圖: {category_key}")
-    return fallback_url
-
-def get_image_base64(url_or_path):
-    if not url_or_path:
-        return None
+def url_to_base64(image_url):
     try:
-        if url_or_path.startswith("http"):
-            headers = {"User-Agent": "Mozilla/5.0"}
-            resp = requests.get(url_or_path, headers=headers, timeout=10)
-            if resp.status_code == 200:
-                encoded = base64.b64encode(resp.content).decode("utf-8")
-                print(f"🖼️ Base64 轉換成功！字串長度: {len(encoded)}")
-                return f"data:image/jpeg;base64,{encoded}"
+        res = requests.get(image_url, timeout=10)
+        encoded = base64.b64encode(res.content).decode("utf-8")
+        print(f"🖼️ Base64 轉換成功！字串長度: {len(encoded)}")
+        return f"data:image/jpeg;base64,{encoded}"
     except Exception as e:
-        print(f"❌ Base64 轉換錯誤: {e}")
-    return None
+        print(f"⚠️ 圖片 Base64 轉換失敗: {e}")
+        return image_url
 
 # ==========================================
-# 6. Playwright 卡片圖片生成模組
+# 5. Playwright 動態卡片渲染 (異步 async)
 # ==========================================
-async def generate_card_image(category_key, cover_title, sub_title, output_filename="xgame_card.png"):
-    cat_info = XGAME_CATEGORIES.get(category_key, XGAME_CATEGORIES.get("EVENT"))
-    icon = cat_info.get("icon", "🛹")
-
-    bg_image_url = get_pexels_bg_url(category_key)
-    base64_bg = get_image_base64(bg_image_url)
-
-    if base64_bg:
-        bg_css = f"""
-          background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.75) 100%), url('{base64_bg}');
-          background-position: center center;
-          background-size: cover;
-          background-repeat: no-repeat;
-        """
-    else:
-        bg_css = "background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);"
-
-    html_content = f"""
+async def render_card_image_async(title, subtitle, tag_city, bg_image_url, output_path):
+    bg_base64 = url_to_base64(bg_image_url)
+    
+    html_template = f"""
     <!DOCTYPE html>
-    <html lang="zh-HK">
+    <html>
     <head>
-      <meta charset="UTF-8">
-      <style>
-        * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-        body {{
-          width: 1080px;
-          height: 1080px;
-          {bg_css}
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-          color: #ffffff;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          padding: 80px;
-        }}
-        .header {{ display: flex; justify-content: space-between; align-items: center; }}
-        .badge {{ background: #FF4500; color: #fff; font-weight: bold; padding: 12px 24px; border-radius: 30px; font-size: 24px; letter-spacing: 2px; }}
-        .subtitle-top {{ font-size: 26px; color: #dddddd; letter-spacing: 1px; }}
-        .content {{ margin-top: auto; margin-bottom: 60px; }}
-        .icon {{ font-size: 80px; margin-bottom: 20px; }}
-        .title {{ font-size: 64px; font-weight: 900; line-height: 1.25; text-shadow: 0 4px 20px rgba(0,0,0,0.8); }}
-        .footer {{ border-top: 2px solid rgba(255,255,255,0.2); padding-top: 30px; display: flex; justify-content: space-between; align-items: center; }}
-        .author {{ font-size: 28px; color: #FF4500; font-weight: bold; }}
-        .tags {{ font-size: 22px; color: #aaaaaa; }}
-      </style>
+    <meta charset="UTF-8">
+    <style>
+        body {{ margin: 0; padding: 0; width: 1080px; height: 1080px; display: flex; justify-content: center; align-items: center; background: #000; font-family: 'Helvetica Neue', Arial, sans-serif; }}
+        .card {{ width: 1080px; height: 1080px; position: relative; background-image: url('{bg_base64}'); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: space-between; padding: 80px; box-sizing: border-box; }}
+        .overlay {{ position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.85) 100%); z-index: 1; }}
+        .content {{ position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }}
+        .top-bar {{ display: flex; justify-content: space-between; align-items: center; }}
+        .badge {{ background: #ff3300; color: #fff; padding: 12px 24px; font-weight: bold; font-size: 24px; border-radius: 30px; text-transform: uppercase; letter-spacing: 2px; }}
+        .location {{ color: #ffffff; font-size: 24px; font-weight: 600; opacity: 0.9; }}
+        .main-title {{ color: #ffffff; font-size: 64px; font-weight: 900; line-height: 1.2; margin-bottom: 20px; text-shadow: 0 4px 12px rgba(0,0,0,0.5); }}
+        .author {{ color: #ff3300; font-size: 28px; font-weight: 700; display: flex; align-items: center; gap: 10px; }}
+        .footer {{ display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 30px; }}
+        .sub-tag {{ color: #aaaaaa; font-size: 22px; text-transform: uppercase; letter-spacing: 1.5px; }}
+    </style>
     </head>
     <body>
-      <div class="header">
-        <div class="badge">XGAME RADAR</div>
-        <div class="subtitle-top">{sub_title}</div>
-      </div>
-      <div class="content">
-        <div class="icon">{icon}</div>
-        <div class="title">{cover_title}</div>
-      </div>
-      <div class="footer">
-        <div class="author">By Una (@Una_next)</div>
-        <div class="tags">Global Extreme Sports Daily</div>
-      </div>
+        <div class="card">
+            <div class="overlay"></div>
+            <div class="content">
+                <div class="top-bar">
+                    <div class="badge">xGame Radar</div>
+                    <div class="location">【{subtitle}】</div>
+                </div>
+                <div>
+                    <div class="main-title">🏆<br>{title}</div>
+                    <div class="author">By Una (@Una_next)</div>
+                </div>
+                <div class="footer">
+                    <div class="sub-tag">Global Extreme Sports Daily</div>
+                    <div class="sub-tag">{tag_city}</div>
+                </div>
+            </div>
+        </div>
     </body>
     </html>
     """
-
+    
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
+        browser = await p.chromium.launch()
         page = await browser.new_page(viewport={"width": 1080, "height": 1080})
-        await page.set_content(html_content, wait_until="load")
-        await page.wait_for_timeout(800)
-        await page.screenshot(path=output_filename)
+        await page.set_content(html_template)
+        await page.screenshot(path=output_path)
         await browser.close()
-    print(f"📸 卡片圖片生成完畢: {output_filename}")
+    print(f"📸 卡片圖片生成完畢: {output_path}")
 
 # ==========================================
-# 7. Cloudflare R2 圖床與 JSON 備份模組
+# 6. Cloudflare R2 備份上傳
 # ==========================================
-def upload_to_r2(file_path, object_name=None):
+def upload_to_r2(local_file_path, r2_object_name):
     account_id = os.getenv("R2_ACCOUNT_ID")
     access_key = os.getenv("R2_ACCESS_KEY_ID")
     secret_key = os.getenv("R2_SECRET_ACCESS_KEY")
-    bucket_name = os.getenv("R2_BUCKET_NAME")
-    public_domain = os.getenv("R2_PUBLIC_DOMAIN")
+    bucket_name = os.getenv("R2_BUCKET_NAME", "xgame-radar-media")
+    public_domain = os.getenv("R2_PUBLIC_DOMAIN", "").rstrip("/")
 
-    if not all([account_id, access_key, secret_key, bucket_name]):
-        print("⚠️ 未完整設定 Cloudflare R2，跳過上傳。")
+    if not all([account_id, access_key, secret_key]):
+        print("⚠️ 未設置 Cloudflare R2 環境變數，跳過上傳。")
         return None
 
-    if object_name is None:
-        object_name = f"cards/{os.path.basename(file_path)}"
-
-    s3_client = boto3.client(
-        "s3",
-        endpoint_url=f"https://{account_id}.r2.cloudflarestorage.com",
-        aws_access_key_id=access_key,
-        aws_secret_access_key=secret_key,
-        region_name="auto"
-    )
-
     try:
-        content_type = "application/json" if file_path.endswith(".json") else "image/png"
-        s3_client.upload_file(file_path, bucket_name, object_name, ExtraArgs={"ContentType": content_type})
+        s3 = boto3.client(
+            "s3",
+            endpoint_url=f"https://{account_id}.r2.cloudflarestorage.com",
+            aws_access_key_id=access_key,
+            aws_secret_access_key=secret_key,
+            region_name="auto"
+        )
+        content_type = "image/png" if local_file_path.endswith(".png") else "application/json"
+        s3.upload_file(local_file_path, bucket_name, r2_object_name, ExtraArgs={"ContentType": content_type})
         
-        if public_domain:
-            url = f"https://{public_domain.rstrip('/')}/{object_name}"
-        else:
-            url = f"https://{bucket_name}.r2.cloudflarestorage.com/{object_name}"
-            
-        print(f"☁️ 檔案已成功上傳至 R2: {url}")
-        return url
+        file_url = f"{public_domain}/{r2_object_name}" if public_domain else f"https://***{r2_object_name}"
+        print(f"☁️ 檔案已成功上傳至 R2: {file_url}")
+        return file_url
     except Exception as e:
         print(f"❌ R2 上傳失敗: {e}")
         return None
 
-def save_post_data_to_r2(category_key, cover_title, sub_title, caption_text, image_url):
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    json_filename = f"posts/{timestamp}_{category_key}.json"
+# ==========================================
+# 7. 本地 Markdown Post 生成模組
+# ==========================================
+def save_post_as_markdown(category_key, cover_title, sub_title, caption_text, image_url):
+    timestamp = datetime.now().strftime("%Y-%m-%d")
+    posts_dir = "posts"
+    os.makedirs(posts_dir, exist_ok=True)
+    filepath = os.path.join(posts_dir, f"{timestamp}_{category_key.lower()}.md")
     
-    post_data = {
-        "id": timestamp,
-        "category": category_key,
-        "title": cover_title,
-        "subtitle": sub_title,
-        "content": caption_text,
-        "image_url": image_url,
-        "created_at": datetime.now().isoformat(),
-        "author": "Una (@Una_next)"
-    }
-    
-    temp_json_path = f"temp_{timestamp}.json"
-    with open(temp_json_path, "w", encoding="utf-8") as f:
-        json.dump(post_data, f, ensure_ascii=False, indent=2)
-        
-    upload_to_r2(temp_json_path, object_name=json_filename)
-    if os.path.exists(temp_json_path):
-        os.remove(temp_json_path)
-    print(f"📄 文章 JSON 已成功備份至 R2: {json_filename}")
+    md_content = f"""---
+title: "{cover_title}"
+subtitle: "{sub_title}"
+date: {datetime.now().isoformat()}
+category: "{category_key}"
+cover_image: "{image_url}"
+author: "Una (@Una_next)"
+---
+
+![{cover_title}]({image_url})
+
+{caption_text}
+"""
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write(md_content)
+    print(f"📝 Markdown 文章已生成: {filepath}")
 
 # ==========================================
-# 8. Telegram 推送模組
-# ==========================================
-# ==========================================
-# 8. Telegram 推送模組 (含精確除錯與自動降級)
+# 8. Telegram 推送模組 (含降級機制)
 # ==========================================
 def send_telegram_post(caption_text, image_path=None):
     bot_token = os.getenv("TELEGRAM_BOT_TOKEN", "").strip("'\" ")
@@ -434,19 +346,18 @@ def send_telegram_post(caption_text, image_path=None):
         print("⚠️ 未設定 TELEGRAM_BOT_TOKEN 或 TELEGRAM_CHAT_ID，跳過社群發送。")
         return
 
-    # 1. 預先清理 Markdown 特殊字元避免解析崩潰
     clean_caption = caption_text.replace("**", "*")
 
     def make_tg_request(parse_mode="Markdown"):
         if image_path and os.path.exists(image_path):
-            url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
+            url = f"[https://api.telegram.org/bot](https://api.telegram.org/bot){bot_token}/sendPhoto"
             payload = {"chat_id": chat_id, "caption": clean_caption}
             if parse_mode:
                 payload["parse_mode"] = parse_mode
             with open(image_path, "rb") as photo:
                 return requests.post(url, data=payload, files={"photo": photo}, timeout=15)
         else:
-            url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+            url = f"[https://api.telegram.org/bot](https://api.telegram.org/bot){bot_token}/sendMessage"
             payload = {"chat_id": chat_id, "text": clean_caption}
             if parse_mode:
                 payload["parse_mode"] = parse_mode
@@ -456,12 +367,10 @@ def send_telegram_post(caption_text, image_path=None):
         response = make_tg_request(parse_mode="Markdown")
         res_json = response.json()
 
-        # 如果 Telegram 回應 result: true，代表發送成功
         if res_json.get("ok"):
             print("✅ Telegram 卡片與文案成功發送！")
             return
 
-        # 如果因為 Markdown 格式出錯 (400)，改用無格式降級重試
         print(f"⚠️ Telegram 第一次發送失敗: {res_json.get('description', '')}，嘗試純文字降級發送...")
         fallback_res = make_tg_request(parse_mode=None)
         fallback_json = fallback_res.json()
@@ -475,46 +384,72 @@ def send_telegram_post(caption_text, image_path=None):
         print(f"❌ Telegram 發送過程發生異常例外: {e}")
 
 # ==========================================
-# 9. 主流程控制器
+# 9. 主程式執行流程 (支援 CLI 參數傳遞)
 # ==========================================
-async def main(category_key="AUTO", target_lang="zh-hk"):
+async def main_async():
     print("🚀 啟動 xGame Radar 每日自動化內容生成引擎...")
     init_db()
 
-    if not category_key or category_key == "AUTO":
-        category_key = random.choice(list(XGAME_CATEGORIES.keys()))
+    # 保留 CLI 參數解析功能（如：python main.py SKATE zh-hk）
+    category_arg = sys.argv[1] if len(sys.argv) > 1 else ""
+    lang_arg = sys.argv[2] if len(sys.argv) > 2 else "zh-hk"
 
-    cover_title, sub_title, caption_text, city_tag = generate_xgame_content(
-        category_key=category_key, 
-        target_lang=target_lang
-    )
+    category = category_arg.strip().upper() if category_arg else random.choice(list(XGAME_CATEGORIES.keys()))
 
-    record_posted_article(cover_title)
+    # 1. 生成內容
+    title, subtitle, content, city_tag = generate_xgame_content(category_key=category, target_lang=lang_arg)
 
+    # 防重複檢查
+    if is_already_posted(title):
+        print(f"ℹ️ 文章 [{title}] 今日已發布過，跳過重複發送。")
+        return
+
+    # 2. 獲取圖片與渲染卡片 (異步呼叫 async playwright)
+    bg_image = get_pexels_image(f"{category.lower()} action")
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    image_filename = f"xgame_{timestamp}.png"
+    card_filename = f"xgame_{timestamp}.png"
+    
+    await render_card_image_async(title, subtitle, city_tag, bg_image, card_filename)
 
-    await generate_card_image(category_key, cover_title, sub_title, image_filename)
+    # 3. 上傳圖片卡片至 R2
+    r2_img_url = upload_to_r2(card_filename, f"cards/{card_filename}")
+    img_link_for_record = r2_img_url if r2_img_url else bg_image
 
-    r2_image_url = upload_to_r2(image_filename)
+    # 4. 生成並上傳 JSON 備份至 R2
+    json_filename = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{category}.json"
+    post_data = {
+        "id": timestamp,
+        "title": title,
+        "subtitle": subtitle,
+        "category": category,
+        "content": content,
+        "image_url": img_link_for_record,
+        "created_at": datetime.now().isoformat(),
+        "author": "Una (@Una_next)"
+    }
+    with open(json_filename, "w", encoding="utf-8") as f:
+        json.dump(post_data, f, ensure_ascii=False, indent=2)
+    
+    upload_to_r2(json_filename, f"posts/{json_filename}")
+    print(f"📄 文章 JSON 已成功備份至 R2: posts/{json_filename}")
 
-    save_post_data_to_r2(category_key, cover_title, sub_title, caption_text, r2_image_url)
+    # 5. 生成本地 Markdown Post
+    save_post_as_markdown(category, title, subtitle, content, img_link_for_record)
 
-    send_telegram_post(caption_text, image_path=image_filename)
+    # 6. 發送至 Telegram
+    tg_message = f"🏆 *{title}*\n\n{subtitle}\n\n{content}\n\n#xGameRadar #{category} #Una_next"
+    send_telegram_post(tg_message, image_path=card_filename)
 
-    # 善後清理：刪除本地生成的卡片圖片
-    if os.path.exists(image_filename):
-        os.remove(image_filename)
+    # 7. 記錄已發布
+    record_posted_article(title, category)
+
+    # 清理臨時本地檔案
+    if os.path.exists(card_filename):
+        os.remove(card_filename)
+    if os.path.exists(json_filename):
+        os.remove(json_filename)
 
     print("🎉 今日自動發帖任務完全執行完成！")
 
 if __name__ == "__main__":
-    cat_arg = "AUTO"
-    lang_arg = "zh-hk"
-
-    if len(sys.argv) > 1 and sys.argv[1] != "AUTO":
-        cat_arg = sys.argv[1]
-    if len(sys.argv) > 2:
-        lang_arg = sys.argv[2]
-
-    asyncio.run(main(category_key=cat_arg, target_lang=lang_arg))
+    asyncio.run(main_async())
