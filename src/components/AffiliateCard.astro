@@ -1,0 +1,79 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  searchTerm?: string;
+  amazonUrl?: string;
+  recommendedFor?: string;
+  badgeText?: string;
+  category?: string;
+}
+
+const {
+  title,
+  subtitle,
+  searchTerm = 'extreme sports gear',
+  amazonUrl,
+  recommendedFor,
+  badgeText = 'Una 編輯推薦',
+  category = 'SKATE'
+} = Astro.props;
+
+const affiliateTag = 'kait02bc-20';
+const cleanSearch = encodeURIComponent(searchTerm.replace(/[^a-zA-Z0-9\s]/g, '').trim());
+const finalUrl = amazonUrl || `https://www.amazon.com/s?k=${cleanSearch}&tag=${affiliateTag}`;
+---
+
+<div class="my-6 rounded-2xl bg-gradient-to-br from-xcard to-[#181a24] border border-xorange/30 p-5 sm:p-6 shadow-lg relative overflow-hidden group hover:border-xorange/60 transition-all duration-200">
+  <!-- Glowing Background Accent -->
+  <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-xorange/10 rounded-full blur-3xl pointer-events-none group-hover:bg-xorange/20 transition-all"></div>
+  
+  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <div class="space-y-1.5 flex-1">
+      <div class="flex items-center gap-2">
+        <span class="px-2.5 py-0.5 rounded-full bg-xorange/20 text-xorange text-[10px] font-black uppercase tracking-wider border border-xorange/30">
+          🛒 {badgeText}
+        </span>
+        <span class="text-[11px] text-gray-400 font-mono">
+          Amazon 直送正品
+        </span>
+      </div>
+
+      <h4 class="text-base sm:text-lg font-bold text-white group-hover:text-xorange transition-colors">
+        {title}
+      </h4>
+
+      {subtitle && (
+        <p class="text-xs text-gray-300">
+          {subtitle}
+        </p>
+      )}
+
+      {recommendedFor && (
+        <div class="flex items-center gap-1.5 text-xs text-yellow-400/90 font-medium pt-1">
+          <span>⚡ 推薦理由：</span>
+          <span>{recommendedFor}</span>
+        </div>
+      )}
+    </div>
+
+    <!-- Buy / Check Price CTA Button -->
+    <div class="w-full sm:w-auto flex flex-col items-end gap-1.5">
+      <a
+        href={finalUrl}
+        target="_blank"
+        rel="nofollow noopener sponsored"
+        class="w-full sm:w-auto text-center inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-xorange to-red-600 hover:from-xorange-hover hover:to-red-500 text-white font-black text-xs sm:text-sm shadow-glow-orange hover:scale-105 active:scale-95 transition-all"
+      >
+        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+          <path d="M10 19.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm1.336-5l1.977-7H6.704l-.903-3h-4.801v2h3.28l3.617 12h12.104v-2h-11.668l-.996-2h7.336z"/>
+        </svg>
+        <span>查看 Amazon 最新售價</span>
+        <span>→</span>
+      </a>
+      <span class="text-[10px] text-gray-400 tracking-tight">
+        *透過本連結選購可支持雜誌持續營運
+      </span>
+    </div>
+  </div>
+</div>

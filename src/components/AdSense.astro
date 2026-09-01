@@ -1,0 +1,38 @@
+---
+interface Props {
+  slotId?: string;
+  format?: 'auto' | 'horizontal' | 'rectangle';
+  className?: string;
+}
+
+const { slotId = '1234567890', format = 'auto', className = '' } = Astro.props;
+const client = 'ca-pub-XXXXXXXXXXXXXXXX'; // Replace with real publisher ID if set in env
+---
+
+<div class={`my-8 p-4 rounded-xl bg-xdark/60 border border-xborder/40 text-center relative overflow-hidden ${className}`}>
+  <div class="text-[10px] uppercase font-mono tracking-widest text-gray-400 mb-2">
+    SPONSORED ADVERTISEMENT
+  </div>
+  
+  <!-- Fallback / Placeholder Container -->
+  <div class="min-h-[100px] flex flex-col items-center justify-center border border-dashed border-xborder rounded-lg p-4 bg-xblack/40">
+    <div class="text-xs text-gray-400">
+      ⚡ <span class="font-bold text-gray-300">極限運動品牌贊助空間</span> (Google AdSense Ready)
+    </div>
+    <div class="text-[11px] text-gray-400 mt-1">
+      支援 728x90 橫幅、300x250 矩形與自適應廣告單元
+    </div>
+  </div>
+
+  <!-- Real AdSense Script Tag (uncomment when AdSense client is active)
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client={client}
+       data-ad-slot={slotId}
+       data-ad-format={format}
+       data-full-width-responsive="true"></ins>
+  <script is:inline>
+       (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+  -->
+</div>

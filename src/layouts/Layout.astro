@@ -1,0 +1,67 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  category?: string;
+}
+
+const {
+  title = 'xGame Magazine | 全球極限運動雷達 & 裝備指南',
+  description = '專注於滑板、BMX、衝浪、攀岩與極限賽事的現代雜誌。提供頂級選手專題、場地導覽、未來3-12個月賽事資訊、近期賽果與安全裝備深度評測。',
+  image = '/og-default.jpg',
+  category = 'X-SPORTS'
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://xgame-radar.pages.dev');
+---
+
+<!doctype html>
+<html lang="zh-HK" class="scroll-smooth bg-xblack text-gray-100 antialiased selection:bg-xorange selection:text-white">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#ff4d00" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO Meta Tags -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta property="og:site_name" content="xGame Radar Magazine" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={image} />
+    <meta name="twitter:creator" content="@Una_next" />
+
+    <!-- RSS Feed Auto-Discovery -->
+    <link rel="alternate" type="application/rss+xml" title="xGame Radar Magazine RSS" href="/rss.xml" />
+    
+    <!-- Preconnect for external assets -->
+    <link rel="preconnect" href="https://images.pexels.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+  </head>
+  <body class="min-h-screen flex flex-col bg-gradient-to-b from-xblack via-[#0d0e12] to-xblack">
+    <Header />
+    <main class="flex-grow">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,200 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('posts');
+const sortedPosts = allPosts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const todayPost = sortedPosts[0];
+const recentPosts = sortedPosts.slice(1, 6);
+
+const affiliateTag = 'kait02bc-20';
+const todayGearKeyword = todayPost?.data?.gear_keyword || 'extreme sports gear';
+const todayAmazonUrl = `https://www.amazon.com/s?k=${encodeURIComponent(todayGearKeyword)}&tag=${affiliateTag}`;
+---
+
+<Layout
+  title="🔥 今日極限焦點 | xGame Radar (Link in Bio)"
+  description="今日極限運動快訊、今日推薦裝備直達與 Telegram 頻道入口！"
+  image={todayPost?.data?.cover_image}
+>
+  <div class="max-w-md mx-auto px-4 py-8 space-y-6">
+    
+    <!-- Profile / Avatar Header -->
+    <div class="text-center space-y-3">
+      <div class="relative inline-block">
+        <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-xorange via-red-500 to-xcyan p-1 shadow-glow-orange mx-auto">
+          <div class="w-full h-full rounded-full bg-xblack flex items-center justify-center text-3xl">
+            🛹
+          </div>
+        </div>
+        <span class="absolute bottom-0 right-0 w-5 h-5 rounded-full bg-xgreen border-2 border-xblack flex items-center justify-center text-[9px] font-black text-black">
+          ✓
+        </span>
+      </div>
+      <div>
+        <h1 class="text-xl font-black text-white tracking-tight uppercase">
+          Una <span class="text-xorange">@Una_next</span>
+        </h1>
+        <p class="text-xs text-gray-400 font-mono mt-0.5">
+          全球極限運動雷達・賽事資訊・選手專題・裝備指南
+        </p>
+      </div>
+    </div>
+
+    <!-- Primary Quick Actions (Link-in-bio buttons) -->
+    <div class="space-y-3">
+      
+      <!-- Button 1: Telegram Channel (Glowing primary) -->
+      <a
+        href="https://t.me/Una_next"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="w-full flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-blue-600 to-sky-500 text-white font-black text-sm shadow-lg hover:scale-[1.02] active:scale-95 transition-all group"
+      >
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center text-lg">
+            ✈️
+          </div>
+          <div class="text-left">
+            <div class="font-extrabold text-sm">加入 Telegram 官方頻道</div>
+            <div class="text-[10px] text-blue-100 font-normal">每日極速推播與賽事通知</div>
+          </div>
+        </div>
+        <span class="text-lg group-hover:translate-x-1 transition-transform">→</span>
+      </a>
+
+      <!-- Button 2: Today's Amazon Gear Deal -->
+      <a
+        href={todayAmazonUrl}
+        target="_blank"
+        rel="nofollow noopener sponsored"
+        class="w-full flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-xorange to-red-600 text-white font-black text-sm shadow-glow-orange hover:scale-[1.02] active:scale-95 transition-all group"
+      >
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center text-lg">
+            🛒
+          </div>
+          <div class="text-left">
+            <div class="font-extrabold text-sm">今日精選裝備 Amazon 門市</div>
+            <div class="text-[10px] text-orange-100 font-normal">官方正品直送・即時折扣查詢</div>
+          </div>
+        </div>
+        <span class="text-lg group-hover:translate-x-1 transition-transform">→</span>
+      </a>
+
+      <!-- Button 3: Visit Full Magazine Homepage -->
+      <a
+        href="/"
+        class="w-full flex items-center justify-between p-3.5 rounded-2xl bg-xcard border border-xborder text-gray-200 font-bold text-xs hover:border-xorange/50 hover:bg-xdark transition-all"
+      >
+        <div class="flex items-center gap-3">
+          <span class="text-base">🌐</span>
+          <span>瀏覽 xGame Radar 完整雜誌官網</span>
+        </div>
+        <span>→</span>
+      </a>
+
+    </div>
+
+    <!-- Today's Highlight Card -->
+    {todayPost && (
+      <div class="rounded-2xl bg-xcard border border-xorange/40 overflow-hidden shadow-xl space-y-3">
+        <div class="relative h-48 w-full overflow-hidden">
+          <img
+            src={todayPost.data.cover_image}
+            alt={todayPost.data.title}
+            class="w-full h-full object-cover"
+          />
+          <div class="absolute top-3 left-3">
+            <span class="px-2.5 py-0.5 rounded-full bg-xorange text-white text-[10px] font-black uppercase shadow-md">
+              ⚡ 今日熱門 TOPIC
+            </span>
+          </div>
+        </div>
+        <div class="p-4 space-y-2">
+          <span class="text-[10px] font-mono text-cyan-400 font-bold uppercase">
+            {todayPost.data.category} · {todayPost.data.city_tag}
+          </span>
+          <h3 class="text-base font-black text-white leading-snug">
+            <a href={`/posts/${todayPost.slug}`} class="hover:text-xorange transition-colors">
+              {todayPost.data.title}
+            </a>
+          </h3>
+          <p class="text-xs text-gray-300 leading-relaxed line-clamp-3">
+            {todayPost.data.subtitle}
+          </p>
+          <a
+            href={`/posts/${todayPost.slug}`}
+            class="inline-block pt-2 text-xs font-bold text-xorange hover:underline"
+          >
+            閱讀完整專題內容 →
+          </a>
+        </div>
+      </div>
+    )}
+
+    <!-- Category Quick Chips -->
+    <div class="space-y-2 pt-2">
+      <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider text-center">
+        快速探索運動項目
+      </h3>
+      <div class="grid grid-cols-3 gap-2">
+        <a href="/skate" class="p-2 rounded-xl bg-xdark border border-xborder text-center text-xs font-bold text-gray-300 hover:text-xorange hover:border-xorange transition-all">
+          🛹 滑板
+        </a>
+        <a href="/bmx" class="p-2 rounded-xl bg-xdark border border-xborder text-center text-xs font-bold text-gray-300 hover:text-xorange hover:border-xorange transition-all">
+          🚲 BMX
+        </a>
+        <a href="/surf" class="p-2 rounded-xl bg-xdark border border-xborder text-center text-xs font-bold text-gray-300 hover:text-xorange hover:border-xorange transition-all">
+          🏄 衝浪
+        </a>
+        <a href="/climb" class="p-2 rounded-xl bg-xdark border border-xborder text-center text-xs font-bold text-gray-300 hover:text-xorange hover:border-xorange transition-all">
+          🧗 攀岩
+        </a>
+        <a href="/snow" class="p-2 rounded-xl bg-xdark border border-xborder text-center text-xs font-bold text-gray-300 hover:text-xorange hover:border-xorange transition-all">
+          🏂 單板
+        </a>
+        <a href="/events" class="p-2 rounded-xl bg-xdark border border-xborder text-center text-xs font-bold text-cyan-400 hover:border-cyan-400 transition-all">
+          🗓️ 賽事
+        </a>
+      </div>
+    </div>
+
+    <!-- Recent Headlines -->
+    <div class="space-y-2.5 pt-2">
+      <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider text-center">
+        近期熱門推薦
+      </h3>
+      <div class="space-y-2">
+        {recentPosts.map((post) => (
+          <a
+            href={`/posts/${post.slug}`}
+            class="flex items-center gap-3 p-2.5 rounded-xl bg-xdark border border-xborder hover:border-xorange/50 transition-all"
+          >
+            <img
+              src={post.data.cover_image}
+              alt={post.data.title}
+              class="w-12 h-12 rounded-lg object-cover flex-shrink-0"
+            />
+            <div class="flex-1 min-w-0">
+              <span class="text-[9px] font-mono text-xorange uppercase font-bold block">
+                {post.data.category}
+              </span>
+              <h4 class="text-xs font-bold text-white truncate">
+                {post.data.title}
+              </h4>
+            </div>
+            <span class="text-xs text-gray-500 font-mono">→</span>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Footer Note -->
+    <div class="text-center text-[10px] text-gray-400 pt-4 border-t border-xborder">
+      <p>© xGame Radar Magazine · Curated by Una (@Una_next)</p>
+      <p class="mt-1 text-gray-400">Amazon Associate & Telegram Automation Powered</p>
+    </div>
+
+  </div>
+</Layout>

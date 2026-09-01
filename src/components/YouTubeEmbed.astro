@@ -1,0 +1,56 @@
+---
+interface Props {
+  videoId?: string;
+  videoTitle?: string;
+  sourceUrl?: string;
+}
+
+const { videoId, videoTitle = '官方精彩賽事精華 / 技巧示範', sourceUrl } = Astro.props;
+
+// If a direct URL was passed, try extracting the YouTube ID
+let cleanVideoId = videoId;
+if (!cleanVideoId && sourceUrl) {
+  const match = sourceUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+  if (match) {
+    cleanVideoId = match[1];
+  }
+}
+---
+
+{cleanVideoId && (
+  <div class="my-8 rounded-2xl overflow-hidden bg-xcard border border-xborder shadow-xl">
+    <div class="px-4 py-2.5 bg-xdark flex items-center justify-between border-b border-xborder">
+      <div class="flex items-center space-x-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+        <span class="text-xs font-bold text-gray-200 truncate">
+          🎬 官方精華影片：{videoTitle}
+        </span>
+      </div>
+      <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-red-500/20 text-red-400 font-black">
+        HD 4K Official
+      </span>
+    </div>
+    
+    <div class="relative w-full pb-[56.25%] bg-black">
+      <iframe
+        class="absolute top-0 left-0 w-full h-full border-0"
+        src={`https://www.youtube-nocookie.com/embed/${cleanVideoId}?rel=0&modestbranding=1`}
+        title={videoTitle}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+        loading="lazy"
+      ></iframe>
+    </div>
+    <div class="px-4 py-2 bg-xdark/60 text-[11px] text-gray-400 flex items-center justify-between">
+      <span>來源：大會/選手官方 YouTube 頻道</span>
+      <a
+        href={`https://www.youtube.com/watch?v=${cleanVideoId}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-xorange hover:underline flex items-center gap-1"
+      >
+        <span>在 YouTube 開啟</span> ↗
+      </a>
+    </div>
+  </div>
+)}

@@ -1,0 +1,37 @@
+---
+interface Props {
+  trickName: string;
+  difficulty: number; // 1 to 5
+  prerequisites?: string[];
+}
+
+const { trickName, difficulty = 3, prerequisites = [] } = Astro.props;
+
+const flames = '🔥'.repeat(Math.max(1, Math.min(5, difficulty)));
+const diffNames = ['', '初級入門', '中級進階', '高級熟練', 'Pro 大師級', '歷史級大招'];
+---
+
+<div class="rounded-xl bg-xdark border border-xborder p-4 my-4">
+  <div class="flex flex-wrap items-center justify-between gap-2 border-b border-xborder/50 pb-2.5 mb-2.5">
+    <div class="flex items-center gap-2">
+      <span class="text-xs font-mono font-bold text-gray-400">動作名稱：</span>
+      <span class="text-base font-black text-xorange">{trickName}</span>
+    </div>
+    <div class="flex items-center gap-1 text-xs">
+      <span class="text-gray-400">難度評分：</span>
+      <span>{flames}</span>
+      <span class="font-bold text-yellow-400 ml-1">({diffNames[difficulty] || `${difficulty}/5`})</span>
+    </div>
+  </div>
+
+  {prerequisites && prerequisites.length > 0 && (
+    <div class="flex flex-wrap items-center gap-1.5 text-xs text-gray-300">
+      <span class="text-gray-400 font-semibold">⚡ 必備先修技巧：</span>
+      {prerequisites.map((req) => (
+        <span class="px-2 py-0.5 rounded bg-xcard border border-xborder text-cyan-400 font-mono text-[11px]">
+          {req}
+        </span>
+      ))}
+    </div>
+  )}
+</div>

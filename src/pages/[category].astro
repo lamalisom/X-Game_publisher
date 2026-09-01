@@ -1,0 +1,146 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AffiliateCard from '../components/AffiliateCard.astro';
+import AdSense from '../components/AdSense.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const routes = [
+    { params: { category: 'skate' }, props: { title: '🛹 滑板 SKATEBOARDING', filterKey: 'SKATE', desc: '滑板街式、碗池、最新 SLS / X Games 戰報、焦點滑手專題與滑板鞋/板身評測。' } },
+    { params: { category: 'bmx' }, props: { title: '🚲 極限單車 BMX', filterKey: 'BMX', desc: 'BMX Freestyle 自由式、公園賽、泵道 (Pump Track) 與極限零件裝備選購。' } },
+    { params: { category: 'surf' }, props: { title: '🏄 極限衝浪 SURFING', filterKey: 'SURF', desc: 'WSL 世界衝浪巡迴賽、大浪征服者、全球頂級浪點導覽與防寒衣/衝浪板推薦。' } },
+    { params: { category: 'climb' }, props: { title: '🧗 運動攀岩 CLIMBING', filterKey: 'CLIMB', desc: '抱石、先鋒攀登、IFSC 世界盃賽事速報、天然岩場指南與攀岩鞋/粉袋指南。' } },
+    { params: { category: 'snow' }, props: { title: '🏂 單板滑雪 SNOWBOARD', filterKey: 'SNOW', desc: '單板大跳台 (Big Air)、U型池 (Halfpipe)、世界級雪場導覽與雪鏡/防摔褲評測。' } },
+    { params: { category: 'events' }, props: { title: '🗓️ 全球賽事雷達 (2026-2027)', filterKey: 'EVENT', desc: '未來 3-12 個月 X Games、SLS、WSL、UCI 與奧運積分賽最新賽程、時間表與賽果。' } },
+    { params: { category: 'spots' }, props: { title: '📍 全球與亞洲場地導覽', filterKey: 'SPOT', desc: '滑板場、碗池、浪點、岩館難度評級、開放時間與玩家攻略。' } },
+    { params: { category: 'athletes' }, props: { title: '🏆 焦點專家與選手專題', filterKey: 'ATHLETE', desc: 'Pro 極限運動員檔案、招牌動作、個人專用裝備配置與賽事生平。' } },
+    { params: { category: 'tricks' }, props: { title: '🎯 花式技巧與攻略庫', filterKey: 'TRICKS', desc: '滑板、BMX、衝浪動作分解教學、難度星級評定與常見練習錯誤解析。' } },
+    { params: { category: 'safety' }, props: { title: '🛡️ 安全裝備與護具指南', filterKey: 'SAFETY', desc: '極限運動頭盔、護膝、護腕、防摔褲認證標準與實測選購指南。' } },
+  ];
+
+  return routes;
+}
+
+const { category } = Astro.params;
+const { title, filterKey, desc } = Astro.props;
+
+const allPosts = await getCollection('posts');
+const categoryPosts = allPosts.filter((post) => {
+  const cat = post.data.category.toUpperCase();
+  const topic = post.data.topic_type.toUpperCase();
+  const key = filterKey.toUpperCase();
+
+  if (key === 'EVENT') {
+    return cat === 'EVENT' || topic === 'EVENT' || post.data.event_info !== undefined;
+  }
+  if (key === 'SPOT') {
+    return cat === 'SPOT' || topic === 'SPOT' || post.data.spot_info !== undefined;
+  }
+  if (key === 'ATHLETE') {
+    return cat === 'ATHLETE' || topic === 'ATHLETE' || post.data.expert_info !== undefined;
+  }
+  if (key === 'TRICKS') {
+    return cat === 'TRICKS' || topic === 'TIPS' || post.data.trick_info !== undefined;
+  }
+  if (key === 'SAFETY') {
+    return cat === 'SAFETY' || topic === 'SAFETY' || post.data.safety_gear_info !== undefined;
+  }
+  return cat === key;
+}).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<Layout title={`${title} | xGame Radar Magazine`} description={desc}>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+    
+    <!-- Category Header Banner -->
+    <div class="rounded-3xl bg-gradient-to-r from-xcard via-xdark to-xcard border border-xborder p-6 sm:p-10 relative overflow-hidden">
+      <div class="space-y-2 max-w-3xl relative z-10">
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-xorange text-white text-xs font-black uppercase tracking-wider shadow-glow-orange">
+            {filterKey} CATEGORY
+          </span>
+          <span class="text-xs text-gray-400 font-mono">共 {categoryPosts.length} 篇專題</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-black text-white tracking-tight">
+          {title}
+        </h1>
+        <p class="text-sm text-gray-300 leading-relaxed">
+          {desc}
+        </p>
+      </div>
+      <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-xorange/10 rounded-full blur-3xl pointer-events-none"></div>
+    </div>
+
+    <!-- Posts Grid -->
+    {categoryPosts.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {categoryPosts.map((post) => (
+          <article class="rounded-2xl bg-xcard border border-xborder overflow-hidden flex flex-col justify-between hover:border-xorange/50 hover:shadow-xl transition-all duration-300 group">
+            <div class="relative h-52 w-full overflow-hidden">
+              <img
+                src={post.data.cover_image}
+                alt={post.data.title}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div class="absolute top-3 left-3 flex gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-black/70 backdrop-blur-sm text-xorange text-[10px] font-black uppercase border border-xorange/30">
+                  {post.data.category}
+                </span>
+                {post.data.city_tag && (
+                  <span class="px-2 py-0.5 rounded-full bg-black/70 backdrop-blur-sm text-cyan-400 text-[10px] font-bold">
+                    {post.data.city_tag}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+              <div class="space-y-2">
+                <h2 class="text-lg font-bold text-white group-hover:text-xorange transition-colors leading-snug line-clamp-2">
+                  <a href={`/posts/${post.slug}`}>
+                    {post.data.title}
+                  </a>
+                </h2>
+                {post.data.subtitle && (
+                  <p class="text-xs text-gray-400 line-clamp-2">
+                    {post.data.subtitle}
+                  </p>
+                )}
+              </div>
+
+              <div class="pt-4 border-t border-xborder/60 flex items-center justify-between text-xs text-gray-500 font-mono">
+                <span>🗓️ {post.data.date.toISOString().split('T')[0]}</span>
+                <a href={`/posts/${post.slug}`} class="text-xorange font-bold hover:underline">
+                  閱讀內文 →
+                </a>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <div class="p-12 rounded-3xl bg-xcard border border-xborder text-center space-y-4">
+        <div class="text-4xl">🛹</div>
+        <h3 class="text-lg font-bold text-white">此分類文章正在由 AI 引擎編寫中</h3>
+        <p class="text-xs text-gray-400 max-w-md mx-auto">
+          每日排程自動抓取全球官方 RSS 新聞與賽程資訊，請稍候每日發布更新！
+        </p>
+        <a href="/" class="inline-block px-4 py-2 rounded-xl bg-xorange text-white text-xs font-bold shadow-glow-orange">
+          返回首頁
+        </a>
+      </div>
+    )}
+
+    <!-- Category Affiliate Direct Bar -->
+    <AffiliateCard
+      title={`熱門 ${filterKey} 裝備 Amazon 直送推薦`}
+      subtitle={`由 Una 精選的合格認證極限裝備與配件`}
+      searchTerm={`${filterKey.toLowerCase()} protective gear helmet`}
+      badgeText="分類精選"
+    />
+
+    <!-- Google AdSense -->
+    <AdSense />
+
+  </div>
+</Layout>

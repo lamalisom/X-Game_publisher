@@ -1,0 +1,84 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-xdark border-t border-xborder mt-20 text-gray-400 text-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      
+      <!-- Brand & Mission -->
+      <div class="md:col-span-2 space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-xorange to-red-600 flex items-center justify-center text-white font-black text-lg shadow-glow-orange">
+            X
+          </div>
+          <span class="text-xl font-black tracking-tight text-white uppercase">
+            xGame <span class="text-xorange">Radar</span> Magazine
+          </span>
+        </div>
+        <p class="text-gray-400 text-xs leading-relaxed max-w-md">
+          全球極限運動前線雷達！由 AI 引擎與極限運動編輯 Una 共同維護，每日自動更新滑板、BMX、衝浪、攀岩與雪上運動的最新賽事情報、焦點選手專訪、場地深度評測與安全裝備選購建議。
+        </p>
+        <div class="flex items-center space-x-3 pt-2">
+          <a
+            href="https://t.me/Una_next"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-3 py-1.5 rounded-md bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600/30 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+          >
+            <span>✈️ Telegram 即時快訊頻道</span>
+          </a>
+          <a
+            href="/rss.xml"
+            class="px-3 py-1.5 rounded-md bg-orange-600/20 text-orange-400 border border-orange-500/30 hover:bg-orange-600/30 text-xs font-semibold flex items-center gap-1.5 transition-colors"
+          >
+            <span>📡 RSS 訂閱源</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Navigation -->
+      <div>
+        <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-4 border-l-2 border-xorange pl-2">
+          專欄分類
+        </h4>
+        <ul class="space-y-2 text-xs">
+          <li><a href="/skate" class="hover:text-xorange transition-colors">🛹 滑板街式與碗池</a></li>
+          <li><a href="/bmx" class="hover:text-xorange transition-colors">🚲 BMX 自由式與競速</a></li>
+          <li><a href="/surf" class="hover:text-xorange transition-colors">🏄 衝浪與世界浪點</a></li>
+          <li><a href="/climb" class="hover:text-xorange transition-colors">🧗 攀岩抱石與先鋒賽</a></li>
+          <li><a href="/snow" class="hover:text-xorange transition-colors">🏂 單板滑雪與大跳台</a></li>
+          <li><a href="/events" class="hover:text-xorange transition-colors">🗓️ 未來3-12個月賽事</a></li>
+          <li><a href="/spots" class="hover:text-xorange transition-colors">📍 全球頂級場地推薦</a></li>
+        </ul>
+      </div>
+
+      <!-- Compliance & Affiliate Disclosure -->
+      <div>
+        <h4 class="text-white font-bold text-xs uppercase tracking-wider mb-4 border-l-2 border-yellow-500 pl-2">
+          聯盟行銷與免責聲明
+        </h4>
+        <p class="text-[11px] text-gray-500 leading-normal">
+          <strong class="text-gray-400">Amazon Associates 免責聲明：</strong>
+          本網站為 Amazon 聯盟行銷計畫（Amazon Services LLC Associates Program）參與者。當您透過本站之推薦連結購買商品時，我們可能獲取微薄佣金，這不會增加您的任何購買成本，並將全數用於維持本站伺服器與每日 AI 內容自動化生成運作。
+        </p>
+        <p class="text-[11px] text-gray-500 mt-2">
+          極限運動具一定危險性，進行任何招式練習前請務必配戴合格認證之安全裝備並評估自身能力。
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="border-t border-xborder/60 mt-8 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500">
+      <p>© {currentYear} xGame Radar Magazine. All rights reserved. Powered by Una & Google Gemini AI.</p>
+      <div class="flex space-x-4 mt-4 sm:mt-0">
+        <a href="/today" class="hover:text-gray-300">Link in Bio</a>
+        <span>•</span>
+        <a href="/rss.xml" class="hover:text-gray-300">RSS</a>
+        <span>•</span>
+        <a href="https://t.me/Una_next" class="hover:text-gray-300">Telegram</a>
+      </div>
+    </div>
+  </div>
+</footer>

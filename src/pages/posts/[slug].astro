@@ -1,0 +1,282 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AffiliateCard from '../../components/AffiliateCard.astro';
+import YouTubeEmbed from '../../components/YouTubeEmbed.astro';
+import AdSense from '../../components/AdSense.astro';
+import EventBadge from '../../components/EventBadge.astro';
+import TrickBadge from '../../components/TrickBadge.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+// Related posts from the same category
+const allPosts = await getCollection('posts');
+const relatedPosts = allPosts
+  .filter((p) => p.slug !== post.slug && (p.data.category === post.data.category || p.data.topic_type === post.data.topic_type))
+  .slice(0, 3);
+---
+
+<Layout
+  title={`${post.data.title} | xGame Radar Magazine`}
+  description={post.data.subtitle || post.data.title}
+  image={post.data.cover_image}
+  category={post.data.category}
+>
+  <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    
+    <!-- Breadcrumb & Top Tags -->
+    <nav class="flex items-center gap-2 text-xs font-mono text-gray-400 mb-6">
+      <a href="/" class="hover:text-xorange">首頁</a>
+      <span>/</span>
+      <a href={`/${post.data.category.toLowerCase()}`} class="text-xorange font-bold hover:underline">
+        {post.data.category}
+      </a>
+      <span>/</span>
+      <span class="text-gray-500 truncate max-w-xs">{post.data.title}</span>
+    </nav>
+
+    <!-- Post Header -->
+    <header class="space-y-4 mb-8">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="px-3 py-1 rounded-full bg-xorange text-white text-xs font-black uppercase tracking-wider shadow-glow-orange">
+          {post.data.category}
+        </span>
+        <span class="px-3 py-1 rounded-full bg-xcard border border-xborder text-cyan-400 text-xs font-bold font-mono">
+          {post.data.topic_type} · {post.data.city_tag}
+        </span>
+        {post.data.cover_image_source && (
+          <span class="text-[11px] text-gray-500 font-mono ml-auto">
+            📷 {post.data.cover_image_source}
+          </span>
+        )}
+      </div>
+
+      <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight">
+        {post.data.title}
+      </h1>
+
+      {post.data.subtitle && (
+        <p class="text-base sm:text-xl text-gray-300 font-medium leading-relaxed border-l-4 border-xorange pl-4">
+          {post.data.subtitle}
+        </p>
+      )}
+
+      <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-xborder/60 text-xs text-gray-400 font-mono">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-xorange flex items-center justify-center text-white font-bold">
+            U
+          </div>
+          <div>
+            <div class="font-bold text-gray-200">{post.data.author}</div>
+            <div class="text-[10px] text-gray-500">xGame Magazine 總編輯</div>
+          </div>
+        </div>
+        <div>
+          <span>發布日期：</span>
+          <time class="text-gray-300 font-bold">{post.data.date.toISOString().split('T')[0]}</time>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Featured Image -->
+    <div class="rounded-3xl overflow-hidden border border-xborder mb-8 shadow-2xl relative">
+      <img
+        src={post.data.cover_image}
+        alt={post.data.title}
+        class="w-full max-h-[520px] object-cover object-center"
+      />
+      <div class="absolute bottom-3 right-3 px-3 py-1 rounded-lg bg-black/70 backdrop-blur-sm text-[10px] text-gray-400 font-mono">
+        Official / Editorial Source
+      </div>
+    </div>
+
+    <!-- Structured Pillar Badges & Metadata (If Present) -->
+    
+    <!-- 1. Event Radar Info -->
+    {post.data.event_info && (
+      <EventBadge
+        status={post.data.event_info.event_status}
+        dates={post.data.event_info.dates}
+        tier={post.data.event_info.tier}
+        location={post.data.event_info.location}
+      />
+    )}
+
+    {post.data.event_info?.podium_results && post.data.event_info.podium_results.length > 0 && (
+      <div class="rounded-2xl bg-xdark border border-xborder p-5 my-6">
+        <h3 class="text-sm font-bold text-yellow-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+          <span>🏆 賽事頒獎台戰報 (Podium Results)</span>
+        </h3>
+        <div class="space-y-2">
+          {post.data.event_info.podium_results.map((res) => (
+            <div class="flex items-center justify-between p-2.5 rounded-lg bg-xcard border border-xborder/50 text-xs">
+              <span class="font-black text-xorange">{res.place}</span>
+              <span class="font-bold text-white">{res.athlete}</span>
+              <span class="font-mono text-gray-400">{res.score_or_time || 'TOP SCORE'}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- 2. Spot / Venue Info -->
+    {post.data.spot_info && (
+      <div class="rounded-2xl bg-gradient-to-br from-xcard to-xdark border border-cyan-500/30 p-5 my-6 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-mono text-cyan-400 font-bold uppercase">🛹 場地規格與資訊</span>
+          <span class="px-2.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 text-xs font-bold">
+            難度：{post.data.spot_info.difficulty}
+          </span>
+        </div>
+        <h3 class="text-lg font-bold text-white">{post.data.spot_info.name}</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-gray-300 pt-2 border-t border-xborder/50">
+          <div>📍 <strong>地址/位置：</strong>{post.data.spot_info.location}</div>
+          <div>💰 <strong>收費標準：</strong>{post.data.spot_info.fee || '免費開放 / 依現場公告'}</div>
+          {post.data.spot_info.best_season_or_hours && (
+            <div class="sm:col-span-2">⏰ <strong>開放時段/最佳季節：</strong>{post.data.spot_info.best_season_or_hours}</div>
+          )}
+        </div>
+        {post.data.spot_info.features && post.data.spot_info.features.length > 0 && (
+          <div class="flex flex-wrap gap-1.5 pt-2">
+            {post.data.spot_info.features.map((feat) => (
+              <span class="px-2 py-0.5 rounded-md bg-xdark border border-xborder text-[11px] text-gray-300 font-mono">
+                ✓ {feat}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    )}
+
+    <!-- 3. Expert / Athlete Spotlight Info -->
+    {post.data.expert_info && (
+      <div class="rounded-2xl bg-gradient-to-br from-xcard to-xdark border border-xorange/40 p-5 my-6 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-mono text-xorange font-bold uppercase">🏆 選手檔案 PRO PROFILE</span>
+          {post.data.expert_info.instagram_handle && (
+            <a
+              href={`https://instagram.com/${post.data.expert_info.instagram_handle.replace('@', '')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-xs text-pink-400 font-mono hover:underline"
+            >
+              📸 {post.data.expert_info.instagram_handle}
+            </a>
+          )}
+        </div>
+        <h3 class="text-lg font-bold text-white">{post.data.expert_info.name}</h3>
+        <div class="text-xs text-gray-300 space-y-1.5">
+          {post.data.expert_info.stance_or_style && <div>⚡ <strong>風格/站姿：</strong>{post.data.expert_info.stance_or_style}</div>}
+          {post.data.expert_info.setup_breakdown && <div>🛹 <strong>專用裝備配置：</strong>{post.data.expert_info.setup_breakdown}</div>}
+        </div>
+        {post.data.expert_info.signature_tricks && (
+          <div class="pt-2 flex flex-wrap gap-1.5">
+            <span class="text-xs text-gray-400 font-semibold mr-1">招牌動作：</span>
+            {post.data.expert_info.signature_tricks.map((trick) => (
+              <span class="px-2 py-0.5 rounded bg-xorange/20 text-xorange text-[11px] font-bold">
+                ★ {trick}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    )}
+
+    <!-- 4. Trick Guide Info -->
+    {post.data.trick_info && (
+      <TrickBadge
+        trickName={post.data.trick_info.trick_name}
+        difficulty={post.data.trick_info.difficulty_rating}
+        prerequisites={post.data.trick_info.prerequisites}
+      />
+    )}
+
+    <!-- Official Video Embed (If available) -->
+    {post.data.youtube_video_id && (
+      <YouTubeEmbed
+        videoId={post.data.youtube_video_id}
+        videoTitle={post.data.youtube_video_title || post.data.title}
+      />
+    )}
+
+    <!-- In-Article AdSense Banner -->
+    <AdSense />
+
+    <!-- Main Markdown Article Content -->
+    <div class="prose prose-invert prose-orange max-w-none my-8 text-gray-200 leading-relaxed space-y-4 text-base">
+      <Content />
+    </div>
+
+    <!-- Amazon Affiliate Recommended Gear Module -->
+    <div class="my-10">
+      <AffiliateCard
+        title={post.data.affiliate_products?.[0]?.title || `推薦同款裝備：${post.data.gear_keyword || '極限運動安全裝備'}`}
+        subtitle={post.data.affiliate_products?.[0]?.subtitle || '全球職業選手信賴品牌，Amazon 官方直送享有售後保障'}
+        searchTerm={post.data.gear_keyword || 'extreme sports gear'}
+        recommendedFor={post.data.affiliate_products?.[0]?.recommended_for || '日常練習與高強度賽事防護必備'}
+        category={post.data.category}
+      />
+    </div>
+
+    <!-- Community & Social Share Box -->
+    <div class="rounded-2xl bg-gradient-to-r from-blue-900/30 via-xdark to-blue-900/30 border border-blue-500/30 p-6 my-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+      <div class="space-y-1">
+        <h4 class="text-base font-bold text-white flex items-center justify-center sm:justify-start gap-2">
+          <span>✈️ 想第一時間收到全球極限賽事快訊？</span>
+        </h4>
+        <p class="text-xs text-gray-400">
+          加入 Una 的 Telegram 頻道，每日自動推播最熱血的賽果與特價裝備通知。
+        </p>
+      </div>
+      <a
+        href="https://t.me/Una_next"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-sky-500 text-white text-xs font-black shadow-lg hover:brightness-110 transition-all whitespace-nowrap"
+      >
+        立即加入 Telegram 頻道 ↗
+      </a>
+    </div>
+
+    <!-- Related Articles Section -->
+    {relatedPosts.length > 0 && (
+      <div class="pt-12 border-t border-xborder">
+        <h3 class="text-xl font-black text-white mb-6">
+          🔥 更多 {post.data.category} 相關焦點
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {relatedPosts.map((rel) => (
+            <a
+              href={`/posts/${rel.slug}`}
+              class="rounded-xl bg-xcard border border-xborder overflow-hidden hover:border-xorange/50 transition-all group"
+            >
+              <img
+                src={rel.data.cover_image}
+                alt={rel.data.title}
+                class="w-full h-32 object-cover group-hover:scale-105 transition-transform"
+              />
+              <div class="p-3">
+                <span class="text-[10px] font-bold text-xorange font-mono block">
+                  {rel.data.category}
+                </span>
+                <h4 class="text-xs font-bold text-white line-clamp-2 mt-1 group-hover:text-xorange transition-colors">
+                  {rel.data.title}
+                </h4>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+  </article>
+</Layout>

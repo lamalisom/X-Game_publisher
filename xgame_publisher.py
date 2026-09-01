@@ -10,7 +10,8 @@ import feedparser
 import asyncio
 import time
 from datetime import datetime
-from urllib.parse import quote
+from urllib.parse import quote, urlparse
+from bs4 import BeautifulSoup
 
 import boto3
 from google import genai
@@ -39,7 +40,7 @@ def extract_clean_url(url_str):
 def url_to_base64(image_url):
     clean_url = extract_clean_url(image_url)
     try:
-        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
         res = requests.get(clean_url, headers=headers, timeout=12)
         res.raise_for_status()
         encoded = base64.b64encode(res.content).decode("utf-8")
@@ -70,7 +71,7 @@ DEFAULT_GEAR_KEYWORDS = {
 # ==========================================
 # 1. SQLITE ANTI-DUPLICATION DATABASE
 # ==========================================
-DB_FILE = "posted_articles.db"
+DB_FILE = "xgame_radar.db"
 
 def init_db():
     conn = sqlite3.connect(DB_FILE)
@@ -80,6 +81,7 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT UNIQUE,
             category TEXT,
+            topic_type TEXT,
             posted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ''')
@@ -94,45 +96,117 @@ def is_already_posted(title):
     conn.close()
     return result is not None
 
-def record_posted_article(title, category):
+def record_posted_article(title, category, topic_type="GENERAL"):
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
     try:
-        cursor.execute('INSERT INTO posted_articles (title, category) VALUES (?, ?)', (title, category))
+        cursor.execute(
+            'INSERT INTO posted_articles (title, category, topic_type) VALUES (?, ?, ?)',
+            (title, category, topic_type)
+        )
         conn.commit()
     except sqlite3.IntegrityError:
         pass
     conn.close()
 
 # ==========================================
-# 2. RSS FEED FETCHING MODULE
+# 2. OFFICIAL SITE MEDIA SCRAPER & RSS PARSER
 # ==========================================
+def scrape_official_media(article_url):
+    """從官方網站文章連結中解析 OpenGraph 高清圖片 (og:image) 與 YouTube 官方影片"""
+    if not article_url or not article_url.startswith("http"):
+        return None, None
+
+    try:
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+        res = requests.get(article_url, headers=headers, timeout=8)
+        if res.status_code == 200:
+            soup = BeautifulSoup(res.text, "html.parser")
+            
+            # 1. 解析官方圖片 (og:image / twitter:image)
+            og_img = soup.find("meta", property="og:image") or soup.find("meta", attrs={"name": "twitter:image"})
+            img_url = None
+            if og_img and og_img.get("content"):
+                img_url = extract_clean_url(og_img["content"])
+            
+            # 2. 解析官方 YouTube 影片
+            youtube_id = None
+            yt_iframe = soup.find("iframe", src=re.compile(r"youtube\.com|youtu\.be"))
+            if yt_iframe and yt_iframe.get("src"):
+                yt_match = re.search(r"(?:embed/|v/|watch\?v=)([\w-]{11})", yt_iframe["src"])
+                if yt_match:
+                    youtube_id = yt_match.group(1)
+
+            if img_url or youtube_id:
+                print(f"🎯 成功從官方來源抓取媒體：圖片={bool(img_url)}, 影片ID={youtube_id}")
+            return img_url, youtube_id
+    except Exception as e:
+        print(f"⚠️ 官方頁面媒體解析跳過 ({article_url[:40]}...): {e}")
+
+    return None, None
+
 def fetch_latest_rss_news(category_key):
     rss_url = XGAME_CATEGORIES.get(category_key.upper())
     if not rss_url:
-        return ""
+        return "", None, None
+
+    official_img = None
+    official_video_id = None
+    articles = []
+
     try:
         feed = feedparser.parse(rss_url)
-        articles = []
         for entry in feed.entries[:3]:
             title = entry.get('title', '')
             summary = entry.get('summary', entry.get('description', ''))
-            clean_summary = re.sub('<[^<]+?>', '', summary)[:150]
-            articles.append(f"- {title}: {clean_summary}")
+            clean_summary = re.sub('<[^<]+?>', '', summary)[:160]
+            link = entry.get('link', '')
+
+            articles.append(f"- {title}: {clean_summary} (來源: {link})")
+
+            # 嘗試抓取官方媒體圖片
+            if not official_img:
+                # 檢查 RSS 內建 media_content
+                if 'media_content' in entry and len(entry['media_content']) > 0:
+                    official_img = entry['media_content'][0].get('url')
+                elif 'media_thumbnail' in entry and len(entry['media_thumbnail']) > 0:
+                    official_img = entry['media_thumbnail'][0].get('url')
+                elif 'enclosures' in entry and len(entry['enclosures']) > 0:
+                    official_img = entry['enclosures'][0].get('href')
+                
+                # 若 RSS 內無圖片但有文章網址，爬取官網 og:image
+                if not official_img and link:
+                    scraped_img, scraped_yt = scrape_official_media(link)
+                    if scraped_img:
+                        official_img = scraped_img
+                    if scraped_yt:
+                        official_video_id = scraped_yt
+
         if articles:
-            return "【最新 RSS 參考新聞】:\n" + "\n".join(articles)
+            context_text = "【最新官方 RSS 參考新聞】:\n" + "\n".join(articles)
+            return context_text, official_img, official_video_id
     except Exception as e:
         print(f"⚠️ RSS 抓取失敗 ({category_key}): {e}")
-    return ""
+
+    return "", None, None
 
 # ==========================================
-# 3. GEMINI AI CONTENT ENGINE
+# 3. GEMINI AI CONTENT ENGINE (RICH PILLARS)
 # ==========================================
 def generate_xgame_content(category_key="", topic_type="", topic_desc="", target_lang="zh-hk"):
     api_key = clean_token_or_url(os.getenv("GEMINI_API_KEY", ""))
     if not api_key:
         print("❌ 錯誤：未偵測到 GEMINI_API_KEY 環境變數！")
-        return ("xGame Radar", "GLOBAL · EVENT", "請設定 API Key", "GLOBAL", "skateboarding gear")
+        return {
+            "title": "xGame Radar",
+            "subtitle": "GLOBAL · EVENT",
+            "content": "請設定 GEMINI_API_KEY 環境變數以啟用 AI 自動內容生成。",
+            "city_tag": "GLOBAL",
+            "gear_keyword": "skateboarding gear",
+            "topic_type": "GENERAL"
+        }
 
     client = genai.Client(api_key=api_key)
 
@@ -140,17 +214,18 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
         category_key = random.choice(list(XGAME_CATEGORIES.keys()))
     display_category = category_key.strip().upper()
 
-    rss_context = fetch_latest_rss_news(display_category)
+    rss_context, official_img, official_yt = fetch_latest_rss_news(display_category)
 
+    # 內容輪播排程：五大支柱
     weekday = datetime.now().weekday()
     SCHEDULE_MAP = {
-        0: {"type": "EVENT", "title": "🗓️ 賽事雷達"},
-        1: {"type": "SPOT", "title": "🛹 場地導覽"},
-        2: {"type": "ATHLETE", "title": "🏆 焦點人物"},
-        3: {"type": "SAFETY", "title": "🛡️ 安全與裝備"},
-        4: {"type": "EVENT", "title": "🗓️ 賽事雷達"},
-        5: {"type": "RECORD", "title": "🔥 極限紀錄"},
-        6: {"type": "TIPS", "title": "🎯 技巧解密"}
+        0: {"type": "EVENT", "title": "🗓️ 未來3-12個月賽事雷達與近期戰報"},
+        1: {"type": "SPOT", "title": "🛹 全球與亞洲頂級場地導覽"},
+        2: {"type": "ATHLETE", "title": "🏆 焦點專家與選手檔案 (PRO PROFILE)"},
+        3: {"type": "SAFETY", "title": "🛡️ 安全裝備評測與護具選購指南"},
+        4: {"type": "EVENT", "title": "⚡ 賽事精華與頒獎台名次速報"},
+        5: {"type": "TIPS", "title": "🎯 花式招式分解與技巧心法庫"},
+        6: {"type": "RECORD", "title": "🔥 極限歷史紀錄與經典重溫"}
     }
 
     current_schedule = SCHEDULE_MAP.get(weekday, SCHEDULE_MAP[0])
@@ -166,33 +241,59 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
     selected_lang_desc = lang_map.get(target_lang, lang_map["zh-hk"])
 
     prompt = f"""
-你是一位專注於全球極限運動的熱血社群小編 Una (@Una_next)。
-今日專欄主題：【{active_title}】（項目：{display_category}）
+你是一位專注於全球極限運動的專業主編 Una (@Una_next)。
+今日專欄主題：【{active_title}】（項目類別：{display_category}，主題類型：{active_topic}）
 {rss_context}
 
-【撰寫要求】:
-1. 內文必須極致精煉，總字數控制在 **120 至 180 字以內**。使用短句、重點列點與熱血 Emoji。
-2. 語言格式：完全使用 **{selected_lang_desc}** 撰寫。
-3. 如果有 RSS 新聞，簡短帶出 1 個核心賽事/選手動態即可。
-4. 結尾用 1 句精簡推薦 1 款裝備與理由。
-5. 「推薦裝備英文關鍵字」只許填寫純英文單字（如: bmx helmet / skate shoes），嚴禁標點或中文。
+【任務要求】:
+請生成一篇具備深度專業度、高社群傳播力與極限運動熱血感的文章資料，語言格式：完全使用 **{selected_lang_desc}**。
+必須以嚴格的 JSON 格式回傳（請勿輸出 Markdown 區塊或多餘文字），包含以下欄位：
 
-請嚴格按照以下格式輸出，並用 `---` 分隔，不要使用 Markdown 程式碼區塊：
-
-[封面主標題]
----
-[封面副標題]
----
-[城市英文名或主題關鍵字]
----
-[英文裝備關鍵字]
----
-[精簡正文內容]
+{{
+  "title": "精煉且具震撼力的封面主標題（嚴禁【】符號，約 20-35 字）",
+  "subtitle": "副標題或一句話亮點總結（約 30-50 字）",
+  "city_tag": "舉辦城市英文或主題城市（例如: TOKYO, SYDNEY, CALIFORNIA, GLOBAL）",
+  "gear_keyword": "純英文推薦裝備搜尋關鍵字（例如: skate shoes pro / bmx helmet / surfing wetsuit，嚴禁中文）",
+  "content": "深度正文內容（約 180-280 字，條理分明，使用熱血 Emoji，適度介紹重點賽事/人物/場地/安全要點）",
+  "topic_type": "{active_topic}",
+  "expert_info": {{
+    "name": "選手或專家姓名（若為 ATHLETE 主題請填寫，否則可留空）",
+    "country": "代表國家",
+    "stance_or_style": "風格或站姿",
+    "signature_tricks": ["招牌動作1", "招牌動作2"],
+    "setup_breakdown": "專用裝備配置說明"
+  }},
+  "spot_info": {{
+    "name": "場地名稱（若為 SPOT 主題請填寫）",
+    "location": "場地地理位置",
+    "difficulty": "All Levels / Beginner / Intermediate / Advanced / Pro",
+    "features": ["特點1", "特點2"],
+    "fee": "收費方式"
+  }},
+  "event_info": {{
+    "event_name": "賽事名稱（若為 EVENT 主題請填寫）",
+    "dates": "賽事日期（未來3-12個月或近期）",
+    "event_status": "UPCOMING",
+    "location": "賽事地點",
+    "tier": "World Championship / X-Games Tier"
+  }},
+  "trick_info": {{
+    "trick_name": "花式招式名稱（若為 TIPS/TRICKS 主題請填寫）",
+    "difficulty_rating": 3,
+    "prerequisites": ["先修基礎動作1", "先修基礎動作2"]
+  }},
+  "safety_gear_info": {{
+    "gear_type": "裝備品類（若為 SAFETY 主題請填寫）",
+    "certification": "ASTM F1492 / CPSC / CE EN1078"
+  }},
+  "recommended_gear_title": "Amazon 推薦商品中文標題",
+  "recommended_gear_reason": "推薦理由"
+}}
 """
-    print(f"🤖 今日專欄: 【{active_title}】，正在呼叫 Gemini API...")
 
+    print(f"🤖 今日專欄: 【{active_title}】，正在呼叫 Gemini API...")
     models_to_try = ["gemini-2.5-flash", "gemini-1.5-flash"]
-    
+
     for model_name in models_to_try:
         max_retries = 3
         for attempt in range(1, max_retries + 1):
@@ -200,74 +301,66 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
                 chat = client.chats.create(
                     model=model_name,
                     config=types.GenerateContentConfig(
-                        temperature=0.4,
+                        temperature=0.3,
+                        response_mime_type="application/json",
                         tools=[{"google_search": {}}]
                     )
                 )
                 response = chat.send_message(prompt)
+                raw_json = response.text.strip()
+                parsed = json.loads(raw_json)
 
-                raw_text = response.text.strip()
-                raw_text = re.sub(r'^```\w*\n?', '', raw_text)
-                raw_text = re.sub(r'\n?```$', '', raw_text)
+                # 補充官方抓取的媒體資訊
+                if official_img:
+                    parsed["official_cover_image"] = official_img
+                if official_yt:
+                    parsed["youtube_video_id"] = official_yt
 
-                parts = [p.strip() for p in raw_text.split("---", 4)]
-
-                if len(parts) == 5:
-                    title = parts[0].replace("封面主標題", "").replace("【", "").replace("】", "").strip()
-                    subtitle = parts[1].replace("封面副標題", "").strip()
-                    city_tag = parts[2].replace("城市英文名或主題關鍵字", "").strip().upper()
-                    gear_kw = re.sub(r'[^a-zA-Z0-9\s]', '', parts[3]).strip()
-                    content = parts[4]
-
-                    if not gear_kw:
-                        gear_kw = DEFAULT_GEAR_KEYWORDS.get(display_category, "extreme sports gear")
-
-                    print(f"✅ 模型 [{model_name}] 生成成功！")
-                    return title, subtitle, content, city_tag, gear_kw
-                
-                elif len(parts) == 4:
-                    title = parts[0].replace("封面主標題", "").strip()
-                    subtitle = parts[1].replace("封面副標題", "").strip()
-                    city_tag = parts[2].strip().upper()
-                    content = parts[3]
-                    gear_kw = DEFAULT_GEAR_KEYWORDS.get(display_category, "extreme sports gear")
-                    return title, subtitle, content, city_tag, gear_kw
-                else:
-                    return f"{display_category} {active_title}", f"GLOBAL · {active_topic}", raw_text, "GLOBAL", DEFAULT_GEAR_KEYWORDS.get(display_category, "extreme sports gear")
+                print(f"✅ 模型 [{model_name}] 成功生成結構化專案內容！")
+                return parsed
 
             except Exception as e:
                 err_msg = str(e)
-                print(f"⚠️ [{model_name}] 請求失敗 (第 {attempt} 次): {err_msg[:120]}")
-                if "503" in err_msg or "UNAVAILABLE" in err_msg or "429" in err_msg or "disconnected" in err_msg:
-                    if attempt < max_retries:
-                        time.sleep(5)
-                        continue
+                print(f"⚠️ [{model_name}] 請求失敗 (第 {attempt} 次): {err_msg[:100]}")
+                if "503" in err_msg or "UNAVAILABLE" in err_msg or "429" in err_msg:
+                    time.sleep(4)
+                    continue
                 break
 
-    fallback_gear = DEFAULT_GEAR_KEYWORDS.get(display_category, "gear")
-    return f"{display_category} 熱血企劃", f"GLOBAL · {active_topic}", f"⚡ 各位極限迷！今日【{display_category}】情報熱血更新中！\n\n💬 留言話我知你最想睇咩！👇\n#Una_next #{display_category} #xGameRadar", "GLOBAL", fallback_gear
+    # Fallback default
+    fallback_gear = DEFAULT_GEAR_KEYWORDS.get(display_category, "extreme sports gear")
+    return {
+        "title": f"{display_category} 極限前線情報速報",
+        "subtitle": f"Una 帶你直擊全球 {display_category} 最新賽事、場地與裝備亮點",
+        "city_tag": "GLOBAL",
+        "gear_keyword": fallback_gear,
+        "content": f"⚡ 各位極限迷！今日【{display_category}】情報熱血更新中！無論街頭還是碗池，安全第一，盡情挑戰極限！\n\n💬 留言話我知你最想睇咩！\n#Una_next #{display_category} #xGameRadar",
+        "topic_type": active_topic,
+        "recommended_gear_title": f"{display_category} 專業防護裝備",
+        "recommended_gear_reason": "賽事等級安全認證，提供最佳緩震與活動度"
+    }
 
 # ==========================================
-# 4. AFFILIATE LINK BUILDER (STRICT ENGLISH SEARCH)
+# 4. AFFILIATE LINK BUILDER
 # ==========================================
 def attach_affiliate_link(content_text, gear_keyword, category_key):
     clean_kw = re.sub(r'[^a-zA-Z0-9\s]', '', gear_keyword).strip()
     if not clean_kw or len(clean_kw) < 2:
         clean_kw = DEFAULT_GEAR_KEYWORDS.get(category_key.upper(), "extreme sports gear")
-    
+
     encoded_kw = quote(clean_kw)
     amazon_url = f"https://www.amazon.com/s?k={encoded_kw}&tag={AMAZON_AFFILIATE_ID}"
-    
     display_name = clean_kw.title()
+
     affiliate_block = (
         f"\n\n🛒 *Una 裝備選購建議*:\n"
         f"👉 [{display_name} Amazon 直送門市]({amazon_url})\n"
-        f"*(透過連結購買可支持本頻道運作)*"
+        f"*(透過連結購買可支持本頻道與網站運作)*"
     )
     return content_text + affiliate_block
 
 # ==========================================
-# 5. PEXELS IMAGE FETCHING & BASE64 SANITIZER
+# 5. PEXELS IMAGE FETCHING
 # ==========================================
 def get_pexels_image(keyword):
     pexels_key = clean_token_or_url(os.getenv("PEXELS_API_KEY", ""))
@@ -281,15 +374,14 @@ def get_pexels_image(keyword):
             headers = {"Authorization": pexels_key}
             clean_keyword = quote(keyword.strip())
             url = f"https://api.pexels.com/v1/search?query={clean_keyword}&per_page=1"
-            
             res = requests.get(url, headers=headers, timeout=10).json()
-            if res.get("photos"):
+            if res.get("photos") and len(res["photos"]) > 0:
                 img_url = extract_clean_url(res["photos"][0]["src"]["large2x"])
                 print(f"✅ Pexels 成功抓取【{keyword}】背景圖！")
                 return img_url
         except Exception as e:
-            print(f"⚠️ Pexels 搜尋失敗: {e}")
-            
+            print(f"⚠️ Pexels 搜尋跳過: {e}")
+
     return random.choice(fallback_urls)
 
 # ==========================================
@@ -297,24 +389,25 @@ def get_pexels_image(keyword):
 # ==========================================
 async def render_card_image_async(title, subtitle, tag_city, bg_image_url, output_path):
     bg_base64 = url_to_base64(bg_image_url).replace("'", "%27")
-    
+
     html_template = f"""
     <!DOCTYPE html>
     <html>
     <head>
     <meta charset="UTF-8">
     <style>
-        body {{ margin: 0; padding: 0; width: 1080px; height: 1080px; display: flex; justify-content: center; align-items: center; background: #000; font-family: 'Helvetica Neue', Arial, sans-serif; }}
-        .card {{ width: 1080px; height: 1080px; position: relative; background-image: url('{bg_base64}'); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: space-between; padding: 80px; box-sizing: border-box; }}
-        .overlay {{ position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.85) 100%); z-index: 1; }}
+        body {{ margin: 0; padding: 0; width: 1080px; height: 1080px; display: flex; justify-content: center; align-items: center; background: #000; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }}
+        .card {{ width: 1080px; height: 1080px; position: relative; background-image: url('{bg_base64}'); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: space-between; padding: 75px; box-sizing: border-box; }}
+        .overlay {{ position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(8,8,10,0.4) 0%, rgba(8,8,10,0.88) 100%); z-index: 1; }}
         .content {{ position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }}
         .top-bar {{ display: flex; justify-content: space-between; align-items: center; }}
-        .badge {{ background: #ff3300; color: #fff; padding: 12px 24px; font-weight: bold; font-size: 24px; border-radius: 30px; text-transform: uppercase; letter-spacing: 2px; }}
-        .location {{ color: #ffffff; font-size: 24px; font-weight: 600; opacity: 0.9; }}
-        .main-title {{ color: #ffffff; font-size: 64px; font-weight: 900; line-height: 1.2; margin-bottom: 20px; text-shadow: 0 4px 12px rgba(0,0,0,0.5); }}
-        .author {{ color: #ff3300; font-size: 28px; font-weight: 700; display: flex; align-items: center; gap: 10px; }}
-        .footer {{ display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 30px; }}
-        .sub-tag {{ color: #aaaaaa; font-size: 22px; text-transform: uppercase; letter-spacing: 1.5px; }}
+        .badge {{ background: #ff4d00; color: #fff; padding: 10px 24px; font-weight: 900; font-size: 22px; border-radius: 30px; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 0 20px rgba(255,77,0,0.5); }}
+        .location {{ color: #ffffff; font-size: 22px; font-weight: 700; opacity: 0.95; }}
+        .main-title {{ color: #ffffff; font-size: 58px; font-weight: 900; line-height: 1.25; margin-bottom: 20px; text-shadow: 0 4px 16px rgba(0,0,0,0.8); }}
+        .subtitle {{ color: #00f2fe; font-size: 26px; font-weight: 700; line-height: 1.4; margin-bottom: 15px; }}
+        .author {{ color: #ff4d00; font-size: 26px; font-weight: 800; display: flex; align-items: center; gap: 10px; }}
+        .footer {{ display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid rgba(255,255,255,0.25); padding-top: 25px; }}
+        .sub-tag {{ color: #cccccc; font-size: 20px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 600; }}
     </style>
     </head>
     <body>
@@ -323,29 +416,30 @@ async def render_card_image_async(title, subtitle, tag_city, bg_image_url, outpu
             <div class="content">
                 <div class="top-bar">
                     <div class="badge">xGame Radar</div>
-                    <div class="location">【{subtitle}】</div>
+                    <div class="location">【{tag_city}】</div>
                 </div>
                 <div>
-                    <div class="main-title">🏆<br>{title}</div>
+                    <div class="subtitle">⚡ {subtitle}</div>
+                    <div class="main-title">🏆 {title}</div>
                     <div class="author">By Una (@Una_next)</div>
                 </div>
                 <div class="footer">
-                    <div class="sub-tag">Global Extreme Sports Daily</div>
-                    <div class="sub-tag">{tag_city}</div>
+                    <div class="sub-tag">Global Extreme Sports Magazine</div>
+                    <div class="sub-tag">{tag_city} · RADAR</div>
                 </div>
             </div>
         </div>
     </body>
     </html>
     """
-    
+
     async with async_playwright() as p:
         browser = await p.chromium.launch()
         page = await browser.new_page(viewport={"width": 1080, "height": 1080})
         await page.set_content(html_template)
         await page.screenshot(path=output_path)
         await browser.close()
-    print(f"📸 卡片圖片生成完畢: {output_path}")
+    print(f"📸 1080x1080 卡片圖片生成完畢: {output_path}")
 
 # ==========================================
 # 7. CLOUDFLARE R2 STORAGE UPLOADER
@@ -358,7 +452,7 @@ def upload_to_r2(local_file_path, r2_object_name):
     public_domain = extract_clean_url(os.getenv("R2_PUBLIC_DOMAIN", "")).rstrip("/")
 
     if not all([account_id, access_key, secret_key]):
-        print("⚠️ 未設置 Cloudflare R2 環境變數，跳過上傳。")
+        print("⚠️ 未設置 Cloudflare R2 環境變數，跳過雲端上傳。")
         return None
 
     try:
@@ -371,7 +465,7 @@ def upload_to_r2(local_file_path, r2_object_name):
         )
         content_type = "image/png" if local_file_path.endswith(".png") else "application/json"
         s3.upload_file(local_file_path, bucket_name, r2_object_name, ExtraArgs={"ContentType": content_type})
-        
+
         file_url = f"{public_domain}/{r2_object_name}" if public_domain else f"https://pub-{account_id}.r2.dev/{r2_object_name}"
         print(f"☁️ 檔案已成功上傳至 R2: {file_url}")
         return file_url
@@ -380,36 +474,95 @@ def upload_to_r2(local_file_path, r2_object_name):
         return None
 
 # ==========================================
-# 8. MARKDOWN POST GENERATOR
+# 8. MARKDOWN POST GENERATOR (ASTRO COMPATIBLE)
 # ==========================================
-def save_post_as_markdown(category_key, cover_title, sub_title, caption_text, image_url):
+def save_post_as_markdown(post_data, image_url, source_label="Official / Editorial"):
     timestamp = datetime.now().strftime("%Y-%m-%d")
-    posts_dir = "posts"
-    os.makedirs(posts_dir, exist_ok=True)
-    filepath = os.path.join(posts_dir, f"{timestamp}_{category_key.lower()}.md")
+    category_key = post_data.get("category", "SKATE").upper()
+    topic_type = post_data.get("topic_type", "GENERAL").upper()
+    title = post_data.get("title", "").replace('"', '\\"')
+    subtitle = post_data.get("subtitle", "").replace('"', '\\"')
+    gear_kw = post_data.get("gear_keyword", "extreme sports gear")
+    clean_slug = re.sub(r'[^a-zA-Z0-9]', '_', post_data.get("city_tag", "global").lower())[:15]
     
-    md_content = f"""---
-title: "{cover_title}"
-subtitle: "{sub_title}"
-date: {datetime.now().isoformat()}
-category: "{category_key}"
-cover_image: "{image_url}"
-author: "Una (@Una_next)"
----
+    posts_dir = os.path.join("src", "content", "posts")
+    os.makedirs(posts_dir, exist_ok=True)
+    filename = f"{timestamp}_{category_key.lower()}_{clean_slug}.md"
+    filepath = os.path.join(posts_dir, filename)
 
-![{cover_title}]({image_url})
+    # 組合 YAML Frontmatter
+    frontmatter_dict = {
+        "title": title,
+        "subtitle": subtitle,
+        "date": datetime.now().isoformat(),
+        "category": category_key if category_key in ["SKATE", "BMX", "SURF", "CLIMB", "SNOW", "EVENT", "SPOT", "ATHLETE", "SAFETY", "TRICKS"] else "SKATE",
+        "topic_type": topic_type if topic_type in ["EVENT", "SPOT", "ATHLETE", "SAFETY", "RECORD", "TIPS", "GEAR", "GENERAL"] else "GENERAL",
+        "cover_image": image_url,
+        "cover_image_source": source_label,
+        "author": "Una (@Una_next)",
+        "city_tag": post_data.get("city_tag", "GLOBAL"),
+        "featured": True,
+        "gear_keyword": gear_kw
+    }
 
-{caption_text}
-"""
+    if post_data.get("youtube_video_id"):
+        frontmatter_dict["youtube_video_id"] = post_data["youtube_video_id"]
+        frontmatter_dict["youtube_video_title"] = post_data.get("youtube_video_title", "官方精彩精華")
+
+    if post_data.get("expert_info") and post_data["expert_info"].get("name"):
+        frontmatter_dict["expert_info"] = post_data["expert_info"]
+
+    if post_data.get("spot_info") and post_data["spot_info"].get("name"):
+        frontmatter_dict["spot_info"] = post_data["spot_info"]
+
+    if post_data.get("event_info") and post_data["event_info"].get("event_name"):
+        frontmatter_dict["event_info"] = post_data["event_info"]
+
+    if post_data.get("trick_info") and post_data["trick_info"].get("trick_name"):
+        frontmatter_dict["trick_info"] = post_data["trick_info"]
+
+    if post_data.get("safety_gear_info") and post_data["safety_gear_info"].get("gear_type"):
+        frontmatter_dict["safety_gear_info"] = post_data["safety_gear_info"]
+
+    # Affiliate Product Object
+    amazon_search_url = f"https://www.amazon.com/s?k={quote(gear_kw)}&tag={AMAZON_AFFILIATE_ID}"
+    frontmatter_dict["affiliate_products"] = [
+        {
+            "title": post_data.get("recommended_gear_title", f"{gear_kw.title()} 專業裝備"),
+            "subtitle": "Amazon 官方直送・全球職業選手信賴",
+            "search_term": gear_kw,
+            "amazon_url": amazon_search_url,
+            "recommended_for": post_data.get("recommended_gear_reason", "日常訓練與賽事高強度防護必備"),
+            "badge_text": "Una 編輯推薦"
+        }
+    ]
+
+    # 格式化 YAML Frontmatter
+    yaml_lines = ["---"]
+    for k, v in frontmatter_dict.items():
+        if isinstance(v, (dict, list)):
+            json_str = json.dumps(v, ensure_ascii=False)
+            # 轉換為標準 YAML 物件結構
+            yaml_lines.append(f"{k}: {json_str}")
+        elif isinstance(v, bool):
+            yaml_lines.append(f"{k}: {'true' if v else 'false'}")
+        else:
+            yaml_lines.append(f"{k}: \"{v}\"")
+    yaml_lines.append("---")
+    yaml_lines.append("")
+    yaml_lines.append(f"![{title}]({image_url})")
+    yaml_lines.append("")
+    yaml_lines.append(post_data.get("content", ""))
+
     with open(filepath, "w", encoding="utf-8") as f:
-        f.write(md_content)
-    print(f"📝 Markdown 文章已生成: {filepath}")
+        f.write("\n".join(yaml_lines))
+    print(f"📝 Astro Markdown 文章已生成: {filepath}")
+    return filepath
 
 # ==========================================
-# 9. TELEGRAM DISPATCHER (STRICT CLEAN URL)
+# 9. TELEGRAM DISPATCHER
 # ==========================================
 def clean_markdown_for_telegram(text):
-    """清理不成對的 Markdown 符號，但保護 URL 不被破壞"""
     parts = re.split(r'(https?://[^\s\)]+)', text)
     for i in range(0, len(parts), 2):
         parts[i] = parts[i].replace("_", " ")
@@ -420,9 +573,9 @@ def clean_markdown_for_telegram(text):
 def send_telegram_post(caption_text, image_path=None):
     bot_token = clean_token_or_url(os.getenv("TELEGRAM_BOT_TOKEN", ""))
     chat_id = clean_token_or_url(os.getenv("TELEGRAM_CHAT_ID", ""))
-    
+
     if not bot_token or not chat_id:
-        print("⚠️ 未設定 TELEGRAM_BOT_TOKEN 或 TELEGRAM_CHAT_ID，跳過社群發送。")
+        print("⚠️ 未設定 TELEGRAM_BOT_TOKEN 或 TELEGRAM_CHAT_ID，跳過社群推播。")
         return
 
     clean_caption = clean_markdown_for_telegram(caption_text)
@@ -445,7 +598,6 @@ def send_telegram_post(caption_text, image_path=None):
     try:
         response = make_tg_request(parse_mode="Markdown")
         res_json = response.json()
-
         if res_json.get("ok"):
             print("✅ Telegram 卡片與文案成功發送！")
             return
@@ -456,74 +608,86 @@ def send_telegram_post(caption_text, image_path=None):
             print("✅ Telegram (純文字模式) 發送成功！")
     except Exception as e:
         print(f"❌ Telegram 發送異常: {e}")
-        
+
 # ==========================================
 # 10. MAIN ASYNC PIPELINE
 # ==========================================
 async def main_async():
-    print("🚀 啟動 xGame Radar 每日自動化內容生成引擎...")
+    print("🚀 啟動 xGame Radar Magazine 全自動化發布引擎...")
     init_db()
 
     category_arg = sys.argv[1] if len(sys.argv) > 1 else ""
     lang_arg = sys.argv[2] if len(sys.argv) > 2 else "zh-hk"
+    topic_arg = sys.argv[3] if len(sys.argv) > 3 else ""
 
-    category = category_arg.strip().upper() if category_arg else random.choice(list(XGAME_CATEGORIES.keys()))
+    category = category_arg.strip().upper() if category_arg and category_arg.upper() != "AUTO" else random.choice(list(XGAME_CATEGORIES.keys()))
 
-    # 1. AI Content Generation
-    title, subtitle, content, city_tag, gear_kw = generate_xgame_content(category_key=category, target_lang=lang_arg)
+    # 1. AI 內容與結構化資料生成
+    post_data = generate_xgame_content(category_key=category, topic_type=topic_arg, target_lang=lang_arg)
+    title = post_data.get("title", f"{category} 極限特刊")
+    subtitle = post_data.get("subtitle", "")
+    content = post_data.get("content", "")
+    city_tag = post_data.get("city_tag", "GLOBAL")
+    gear_kw = post_data.get("gear_keyword", "extreme sports gear")
+    topic_type = post_data.get("topic_type", "GENERAL")
 
     if is_already_posted(title):
-        print(f"ℹ️ 文章 [{title}] 今日已發布過，跳過重複發送。")
+        print(f"ℹ️ 文章 [{title}] 今日已發布過，跳過重複發布。")
         return
 
-    # 2. Inject Affiliate Link
+    # 2. 注入 Amazon Affiliate 推薦文字
     monetized_content = attach_affiliate_link(content, gear_kw, category)
+    post_data["category"] = category
+    post_data["content"] = monetized_content
 
-    # 3. Pexels Image & Card Rendering
-    bg_image = get_pexels_image(f"{category.lower()} action sports")
+    # 3. 官方圖片或 Pexels 高清背景圖
+    official_img = post_data.get("official_cover_image")
+    source_label = "Official Source" if official_img else "Editorial / Pexels"
+    bg_image = official_img if official_img else get_pexels_image(f"{category.lower()} action sports")
+    
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     card_filename = f"xgame_{timestamp}.png"
-    
+
+    # 4. Playwright 生成 1080x1080 社群卡片
     await render_card_image_async(title, subtitle, city_tag, bg_image, card_filename)
 
-    # 4. Upload Image Card to R2
+    # 5. 上傳卡片圖片至 Cloudflare R2
     r2_img_url = upload_to_r2(card_filename, f"cards/{card_filename}")
     img_link_for_record = r2_img_url if r2_img_url else bg_image
 
-    # 5. Build and Upload JSON Backup to R2
-    json_filename = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{category}.json"
-    post_data = {
+    # 6. 生成並上傳 JSON 備份至 Cloudflare R2
+    json_filename = f"{timestamp}_{category}.json"
+    backup_payload = {
         "id": timestamp,
         "title": title,
         "subtitle": subtitle,
         "category": category,
+        "topic_type": topic_type,
         "content": monetized_content,
         "image_url": img_link_for_record,
         "created_at": datetime.now().isoformat(),
         "author": "Una (@Una_next)"
     }
     with open(json_filename, "w", encoding="utf-8") as f:
-        json.dump(post_data, f, ensure_ascii=False, indent=2)
-    
+        json.dump(backup_payload, f, ensure_ascii=False, indent=2)
     upload_to_r2(json_filename, f"posts/{json_filename}")
-    print(f"📄 文章 JSON 已成功備份至 R2: posts/{json_filename}")
 
-    # 6. Save Local Markdown Post
-    save_post_as_markdown(category, title, subtitle, monetized_content, img_link_for_record)
+    # 7. 儲存至 Astro 靜態網站 (src/content/posts/)
+    save_post_as_markdown(post_data, img_link_for_record, source_label)
 
-    # 7. Telegram Dispatch
-    tg_message = f"🏆 *{title}*\n\n{subtitle}\n\n{monetized_content}\n\n#xGameRadar #{category} #Una_next"
+    # 8. 推送至 Telegram 頻道
+    tg_message = f"🏆 *{title}*\n\n_{subtitle}_\n\n{monetized_content}\n\n#xGameRadar #{category} #Una_next"
     send_telegram_post(tg_message, image_path=card_filename)
 
-    # 8. Mark Record & Cleanup
-    record_posted_article(title, category)
+    # 9. 記錄於 SQLite 並清理暫存檔
+    record_posted_article(title, category, topic_type)
 
     if os.path.exists(card_filename):
         os.remove(card_filename)
     if os.path.exists(json_filename):
         os.remove(json_filename)
 
-    print("🎉 今日自動發帖任務完全執行完成！")
+    print("🎉 xGame Radar Magazine 今日自動化發布與網站文章生成圓滿完成！")
 
 if __name__ == "__main__":
     asyncio.run(main_async())
