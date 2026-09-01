@@ -24,20 +24,31 @@ def clean_token_or_url(val):
     """徹底清理 Token 與字串，移除所有括號、中括號、引號與多餘空白"""
     if not val:
         return ""
-    # 移除 [ ] ( ) ' " 
     return re.sub(r'[\[\]\(\)\'"]', '', str(val)).strip()
 
 def extract_clean_url(url_str):
-    """從任何受污染字串中萃取出標準 HTTP/HTTPS 網址"""
+    """精準萃取完整 HTTP/HTTPS 網址，不截斷域名"""
     if not url_str:
         return ""
-    match = re.search(r'https?://[^\s\)\ release\]]+', str(url_str))
+    match = re.search(r'https?://[^\s\"\'\]\)]+', str(url_str))
     if match:
         clean_u = match.group(0)
-        # 清除尾端殘留的標點或括號
-        return re.sub(r'[\[\]\(\)\'"]', '', clean_u).strip()
+        return clean_u.rstrip('.,;)]}')
     return clean_token_or_url(url_str)
-    
+
+def url_to_base64(image_url):
+    clean_url = extract_clean_url(image_url)
+    try:
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+        res = requests.get(clean_url, headers=headers, timeout=12)
+        res.raise_for_status()
+        encoded = base64.b64encode(res.content).decode("utf-8")
+        print(f"🖼️ Base64 轉換成功！長度: {len(encoded)}")
+        return f"data:image/jpeg;base64,{encoded}"
+    except Exception as e:
+        print(f"⚠️ 圖片 Base64 轉換失敗 ({clean_url}): {e}")
+        return clean_url
+
 AMAZON_AFFILIATE_ID = clean_token_or_url(os.getenv("AMAZON_AFFILIATE_ID", "kait02bc-20"))
 
 XGAME_CATEGORIES = {
@@ -160,24 +171,24 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 {rss_context}
 
 【撰寫要求】:
-1. 請以熱血且專業的口吻撰寫一篇關於【{display_category}】的極限運動報導。如果有 RSS 參考新聞，請務必將新聞中的賽事名稱、選手、地點或具體產品動態寫入文章中！
-2. 語言格式：完全使用 **{selected_lang_desc}** 撰寫，大量善用 Emoji，總字數控制在 **250 至 350 字以內**。
-3. 商業變現優化：在 Content 正文結尾，請以專家身份推薦 1 款該運動必備的裝備（如特定專業鞋款、護具、配件、鎂粉袋或頭盔），並說明推薦理由。
-4. 【極重要】「推薦裝備英文關鍵字」這欄只許填寫純英文關鍵字（例如：bmx helmet / climbing chalk bag / skate shoes），嚴禁寫任何中文、標題或符號！
+1. 內文必須極致精煉，總字數控制在 **120 至 180 字以內**。使用短句、重點列點與熱血 Emoji。
+2. 語言格式：完全使用 **{selected_lang_desc}** 撰寫。
+3. 如果有 RSS 新聞，簡短帶出 1 個核心賽事/選手動態即可。
+4. 結尾用 1 句精簡推薦 1 款裝備與理由。
+5. 「推薦裝備英文關鍵字」只許填寫純英文單字（如: bmx helmet / skate shoes），嚴禁標點或中文。
 
-請嚴格按照以下格式輸出，並用三條橫線 `---` 將各部分分開，不要輸出 Markdown 代碼塊（```）：
+請嚴格按照以下格式輸出，並用 `---` 分隔，不要使用 Markdown 程式碼區塊：
 
-[這裡寫你自訂的封面主標題]
+[封面主標題]
 ---
-[這裡寫你自訂的封面副標題]
+[封面副標題]
 ---
-[這裡寫城市英文名或主題關鍵字]
+[城市英文名或主題關鍵字]
 ---
-[這裡只寫英文裝備關鍵字，例如: bmx helmet]
+[英文裝備關鍵字]
 ---
-[這裡寫正文內容]
+[精簡正文內容]
 """
-
     print(f"🤖 今日專欄: 【{active_title}】，正在呼叫 Gemini API...")
 
     models_to_try = ["gemini-2.5-flash", "gemini-1.5-flash"]
@@ -240,7 +251,6 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 # 4. AFFILIATE LINK BUILDER (STRICT ENGLISH SEARCH)
 # ==========================================
 def attach_affiliate_link(content_text, gear_keyword, category_key):
-    # 強制只抓英文關鍵字，剔除中文字符與標點符號
     clean_kw = re.sub(r'[^a-zA-Z0-9\s]', '', gear_keyword).strip()
     if not clean_kw or len(clean_kw) < 2:
         clean_kw = DEFAULT_GEAR_KEYWORDS.get(category_key.upper(), "extreme sports gear")
@@ -270,7 +280,6 @@ def get_pexels_image(keyword):
         try:
             headers = {"Authorization": pexels_key}
             clean_keyword = quote(keyword.strip())
-            # 強制構建無污染的 URL
             url = f"https://api.pexels.com/v1/search?query={clean_keyword}&per_page=1"
             
             res = requests.get(url, headers=headers, timeout=10).json()
@@ -283,23 +292,11 @@ def get_pexels_image(keyword):
             
     return random.choice(fallback_urls)
 
-def url_to_base64(image_url):
-    try:
-        clean_url = extract_clean_url(image_url)
-        res = requests.get(clean_url, timeout=10)
-        res.raise_for_status()
-        encoded = base64.b64encode(res.content).decode("utf-8")
-        print(f"🖼️ Base64 轉換成功！字串長度: {len(encoded)}")
-        return f"data:image/jpeg;base64,{encoded}"
-    except Exception as e:
-        print(f"⚠️ 圖片 Base64 轉換失敗: {e}")
-        return extract_clean_url(image_url)
-        
 # ==========================================
 # 6. ASYNC PLAYWRIGHT CARD RENDERER
 # ==========================================
 async def render_card_image_async(title, subtitle, tag_city, bg_image_url, output_path):
-    bg_base64 = url_to_base64(bg_image_url)
+    bg_base64 = url_to_base64(bg_image_url).replace("'", "%27")
     
     html_template = f"""
     <!DOCTYPE html>
@@ -411,8 +408,16 @@ author: "Una (@Una_next)"
 # ==========================================
 # 9. TELEGRAM DISPATCHER (STRICT CLEAN URL)
 # ==========================================
+def clean_markdown_for_telegram(text):
+    """清理不成對的 Markdown 符號，但保護 URL 不被破壞"""
+    parts = re.split(r'(https?://[^\s\)]+)', text)
+    for i in range(0, len(parts), 2):
+        parts[i] = parts[i].replace("_", " ")
+        if parts[i].count("*") % 2 != 0:
+            parts[i] = parts[i].replace("*", "")
+    return "".join(parts)
+
 def send_telegram_post(caption_text, image_path=None):
-    # 確保 Token 不含任何 [ ] 或括號
     bot_token = clean_token_or_url(os.getenv("TELEGRAM_BOT_TOKEN", ""))
     chat_id = clean_token_or_url(os.getenv("TELEGRAM_CHAT_ID", ""))
     
@@ -420,11 +425,10 @@ def send_telegram_post(caption_text, image_path=None):
         print("⚠️ 未設定 TELEGRAM_BOT_TOKEN 或 TELEGRAM_CHAT_ID，跳過社群發送。")
         return
 
-    clean_caption = caption_text.replace("**", "*")
+    clean_caption = clean_markdown_for_telegram(caption_text)
 
     def make_tg_request(parse_mode="Markdown"):
         if image_path and os.path.exists(image_path):
-            # 確保組裝出來的 URL 格式 100% 正確
             url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
             payload = {"chat_id": chat_id, "caption": clean_caption}
             if parse_mode:
@@ -437,7 +441,7 @@ def send_telegram_post(caption_text, image_path=None):
             if parse_mode:
                 payload["parse_mode"] = parse_mode
             return requests.post(url, data=payload, timeout=15)
-            
+
     try:
         response = make_tg_request(parse_mode="Markdown")
         res_json = response.json()
@@ -446,18 +450,13 @@ def send_telegram_post(caption_text, image_path=None):
             print("✅ Telegram 卡片與文案成功發送！")
             return
 
-        print(f"⚠️ Telegram 第一次發送失敗: {res_json.get('description', '')}，嘗試純文字降級模式發送...")
+        print(f"⚠️ Telegram 第一次發送失敗: {res_json.get('description', '')}，嘗試純文字模式...")
         fallback_res = make_tg_request(parse_mode=None)
-        fallback_json = fallback_res.json()
-
-        if fallback_json.get("ok"):
-            print("✅ Telegram (純文字降級模式) 發送成功！")
-        else:
-            print(f"❌ Telegram 最終發送失敗！錯誤訊息: {fallback_json}")
-
+        if fallback_res.json().get("ok"):
+            print("✅ Telegram (純文字模式) 發送成功！")
     except Exception as e:
-        print(f"❌ Telegram 發送過程發生異常例外: {e}")
-
+        print(f"❌ Telegram 發送異常: {e}")
+        
 # ==========================================
 # 10. MAIN ASYNC PIPELINE
 # ==========================================
