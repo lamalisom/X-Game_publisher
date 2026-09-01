@@ -1,9 +1,12 @@
 import sys
 import json
-import boto3
 import os
+import boto3
+import requests  # 修正：補上缺失的 requests 模組
 
-# 清理環境變數工具（保持專案既有規範）
+# ==========================================
+# 1. UTILS & R2 FETCHING
+# ==========================================
 def clean_token_or_url(val):
     return val.strip() if val else ""
 
@@ -23,7 +26,8 @@ def get_specific_post_from_r2(target_filename):
     )
 
     # 確保路徑格式正確（R2 上的路徑通常為 posts/檔名.json）
-    object_key = f"posts/{target_filename}" if not target_filename.startswith("posts/") else target_filename
+    clean_name = target_filename.strip()
+    object_key = f"posts/{clean_name}" if not clean_name.startswith("posts/") else clean_name
     if not object_key.endswith(".json"):
         object_key += ".json"
 
@@ -37,18 +41,68 @@ def get_specific_post_from_r2(target_filename):
         return None
 
 # ==========================================
-# 主執行入口
+# 2. TELEGRAM DISPATCHER
+# ==========================================
+def send_to_telegram(post_data):
+    token = clean_token_or_url(os.getenv("TELEGRAM_BOT_TOKEN", ""))
+    chat_id = clean_token_or_url(os.getenv("TELEGRAM_CHAT_ID", ""))
+    
+    if not token or not chat_id:
+        print("❌ 錯誤：未設定 TELEGRAM_BOT_TOKEN 或 TELEGRAM_CHAT_ID")
+        return
+
+    title = post_data.get("title", "")
+    subtitle = post_data.get("subtitle", "")
+    content = post_data.get("content", "")
+    category = post_data.get("category", "")
+    image_url = post_data.get("image_url", "")
+
+    # 組合訊息內文 (支援 HTML 格式)
+    text = f"🏆 <b>{title}</b>\n<i>{subtitle}</i>\n\n{content}\n\n#xGameRadar #{category} #Una_next"
+
+    # 如果 JSON 裡有圖片網址，優先發送帶圖訊息
+    if image_url:
+        url = f"https://api.telegram.org/bot{token}/sendPhoto"
+        payload = {
+            "chat_id": chat_id,
+            "photo": image_url,
+            "caption": text,
+            "parse_mode": "HTML"
+        }
+    else:
+        url = f"https://api.telegram.org/bot{token}/sendMessage"
+        payload = {
+            "chat_id": chat_id,
+            "text": text,
+            "parse_mode": "HTML"
+        }
+
+    try:
+        res = requests.post(url, json=payload, timeout=15)
+        res_data = res.json()
+        if res.status_code == 200 and res_data.get("ok"):
+            print("✅ Telegram 發送成功！")
+        else:
+            print(f"❌ Telegram 發送失敗！HTTP Code: {res.status_code}")
+            print(f"回應內容: {res.text}")
+    except Exception as e:
+        print(f"❌ 發送 Telegram 訊息時發生異常: {e}")
+
+# ==========================================
+# 3. MAIN ENTRY POINT
 # ==========================================
 if __name__ == "__main__":
-    # 檢查是否有從命令列傳入檔名參數
-    if len(sys.argv) > 1:
-        specified_file = sys.argv[1]
+    specified_file = sys.argv[1] if len(sys.argv) > 1 else ""
+    
+    if specified_file and specified_file.strip():
         post = get_specific_post_from_r2(specified_file)
     else:
-        print("⚠️ 未指定檔名，執行預設邏輯（如：抓取最新文章）...")
-        # 這裡放入你原本抓取最新/隨機文章的函式
-        post = None 
+        print("⚠️ 未指定檔名，執行預設邏輯...")
+        post = None
 
     if post:
         print(f"✅ 成功取得文章標題: {post.get('title')}")
-        # 接下來執行發布至 Telegram 或其他平台的邏輯...
+        # 修正：確實呼叫發送 Telegram 函式
+        send_to_telegram(post)
+    else:
+        print("❌ 未取得任何文章數據，放棄發送 Telegram。")
