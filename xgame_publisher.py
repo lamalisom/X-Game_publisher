@@ -21,16 +21,15 @@ from playwright.async_api import async_playwright
 # 0. CONFIG & SANITIZER UTILS
 # ==========================================
 def clean_token_or_url(val):
-    """徹底清理 Token，移除所有中括號、引號與空白"""
+    """徹底清理 Token 與字串，移除所有中括號、圓括號、引號與空白"""
     if not val:
         return ""
     return re.sub(r'[\[\]\(\)\'"]', '', str(val)).strip()
 
 def extract_clean_url(url_str):
-    """從任何字串（包含 Markdown 連結 [text](url)）中萃取出唯一的合法 HTTP/HTTPS 網址"""
+    """從任何字串中萃取出唯一的合法 HTTP/HTTPS 網址"""
     if not url_str:
         return ""
-    # 若含有 Markdown 格式 [text](http...)，優先取括號內的 URL
     match = re.search(r'https?://[^\s\)]+', str(url_str))
     if match:
         clean_u = match.group(0).rstrip(']')
@@ -251,7 +250,6 @@ def get_pexels_image(keyword):
         try:
             headers = {"Authorization": pexels_key}
             clean_keyword = quote(keyword.strip())
-            # 強制構造乾淨的 URL 避免任何外加括號
             url = f"[https://api.pexels.com/v1/search?query=](https://api.pexels.com/v1/search?query=){clean_keyword}&per_page=1"
             
             res = requests.get(url, headers=headers, timeout=10).json()
@@ -404,7 +402,6 @@ def send_telegram_post(caption_text, image_path=None):
 
     def make_tg_request(parse_mode="Markdown"):
         if image_path and os.path.exists(image_path):
-            # 強制構造乾淨的 Telegram API Endpoint URL
             url = f"[https://api.telegram.org/bot](https://api.telegram.org/bot){bot_token}/sendPhoto"
             payload = {"chat_id": chat_id, "caption": clean_caption}
             if parse_mode:
