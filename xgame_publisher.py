@@ -21,21 +21,23 @@ from playwright.async_api import async_playwright
 # 0. CONFIG & SANITIZER UTILS
 # ==========================================
 def clean_token_or_url(val):
-    """徹底清理 Token 與字串，移除所有中括號、圓括號、引號與空白"""
+    """徹底清理 Token 與字串，移除所有括號、中括號、引號與多餘空白"""
     if not val:
         return ""
+    # 移除 [ ] ( ) ' " 
     return re.sub(r'[\[\]\(\)\'"]', '', str(val)).strip()
 
 def extract_clean_url(url_str):
-    """從任何字串中萃取出唯一的合法 HTTP/HTTPS 網址"""
+    """從任何受污染字串中萃取出標準 HTTP/HTTPS 網址"""
     if not url_str:
         return ""
-    match = re.search(r'https?://[^\s\)]+', str(url_str))
+    match = re.search(r'https?://[^\s\)\ release\]]+', str(url_str))
     if match:
-        clean_u = match.group(0).rstrip(']')
-        return re.sub(r'[\[\]\'"]', '', clean_u).strip()
+        clean_u = match.group(0)
+        # 清除尾端殘留的標點或括號
+        return re.sub(r'[\[\]\(\)\'"]', '', clean_u).strip()
     return clean_token_or_url(url_str)
-
+    
 AMAZON_AFFILIATE_ID = clean_token_or_url(os.getenv("AMAZON_AFFILIATE_ID", "kait02bc-20"))
 
 XGAME_CATEGORIES = {
@@ -260,15 +262,16 @@ def attach_affiliate_link(content_text, gear_keyword, category_key):
 def get_pexels_image(keyword):
     pexels_key = clean_token_or_url(os.getenv("PEXELS_API_KEY", ""))
     fallback_urls = [
-        "[https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg](https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg)",
-        "[https://images.pexels.com/photos/844322/pexels-photo-844322.jpeg](https://images.pexels.com/photos/844322/pexels-photo-844322.jpeg)",
-        "[https://images.pexels.com/photos/1769553/pexels-photo-1769553.jpeg](https://images.pexels.com/photos/1769553/pexels-photo-1769553.jpeg)"
+        "https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg",
+        "https://images.pexels.com/photos/844322/pexels-photo-844322.jpeg",
+        "https://images.pexels.com/photos/1769553/pexels-photo-1769553.jpeg"
     ]
     if pexels_key:
         try:
             headers = {"Authorization": pexels_key}
             clean_keyword = quote(keyword.strip())
-            url = f"[https://api.pexels.com/v1/search?query=](https://api.pexels.com/v1/search?query=){clean_keyword}&per_page=1"
+            # 強制構建無污染的 URL
+            url = f"https://api.pexels.com/v1/search?query={clean_keyword}&per_page=1"
             
             res = requests.get(url, headers=headers, timeout=10).json()
             if res.get("photos"):
@@ -291,7 +294,7 @@ def url_to_base64(image_url):
     except Exception as e:
         print(f"⚠️ 圖片 Base64 轉換失敗: {e}")
         return extract_clean_url(image_url)
-
+        
 # ==========================================
 # 6. ASYNC PLAYWRIGHT CARD RENDERER
 # ==========================================
@@ -409,6 +412,7 @@ author: "Una (@Una_next)"
 # 9. TELEGRAM DISPATCHER (STRICT CLEAN URL)
 # ==========================================
 def send_telegram_post(caption_text, image_path=None):
+    # 確保 Token 不含任何 [ ] 或括號
     bot_token = clean_token_or_url(os.getenv("TELEGRAM_BOT_TOKEN", ""))
     chat_id = clean_token_or_url(os.getenv("TELEGRAM_CHAT_ID", ""))
     
@@ -420,19 +424,20 @@ def send_telegram_post(caption_text, image_path=None):
 
     def make_tg_request(parse_mode="Markdown"):
         if image_path and os.path.exists(image_path):
-            url = f"[https://api.telegram.org/bot](https://api.telegram.org/bot){bot_token}/sendPhoto"
+            # 確保組裝出來的 URL 格式 100% 正確
+            url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
             payload = {"chat_id": chat_id, "caption": clean_caption}
             if parse_mode:
                 payload["parse_mode"] = parse_mode
             with open(image_path, "rb") as photo:
                 return requests.post(url, data=payload, files={"photo": photo}, timeout=15)
         else:
-            url = f"[https://api.telegram.org/bot](https://api.telegram.org/bot){bot_token}/sendMessage"
+            url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
             payload = {"chat_id": chat_id, "text": clean_caption}
             if parse_mode:
                 payload["parse_mode"] = parse_mode
             return requests.post(url, data=payload, timeout=15)
-
+            
     try:
         response = make_tg_request(parse_mode="Markdown")
         res_json = response.json()
