@@ -158,21 +158,22 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 {rss_context}
 
 【撰寫要求】:
-1. 請以熱血且專業的口吻撰寫一篇關於【{display_category}】的極限運動報導。
+1. 請以熱血且專業的口吻撰寫一篇關於【{display_category}】的極限運動報導。如果有 RSS 參考新聞，請務必將新聞中的賽事名稱、選手、地點或具體產品動態寫入文章中！
 2. 語言格式：完全使用 **{selected_lang_desc}** 撰寫，大量善用 Emoji，總字數控制在 **250 至 350 字以內**。
 3. 商業變現優化：在 Content 正文結尾，請以專家身份推薦 1 款該運動必備的裝備（如特定專業鞋款、護具、配件、鎂粉袋或頭盔），並說明推薦理由。
+4. 【極重要】「推薦裝備英文關鍵字」這欄只許填寫純英文關鍵字（例如：bmx helmet / climbing chalk bag / skate shoes），嚴禁寫任何中文、標題或符號！
 
 請嚴格按照以下格式輸出，並用三條橫線 `---` 將各部分分開，不要輸出 Markdown 代碼塊（```）：
 
-封面主標題
+[這裡寫你自訂的封面主標題]
 ---
-封面副標題
+[這裡寫你自訂的封面副標題]
 ---
-城市英文名或主題關鍵字
+[這裡寫城市英文名或主題關鍵字]
 ---
-推薦裝備英文關鍵字（例如：skate shoes / climbing chalk bag / bmx helmet）
+[這裡只寫英文裝備關鍵字，例如: bmx helmet]
 ---
-正文內容
+[這裡寫正文內容]
 """
 
     print(f"🤖 今日專欄: 【{active_title}】，正在呼叫 Gemini API...")
@@ -199,10 +200,25 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
                 parts = [p.strip() for p in raw_text.split("---", 4)]
 
                 if len(parts) == 5:
+                    title = parts[0].replace("封面主標題", "").replace("【", "").replace("】", "").strip()
+                    subtitle = parts[1].replace("封面副標題", "").strip()
+                    city_tag = parts[2].replace("城市英文名或主題關鍵字", "").strip().upper()
+                    gear_kw = re.sub(r'[^a-zA-Z0-9\s]', '', parts[3]).strip()
+                    content = parts[4]
+
+                    if not gear_kw:
+                        gear_kw = DEFAULT_GEAR_KEYWORDS.get(display_category, "extreme sports gear")
+
                     print(f"✅ 模型 [{model_name}] 生成成功！")
-                    return parts[0], parts[1], parts[4], parts[2].upper(), parts[3]
+                    return title, subtitle, content, city_tag, gear_kw
+                
                 elif len(parts) == 4:
-                    return parts[0], parts[1], parts[3], parts[2].upper(), DEFAULT_GEAR_KEYWORDS.get(display_category, "extreme sports gear")
+                    title = parts[0].replace("封面主標題", "").strip()
+                    subtitle = parts[1].replace("封面副標題", "").strip()
+                    city_tag = parts[2].strip().upper()
+                    content = parts[3]
+                    gear_kw = DEFAULT_GEAR_KEYWORDS.get(display_category, "extreme sports gear")
+                    return title, subtitle, content, city_tag, gear_kw
                 else:
                     return f"{display_category} {active_title}", f"GLOBAL · {active_topic}", raw_text, "GLOBAL", DEFAULT_GEAR_KEYWORDS.get(display_category, "extreme sports gear")
 
@@ -219,19 +235,21 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
     return f"{display_category} 熱血企劃", f"GLOBAL · {active_topic}", f"⚡ 各位極限迷！今日【{display_category}】情報熱血更新中！\n\n💬 留言話我知你最想睇咩！👇\n#Una_next #{display_category} #xGameRadar", "GLOBAL", fallback_gear
 
 # ==========================================
-# 4. AFFILIATE LINK BUILDER
+# 4. AFFILIATE LINK BUILDER (STRICT ENGLISH SEARCH)
 # ==========================================
 def attach_affiliate_link(content_text, gear_keyword, category_key):
-    clean_kw = re.sub(r'[^\w\s]', '', gear_keyword).strip()
-    if not clean_kw:
-        clean_kw = DEFAULT_GEAR_KEYWORDS.get(category_key.upper(), "sports gear")
+    # 強制只抓英文關鍵字，剔除中文字符與標點符號
+    clean_kw = re.sub(r'[^a-zA-Z0-9\s]', '', gear_keyword).strip()
+    if not clean_kw or len(clean_kw) < 2:
+        clean_kw = DEFAULT_GEAR_KEYWORDS.get(category_key.upper(), "extreme sports gear")
     
     encoded_kw = quote(clean_kw)
     amazon_url = f"https://www.amazon.com/s?k={encoded_kw}&tag={AMAZON_AFFILIATE_ID}"
     
+    display_name = clean_kw.title()
     affiliate_block = (
         f"\n\n🛒 *Una 裝備選購建議*:\n"
-        f"👉 [{clean_kw.capitalize()} Amazon 直送門市]({amazon_url})\n"
+        f"👉 [{display_name} Amazon 直送門市]({amazon_url})\n"
         f"*(透過連結購買可支持本頻道運作)*"
     )
     return content_text + affiliate_block
@@ -354,7 +372,7 @@ def upload_to_r2(local_file_path, r2_object_name):
         content_type = "image/png" if local_file_path.endswith(".png") else "application/json"
         s3.upload_file(local_file_path, bucket_name, r2_object_name, ExtraArgs={"ContentType": content_type})
         
-        file_url = f"{public_domain}/{r2_object_name}" if public_domain else f"https://***{r2_object_name}"
+        file_url = f"{public_domain}/{r2_object_name}" if public_domain else f"https://pub-{account_id}.r2.dev/{r2_object_name}"
         print(f"☁️ 檔案已成功上傳至 R2: {file_url}")
         return file_url
     except Exception as e:
@@ -458,7 +476,7 @@ async def main_async():
     monetized_content = attach_affiliate_link(content, gear_kw, category)
 
     # 3. Pexels Image & Card Rendering
-    bg_image = get_pexels_image(f"{category.lower()} action")
+    bg_image = get_pexels_image(f"{category.lower()} action sports")
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     card_filename = f"xgame_{timestamp}.png"
     
