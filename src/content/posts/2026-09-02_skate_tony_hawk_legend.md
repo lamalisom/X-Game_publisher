@@ -4,7 +4,7 @@ subtitle: "50 歲依然挑戰 Vert！從 1999 年 X Games 驚世 900 度空中�
 date: "2026-09-02T10:00:00.000Z"
 category: "SKATE"
 topic_type: "ATHLETE"
-cover_image: "https://images.unsplash.com/photo-1520045884215-ac89f05740f3?auto=format&fit=crop&w=1200&q=80"
+cover_image: "https://images.unsplash.com/photo-1516762689617-e1cffcef479d?auto=format&fit=crop&w=1200&q=80"
 cover_image_source: "Birdhouse Skateboards / X Games Archives"
 author: "Una (@Una_next)"
 city_tag: "SAN DIEGO"
@@ -16,7 +16,7 @@ youtube_video_title: "Tony Hawk Lands First 900 in X Games 1999"
 expert_info: {"name": "Tony Hawk", "country": "美國 (USA)", "stance_or_style": "Goofy / 垂直 U 型池 (Vert Ramp Legend)", "signature_tricks": ["The 900 (空中旋轉兩圈半)", "Ollie 540", "Madonna", "Airwalk"], "key_achievements": ["1999 年 X Games 史上首度落地 The 900", "73 場世界級冠軍賽金牌", "創辦全球最成功滑板電玩與慈善基金會"], "instagram_handle": "@tonyhawk", "setup_breakdown": "Birdhouse 8.5 Vert 板身 + Independent 159 Stage 11 + Bones SPF 58mm 輪組 + Triple 8 簽名頭盔"}
 ---
 
-![🏆 垂直碗池教父 Tony Hawk：完成人類首個「The 900」的傳奇神話與 Birdhouse 帝國](https://images.unsplash.com/photo-1520045884215-ac89f05740f3?auto=format&fit=crop&w=1200&q=80)
+![🏆 垂直碗池教父 Tony Hawk：完成人類首個「The 900」的傳奇神話與 Birdhouse 帝國](https://images.unsplash.com/photo-1516762689617-e1cffcef479d?auto=format&fit=crop&w=1200&q=80)
 ### 🛹 改變極限運動歷史的 900 度
 
 1999 年 6 月 27 日，在舊金山舉行的 X Games 賽場上，Tony Hawk 在連續失敗 11 次後，終於在鐘聲響起後的加時嘗試中，完成了人類歷史上首個在垂直 U 型池中的 **900 度空中旋轉（兩圈半）**。這一跳，不僅將極限運動正式推向全球主流視野，更奠定了 Tony Hawk 作為滑板界永恆象徵的地位。

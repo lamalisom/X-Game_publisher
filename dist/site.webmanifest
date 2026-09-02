@@ -1,0 +1,16 @@
+{
+  "name": "xGame Radar Magazine",
+  "short_name": "xGameRadar",
+  "description": "全球極限運動雷達・賽事資訊・選手專題・裝備指南",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#08080a",
+  "theme_color": "#ff4d00",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

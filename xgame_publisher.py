@@ -384,13 +384,13 @@ def attach_affiliate_link(content_text, gear_keyword, category_key):
 # ==========================================
 CATEGORY_ACTION_IMAGES = {
     "SKATE": [
-        "https://images.unsplash.com/photo-1520045884215-ac89f05740f3?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1564982722932-ebc527ea2299?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1516762689617-e1cffcef479d?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80",
         "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1572776685600-5896a2082218?auto=format&fit=crop&w=1200&q=80"
+        "https://images.unsplash.com/photo-1564769662533-4f00a87b4056?auto=format&fit=crop&w=1200&q=80"
     ],
     "BMX": [
-        "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=1200&q=80",
         "https://images.unsplash.com/photo-1576435728678-68d0fbf94e91?auto=format&fit=crop&w=1200&q=80",
         "https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=1200&q=80"
     ],
@@ -409,14 +409,14 @@ CATEGORY_ACTION_IMAGES = {
     ],
     "EVENT": [
         "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&w=1200&q=80"
+        "https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=1200&q=80"
     ],
     "SPOT": [
-        "https://images.unsplash.com/photo-1572776685600-5896a2082218?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1520045884215-ac89f05740f3?auto=format&fit=crop&w=1200&q=80"
+        "https://images.unsplash.com/photo-1564769662533-4f00a87b4056?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1516762689617-e1cffcef479d?auto=format&fit=crop&w=1200&q=80"
     ],
     "SAFETY": [
-        "https://images.unsplash.com/photo-1564982722932-ebc527ea2299?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80",
         "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1200&q=80"
     ]
 }

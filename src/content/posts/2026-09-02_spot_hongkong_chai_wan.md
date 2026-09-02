@@ -4,7 +4,7 @@ subtitle: "港島東區滑板大本營！符合國際街式標準階梯、碗池
 date: "2026-09-02T08:00:00.000Z"
 category: "SPOT"
 topic_type: "SPOT"
-cover_image: "https://images.unsplash.com/photo-1572776685600-5896a2082218?auto=format&fit=crop&w=1200&q=80"
+cover_image: "https://images.unsplash.com/photo-1564769662533-4f00a87b4056?auto=format&fit=crop&w=1200&q=80"
 cover_image_source: "Hong Kong Skateboarding Federation"
 author: "Una (@Una_next)"
 city_tag: "HONG KONG"
@@ -14,7 +14,7 @@ affiliate_products: [{"title": "Pro-Tec Street Wrist Guards 專業護腕", "subt
 spot_info: {"name": "柴灣池畔滑板場 (Chai Wan Poolside Skatepark)", "location": "香港柴灣新廈街 345 號（柴灣游泳池旁）", "difficulty": "Intermediate", "fee": "全免開放 (Free Admission)", "best_season_or_hours": "每日 07:00 - 22:00（晚上有強力聚光燈照明，極佳夜滑體驗）", "features": ["流暢的水泥街式廣場 (Concrete Street Plaza)", "中型平滑碗池 (Mini/Intermediate Bowl)", "3 級階梯帶金屬邊 Hubba 斜台", "Flat Rail 平衡鋼管與斜面坡道 (Quarter Pipes)"]}
 ---
 
-![📍 香港極限地標導覽：柴灣池畔滑板場 (Chai Wan Poolside Skatepark)](https://images.unsplash.com/photo-1572776685600-5896a2082218?auto=format&fit=crop&w=1200&q=80)
+![📍 香港極限地標導覽：柴灣池畔滑板場 (Chai Wan Poolside Skatepark)](https://images.unsplash.com/photo-1564769662533-4f00a87b4056?auto=format&fit=crop&w=1200&q=80)
 ### 🏙️ 隱身於港島柴灣的滑板綠洲
 
 柴灣池畔滑板場是目前香港康文署轄下設施最完整、地面平整度極佳的水泥極限運動場之一。場地依山而建，通風良好，且緊鄰柴灣游泳池，交通從柴灣港鐵站步行約 8-10 分鐘即可到達。

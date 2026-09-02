@@ -4,7 +4,7 @@ subtitle: "全球最美海景極限場地！超深垂直碗池、平滑街式區
 date: 2026-09-03T09:00:00.000Z
 category: "SPOT"
 topic_type: "SPOT"
-cover_image: "https://images.unsplash.com/photo-1520045884215-ac89f05740f3?auto=format&fit=crop&w=1200&q=80"
+cover_image: "https://images.unsplash.com/photo-1516762689617-e1cffcef479d?auto=format&fit=crop&w=1200&q=80"
 cover_image_source: "Bondi Skate Association Official"
 author: "Una (@Una_next)"
 city_tag: "SYDNEY"
