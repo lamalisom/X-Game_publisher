@@ -9,9 +9,10 @@ import requests
 import feedparser
 import asyncio
 import time
-from datetime import datetime
-from urllib.parse import quote, urlparse
-from bs4 import BeautifulSoup
+try:
+    from bs4 import BeautifulSoup
+except ImportError:
+    BeautifulSoup = None
 
 import boto3
 from google import genai
@@ -132,19 +133,29 @@ def scrape_official_media(article_url):
         }
         res = requests.get(article_url, headers=headers, timeout=8)
         if res.status_code == 200:
-            soup = BeautifulSoup(res.text, "html.parser")
-            
-            # 1. 解析官方圖片 (og:image / twitter:image)
-            og_img = soup.find("meta", property="og:image") or soup.find("meta", attrs={"name": "twitter:image"})
             img_url = None
-            if og_img and og_img.get("content"):
-                img_url = extract_clean_url(og_img["content"])
-            
-            # 2. 解析官方 YouTube 影片
             youtube_id = None
-            yt_iframe = soup.find("iframe", src=re.compile(r"youtube\.com|youtu\.be"))
-            if yt_iframe and yt_iframe.get("src"):
-                yt_match = re.search(r"(?:embed/|v/|watch\?v=)([\w-]{11})", yt_iframe["src"])
+
+            if BeautifulSoup:
+                soup = BeautifulSoup(res.text, "html.parser")
+                og_img = soup.find("meta", property="og:image") or soup.find("meta", attrs={"name": "twitter:image"})
+                if og_img and og_img.get("content"):
+                    img_url = extract_clean_url(og_img["content"])
+                
+                yt_iframe = soup.find("iframe", src=re.compile(r"youtube\.com|youtu\.be"))
+                if yt_iframe and yt_iframe.get("src"):
+                    yt_match = re.search(r"(?:embed/|v/|watch\?v=)([\w-]{11})", yt_iframe["src"])
+                    if yt_match:
+                        youtube_id = yt_match.group(1)
+            else:
+                # 無 bs4 時的純正則表達式備案 (100% 零依賴保障)
+                og_match = re.search(r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)["\']', res.text, re.IGNORECASE) or \
+                           re.search(r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image["\']', res.text, re.IGNORECASE) or \
+                           re.search(r'<meta[^>]+name=["\']twitter:image["\'][^>]+content=["\']([^"\']+)["\']', res.text, re.IGNORECASE)
+                if og_match:
+                    img_url = extract_clean_url(og_match.group(1))
+
+                yt_match = re.search(r'(?:youtube\.com/(?:embed/|watch\?v=)|youtu\.be/)([\w-]{11})', res.text)
                 if yt_match:
                     youtube_id = yt_match.group(1)
 
