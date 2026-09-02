@@ -5,6 +5,7 @@ import YouTubeEmbed from '../../components/YouTubeEmbed.astro';
 import AdSense from '../../components/AdSense.astro';
 import EventBadge from '../../components/EventBadge.astro';
 import TrickBadge from '../../components/TrickBadge.astro';
+import NewsletterBar from '../../components/NewsletterBar.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -226,6 +227,9 @@ const relatedPosts = allPosts
         category={post.data.category}
       />
     </div>
+
+    <!-- Newsletter In-Article Card -->
+    <NewsletterBar variant="card" />
 
     <!-- Community & Social Share Box -->
     <div class="rounded-2xl bg-gradient-to-r from-blue-900/30 via-xdark to-blue-900/30 border border-blue-500/30 p-6 my-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">

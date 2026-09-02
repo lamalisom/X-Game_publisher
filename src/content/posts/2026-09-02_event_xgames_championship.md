@@ -4,7 +4,7 @@ subtitle: "未來 3-12 個月極限日程全覽！Street League Skateboarding、
 date: 2026-09-02T10:00:00.000Z
 category: "EVENT"
 topic_type: "EVENT"
-cover_image: "https://images.pexels.com/photos/844322/pexels-photo-844322.jpeg"
+cover_image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1200&q=80"
 cover_image_source: "X Games Official / SLS"
 author: "Una (@Una_next)"
 city_tag: "CALIFORNIA"

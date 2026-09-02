@@ -1,0 +1,128 @@
+---
+interface Props {
+  variant?: 'full' | 'compact' | 'card';
+  title?: string;
+  subtitle?: string;
+}
+
+const {
+  variant = 'full',
+  title = '⚡ 訂閱 xGame Radar 焦點週報',
+  subtitle = '每週五精選：未來賽事倒數提醒、頂級選手專訪、滑板場地實測秘笈與 Amazon 限時裝備折扣！'
+} = Astro.props;
+---
+
+{variant === 'full' && (
+  <section class="my-14 rounded-3xl bg-gradient-to-r from-xcard via-[#161824] to-xcard border border-xorange/40 p-8 sm:p-12 shadow-2xl relative overflow-hidden group">
+    <!-- Glow Background Accents -->
+    <div class="absolute -top-20 -right-20 w-72 h-72 bg-xorange/15 rounded-full blur-3xl pointer-events-none group-hover:bg-xorange/25 transition-all"></div>
+    <div class="absolute -bottom-20 -left-20 w-72 h-72 bg-xcyan/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="relative z-10 max-w-3xl mx-auto text-center space-y-4">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-xorange/20 text-xorange text-xs font-black uppercase tracking-wider border border-xorange/30">
+        <span>📬 VIP EXTREME SPORTS RADAR</span>
+      </div>
+
+      <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight">
+        {title}
+      </h2>
+
+      <p class="text-xs sm:text-sm text-gray-300 max-w-xl mx-auto leading-relaxed">
+        {subtitle}
+      </p>
+
+      <!-- Subscription Form -->
+      <form id="newsletter-form-full" class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto">
+        <div class="relative w-full">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-400">
+            ✉️
+          </span>
+          <input
+            type="email"
+            id="newsletter-email"
+            name="email"
+            required
+            placeholder="輸入你的 Email 電郵地址..."
+            class="w-full pl-10 pr-4 py-3 rounded-xl bg-xdark/90 border border-xborder text-sm text-white placeholder-gray-500 focus:outline-none focus:border-xorange focus:ring-2 focus:ring-xorange/30 transition-all font-sans"
+          />
+        </div>
+        <button
+          type="submit"
+          class="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-xorange to-red-600 hover:from-xorange-hover hover:to-red-500 text-white font-black text-sm shadow-glow-orange hover:scale-105 active:scale-95 transition-all whitespace-nowrap cursor-pointer"
+        >
+          免費訂閱 →
+        </button>
+      </form>
+
+      <!-- Success Message -->
+      <div id="newsletter-success" class="hidden p-3 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold max-w-md mx-auto">
+        🎉 感謝訂閱！每週五全球賽事情報與裝備特惠將直送你的信箱。
+      </div>
+
+      <div class="flex flex-wrap items-center justify-center gap-4 text-[11px] text-gray-400 pt-2 font-mono">
+        <span>✓ 零廣告垃圾郵件</span>
+        <span>•</span>
+        <span>✓ 隨時可一鍵退訂</span>
+        <span>•</span>
+        <a href="https://t.me/Una_next" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline font-bold">
+          同時加入 Telegram 快訊頻道 ↗
+        </a>
+      </div>
+    </div>
+  </section>
+)}
+
+{variant === 'card' && (
+  <div class="my-8 rounded-2xl bg-gradient-to-br from-xcard to-xdark border border-xorange/30 p-6 shadow-xl relative overflow-hidden">
+    <div class="space-y-3">
+      <div class="flex items-center gap-2">
+        <span class="text-xorange text-lg">⚡</span>
+        <h4 class="text-base font-bold text-white">喜歡這篇專題？免費訂閱每週最新極限情報</h4>
+      </div>
+      <p class="text-xs text-gray-300 leading-relaxed">
+        訂閱 Una 的電子報，第一時間掌握全球極限賽事戰報、新場地開箱與裝備實測！
+      </p>
+      <form id="newsletter-form-card" class="flex flex-col sm:flex-row gap-2 pt-1">
+        <input
+          type="email"
+          required
+          placeholder="輸入 Email 電郵..."
+          class="flex-1 px-3.5 py-2.5 rounded-lg bg-xblack border border-xborder text-xs text-white placeholder-gray-500 focus:outline-none focus:border-xorange"
+        />
+        <button
+          type="submit"
+          class="px-4 py-2.5 rounded-lg bg-xorange hover:bg-xorange-hover text-white text-xs font-bold shadow-glow-orange transition-all whitespace-nowrap cursor-pointer"
+        >
+          立即訂閱
+        </button>
+      </form>
+      <div id="newsletter-card-success" class="hidden text-xs text-emerald-400 font-bold">
+        ✓ 訂閱成功！即將為您推送最新內容。
+      </div>
+    </div>
+  </div>
+)}
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const fullForm = document.getElementById('newsletter-form-full');
+    const fullSuccess = document.getElementById('newsletter-success');
+    if (fullForm) {
+      fullForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        fullForm.classList.add('hidden');
+        if (fullSuccess) fullSuccess.classList.remove('hidden');
+      });
+    }
+
+    const cardForm = document.getElementById('newsletter-form-card');
+    const cardSuccess = document.getElementById('newsletter-card-success');
+    if (cardForm) {
+      cardForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        cardForm.classList.add('hidden');
+        if (cardSuccess) cardSuccess.classList.remove('hidden');
+      });
+    }
+  });
+</script>

@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import AffiliateCard from '../components/AffiliateCard.astro';
 import YouTubeEmbed from '../components/YouTubeEmbed.astro';
 import AdSense from '../components/AdSense.astro';
+import NewsletterBar from '../components/NewsletterBar.astro';
 import { getCollection } from 'astro:content';
 
 const allPosts = await getCollection('posts');
@@ -408,5 +409,10 @@ const latestArticles = sortedPosts.slice(0, 8);
       </div>
     </div>
   </section>
+
+  <!-- VIP Newsletter Subscription Bar -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <NewsletterBar variant="full" />
+  </div>
 
 </Layout>

@@ -4,7 +4,7 @@ subtitle: "從東京到巴黎連霸金牌！深度剖析 Yuto 的 Nollie 270 旋
 date: 2026-09-01T12:00:00.000Z
 category: "SKATE"
 topic_type: "ATHLETE"
-cover_image: "https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg"
+cover_image: "https://images.unsplash.com/photo-1564982722932-ebc527ea2299?auto=format&fit=crop&w=1200&q=80"
 cover_image_source: "Official Olympics / SLS Media Pool"
 author: "Una (@Una_next)"
 city_tag: "TOKYO"

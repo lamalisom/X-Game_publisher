@@ -80,11 +80,20 @@ def init_db():
         CREATE TABLE IF NOT EXISTS posted_articles (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT UNIQUE,
+            link TEXT,
             category TEXT,
             topic_type TEXT,
             posted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ''')
+    cursor.execute("PRAGMA table_info(posted_articles)")
+    columns = [col[1] for col in cursor.fetchall()]
+    if "category" not in columns:
+        cursor.execute("ALTER TABLE posted_articles ADD COLUMN category TEXT")
+    if "topic_type" not in columns:
+        cursor.execute("ALTER TABLE posted_articles ADD COLUMN topic_type TEXT")
+    if "link" not in columns:
+        cursor.execute("ALTER TABLE posted_articles ADD COLUMN link TEXT")
     conn.commit()
     conn.close()
 
@@ -360,29 +369,73 @@ def attach_affiliate_link(content_text, gear_keyword, category_key):
     return content_text + affiliate_block
 
 # ==========================================
-# 5. PEXELS IMAGE FETCHING
+# 5. ACTION SPORTS IMAGE REPOSITORY & PEXELS FETCHER
 # ==========================================
-def get_pexels_image(keyword):
-    pexels_key = clean_token_or_url(os.getenv("PEXELS_API_KEY", ""))
-    fallback_urls = [
-        "https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg",
-        "https://images.pexels.com/photos/844322/pexels-photo-844322.jpeg",
-        "https://images.pexels.com/photos/1769553/pexels-photo-1769553.jpeg"
+CATEGORY_ACTION_IMAGES = {
+    "SKATE": [
+        "https://images.unsplash.com/photo-1520045884215-ac89f05740f3?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1564982722932-ebc527ea2299?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1572776685600-5896a2082218?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "BMX": [
+        "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1576435728678-68d0fbf94e91?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "SURF": [
+        "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "CLIMB": [
+        "https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1564769662533-4f00a87b4056?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "SNOW": [
+        "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "EVENT": [
+        "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "SPOT": [
+        "https://images.unsplash.com/photo-1572776685600-5896a2082218?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1520045884215-ac89f05740f3?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "SAFETY": [
+        "https://images.unsplash.com/photo-1564982722932-ebc527ea2299?auto=format&fit=crop&w=1200&q=80",
+        "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1200&q=80"
     ]
+}
+
+def get_action_sports_image(keyword, category_key="SKATE"):
+    """精準抓取對應運動項目的高畫質相片，徹底杜絕披薩與多肉植物等無關圖片"""
+    cat = category_key.upper() if category_key else "SKATE"
+    if cat not in CATEGORY_ACTION_IMAGES:
+        cat = "SKATE"
+
+    pexels_key = clean_token_or_url(os.getenv("PEXELS_API_KEY", ""))
     if pexels_key:
         try:
             headers = {"Authorization": pexels_key}
-            clean_keyword = quote(keyword.strip())
-            url = f"https://api.pexels.com/v1/search?query={clean_keyword}&per_page=1"
+            # 確保搜尋詞強烈關聯極限運動
+            search_query = f"{cat.lower()} action sports {keyword}".strip()
+            clean_keyword = quote(search_query)
+            url = f"https://api.pexels.com/v1/search?query={clean_keyword}&per_page=3&orientation=landscape"
             res = requests.get(url, headers=headers, timeout=10).json()
             if res.get("photos") and len(res["photos"]) > 0:
                 img_url = extract_clean_url(res["photos"][0]["src"]["large2x"])
-                print(f"✅ Pexels 成功抓取【{keyword}】背景圖！")
+                print(f"✅ Pexels 成功抓取【{cat}】極限動作圖: {img_url}")
                 return img_url
         except Exception as e:
             print(f"⚠️ Pexels 搜尋跳過: {e}")
 
-    return random.choice(fallback_urls)
+    # 預設使用真實極限運動相片庫
+    selected = random.choice(CATEGORY_ACTION_IMAGES.get(cat, CATEGORY_ACTION_IMAGES["SKATE"]))
+    print(f"📸 選用【{cat}】高畫質運動相片庫: {selected}")
+    return selected
 
 # ==========================================
 # 6. ASYNC PLAYWRIGHT CARD RENDERER
@@ -640,10 +693,10 @@ async def main_async():
     post_data["category"] = category
     post_data["content"] = monetized_content
 
-    # 3. 官方圖片或 Pexels 高清背景圖
+    # 3. 官方圖片或精準運動項目高解析度相片（杜絕披薩與植物）
     official_img = post_data.get("official_cover_image")
-    source_label = "Official Source" if official_img else "Editorial / Pexels"
-    bg_image = official_img if official_img else get_pexels_image(f"{category.lower()} action sports")
+    source_label = "Official Source" if official_img else "Editorial / Action Sports"
+    bg_image = official_img if official_img else get_action_sports_image(f"{category.lower()} action sports", category)
     
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     card_filename = f"xgame_{timestamp}.png"

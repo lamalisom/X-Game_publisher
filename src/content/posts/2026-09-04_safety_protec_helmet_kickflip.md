@@ -4,7 +4,7 @@ subtitle: "如何避免練招腦震盪與腳踝翻船？職業選手護具選購
 date: 2026-09-04T11:00:00.000Z
 category: "SAFETY"
 topic_type: "SAFETY"
-cover_image: "https://images.pexels.com/photos/1653877/pexels-photo-1653877.jpeg"
+cover_image: "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1200&q=80"
 cover_image_source: "Pro-Tec Safety Lab Official"
 author: "Una (@Una_next)"
 city_tag: "GLOBAL"
