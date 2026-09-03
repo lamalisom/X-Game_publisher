@@ -9,6 +9,8 @@ import requests
 import feedparser
 import asyncio
 import time
+from datetime import datetime
+from urllib.parse import quote, urlparse
 try:
     from bs4 import BeautifulSoup
 except ImportError:
