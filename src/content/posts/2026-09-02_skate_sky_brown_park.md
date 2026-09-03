@@ -11,8 +11,8 @@ city_tag: "LONDON"
 featured: false
 gear_keyword: "protec helmet junior skate knee pads"
 affiliate_products: [{"title": "Pro-Tec Junior Classic 兒童與青少年認證護具組", "subtitle": "包含安全頭盔、高吸震護膝與護肘，青少年選手訓練首選", "search_term": "pro-tec junior skate pad set", "amazon_url": "https://www.amazon.com/s?k=pro-tec+junior+skate+pad+set&tag=kait02bc-20", "recommended_for": "女性與青少年入門極限運動防護", "badge_text": "全方位青少年防護"}]
-youtube_video_id: "W6m0NqE7xL8"
-youtube_video_title: "Sky Brown Olympic Bronze Run Tokyo 2020"
+youtube_video_id: "AkXK9ieCrYE"
+youtube_video_title: "The best of Sky Brown at the Olympics!"
 expert_info: {"name": "Sky Brown", "country": "英國 / 日本 (Great Britain / Japan)", "stance_or_style": "Regular / 碗池公園賽大滯空與衝浪流暢感 (Park & Bowl)", "signature_tricks": ["Frontside 540", "Kickflip Indy Grab", "Backside Air"], "key_achievements": ["2020 東京奧運女子碗池滑板銅牌", "2024 巴黎奧運女子碗池滑板銅牌", "最年輕 X Games 碗池冠軍 (13歲)"], "instagram_handle": "@skybrown", "setup_breakdown": "Almost Sky Brown Pro Model 7.75 + Tensor Mag Light Trucks + Spitfire 54mm + Nike SB"}
 ---
 

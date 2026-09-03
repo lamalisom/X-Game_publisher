@@ -1,6 +1,6 @@
 ---
-youtube_video_id: "b5vU5K_QfFE"
-youtube_video_title: "Teahupoo Heaviest Waves Highlights"
+youtube_video_id: "26KzUnEbTUs"
+youtube_video_title: "Surfing the Heaviest Wave in the World - Teahupoo"
 title: "📍 全球最危險也是最美的浪管：大溪地 Teahupo'o (提阿胡普) 浪點深度指南"
 subtitle: "2024 巴黎奧運衝浪比賽地！淺礁重水巨浪、厚重重力管浪與職業水上攝影攻略"
 date: "2026-09-02T10:00:00.000Z"

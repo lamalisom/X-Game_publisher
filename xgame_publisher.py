@@ -165,7 +165,42 @@ def scrape_official_media(article_url):
     except Exception as e:
         print(f"⚠️ 官方頁面媒體解析跳過 ({article_url[:40]}...): {e}")
 
-    return None, None
+def search_embeddable_youtube_video(query, category_key="SKATE"):
+    """自動搜尋並透過 YouTube oEmbed API 驗證 100% 可外嵌播放的官方極限運動影片"""
+    try:
+        search_query = f"{query} extreme sports official"
+        url = f"https://www.youtube.com/results?search_query={quote(search_query)}"
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+        }
+        res = requests.get(url, headers=headers, timeout=6)
+        if res.status_code == 200:
+            vids = re.findall(r'"videoId":"([a-zA-Z0-9_-]{11})"', res.text)
+            for vid in vids[:6]:
+                # 必須通過 oEmbed 驗證，確保 100% 存在且允許外嵌播放
+                oembed_url = f"https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v={vid}&format=json"
+                o_res = requests.get(oembed_url, timeout=3)
+                if o_res.status_code == 200:
+                    data = o_res.json()
+                    title = data.get("title", f"{category_key} Official Action")
+                    print(f"🎬 自動成功配對 YouTube 官方精華 [{vid}]: {title[:40]}")
+                    return vid, title
+    except Exception as e:
+        print(f"⚠️ YouTube 影片自動搜尋跳過: {e}")
+
+    # 分類備案官方 100% 存在且可播放影片
+    fallback_map = {
+        "SKATE": ("4YYTNkAdDD8", "Tony Hawk Lands FIRST-EVER 900 | World of X Games"),
+        "BMX": ("E-VClAvTgSU", "Best of Logan Martin | Men BMX Freestyle Paris 2024 Highlights"),
+        "SURF": ("26KzUnEbTUs", "Surfing the Heaviest Wave in the World - Teahupoo"),
+        "CLIMB": ("jTVcRSq8IYk", "Janja Garnbret: The Lioness | Climbing Gold Highlights"),
+        "SNOW": ("he03dVkhLTM", "Shaun White Snowboard Halfpipe Gold | PyeongChang 2018"),
+        "EVENT": ("riO1y-xyWek", "Men Skateboard Street Best Trick at X Games California"),
+        "SPOT": ("zJL5IVvDx1k", "Battle At The Berrics - BATB Highlights"),
+        "SAFETY": ("acOvWo88a4w", "How to Kickflip Tutorial & Safety Guide"),
+        "TRICKS": ("acOvWo88a4w", "How to Kickflip Tutorial & Safety Guide")
+    }
+    return fallback_map.get(category_key.upper(), fallback_map["SKATE"])
 
 def fetch_latest_rss_news(category_key):
     rss_url = XGAME_CATEGORIES.get(category_key.upper())
@@ -703,6 +738,12 @@ async def main_async():
     monetized_content = attach_affiliate_link(content, gear_kw, category)
     post_data["category"] = category
     post_data["content"] = monetized_content
+
+    # 確保每篇文章都擁有 100% 官方可外嵌播放的 YouTube 精華
+    if not post_data.get("youtube_video_id"):
+        yt_id, yt_title = search_embeddable_youtube_video(title, category)
+        post_data["youtube_video_id"] = yt_id
+        post_data["youtube_video_title"] = yt_title
 
     # 3. 官方圖片或精準運動項目高解析度相片（杜絕披薩與植物）
     official_img = post_data.get("official_cover_image")

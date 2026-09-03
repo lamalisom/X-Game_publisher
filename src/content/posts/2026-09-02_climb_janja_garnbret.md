@@ -11,8 +11,8 @@ city_tag: "LJUBLJANA"
 featured: false
 gear_keyword: "la sportiva solution comp climbing shoes"
 affiliate_products: [{"title": "La Sportiva Solution Comp 頂級競技攀岩鞋", "subtitle": "專為微小岩點與仰角屋頂抱石設計，精準腳尖回饋與抓扣力", "search_term": "la sportiva solution comp climbing shoes", "amazon_url": "https://www.amazon.com/s?k=la+sportiva+solution+comp+climbing+shoes&tag=kait02bc-20", "recommended_for": "室內岩館先鋒賽與戶外天然抱石挑戰者", "badge_text": "奧運金牌戰鞋"}]
-youtube_video_id: "X4bL0eY2X10"
-youtube_video_title: "Janja Garnbret Paris 2024 Gold Medal Highlights"
+youtube_video_id: "jTVcRSq8IYk"
+youtube_video_title: "Janja Garnbret: The Lioness | Climbing Gold Highlights"
 expert_info: {"name": "Janja Garnbret", "country": "斯洛維尼亞 (Slovenia)", "stance_or_style": "全面型攀登大師 (Bouldering & Lead Climbing)", "signature_tricks": ["Dyno 遠距飛撲抓點", "Toe Hook 腳尖鎖扣", "Micro-crimp 極微小指力抓扣"], "key_achievements": ["2020 東京奧運女子攀岩金牌", "2024 巴黎奧運女子抱石先鋒兩項全能金牌", "30+ 場 IFSC 世界盃金牌"], "instagram_handle": "@janja_garnbret", "setup_breakdown": "La Sportiva Solution Comp + Petzl Sitta 安全帶 + FrictionLabs 頂級攀岩粉"}
 ---
 

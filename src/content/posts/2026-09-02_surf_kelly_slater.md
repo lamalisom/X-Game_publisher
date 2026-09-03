@@ -11,8 +11,8 @@ city_tag: "HAWAII"
 featured: true
 gear_keyword: "surfing wetsuit rip curl fcs fins"
 affiliate_products: [{"title": "Rip Curl Flashbomb 3/2mm 頂級高彈性防寒衣", "subtitle": "E6 超輕保暖內襯，全球衝浪愛好者口碑第一的速乾神衣", "search_term": "rip curl flashbomb wetsuit", "amazon_url": "https://www.amazon.com/s?k=rip+curl+flashbomb+wetsuit&tag=kait02bc-20", "recommended_for": "春秋換季與各類水溫條件下的長時衝浪訓練", "badge_text": "WSL 選手首選"}]
-youtube_video_id: "1gZqG9-k4m0"
-youtube_video_title: "Kelly Slater Historic 50yo Pipeline Victory Highlights"
+youtube_video_id: "OcAH2xXfVhA"
+youtube_video_title: "Kelly Slater Monumental Road To Victory - Billabong Pro Pipeline"
 expert_info: {"name": "Kelly Slater", "country": "美國 (USA)", "stance_or_style": "Regular / 完美浪管掌控與創新弧線 (Barrel Riding Master)", "signature_tricks": ["Rodeo Clown", "Deep Pipeline Barrel Extraction", "Carving 360"], "key_achievements": ["11 次 WSL 世界衝浪冠軍", "56 場 WSL 分站冠軍（歷史第一）", "史上最年輕 (20歲) 與最年長 (50歲) 世界冠軍紀錄保持者"], "instagram_handle": "@kellyslater", "setup_breakdown": "Slater Designs (Firewire) FRK 5'8 + Endorfin Kelly Fins + Outerknown 防寒衣"}
 ---
 

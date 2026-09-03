@@ -11,8 +11,8 @@ city_tag: "SAN DIEGO"
 featured: false
 gear_keyword: "independent trucks 149 stage 11"
 affiliate_products: [{"title": "Independent Stage 11 經典滑板輪架 (Trucks)", "subtitle": "全球滑手公認最耐磨、轉向最靈敏的傳奇輪架", "search_term": "independent stage 11 skateboard trucks", "amazon_url": "https://www.amazon.com/s?k=independent+stage+11+skateboard+trucks&tag=kait02bc-20", "recommended_for": "追求極限磨管耐久度與大角度轉向的進階滑手", "badge_text": "全美銷量第一"}]
-youtube_video_id: "e42uW2PekEg"
-youtube_video_title: "Tony Hawk Lands First 900 in X Games 1999"
+youtube_video_id: "4YYTNkAdDD8"
+youtube_video_title: "Tony Hawk Lands FIRST-EVER 900 | World of X Games"
 expert_info: {"name": "Tony Hawk", "country": "美國 (USA)", "stance_or_style": "Goofy / 垂直 U 型池 (Vert Ramp Legend)", "signature_tricks": ["The 900 (空中旋轉兩圈半)", "Ollie 540", "Madonna", "Airwalk"], "key_achievements": ["1999 年 X Games 史上首度落地 The 900", "73 場世界級冠軍賽金牌", "創辦全球最成功滑板電玩與慈善基金會"], "instagram_handle": "@tonyhawk", "setup_breakdown": "Birdhouse 8.5 Vert 板身 + Independent 159 Stage 11 + Bones SPF 58mm 輪組 + Triple 8 簽名頭盔"}
 ---
 

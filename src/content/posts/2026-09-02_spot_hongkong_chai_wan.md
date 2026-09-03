@@ -1,6 +1,6 @@
 ---
-youtube_video_id: "wX4k7_L9f2k"
-youtube_video_title: "柴灣池畔滑板場實地評測"
+youtube_video_id: "ynm4uvZb9dY"
+youtube_video_title: "Skatepark In Hong Kong - Chai Wan Skate Park"
 title: "📍 香港極限地標導覽：柴灣池畔滑板場 (Chai Wan Poolside Skatepark)"
 subtitle: "港島東區滑板大本營！符合國際街式標準階梯、碗池、Hubba 與夜間充足照明攻略"
 date: "2026-09-02T08:00:00.000Z"

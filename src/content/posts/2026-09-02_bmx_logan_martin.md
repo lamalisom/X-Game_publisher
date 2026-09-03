@@ -11,8 +11,8 @@ city_tag: "GOLD COAST"
 featured: true
 gear_keyword: "bmx helmet gloves fox racing"
 affiliate_products: [{"title": "Fox Racing Proframe 全罩式輕量極限頭盔", "subtitle": "DH / BMX 賽事指定標準，高透氣整合下巴防護與 MIPS 衝擊系統", "search_term": "fox racing proframe helmet", "amazon_url": "https://www.amazon.com/s?k=fox+racing+proframe+helmet&tag=kait02bc-20", "recommended_for": "BMX Park / MegaRamp 及下坡競速選手", "badge_text": "奧運規格全罩防護"}]
-youtube_video_id: "8U8x5kZ5x4A"
-youtube_video_title: "Logan Martin Olympic Gold Winning Run Tokyo"
+youtube_video_id: "E-VClAvTgSU"
+youtube_video_title: "Best of Logan Martin | Men BMX Freestyle Paris 2024 Highlights"
 expert_info: {"name": "Logan Martin", "country": "澳洲 (Australia)", "stance_or_style": "Park / 頂尖超大滯空花式 (Huge Air & Technical Flips)", "signature_tricks": ["Triple Tailwhip", "720 Barspin to Barspin", "Backflip Double Whip"], "key_achievements": ["2020 東京奧運 BMX 自由式首面金牌", "UCI Urban Cycling 雙料世界冠軍", "Multiple X Games BMX Park 金牌"], "instagram_handle": "@loganmartinbmx", "setup_breakdown": "Hyper Wizard Jet Fuel 車架 + Snafu Maelstrom 零件組 + Maxxis Grifter 輪胎"}
 ---
 

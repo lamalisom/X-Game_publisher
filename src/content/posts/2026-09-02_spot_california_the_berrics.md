@@ -1,6 +1,6 @@
 ---
-youtube_video_id: "sF4K7_m9X_k"
-youtube_video_title: "The Berrics Best of BATB Highlights"
+youtube_video_id: "zJL5IVvDx1k"
+youtube_video_title: "Battle At The Berrics - BATB Highlights"
 title: "📍 全球滑板聖殿：加州 The Berrics 私人室內板場深度解密"
 subtitle: "Eric Koston 與 Steve Berra 打造的滑板麥加！Battle at the Berrics (BATB) 傳奇誕生地"
 date: "2026-09-02T08:00:00.000Z"

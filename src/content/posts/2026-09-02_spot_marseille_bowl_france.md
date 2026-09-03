@@ -1,6 +1,6 @@
 ---
-youtube_video_id: "mG9k_2fL9_k"
-youtube_video_title: "Bowl de Marseille Skatepark Session"
+youtube_video_id: "QAimW8gF0oo"
+youtube_video_title: "Vincent Matheron - Marseille Prado Bowl Line"
 title: "📍 歐洲滑板發源聖殿：法國馬賽海濱碗池 (Skatepark de Marseille - Bowl du Prado)"
 subtitle: "面對地中海的塗鴉碗池傳奇！Tony Hawk 電玩經典地圖原型，多葉型深淺碗池全攻略"
 date: "2026-09-02T10:00:00.000Z"

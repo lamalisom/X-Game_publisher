@@ -1,6 +1,6 @@
 ---
-youtube_video_id: "vK9m7_f2X1k"
-youtube_video_title: "美孚荔枝角公園極限運動場 BMX & 滑板 Session"
+youtube_video_id: "LCtzsAPs-sM"
+youtube_video_title: "Mei Foo Skatepark Lai Chi Kok Session"
 title: "📍 香港九龍核心戰區：荔枝角公園極限運動場 (Mei Foo Skatepark)"
 subtitle: "美孚站直達！三面環繞大型 Vert Ramp、深碗池與極限小輪車 BMX 專業認證場域"
 date: "2026-09-02T08:00:00.000Z"

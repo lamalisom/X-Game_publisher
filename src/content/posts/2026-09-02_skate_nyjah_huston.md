@@ -11,8 +11,8 @@ city_tag: "CALIFORNIA"
 featured: true
 gear_keyword: "nike sb nyjah free skate shoes"
 affiliate_products: [{"title": "Nike SB Nyjah Free 2.0 專業滑板鞋", "subtitle": "靈感源自經典 Nike Spiridon，橡膠透氣鞋面與全方位避震", "search_term": "nike sb nyjah free", "amazon_url": "https://www.amazon.com/s?k=nike+sb+nyjah+free&tag=kait02bc-20", "recommended_for": "專門應付高落差街式階梯、扶手與高強度練習", "badge_text": "傳奇簽名戰靴"}]
-youtube_video_id: "2Yv8Vf7gEzg"
-youtube_video_title: "Nyjah Huston Best Career Runs & Highlights"
+youtube_video_id: "-Lra51BUgEs"
+youtube_video_title: "NYJAH’S BACK ON TOP! Top Moments from his SLS Super Crown Win"
 expert_info: {"name": "Nyjah Huston", "country": "美國 (USA)", "stance_or_style": "Goofy / 暴力美學超大落差街式 (High Impact Street)", "signature_tricks": ["Switch Heelflip Frontside Boardslide", "Kickflip Backside Lipslide", "Caballero Flip"], "key_achievements": ["15 次 X Games 夏季極限金牌", "多次 SLS Super Crown 總冠軍", "巴黎奧運男子街式滑板銅牌"], "instagram_handle": "@nyjah", "setup_breakdown": "Disorder Skateboards 8.125 + Thunder Trucks 148 Lights + Ricta Nyjah Wheels 53mm + Nike SB Nyjah Free 2"}
 ---
 

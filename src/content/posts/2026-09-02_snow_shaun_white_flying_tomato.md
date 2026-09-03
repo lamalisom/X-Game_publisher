@@ -11,8 +11,8 @@ city_tag: "ASPEN"
 featured: false
 gear_keyword: "snowboard goggles anon oakley helmet"
 affiliate_products: [{"title": "Oakley Flight Deck M 頂級無框柱面雪鏡", "subtitle": "Prizm 鏡片高對比增晰科技，超廣視野，防霧與高海拔紫外線防護", "search_term": "oakley flight deck snowboard goggles", "amazon_url": "https://www.amazon.com/s?k=oakley+flight+deck+snowboard+goggles&tag=kait02bc-20", "recommended_for": "單板滑雪、雙板進階玩家與全天候雪道馳騁", "badge_text": "奧運選手同款視野"}]
-youtube_video_id: "7Qv6pL2e0g8"
-youtube_video_title: "Shaun White Final Olympic Run Pyeongchang 2018"
+youtube_video_id: "he03dVkhLTM"
+youtube_video_title: "Shaun White grabs Snowboard Halfpipe Gold on his very last run | PyeongChang 2018"
 expert_info: {"name": "Shaun White", "country": "美國 (USA)", "stance_or_style": "Regular / 超級 U 型池極限高度 (Superpipe Master)", "signature_tricks": ["The Tomahawk (Double McTwist 1260)", "Frontside Double Cork 1440", "Cab 1080"], "key_achievements": ["3 屆冬季奧運男子半管金牌 (2006, 2010, 2018)", "15 面冬季 X Games 金牌（史上最多）", "夏季 X Games 滑板金牌（極罕見雙棲得主）"], "instagram_handle": "@shaunwhite", "setup_breakdown": "Whitespace Freestyle 156 板身 + Burton Custom Bindings + Oakley Flight Deck 雪鏡"}
 ---
 

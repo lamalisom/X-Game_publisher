@@ -1,6 +1,6 @@
 ---
-youtube_video_id: "X4bL0eY2X10"
-youtube_video_title: "X Games Summer Championship Highlights"
+youtube_video_id: "riO1y-xyWek"
+youtube_video_title: "Men Skateboard Street Best Trick at X Games California"
 title: "🗓️ 2026-2027 全球賽事雷達：X Games 夏季賽與 SLS 巡迴賽全日程與焦點名單"
 subtitle: "未來 3-12 個月極限日程全覽！Street League Skateboarding、X Games 加州站、WSL 世界衝浪決賽總整理"
 date: 2026-09-02T10:00:00.000Z

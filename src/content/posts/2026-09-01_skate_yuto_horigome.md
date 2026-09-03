@@ -9,8 +9,8 @@ cover_image_source: "Official Olympics / SLS Media Pool"
 author: "Una (@Una_next)"
 city_tag: "TOKYO"
 featured: true
-youtube_video_id: "m8-uM3m1R1w"
-youtube_video_title: "Yuto Horigome Historic Gold Medal Run - Final Highlights"
+youtube_video_id: "bPFuh1AKS-s"
+youtube_video_title: "Yuto Horigome wins gold in Monster Energy Men’s Skateboard Street"
 gear_keyword: "skateboarding shoes nike sb dunk low"
 
 expert_info:

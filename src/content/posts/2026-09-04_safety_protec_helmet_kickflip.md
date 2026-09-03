@@ -1,6 +1,6 @@
 ---
-youtube_video_id: "2Yv8Vf7gEzg"
-youtube_video_title: "How to Kickflip & Safety Gear Breakdown"
+youtube_video_id: "acOvWo88a4w"
+youtube_video_title: "How to Kickflip Tutorial & Safety Guide"
 title: "🛡️ 安全裝備評測與花式攻略：ASTM 雙認證頭盔實測 & Kickflip 踢翻腳法大解密"
 subtitle: "如何避免練招腦震盪與腳踝翻船？職業選手護具選購標準 + 踢翻核心三要素全拆解"
 date: 2026-09-04T11:00:00.000Z
