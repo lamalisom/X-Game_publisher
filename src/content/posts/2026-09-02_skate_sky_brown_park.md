@@ -4,7 +4,7 @@ subtitle: "從重傷骨折中浴火重生！連續兩屆奧運奪牌，揭秘最
 date: "2026-09-02T10:00:00.000Z"
 category: "SKATE"
 topic_type: "ATHLETE"
-cover_image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80"
+cover_image: "/images/sky_brown.jpg"
 cover_image_source: "Team GB / World Skate"
 author: "Una (@Una_next)"
 city_tag: "LONDON"
@@ -16,7 +16,7 @@ youtube_video_title: "Sky Brown Olympic Bronze Run Tokyo 2020"
 expert_info: {"name": "Sky Brown", "country": "英國 / 日本 (Great Britain / Japan)", "stance_or_style": "Regular / 碗池公園賽大滯空與衝浪流暢感 (Park & Bowl)", "signature_tricks": ["Frontside 540", "Kickflip Indy Grab", "Backside Air"], "key_achievements": ["2020 東京奧運女子碗池滑板銅牌", "2024 巴黎奧運女子碗池滑板銅牌", "最年輕 X Games 碗池冠軍 (13歲)"], "instagram_handle": "@skybrown", "setup_breakdown": "Almost Sky Brown Pro Model 7.75 + Tensor Mag Light Trucks + Spitfire 54mm + Nike SB"}
 ---
 
-![🏆 13 歲登頂奧運舞台的天才少女：Sky Brown 的碗池飛躍與衝浪雙棲傳奇](https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80)
+![](/images/sky_brown.jpg)
 ### 🌸 無懼摔倒的陽光少女
 
 Sky Brown 以極具感染力的笑容與在碗池中超乎常人的高度著稱。在 2020 年一次嚴重的訓練意外中，她曾從高台跌落導致頭骨骨折，但僅僅幾個月後，她便重新站上滑板，並在東京與巴黎連續兩屆奧運拿下頒獎台席位。

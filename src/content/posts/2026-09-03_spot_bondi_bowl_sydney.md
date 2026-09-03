@@ -1,10 +1,12 @@
 ---
+youtube_video_id: "6b0A5h7K_x8"
+youtube_video_title: "Bondi Beach Skatepark Session Highlights"
 title: "📍 傳奇朝聖地導覽：澳洲雪梨 Bondi Skatepark & 海景深碗池 (Bondi Bowl)"
 subtitle: "全球最美海景極限場地！超深垂直碗池、平滑街式區、新手 Pump 區與周邊衝浪指南"
 date: 2026-09-03T09:00:00.000Z
 category: "SPOT"
 topic_type: "SPOT"
-cover_image: "https://images.unsplash.com/photo-1516762689617-e1cffcef479d?auto=format&fit=crop&w=1200&q=80"
+cover_image: "/images/bondi_bowl.jpg"
 cover_image_source: "Bondi Skate Association Official"
 author: "Una (@Una_next)"
 city_tag: "SYDNEY"

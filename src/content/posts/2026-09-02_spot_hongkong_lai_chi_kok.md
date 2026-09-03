@@ -1,10 +1,12 @@
 ---
+youtube_video_id: "vK9m7_f2X1k"
+youtube_video_title: "美孚荔枝角公園極限運動場 BMX & 滑板 Session"
 title: "📍 香港九龍核心戰區：荔枝角公園極限運動場 (Mei Foo Skatepark)"
 subtitle: "美孚站直達！三面環繞大型 Vert Ramp、深碗池與極限小輪車 BMX 專業認證場域"
 date: "2026-09-02T08:00:00.000Z"
 category: "SPOT"
 topic_type: "SPOT"
-cover_image: "https://images.unsplash.com/photo-1516762689617-e1cffcef479d?auto=format&fit=crop&w=1200&q=80"
+cover_image: "/images/lai_chi_kok_park.jpg"
 cover_image_source: "LCSD HK Extreme Sports"
 author: "Una (@Una_next)"
 city_tag: "HONG KONG"
@@ -14,7 +16,7 @@ affiliate_products: [{"title": "Triple 8 Certified Sweatsaver 雙認證安全頭
 spot_info: {"name": "荔枝角公園極限運動場 (Lai Chi Kok Park Skatepark)", "location": "九龍美孚荔灣道 1 號（港鐵美孚站 C1 出口步行 3 分鐘）", "difficulty": "Advanced", "fee": "免費入場 (Free Access)", "best_season_or_hours": "每日 07:00 - 22:00（人流高峰通常在平日傍晚與週末午後）", "features": ["國際級多層次複合深碗池 (Deep Multi-Level Bowl)", "高垂直 U 型台 (Vert Ramp Section)", "Funbox 脊樑與超長磨桿金屬欄杆", "全港唯一獲 BMX Freestyle 認證之大型場地之一"]}
 ---
 
-![📍 香港九龍核心戰區：荔枝角公園極限運動場 (Mei Foo Skatepark)](https://images.unsplash.com/photo-1516762689617-e1cffcef479d?auto=format&fit=crop&w=1200&q=80)
+![](/images/lai_chi_kok_park.jpg)
 ### 🔥 九龍區極限運動的心臟美譽
 
 位於美孚荔枝角公園第一期的極限運動場，佔地超過 1,600 平方米，是香港歷史最悠久且極具標誌性的專業場館。這裡常年聚集了香港頂尖的滑板手、BMX 車手與特技滾軸溜冰（Aggressive Inline）高手。

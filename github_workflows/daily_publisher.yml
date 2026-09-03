@@ -1,0 +1,121 @@
+name: Daily Magazine & Telegram Publisher
+
+on:
+  schedule:
+    # UTC 04:15 = 香港時間 12:15 PM
+    - cron: '15 4 * * *'
+
+  workflow_dispatch:
+    inputs:
+      category:
+        description: '選擇運動項目 (Select Category)'
+        required: true
+        default: 'AUTO'
+        type: choice
+        options:
+          - AUTO
+          - SKATE
+          - BMX
+          - SURF
+          - CLIMB
+          - SNOW
+      lang:
+        description: '選擇發布語言 (Select Language)'
+        required: true
+        default: 'zh-hk'
+        type: choice
+        options:
+          - zh-hk
+          - zh-cn
+          - en
+          - ja
+      topic:
+        description: '選擇專題類型 (Topic Type)'
+        required: false
+        default: 'AUTO'
+        type: choice
+        options:
+          - AUTO
+          - EVENT
+          - SPOT
+          - ATHLETE
+          - SAFETY
+          - TIPS
+          - RECORD
+
+jobs:
+  publish_and_build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install System Fonts & Python Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk fonts-noto-color-emoji fonts-wqy-zenhei
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt beautifulsoup4
+
+      - name: Install Playwright Browsers
+        run: |
+          npx playwright install-deps
+          python -m playwright install chromium
+
+      - name: Install NPM Dependencies
+        run: npm ci || npm install
+
+      - name: Run xGame Publisher Engine
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          AMAZON_AFFILIATE_ID: ${{ secrets.AMAZON_AFFILIATE_ID || 'kait02bc-20' }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME || 'xgame-radar-media' }}
+          R2_PUBLIC_DOMAIN: ${{ secrets.R2_PUBLIC_DOMAIN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          CAT_INPUT: ${{ inputs.category || 'AUTO' }}
+          LANG_INPUT: ${{ inputs.lang || 'zh-hk' }}
+          TOPIC_INPUT: ${{ inputs.topic || '' }}
+        run: |
+          TOPIC_PARAM="${TOPIC_INPUT}"
+          if [ "$TOPIC_PARAM" = "AUTO" ]; then
+            TOPIC_PARAM=""
+          fi
+          python xgame_publisher.py "$CAT_INPUT" "$LANG_INPUT" "$TOPIC_PARAM"
+
+      - name: Verify & Build Astro Static Magazine Site
+        env:
+          ASTRO_TELEMETRY_DISABLED: 1
+        run: npm run build
+
+      - name: Git Commit & Push Updated Posts and Database
+        if: always()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/content/posts/ xgame_radar.db xgame_radar.db-journal || true
+          if git diff --staged --quiet; then
+            echo "無任何新文章或資料庫異動，跳過提交。"
+          else
+            git commit -m "chore(auto-publish): publish daily xgame magazine post and update db [skip ci]"
+            git push
+          fi

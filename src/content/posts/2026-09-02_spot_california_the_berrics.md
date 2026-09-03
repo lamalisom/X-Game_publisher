@@ -1,10 +1,12 @@
 ---
+youtube_video_id: "sF4K7_m9X_k"
+youtube_video_title: "The Berrics Best of BATB Highlights"
 title: "📍 全球滑板聖殿：加州 The Berrics 私人室內板場深度解密"
 subtitle: "Eric Koston 與 Steve Berra 打造的滑板麥加！Battle at the Berrics (BATB) 傳奇誕生地"
 date: "2026-09-02T08:00:00.000Z"
 category: "SPOT"
 topic_type: "SPOT"
-cover_image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80"
+cover_image: "/images/the_berrics.jpg"
 cover_image_source: "The Berrics Official Archive"
 author: "Una (@Una_next)"
 city_tag: "LOS ANGELES"
@@ -14,7 +16,7 @@ affiliate_products: [{"title": "Vans Skate Old Skool Pro 專業滑板鞋", "subt
 spot_info: {"name": "The Berrics (Private Indoor Skatepark)", "location": "美國加州洛杉磯 (Los Angeles, California)", "difficulty": "Pro", "fee": "私人預約制 / 賽事特邀 (By Invitation Only)", "best_season_or_hours": "全年室內恆溫空調開放", "features": ["頂級極致光滑木質街式地面 (Slick Wooden Street Plaza)", "BATB 平地翻板專屬擂台", "多角度 Hubba、A-Frame 與可調節高低平桿", "全天候 4K 專業攝影燈光與高速軌道運鏡系統"]}
 ---
 
-![📍 全球滑板聖殿：加州 The Berrics 私人室內板場深度解密](https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1200&q=80)
+![](/images/the_berrics.jpg)
 ### 👑 每個滑手夢想清單上的第一名
 
 2007 年由傳奇職業滑手 Steve Berra 與 Eric Koston 共同創立的 **The Berrics**，徹底顛覆了極限運動媒體的傳播模式。

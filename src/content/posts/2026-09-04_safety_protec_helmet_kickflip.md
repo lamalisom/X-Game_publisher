@@ -1,10 +1,12 @@
 ---
+youtube_video_id: "2Yv8Vf7gEzg"
+youtube_video_title: "How to Kickflip & Safety Gear Breakdown"
 title: "🛡️ 安全裝備評測與花式攻略：ASTM 雙認證頭盔實測 & Kickflip 踢翻腳法大解密"
 subtitle: "如何避免練招腦震盪與腳踝翻船？職業選手護具選購標準 + 踢翻核心三要素全拆解"
 date: 2026-09-04T11:00:00.000Z
 category: "SAFETY"
 topic_type: "SAFETY"
-cover_image: "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1200&q=80"
+cover_image: "/images/safety_gear_kickflip.jpg"
 cover_image_source: "Pro-Tec Safety Lab Official"
 author: "Una (@Una_next)"
 city_tag: "GLOBAL"

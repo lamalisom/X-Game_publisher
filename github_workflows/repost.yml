@@ -1,0 +1,42 @@
+name: Repost Article from R2
+
+on:
+  workflow_dispatch:
+    inputs:
+      filename:
+        description: '請輸入 R2 JSON 完整檔名 (例: 20260831_162709_BMX.json)'
+        required: false
+        default: ''
+
+jobs:
+  repost:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install boto3 requests
+
+      - name: Run Repost Script
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          AMAZON_AFFILIATE_ID: ${{ secrets.AMAZON_AFFILIATE_ID }}
+        run: |
+          if [ -n "${{ github.event.inputs.filename }}" ]; then
+            python repost_from_r2.py "${{ github.event.inputs.filename }}"
+          else
+            python repost_from_r2.py
+          fi

@@ -4,7 +4,7 @@ subtitle: "自建百萬後院私家訓練場！解析世界首位奧運 BMX Free
 date: "2026-09-02T08:00:00.000Z"
 category: "BMX"
 topic_type: "ATHLETE"
-cover_image: "https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=1200&q=80"
+cover_image: "/images/logan_martin_bmx.jpg"
 cover_image_source: "UCI / Olympic Channel"
 author: "Una (@Una_next)"
 city_tag: "GOLD COAST"
@@ -16,7 +16,7 @@ youtube_video_title: "Logan Martin Olympic Gold Winning Run Tokyo"
 expert_info: {"name": "Logan Martin", "country": "澳洲 (Australia)", "stance_or_style": "Park / 頂尖超大滯空花式 (Huge Air & Technical Flips)", "signature_tricks": ["Triple Tailwhip", "720 Barspin to Barspin", "Backflip Double Whip"], "key_achievements": ["2020 東京奧運 BMX 自由式首面金牌", "UCI Urban Cycling 雙料世界冠軍", "Multiple X Games BMX Park 金牌"], "instagram_handle": "@loganmartinbmx", "setup_breakdown": "Hyper Wizard Jet Fuel 車架 + Snafu Maelstrom 零件組 + Maxxis Grifter 輪胎"}
 ---
 
-![🏆 澳洲 BMX 奧運傳奇 Logan Martin：後空翻轉體 720 的極限掌控者](https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=1200&q=80)
+![](/images/logan_martin_bmx.jpg)
 ### 🚲 澳洲黃金海岸走出的空中飛人
 
 在 2020 東京奧運首次將 BMX Freestyle 列入正式比賽項目時，Logan Martin 在第一輪便以無懈可擊的 93.30 高分提前鎖定金牌。他的動作以**「超高滯空、毫無遲滯的連續尾旋轉 (Tailwhips)」**著稱。

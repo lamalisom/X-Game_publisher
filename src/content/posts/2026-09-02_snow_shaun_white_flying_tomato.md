@@ -4,7 +4,7 @@ subtitle: "從飛天番茄到極限體壇商業巨擘！回顧 White 的 Tomahaw
 date: "2026-09-02T10:00:00.000Z"
 category: "SNOW"
 topic_type: "ATHLETE"
-cover_image: "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1200&q=80"
+cover_image: "/images/shaun_white_snow.jpg"
 cover_image_source: "Whitespace / Burton Archive"
 author: "Una (@Una_next)"
 city_tag: "ASPEN"
@@ -16,7 +16,7 @@ youtube_video_title: "Shaun White Final Olympic Run Pyeongchang 2018"
 expert_info: {"name": "Shaun White", "country": "美國 (USA)", "stance_or_style": "Regular / 超級 U 型池極限高度 (Superpipe Master)", "signature_tricks": ["The Tomahawk (Double McTwist 1260)", "Frontside Double Cork 1440", "Cab 1080"], "key_achievements": ["3 屆冬季奧運男子半管金牌 (2006, 2010, 2018)", "15 面冬季 X Games 金牌（史上最多）", "夏季 X Games 滑板金牌（極罕見雙棲得主）"], "instagram_handle": "@shaunwhite", "setup_breakdown": "Whitespace Freestyle 156 板身 + Burton Custom Bindings + Oakley Flight Deck 雪鏡"}
 ---
 
-![🏆 單板滑雪飛人 Shaun White：三屆奧運金牌得主的 22 呎半管天花板](https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1200&q=80)
+![](/images/shaun_white_snow.jpg)
 ### 🏂 統治冬奧 U 型池的空中魔術師
 
 Shaun White 在 22 英尺超級半管中飛出池壁 25 英尺的高空身姿，是整個 21 世紀冬季運動最具代表性的畫面。他不仅能將空中轉體做到 1440 度（4 圈），更擁有無人能及的抓板穩定度與乾淨俐落的落地（Landing）。
