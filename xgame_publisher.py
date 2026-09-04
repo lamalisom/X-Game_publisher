@@ -348,23 +348,56 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 }}
 """
 
-    print(f"🤖 今日專欄: 【{active_title}】，正在呼叫 Gemini API...")
-    models_to_try = ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-pro"]
-
+    print(f"🤖 今日專欄: 【{active_title}】，正在呼叫 Gemini API 生成深度專題...")
+    
+    # 1. 優先使用標準 Google v1beta REST API (100% 穩定，零 SDK 相容性問題)
+    models_to_try = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-2.0-flash"]
     for model_name in models_to_try:
-        max_retries = 3
-        for attempt in range(1, max_retries + 1):
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
+        payload = {
+            "contents": [{"parts": [{"text": prompt}]}],
+            "generationConfig": {
+                "temperature": 0.4
+            }
+        }
+        try:
+            res = requests.post(url, json=payload, headers={"Content-Type": "application/json"}, timeout=15)
+            if res.status_code == 200:
+                data = res.json()
+                raw_text = data["candidates"][0]["content"]["parts"][0]["text"]
+                # 智慧解析 JSON
+                json_match = re.search(r'```(?:json)?\s*([\s\S]*?)\s*```', raw_text)
+                if json_match:
+                    raw_text = json_match.group(1).strip()
+                start = raw_text.find('{')
+                end = raw_text.rfind('}')
+                if start != -1 and end != -1:
+                    raw_text = raw_text[start:end+1]
+                
+                parsed = json.loads(raw_text)
+                if parsed and isinstance(parsed, dict) and parsed.get("title"):
+                    if official_img:
+                        parsed["official_cover_image"] = official_img
+                    if official_yt:
+                        parsed["youtube_video_id"] = official_yt
+                    print(f"✅ Google REST API [{model_name}] 成功生成高品質深度專案: {parsed.get('title')}")
+                    return parsed
+            else:
+                print(f"⚠️ REST [{model_name}] 回應碼 {res.status_code}")
+        except Exception as e:
+            print(f"⚠️ REST [{model_name}] 請求異常: {e}")
+
+    # 2. 次選 Google GenAI SDK
+    try:
+        client = genai.Client(api_key=api_key)
+        for model_name in ["gemini-1.5-flash", "gemini-1.5-pro"]:
             try:
                 response = client.models.generate_content(
                     model=model_name,
-                    contents=prompt,
-                    config=types.GenerateContentConfig(
-                        temperature=0.4
-                    )
+                    contents=prompt
                 )
                 if response and response.text:
                     raw_text = response.text.strip()
-                    # 智慧解析 JSON
                     json_match = re.search(r'```(?:json)?\s*([\s\S]*?)\s*```', raw_text)
                     if json_match:
                         raw_text = json_match.group(1).strip()
@@ -372,31 +405,24 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
                     end = raw_text.rfind('}')
                     if start != -1 and end != -1:
                         raw_text = raw_text[start:end+1]
-                    
                     parsed = json.loads(raw_text)
-
                     if parsed and isinstance(parsed, dict) and parsed.get("title"):
-                        # 補充官方抓取的媒體資訊
                         if official_img:
                             parsed["official_cover_image"] = official_img
                         if official_yt:
                             parsed["youtube_video_id"] = official_yt
-
-                        print(f"✅ 模型 [{model_name}] 成功生成高品質深度專案內容: {parsed.get('title')}")
+                        print(f"✅ GenAI SDK [{model_name}] 成功生成: {parsed.get('title')}")
                         return parsed
-
             except Exception as e:
-                err_msg = str(e)
-                print(f"⚠️ [{model_name}] 請求失敗 (第 {attempt} 次): {err_msg[:100]}")
-                if "503" in err_msg or "UNAVAILABLE" in err_msg or "429" in err_msg:
-                    time.sleep(3)
-                    continue
-                break
+                print(f"⚠️ SDK [{model_name}] 失敗: {e}")
+    except Exception as e:
+        print(f"⚠️ GenAI Client 初始化跳過: {e}")
 
-    # Fallback default
+    # Fallback default with timestamp to prevent duplicate skips
+    timestamp_str = datetime.now().strftime("%m/%d %H:%M")
     fallback_gear = DEFAULT_GEAR_KEYWORDS.get(display_category, "extreme sports gear")
     return {
-        "title": f"{display_category} 極限前線情報速報",
+        "title": f"⚡ {display_category} 極限前線情報 ({timestamp_str})",
         "subtitle": f"Una 帶你直擊全球 {display_category} 最新賽事、場地與裝備亮點",
         "city_tag": "GLOBAL",
         "gear_keyword": fallback_gear,
