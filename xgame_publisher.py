@@ -349,38 +349,47 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 """
 
     print(f"🤖 今日專欄: 【{active_title}】，正在呼叫 Gemini API...")
-    models_to_try = ["gemini-2.5-flash", "gemini-1.5-flash"]
+    models_to_try = ["gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-pro"]
 
     for model_name in models_to_try:
         max_retries = 3
         for attempt in range(1, max_retries + 1):
             try:
-                chat = client.chats.create(
+                response = client.models.generate_content(
                     model=model_name,
+                    contents=prompt,
                     config=types.GenerateContentConfig(
-                        temperature=0.3,
-                        response_mime_type="application/json",
-                        tools=[{"google_search": {}}]
+                        temperature=0.4
                     )
                 )
-                response = chat.send_message(prompt)
-                raw_json = response.text.strip()
-                parsed = json.loads(raw_json)
+                if response and response.text:
+                    raw_text = response.text.strip()
+                    # 智慧解析 JSON
+                    json_match = re.search(r'```(?:json)?\s*([\s\S]*?)\s*```', raw_text)
+                    if json_match:
+                        raw_text = json_match.group(1).strip()
+                    start = raw_text.find('{')
+                    end = raw_text.rfind('}')
+                    if start != -1 and end != -1:
+                        raw_text = raw_text[start:end+1]
+                    
+                    parsed = json.loads(raw_text)
 
-                # 補充官方抓取的媒體資訊
-                if official_img:
-                    parsed["official_cover_image"] = official_img
-                if official_yt:
-                    parsed["youtube_video_id"] = official_yt
+                    if parsed and isinstance(parsed, dict) and parsed.get("title"):
+                        # 補充官方抓取的媒體資訊
+                        if official_img:
+                            parsed["official_cover_image"] = official_img
+                        if official_yt:
+                            parsed["youtube_video_id"] = official_yt
 
-                print(f"✅ 模型 [{model_name}] 成功生成結構化專案內容！")
-                return parsed
+                        print(f"✅ 模型 [{model_name}] 成功生成高品質深度專案內容: {parsed.get('title')}")
+                        return parsed
 
             except Exception as e:
                 err_msg = str(e)
                 print(f"⚠️ [{model_name}] 請求失敗 (第 {attempt} 次): {err_msg[:100]}")
                 if "503" in err_msg or "UNAVAILABLE" in err_msg or "429" in err_msg:
-                    time.sleep(4)
+                    time.sleep(3)
                     continue
                 break
 
