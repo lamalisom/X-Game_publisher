@@ -2,7 +2,7 @@ name: Daily Magazine & Telegram Publisher
 
 on:
   schedule:
-    # UTC 04:15 = 香港時間 12:15 PM 每日自動執行
+    # UTC 04:15 = 香港時間 12:15 PM
     - cron: '15 4 * * *'
 
   workflow_dispatch:
@@ -116,6 +116,6 @@ jobs:
           if git diff --staged --quiet; then
             echo "無任何新文章或資料庫異動，跳過提交。"
           else
-            git commit -m "chore(auto-publish): publish daily xgame magazine post and update db [skip ci]"
+            git commit -m "feat(magazine): publish new extreme sports article [auto]"
             git push
           fi
