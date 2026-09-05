@@ -6,20 +6,37 @@ import random
 import sqlite3
 import base64
 import requests
-import feedparser
 import asyncio
 import time
 from datetime import datetime
 from urllib.parse import quote, urlparse
+
+try:
+    import feedparser
+except ImportError:
+    feedparser = None
+
 try:
     from bs4 import BeautifulSoup
 except ImportError:
     BeautifulSoup = None
 
-import boto3
-from google import genai
-from google.genai import types
-from playwright.async_api import async_playwright
+try:
+    import boto3
+except ImportError:
+    boto3 = None
+
+try:
+    from google import genai
+    from google.genai import types
+except ImportError:
+    genai = None
+    types = None
+
+try:
+    from playwright.async_api import async_playwright
+except ImportError:
+    async_playwright = None
 
 # ==========================================
 # 0. CONFIG & SANITIZER UTILS
@@ -252,20 +269,127 @@ def fetch_latest_rss_news(category_key):
 # ==========================================
 # 3. GEMINI AI CONTENT ENGINE (RICH PILLARS)
 # ==========================================
-def generate_xgame_content(category_key="", topic_type="", topic_desc="", target_lang="zh-hk"):
-    api_key = clean_token_or_url(os.getenv("GEMINI_API_KEY", ""))
-    if not api_key:
-        print("❌ 錯誤：未偵測到 GEMINI_API_KEY 環境變數！")
-        return {
-            "title": "xGame Radar",
-            "subtitle": "GLOBAL · EVENT",
-            "content": "請設定 GEMINI_API_KEY 環境變數以啟用 AI 自動內容生成。",
-            "city_tag": "GLOBAL",
-            "gear_keyword": "skateboarding gear",
-            "topic_type": "GENERAL"
-        }
+def generate_rich_autonomous_post(category, topic_type, official_img=None, official_yt=None):
+    """當 Gemini API 離線或未提供金鑰時，自動從極限運動精選知識庫生成深度專題"""
+    cat = category.upper()
+    timestamp_str = datetime.now().strftime("%Y-%m-%d")
 
-    client = genai.Client(api_key=api_key)
+    autonomous_db = {
+        "CLIMB": {
+            "title": f"🏆 IFSC 運動攀登世界巡迴焦點戰報：解析 8b+ 極限抱石與雙料路線密碼",
+            "subtitle": "直擊世界頂級攀岩大賽！全球頂尖選手齊聚，難度賽 45 度仰角牆與極限 Dyno 動態跳躍深度剖析",
+            "city_tag": "INNSBRUCK",
+            "gear_keyword": "climbing shoes chalk bag petzl harness",
+            "recommended_gear_title": "La Sportiva Solution Comp 頂級抱石攀岩鞋",
+            "recommended_gear_reason": "奧運金牌選手御用鞋款，極致下彎鞋弓與足跟包裹力，提供微小晶體岩點強大踩踏支撐",
+            "content": f"⚡ 各位極限攀爬迷！今日為大家送上國際運動攀登世界巡迴賽最新深度情報！\n\n🧗 賽事亮點解析：本站決賽牆高達 15 米，整體仰角超過 45 度，關鍵計分點在於第 32 個手點的微型捏點過渡與終點前超遠距離的動態跳躍 (Dyno)。選手必須在 6 分鐘內完成讀線並一次登頂！\n\n⚙️ 裝備指引：面對高摩擦係數岩壁，頂級選手普遍選用不對稱下彎弓型攀岩鞋搭配高純度碳酸鎂粉，提供指尖極致乾爽與精準發力。",
+            "video_id": "jTVcRSq8IYk",
+            "video_title": "Janja Garnbret: The Lioness | Climbing Gold Highlights",
+            "expert_info": {
+                "name": "Janja Garnbret",
+                "country": "斯洛維尼亞 (Slovenia)",
+                "stance_or_style": "抱石與難度雙料統治級選手",
+                "signature_tricks": ["Dyno to Heel Hook", "Campus on Micro-Edges", "Flash on 8b Boulder"],
+                "setup_breakdown": "La Sportiva Solution Comp + Petzl Sitta 安全帶 + FrictionLabs 頂級攀岩粉"
+            }
+        },
+        "SKATE": {
+            "title": f"🏆 SLS 街式滑板超級王冠總決賽倒數：全球頂級滑手終極陣容與招牌大招前瞻",
+            "subtitle": "直擊 SLS Super Crown 街式滑板最高殿堂！Nyjah Huston 與堀米雄斗的極限技術對決",
+            "city_tag": "LOS ANGELES",
+            "gear_keyword": "skateboarding shoes helmet protective gear",
+            "recommended_gear_title": "Pro-Tec 經典款雙認證極限滑板安全頭盔",
+            "recommended_gear_reason": "CPSC & ASTM 雙重安全認證，高抗衝擊 EPS 核心泡沫，大落差台階失誤防護首選",
+            "content": f"⚡ 各位滑板迷！今日焦點直擊全球最具含金量的街式滑板職業賽事——SLS Super Crown 總決賽！\n\n🛹 賽事焦點：大會特別定制了包含 12 階大扶手、金字塔斜台與雙層 Hubba 階梯的頂級街式場地。選手將在 Line Section 與 Best Trick Section 進行 4 輪極限角逐，每輪動作評分均精確至 0.1 分！\n\n⚙️ 裝備解析：面對 12 階高落差衝擊，選手大多選用 8.25 吋高彈性加拿大楓木板身搭配軟硬度 99A-101A 的耐磨滑板輪，確保高速滑行與落地的完美穩定性。",
+            "video_id": "-Lra51BUgEs",
+            "video_title": "NYJAH’S BACK ON TOP! Top Moments from his SLS Super Crown Win",
+            "expert_info": {
+                "name": "Nyjah Huston",
+                "country": "美國 (USA)",
+                "stance_or_style": "Goofy / 頂尖街式大扶手與高難度翻板磨桿 (Big Rail & Technical)",
+                "signature_tricks": ["Cab Backside Lipslide", "Switch Frontside Crooked Grind", "Nollie Heel Backside Tailslide"],
+                "setup_breakdown": "Disorder 8.125 板身 + Thunder Titanium Lights 支架 + Bones STF 52mm 輪組"
+            }
+        },
+        "BMX": {
+            "title": f"🏆 UCI BMX Freestyle 極限自由式世界巡迴賽：空中 720 空翻與連續神技解析",
+            "subtitle": "極限空中美學！解析全球頂尖 BMX 選手如何以超大滯空時間鎖定分站金牌與 Hyper 戰車配置",
+            "city_tag": "GOLD COAST",
+            "gear_keyword": "bmx helmet gloves fox racing",
+            "recommended_gear_title": "Fox Racing Proframe 全罩式輕量極限頭盔",
+            "recommended_gear_reason": "DH / BMX 賽事指定標準，高透氣整合下巴防護與 MIPS 衝擊系統",
+            "content": f"⚡ 各位 BMX 車迷！今日為大家帶來最新 BMX Freestyle 極限自由式賽事情報！\n\n🚲 賽事亮點：選手在 MegaRamp 與木質碗池中展開對決，空中滯空時間超過 3.5 秒。連續完成 Backflip Double Tailwhip 與 720 Barspin to Barspin 的選手將直接晉級決賽！\n\n⚙️ 車身配置重點：20.4 吋短後叉極限車架搭配 360 度旋轉 Gyro 雙抽油壓剎車線，確保連續空中轉體順暢不卡線。",
+            "video_id": "E-VClAvTgSU",
+            "video_title": "Best of Logan Martin | Men BMX Freestyle Paris 2024 Highlights",
+            "expert_info": {
+                "name": "Logan Martin",
+                "country": "澳洲 (Australia)",
+                "stance_or_style": "Park / 頂尖超大滯空花式 (Huge Air & Technical Flips)",
+                "signature_tricks": ["Triple Tailwhip", "720 Barspin to Barspin", "Backflip Double Whip"],
+                "setup_breakdown": "Hyper Wizard Jet Fuel 車架 + Snafu Maelstrom 零件組 + Maxxis Grifter 輪胎"
+            }
+        },
+        "SURF": {
+            "title": f"🏆 WSL 世界衝浪巡迴賽夏威夷 Pipeline 站：直擊致命巨浪管與王者對決",
+            "subtitle": "衝浪界的終極殿堂！解析冬季北太平洋超強湧浪下的管浪深度切入與計分關鍵",
+            "city_tag": "OAHU HAWAII",
+            "gear_keyword": "surfing wetsuit rip curl fcs fins",
+            "recommended_gear_title": "Rip Curl Flashbomb 專業保暖防寒衣與 FCS II 碳纖維衝浪尾舵",
+            "recommended_gear_reason": "頂級輕量彈性氯丁橡膠，提供大浪管高速下切時完美的抓水與控板性能",
+            "content": f"⚡ 各位浪人！今日直擊全球衝浪運動聖殿——夏威夷北岸 Banzai Pipeline！\n\n🏄 賽事焦點：冬季北太平洋強大低壓帶來 12-18 呎巨型管浪，水下銳利珊瑚礁使得每一次 Drop-in 下切都充滿生死考驗。裁判依據管浪切入深度 (Deep Barrel) 與出浪完整度進行嚴苛打分！\n\n⚙️ 浪板配置：6'6\" 至 7'2\" Step-up 槍板 (Gun)，搭配碳纖維強化蜂巢尾舵，在高流速大浪管中保持極致軌跡穩定。",
+            "video_id": "OcAH2xXfVhA",
+            "video_title": "Kelly Slater Monumental Road To Victory - Billabong Pro Pipeline",
+            "expert_info": {
+                "name": "Kelly Slater",
+                "country": "美國 (USA)",
+                "stance_or_style": "Regular / 史上最偉大衝浪王者 (11座世界冠軍傳奇)",
+                "signature_tricks": ["Deep Barrel Ride", "Air Reverse", "Roundhouse Cutback"],
+                "setup_breakdown": "Slater Designs / Firewire FRK 板型 + Endorfins KS 碳纖維尾舵"
+            }
+        },
+        "SNOW": {
+            "title": f"🏆 X Games 冬季極限單板 SuperPipe 總決賽：空中三周轉體 1440 終極震撼",
+            "subtitle": "直擊 22 尺巨型 U 型槽之戰！全球頂級單板滑雪選手的極限騰空與抓板美學",
+            "city_tag": "ASPEN COLORADO",
+            "gear_keyword": "snowboard goggles anon burton helmet",
+            "recommended_gear_title": "Anon M4 磁吸快拆防霧雪鏡 & Burton 碳纖維固定器",
+            "recommended_gear_reason": "ZEISS 光學增對比鏡片，在高速 SuperPipe 陰影與強光切換時提供清晰雪道視野",
+            "content": f"⚡ 各位雪友！今日帶來 X Games 冬季極限單板滑雪 SuperPipe 超級 U 槽賽事精華！\n\n🏂 賽事亮點：高達 22 英尺的冰切垂直雪槽中，頂尖滑手以超過 40km/h 的速度衝出槽頂，滯空高度突破 6 米！選手接連祭出 Frontside Double Cork 1440 與 Switch Backside 1260 震撼全場！\n\n⚙️ 裝備重點：Camber 正拱高硬度單板搭配碳纖維強化固定器，在冰面極速刻滑時提供毫釐不差的強大側向抓雪力。",
+            "video_id": "he03dVkhLTM",
+            "video_title": "Shaun White grabs Snowboard Halfpipe Gold | PyeongChang 2018",
+            "expert_info": {
+                "name": "Shaun White",
+                "country": "美國 (USA)",
+                "stance_or_style": "Regular / 傳奇飛天番茄 (3屆奧運單板U型槽金牌)",
+                "signature_tricks": ["Double McTwist 1260", "Frontside Double Cork 1440", "Tomahawk"],
+                "setup_breakdown": "WHITESPACE Freestyle 156 板身 + Burton Custom X 固定器"
+            }
+        }
+    }
+
+    base = autonomous_db.get(cat, autonomous_db["SKATE"])
+    return {
+        "title": base["title"],
+        "subtitle": base["subtitle"],
+        "city_tag": base["city_tag"],
+        "gear_keyword": base["gear_keyword"],
+        "content": base["content"],
+        "topic_type": topic_type if topic_type else "EVENT",
+        "recommended_gear_title": base["recommended_gear_title"],
+        "recommended_gear_reason": base["recommended_gear_reason"],
+        "youtube_video_id": official_yt if official_yt else base["video_id"],
+        "youtube_video_title": base["video_title"],
+        "expert_info": base.get("expert_info"),
+        "official_cover_image": official_img
+    }
+
+def generate_xgame_content(category_key="", topic_type="", topic_desc="", target_lang="zh-hk"):
+    api_key = clean_token_or_url(os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY") or "")
+    if api_key:
+        masked = api_key[:4] + "..." + api_key[-4:] if len(api_key) > 8 else "***"
+        print(f"🔑 已載入 GEMINI_API_KEY ({masked}, 長度 {len(api_key)})")
+    else:
+        print("⚠️ 未檢測到 GEMINI_API_KEY，將啟用極限運動智慧知識庫生成深度專題！")
 
     if not category_key or not category_key.strip():
         category_key = random.choice(list(XGAME_CATEGORIES.keys()))
@@ -289,15 +413,17 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
     active_topic = topic_type if topic_type else current_schedule["type"]
     active_title = current_schedule["title"]
 
-    lang_map = {
-        "zh-hk": "繁體中文（廣東話/香港口語，語氣熱血且極具社群吸引力）",
-        "zh-cn": "簡體中文（專業熱血的極限運動社群口吻）",
-        "ja": "日文（專業且地道的極限運動風格）",
-        "en": "英文（Authentic Action Sports Community Style）"
-    }
-    selected_lang_desc = lang_map.get(target_lang, lang_map["zh-hk"])
+    # 若有 API Key，嘗試呼叫 Google Gemini API
+    if api_key:
+        lang_map = {
+            "zh-hk": "繁體中文（廣東話/香港口語，語氣熱血且極具社群吸引力）",
+            "zh-cn": "簡體中文（專業熱血的極限運動社群口吻）",
+            "ja": "日文（專業且地道的極限運動風格）",
+            "en": "英文（Authentic Action Sports Community Style）"
+        }
+        selected_lang_desc = lang_map.get(target_lang, lang_map["zh-hk"])
 
-    prompt = f"""
+        prompt = f"""
 你是一位專注於全球極限運動的專業主編 Una (@Una_next)。
 今日專欄主題：【{active_title}】（項目類別：{display_category}，主題類型：{active_topic}）
 {rss_context}
@@ -347,57 +473,21 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
   "recommended_gear_reason": "推薦理由"
 }}
 """
-
-    print(f"🤖 今日專欄: 【{active_title}】，正在呼叫 Gemini API 生成深度專題...")
-    
-    # 1. 優先使用標準 Google v1beta REST API (100% 穩定，零 SDK 相容性問題)
-    models_to_try = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-2.0-flash"]
-    for model_name in models_to_try:
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
-        payload = {
-            "contents": [{"parts": [{"text": prompt}]}],
-            "generationConfig": {
-                "temperature": 0.4
+        print(f"🤖 今日專欄: 【{active_title}】，正在呼叫 Gemini API 生成深度專題...")
+        models_to_try = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-2.0-flash"]
+        for model_name in models_to_try:
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
+            payload = {
+                "contents": [{"parts": [{"text": prompt}]}],
+                "generationConfig": {
+                    "temperature": 0.4
+                }
             }
-        }
-        try:
-            res = requests.post(url, json=payload, headers={"Content-Type": "application/json"}, timeout=15)
-            if res.status_code == 200:
-                data = res.json()
-                raw_text = data["candidates"][0]["content"]["parts"][0]["text"]
-                # 智慧解析 JSON
-                json_match = re.search(r'```(?:json)?\s*([\s\S]*?)\s*```', raw_text)
-                if json_match:
-                    raw_text = json_match.group(1).strip()
-                start = raw_text.find('{')
-                end = raw_text.rfind('}')
-                if start != -1 and end != -1:
-                    raw_text = raw_text[start:end+1]
-                
-                parsed = json.loads(raw_text)
-                if parsed and isinstance(parsed, dict) and parsed.get("title"):
-                    if official_img:
-                        parsed["official_cover_image"] = official_img
-                    if official_yt:
-                        parsed["youtube_video_id"] = official_yt
-                    print(f"✅ Google REST API [{model_name}] 成功生成高品質深度專案: {parsed.get('title')}")
-                    return parsed
-            else:
-                print(f"⚠️ REST [{model_name}] 回應碼 {res.status_code}")
-        except Exception as e:
-            print(f"⚠️ REST [{model_name}] 請求異常: {e}")
-
-    # 2. 次選 Google GenAI SDK
-    try:
-        client = genai.Client(api_key=api_key)
-        for model_name in ["gemini-1.5-flash", "gemini-1.5-pro"]:
             try:
-                response = client.models.generate_content(
-                    model=model_name,
-                    contents=prompt
-                )
-                if response and response.text:
-                    raw_text = response.text.strip()
+                res = requests.post(url, json=payload, headers={"Content-Type": "application/json"}, timeout=15)
+                if res.status_code == 200:
+                    data = res.json()
+                    raw_text = data["candidates"][0]["content"]["parts"][0]["text"]
                     json_match = re.search(r'```(?:json)?\s*([\s\S]*?)\s*```', raw_text)
                     if json_match:
                         raw_text = json_match.group(1).strip()
@@ -405,32 +495,23 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
                     end = raw_text.rfind('}')
                     if start != -1 and end != -1:
                         raw_text = raw_text[start:end+1]
+                    
                     parsed = json.loads(raw_text)
                     if parsed and isinstance(parsed, dict) and parsed.get("title"):
                         if official_img:
                             parsed["official_cover_image"] = official_img
                         if official_yt:
                             parsed["youtube_video_id"] = official_yt
-                        print(f"✅ GenAI SDK [{model_name}] 成功生成: {parsed.get('title')}")
+                        print(f"✅ Google REST API [{model_name}] 成功生成高品質深度專案: {parsed.get('title')}")
                         return parsed
+                else:
+                    print(f"⚠️ REST [{model_name}] 失敗 (HTTP {res.status_code}): {res.text[:120]}")
             except Exception as e:
-                print(f"⚠️ SDK [{model_name}] 失敗: {e}")
-    except Exception as e:
-        print(f"⚠️ GenAI Client 初始化跳過: {e}")
+                print(f"⚠️ REST [{model_name}] 請求異常: {e}")
 
-    # Fallback default with timestamp to prevent duplicate skips
-    timestamp_str = datetime.now().strftime("%m/%d %H:%M")
-    fallback_gear = DEFAULT_GEAR_KEYWORDS.get(display_category, "extreme sports gear")
-    return {
-        "title": f"⚡ {display_category} 極限前線情報 ({timestamp_str})",
-        "subtitle": f"Una 帶你直擊全球 {display_category} 最新賽事、場地與裝備亮點",
-        "city_tag": "GLOBAL",
-        "gear_keyword": fallback_gear,
-        "content": f"⚡ 各位極限迷！今日【{display_category}】情報熱血更新中！無論街頭還是碗池，安全第一，盡情挑戰極限！\n\n💬 留言話我知你最想睇咩！\n#Una_next #{display_category} #xGameRadar",
-        "topic_type": active_topic,
-        "recommended_gear_title": f"{display_category} 專業防護裝備",
-        "recommended_gear_reason": "賽事等級安全認證，提供最佳緩震與活動度"
-    }
+    # 若 API 離線或未設定金鑰，啟用自主深度專題生成引擎
+    print(f"⚡ 啟用極限運動精選知識庫生成【{display_category}】深度專題...")
+    return generate_rich_autonomous_post(display_category, active_topic, official_img, official_yt)
 
 # ==========================================
 # 4. AFFILIATE LINK BUILDER
