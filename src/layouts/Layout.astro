@@ -17,6 +17,9 @@ const {
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://xgame-radar.pages.dev');
+
+// Fetch GA4 Measurement ID from environment variables
+const gaId = import.meta.env.PUBLIC_GA_ID;
 ---
 
 <!doctype html>
@@ -28,6 +31,20 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://xgame-ra
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#ff4d00" />
     <meta name="generator" content={Astro.generator} />
+
+    <!-- Google Analytics 4 (GA4) -->
+    {gaId && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+        <script is:inline define:vars={{ gaId }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', gaId);
+        </script>
+      </>
+    )}
 
     <!-- SEO Meta Tags -->
     <title>{title}</title>
