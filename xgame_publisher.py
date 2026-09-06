@@ -474,40 +474,69 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 }}
 """
         print(f"🤖 今日專欄: 【{active_title}】，正在呼叫 Gemini API 生成深度專題...")
-        models_to_try = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-2.0-flash"]
-        for model_name in models_to_try:
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent?key={api_key}"
-            payload = {
-                "contents": [{"parts": [{"text": prompt}]}],
-                "generationConfig": {
-                    "temperature": 0.4
+        
+        # 動態偵測 API Key 支援的有效 Gemini 模型
+        available_models = []
+        try:
+            list_res = requests.get(f"https://generativelanguage.googleapis.com/v1beta/models?key={api_key}", timeout=10)
+            if list_res.status_code == 200:
+                models_data = list_res.json().get("models", [])
+                for m in models_data:
+                    if "generateContent" in m.get("supportedGenerationMethods", []):
+                        m_name = m["name"].replace("models/", "")
+                        if "gemini" in m_name:
+                            available_models.append(m_name)
+                print(f"📡 自動偵測到可用模型清單: {available_models[:6]}")
+        except Exception as e:
+            print(f"⚠️ 模型清單自動查詢跳過: {e}")
+
+        # 若未自動取得，使用最全面之相容清單
+        if not available_models:
+            available_models = [
+                "gemini-1.5-flash-latest",
+                "gemini-1.5-flash-001",
+                "gemini-1.5-flash-002",
+                "gemini-1.5-pro-latest",
+                "gemini-1.5-pro-001",
+                "gemini-2.0-flash-exp",
+                "gemini-2.5-flash",
+                "gemini-1.5-flash"
+            ]
+
+        for model_name in available_models:
+            for api_ver in ["v1beta", "v1"]:
+                url = f"https://generativelanguage.googleapis.com/{api_ver}/models/{model_name}:generateContent?key={api_key}"
+                payload = {
+                    "contents": [{"parts": [{"text": prompt}]}],
+                    "generationConfig": {
+                        "temperature": 0.4
+                    }
                 }
-            }
-            try:
-                res = requests.post(url, json=payload, headers={"Content-Type": "application/json"}, timeout=15)
-                if res.status_code == 200:
-                    data = res.json()
-                    raw_text = data["candidates"][0]["content"]["parts"][0]["text"]
-                    json_match = re.search(r'```(?:json)?\s*([\s\S]*?)\s*```', raw_text)
-                    if json_match:
-                        raw_text = json_match.group(1).strip()
-                    start = raw_text.find('{')
-                    end = raw_text.rfind('}')
-                    if start != -1 and end != -1:
-                        raw_text = raw_text[start:end+1]
-                    
-                    parsed = json.loads(raw_text)
-                    if parsed and isinstance(parsed, dict) and parsed.get("title"):
-                        if official_img:
-                            parsed["official_cover_image"] = official_img
-                        if official_yt:
-                            parsed["youtube_video_id"] = official_yt
-                        print(f"✅ Google REST API [{model_name}] 成功生成高品質深度專案: {parsed.get('title')}")
-                        return parsed
-                else:
-                    print(f"⚠️ REST [{model_name}] 失敗 (HTTP {res.status_code}): {res.text[:120]}")
-            except Exception as e:
-                print(f"⚠️ REST [{model_name}] 請求異常: {e}")
+                try:
+                    res = requests.post(url, json=payload, headers={"Content-Type": "application/json"}, timeout=15)
+                    if res.status_code == 200:
+                        data = res.json()
+                        raw_text = data["candidates"][0]["content"]["parts"][0]["text"]
+                        json_match = re.search(r'```(?:json)?\s*([\s\S]*?)\s*```', raw_text)
+                        if json_match:
+                            raw_text = json_match.group(1).strip()
+                        start = raw_text.find('{')
+                        end = raw_text.rfind('}')
+                        if start != -1 and end != -1:
+                            raw_text = raw_text[start:end+1]
+                        
+                        parsed = json.loads(raw_text)
+                        if parsed and isinstance(parsed, dict) and parsed.get("title"):
+                            if official_img:
+                                parsed["official_cover_image"] = official_img
+                            if official_yt:
+                                parsed["youtube_video_id"] = official_yt
+                            print(f"✅ Google API [{model_name} / {api_ver}] 成功生成高品質深度專案: {parsed.get('title')}")
+                            return parsed
+                    elif res.status_code != 404:
+                        print(f"⚠️ [{model_name}/{api_ver}] 回應 ({res.status_code}): {res.text[:100]}")
+                except Exception as e:
+                    pass
 
     # 若 API 離線或未設定金鑰，啟用自主深度專題生成引擎
     print(f"⚡ 啟用極限運動精選知識庫生成【{display_category}】深度專題...")
@@ -849,8 +878,10 @@ async def main_async():
     topic_type = post_data.get("topic_type", "GENERAL")
 
     if is_already_posted(title):
-        print(f"ℹ️ 文章 [{title}] 今日已發布過，跳過重複發布。")
-        return
+        now_time = datetime.now().strftime("%H:%M")
+        print(f"ℹ️ 偵測到文章 [{title}] 今日已存在於資料庫，自動為新專題附加獨立刊號以確保發布...")
+        title = f"{title} (Vol. {now_time})"
+        post_data["title"] = title
 
     # 2. 注入 Amazon Affiliate 推薦文字
     monetized_content = attach_affiliate_link(content, gear_kw, category)
