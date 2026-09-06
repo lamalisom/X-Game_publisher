@@ -105,6 +105,7 @@ jobs:
       - name: Verify & Build Astro Static Magazine Site
         env:
           ASTRO_TELEMETRY_DISABLED: 1
+          PUBLIC_GA_ID: ${{ vars.PUBLIC_GA_ID || secrets.PUBLIC_GA_ID }}
         run: npm run build
 
       - name: Git Commit & Push Updated Posts and Database
