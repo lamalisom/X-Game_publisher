@@ -2,7 +2,7 @@ name: Daily Magazine & Telegram Publisher
 
 on:
   schedule:
-    # UTC 04:15 = 香港時間 12:15 PM
+    # UTC 04:15 = 香港時間 12:15 PM 每日自動執行
     - cron: '15 4 * * *'
 
   workflow_dispatch:
@@ -52,6 +52,10 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Setup Python Environment
         uses: actions/setup-python@v5
@@ -105,7 +109,6 @@ jobs:
       - name: Verify & Build Astro Static Magazine Site
         env:
           ASTRO_TELEMETRY_DISABLED: 1
-          PUBLIC_GA_ID: ${{ vars.PUBLIC_GA_ID || secrets.PUBLIC_GA_ID }}
         run: npm run build
 
       - name: Git Commit & Push Updated Posts and Database
@@ -113,10 +116,11 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add src/content/posts/ xgame_radar.db xgame_radar.db-journal || true
+          git status
+          git add -A src/content/posts/ xgame_radar.db
           if git diff --staged --quiet; then
             echo "無任何新文章或資料庫異動，跳過提交。"
           else
             git commit -m "feat(magazine): publish new extreme sports article [auto]"
-            git push
+            git push origin main || git push origin HEAD:main
           fi
