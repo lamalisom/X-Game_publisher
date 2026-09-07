@@ -46,6 +46,24 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
       </>
     )}
 
+    ---
+// src/components/AffiliateCard.astro
+const { title, url, price } = Astro.props;
+---
+
+<a 
+  href={url} 
+  target="_blank" 
+  rel="noopener noreferrer"
+  onclick={`gtag('event', 'select_promotion', {
+    'promotion_name': '${title}',
+    'creative_slot': 'AffiliateCard',
+    'value': '${price}'
+  });`}
+  class="bg-xorange text-white px-4 py-2 rounded font-bold"
+>
+  查看商品詳情
+</a>
     <!-- SEO Meta Tags -->
     <title>{title}</title>
     <meta name="description" content={description} />
