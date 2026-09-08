@@ -282,7 +282,21 @@ def generate_rich_autonomous_post(category, topic_type, official_img=None, offic
             "gear_keyword": "climbing shoes chalk bag petzl harness",
             "recommended_gear_title": "La Sportiva Solution Comp 頂級抱石攀岩鞋",
             "recommended_gear_reason": "奧運金牌選手御用鞋款，極致下彎鞋弓與足跟包裹力，提供微小晶體岩點強大踩踏支撐",
-            "content": f"⚡ 各位極限攀爬迷！今日為大家送上國際運動攀登世界巡迴賽最新深度情報！\n\n🧗 賽事亮點解析：本站決賽牆高達 15 米，整體仰角超過 45 度，關鍵計分點在於第 32 個手點的微型捏點過渡與終點前超遠距離的動態跳躍 (Dyno)。選手必須在 6 分鐘內完成讀線並一次登頂！\n\n⚙️ 裝備指引：面對高摩擦係數岩壁，頂級選手普遍選用不對稱下彎弓型攀岩鞋搭配高純度碳酸鎂粉，提供指尖極致乾爽與精準發力。",
+            "telegram_caption": "⚡ 各位極限攀爬迷！IFSC 運動攀登世界巡迴賽焦點戰報速遞！\n\n🧗 3大核心看點：\n1️⃣ 決賽牆高達 15 米、仰角超過 45 度，考驗極致指力！\n2️⃣ 第 32 個微型手點過渡 + 終點超遠距 Dyno 動態跳躍\n3️⃣ 頂級選手選用不對稱弓形鞋與高純度碳酸鎂粉精準發力\n\n💬 你覺得邊個動作最震撼？留言話我知！",
+            "website_full_content": """### 🏆 賽況復盤與頂級岩壁挑戰
+
+本站 IFSC 國際運動攀登世界盃在奧地利因斯布魯克盛大開賽。作為巴黎奧運後的首場頂級大賽，主辦方在路線設計上展現了極高的難度與觀賞性。決賽難度牆高達 15 米，整體岩壁向外傾斜超過 45 度，極大考驗選手的核心抗疲勞能力與瞬間爆發力。
+
+關鍵計分點集中在第 32 個手點的微型捏點（Micro-Crimp）過渡區。選手必須在 6 分鐘規定時間內完成路線判讀，並在高空進行一次超過 1.8 米的超遠距離動態跳躍（Dyno）。
+
+### ⚡ 關鍵技術亮點與動作分解
+
+1. **屋頂天花板掛腳（Heel/Toe Hook）**：在倒掛屋頂地形中，選手利用腳跟與腳尖鎖死岩點，減輕手臂 40% 以上的負重。
+2. **微小晶體邊緣踩踏（Micro-Edge Smearing）**：鞋尖橡膠必須精準嵌入 3 毫米以下的微小岩縫，產生強大的摩擦抓地力。
+
+### ⚙️ 職業選手專用裝備配置深度解析
+
+面對高摩擦係數的現代競技岩壁，頂級攀爬者普遍選用高不對稱、下彎鞋弓設計的專業抱石鞋（如 La Sportiva Solution Comp）。搭配高透氣輕量安全帶與超細顆粒高純度碳酸鎂粉，確保手指在極限出汗狀態下依然具備頂級乾爽抓握力。""",
             "video_id": "jTVcRSq8IYk",
             "video_title": "Janja Garnbret: The Lioness | Climbing Gold Highlights",
             "expert_info": {
@@ -300,7 +314,21 @@ def generate_rich_autonomous_post(category, topic_type, official_img=None, offic
             "gear_keyword": "skateboarding shoes helmet protective gear",
             "recommended_gear_title": "Pro-Tec 經典款雙認證極限滑板安全頭盔",
             "recommended_gear_reason": "CPSC & ASTM 雙重安全認證，高抗衝擊 EPS 核心泡沫，大落差台階失誤防護首選",
-            "content": f"⚡ 各位滑板迷！今日焦點直擊全球最具含金量的街式滑板職業賽事——SLS Super Crown 總決賽！\n\n🛹 賽事焦點：大會特別定制了包含 12 階大扶手、金字塔斜台與雙層 Hubba 階梯的頂級街式場地。選手將在 Line Section 與 Best Trick Section 進行 4 輪極限角逐，每輪動作評分均精確至 0.1 分！\n\n⚙️ 裝備解析：面對 12 階高落差衝擊，選手大多選用 8.25 吋高彈性加拿大楓木板身搭配軟硬度 99A-101A 的耐磨滑板輪，確保高速滑行與落地的完美穩定性。",
+            "telegram_caption": "⚡ 各位滑板迷！SLS Super Crown 街式滑板總決賽前瞻火熱登場！\n\n🛹 3大焦點搶先睇：\n1️⃣ 12 階大扶手 + 雙層 Hubba 階梯頂級訂製賽道\n2️⃣ Nyjah Huston 對決 堀米雄斗，爭奪最高積分王座\n3️⃣ 8.25 吋高彈性加拿大楓木板身 + 99A-101A 耐磨輪組解析\n\n💬 你今屆撐邊個？即刻留言！",
+            "website_full_content": """### 🏆 賽事背景與 SLS 頂級街式殿堂
+
+SLS (Street League Skateboarding) Super Crown 總決賽作為全球最具含金量的街式滑板職業賽事，匯聚了全球排名前八位的頂級職業滑手。本屆大會特別打造了融合街頭真實地形與賽事標準的頂級場地，包含 12 階大落差樓梯、金字塔斜台與超長雙層 Hubba 大理石滑台。
+
+賽事分為 Line Section（連續動作線路）與 Best Trick Section（單一大招評分），每一輪動作均由 5 位國際裁判以精確至 0.1 分進行極限評分。
+
+### ⚡ 關鍵技術拆解：冠軍級殺手鐧
+
+- **Caballerial Backside Lipslide**：在 12 階大扶手上完成 360 度倒板轉體並順勢鎖定板身中段滑行，對起跳高度與滯空平衡要求極高。
+- **Switch Frontside Crooked Grind**：非慣用腳（Switch）起跳並以斜角輪架鎖死金屬邊緣，展現毫釐不差的磨桿控制力。
+
+### ⚙️ 職業滑手裝備配置深度評測
+
+面對連續高衝擊落地，職業選手選用 8.25 吋高壓 7 層加拿大硬楓木板身，搭配輕量化鈦合金輪架（Titanium Trucks）與 99A-101A 軟硬度的高回彈聚氨酯滑板輪，確保高速滑行不平點，落地兼具極致吸震與回彈回饋。""",
             "video_id": "-Lra51BUgEs",
             "video_title": "NYJAH’S BACK ON TOP! Top Moments from his SLS Super Crown Win",
             "expert_info": {
@@ -318,7 +346,19 @@ def generate_rich_autonomous_post(category, topic_type, official_img=None, offic
             "gear_keyword": "bmx helmet gloves fox racing",
             "recommended_gear_title": "Fox Racing Proframe 全罩式輕量極限頭盔",
             "recommended_gear_reason": "DH / BMX 賽事指定標準，高透氣整合下巴防護與 MIPS 衝擊系統",
-            "content": f"⚡ 各位 BMX 車迷！今日為大家帶來最新 BMX Freestyle 極限自由式賽事情報！\n\n🚲 賽事亮點：選手在 MegaRamp 與木質碗池中展開對決，空中滯空時間超過 3.5 秒。連續完成 Backflip Double Tailwhip 與 720 Barspin to Barspin 的選手將直接晉級決賽！\n\n⚙️ 車身配置重點：20.4 吋短後叉極限車架搭配 360 度旋轉 Gyro 雙抽油壓剎車線，確保連續空中轉體順暢不卡線。",
+            "telegram_caption": "⚡ 各位 BMX 車迷！UCI BMX Freestyle 極限自由式戰報來襲！\n\n🚲 3大空中神技速報：\n1️⃣ 滯空時間突破 3.5 秒，垂直躍升超過 5 米！\n2️⃣ Backflip Double Tailwhip 空翻雙甩尾神級連招\n3️⃣ 360 度旋轉 Gyro 雙抽油壓剎車系統極限配置\n\n💬 邊個大招最誇張？留言話我知！",
+            "website_full_content": """### 🏆 賽事精華與空中滯空極限
+
+UCI BMX Freestyle 自由式世界盃黃金海岸站展開激烈廝殺。本站木質碗池與拋台（MegaRamp）高度超過 6 米，頂尖選手在空中能獲得超過 3.5 秒的純粹滯空時間，為複雜的多重轉體動作提供了完美的發揮空間。
+
+### ⚡ 焦點神技分解
+
+1. **720 Barspin to Barspin**：在空中完成兩周 720 度水平旋轉的同時，雙手連續完成兩次車把 360 度凌空轉把。
+2. **Backflip Triple Tailwhip**：後空翻狀態下連續完成三次車身 360 度水平甩尾，對核心爆發力與接車精準度要求達到極致。
+
+### ⚙️ 冠軍級戰車配置與安全建議
+
+極限自由式戰車採用 20.4 吋短後叉鉻鉬鋼（4130 Cr-Mo）車架，搭配 360 度旋轉 Gyro 雙抽剎車系統，確保連續空中甩把甩尾線管不打結。頭部防護首選配備 MIPS 衝擊防護系統的全罩式碳纖維安全頭盔。""",
             "video_id": "E-VClAvTgSU",
             "video_title": "Best of Logan Martin | Men BMX Freestyle Paris 2024 Highlights",
             "expert_info": {
@@ -336,7 +376,21 @@ def generate_rich_autonomous_post(category, topic_type, official_img=None, offic
             "gear_keyword": "surfing wetsuit rip curl fcs fins",
             "recommended_gear_title": "Rip Curl Flashbomb 專業保暖防寒衣與 FCS II 碳纖維衝浪尾舵",
             "recommended_gear_reason": "頂級輕量彈性氯丁橡膠，提供大浪管高速下切時完美的抓水與控板性能",
-            "content": f"⚡ 各位浪人！今日直擊全球衝浪運動聖殿——夏威夷北岸 Banzai Pipeline！\n\n🏄 賽事焦點：冬季北太平洋強大低壓帶來 12-18 呎巨型管浪，水下銳利珊瑚礁使得每一次 Drop-in 下切都充滿生死考驗。裁判依據管浪切入深度 (Deep Barrel) 與出浪完整度進行嚴苛打分！\n\n⚙️ 浪板配置：6'6\" 至 7'2\" Step-up 槍板 (Gun)，搭配碳纖維強化蜂巢尾舵，在高流速大浪管中保持極致軌跡穩定。",
+            "telegram_caption": "⚡ 各位浪人！WSL 衝浪巡迴賽夏威夷 Pipeline 站戰報直擊！\n\n🏄 3大管浪看點：\n1️⃣ 冬季北太平洋 12-18 呎巨型猛烈管浪\n2️⃣ 致命淺礁區 Drop-in 垂直下切極限考驗\n3️⃣ 6'8\" 槍板 + 碳纖維蜂巢尾舵極限軌跡控制\n\n💬 咁大個浪你敢唔敢落？留言傾下！",
+            "website_full_content": """### 🏆 賽事焦點：衝浪運動的終極聖殿
+
+夏威夷北岸的 Banzai Pipeline 被公認為全球最致命但也最具觀賞性的巨浪管點。冬季強烈的北太平洋低壓系統帶來高達 12 至 18 英尺的超重型管浪，浪壁在極淺的火山珊瑚礁上瞬間崩塌，形成完美的圓柱形水下真空巨管。
+
+裁判評分的最高標準在於「Deep Barrel（深層鑽管）」的切入深度與在極度浪花崩塌壓迫下能否完整出浪（Make the Wave）。
+
+### ⚡ 關鍵技術剖析
+
+- **Late Drop-in（極限晚下切）**：在浪頭即將合攏的垂直浪壁上起乘，雙腳必須精準卡緊防滑墊，利用浪板內側邊緣（Rail）死死咬住水面。
+- **Stall & Speed Control（管內控速）**：用手掌拖拽浪壁進行微幅減速以深入管心，隨後壓低重心全速衝出浪口。
+
+### ⚙️ 浪板配置與防護選購
+
+面對 Pipeline 級別的巨浪，選手多採用 6'6\" 至 7'2\" 的 Step-up 槍板（Gun），搭配碳纖維強化蜂巢結構尾舵（FCS II Fins）與高抗拉力大浪腳繩，確保高速切入浪壁時具備絕對的軌跡穩定性。""",
             "video_id": "OcAH2xXfVhA",
             "video_title": "Kelly Slater Monumental Road To Victory - Billabong Pro Pipeline",
             "expert_info": {
@@ -354,7 +408,19 @@ def generate_rich_autonomous_post(category, topic_type, official_img=None, offic
             "gear_keyword": "snowboard goggles anon burton helmet",
             "recommended_gear_title": "Anon M4 磁吸快拆防霧雪鏡 & Burton 碳纖維固定器",
             "recommended_gear_reason": "ZEISS 光學增對比鏡片，在高速 SuperPipe 陰影與強光切換時提供清晰雪道視野",
-            "content": f"⚡ 各位雪友！今日帶來 X Games 冬季極限單板滑雪 SuperPipe 超級 U 槽賽事精華！\n\n🏂 賽事亮點：高達 22 英尺的冰切垂直雪槽中，頂尖滑手以超過 40km/h 的速度衝出槽頂，滯空高度突破 6 米！選手接連祭出 Frontside Double Cork 1440 與 Switch Backside 1260 震撼全場！\n\n⚙️ 裝備重點：Camber 正拱高硬度單板搭配碳纖維強化固定器，在冰面極速刻滑時提供毫釐不差的強大側向抓雪力。",
+            "telegram_caption": "⚡ 各位雪友！X Games 冬季極限單板 SuperPipe 決賽焦點！\n\n🏂 3大高空震撼看點：\n1️⃣ 22 尺垂直冰切雪槽，騰空高度突破 6 米！\n2️⃣ Frontside Double Cork 1440 空中三周轉體大招\n3️⃣ Camber 正拱高硬度單板 + 碳纖維固定器極限抓雪\n\n💬 邊個動作最令你起雞皮？即刻留言！",
+            "website_full_content": """### 🏆 賽事亮點：22 尺垂直巨型 U 槽巔峰之戰
+
+美國阿斯本（Aspen）X Games 冬季極限運動會單板 SuperPipe 總決賽聚集了全世界最頂尖的 U 槽滑手。高達 22 英尺的冰切垂直牆壁中，滑手以超過 40km/h 的高速衝出槽頂，滯空高度突破 6 米，在空中展現極致轉體與優雅抓板。
+
+### ⚡ 焦點神技拆解
+
+1. **Frontside Double Cork 1440**：在正向起跳中完成兩次偏軸空翻與整整四周（1440度）轉體，並在落地前緊緊抓牢板刃（Mute Grab）。
+2. **Switch Backside 1260**：倒滑起跳並以背向盲區完成三周半旋轉，對空間感知與空中落點預判要求極為苛刻。
+
+### ⚙️ 頂級單板滑雪裝備配置
+
+面對極速刻滑與高空衝擊，選手首選 Camber 正拱硬度 8/10 以上的專業競技板身，搭配碳纖維高反應固定器與 ZEISS 增對比磁吸快拆防霧雪鏡，確保在高速陰影與烈日轉換間保持清晰雪面視野。""",
             "video_id": "he03dVkhLTM",
             "video_title": "Shaun White grabs Snowboard Halfpipe Gold | PyeongChang 2018",
             "expert_info": {
@@ -373,7 +439,9 @@ def generate_rich_autonomous_post(category, topic_type, official_img=None, offic
         "subtitle": base["subtitle"],
         "city_tag": base["city_tag"],
         "gear_keyword": base["gear_keyword"],
-        "content": base["content"],
+        "telegram_caption": base["telegram_caption"],
+        "website_full_content": base["website_full_content"],
+        "content": base["website_full_content"],
         "topic_type": topic_type if topic_type else "EVENT",
         "recommended_gear_title": base["recommended_gear_title"],
         "recommended_gear_reason": base["recommended_gear_reason"],
@@ -437,7 +505,9 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
   "subtitle": "副標題或一句話亮點總結（約 30-50 字）",
   "city_tag": "舉辦城市英文或主題城市（例如: TOKYO, SYDNEY, CALIFORNIA, GLOBAL）",
   "gear_keyword": "純英文推薦裝備搜尋關鍵字（例如: skate shoes pro / bmx helmet / surfing wetsuit，嚴禁中文）",
-  "content": "深度正文內容（約 180-280 字，條理分明，使用熱血 Emoji，適度介紹重點賽事/人物/場地/安全要點）",
+  "telegram_caption": "【📱 Telegram 社群專用速報短文】：約 100-150 字，極致精練，熱血 Emoji 列點總結 3 大賽事/動作/場地核心亮點，並帶有強烈社群互動號召！",
+  "website_full_content": "【🌐 官方網站長篇深度專題】：約 450-650 字，嚴格使用 Markdown 結構化排版，包含多個章節副標題（例如：### 🏆 賽況復盤與焦點直擊、### ⚡ 關鍵技術亮點與動作分解、### ⚙️ 職業裝備深度評測與選購建議），段落分明，具備極高資訊密度與專業深度！",
+  "content": "保留備用字段（填入 telegram_caption）",
   "topic_type": "{active_topic}",
   "expert_info": {{
     "name": "選手或專家姓名（若為 ATHLETE 主題請填寫，否則可留空）",
@@ -883,10 +953,21 @@ async def main_async():
         title = f"{title} (Vol. {now_time})"
         post_data["title"] = title
 
-    # 2. 注入 Amazon Affiliate 推薦文字
-    monetized_content = attach_affiliate_link(content, gear_kw, category)
+    # 2. 分流處理：提取 Telegram 短訊精華與網站長篇深度內容
+    tg_caption = post_data.get("telegram_caption") or post_data.get("content", "")
+    web_content = post_data.get("website_full_content") or post_data.get("content", "")
+
+    # 計算網站文章專屬 URL
+    today_date_str = datetime.now().strftime("%Y-%m-%d")
+    clean_slug = re.sub(r'[^a-zA-Z0-9]', '_', city_tag.lower())[:15]
+    post_slug = f"{today_date_str}_{category.lower()}_{clean_slug}"
+    post_web_url = f"https://unanext.fans/posts/{post_slug}/"
+    amazon_search_url = f"https://www.amazon.com/s?k={quote(gear_kw)}&tag={AMAZON_AFFILIATE_ID}"
+
+    # 網站文章內容：注入 Amazon Affiliate
+    monetized_web_content = attach_affiliate_link(web_content, gear_kw, category)
     post_data["category"] = category
-    post_data["content"] = monetized_content
+    post_data["content"] = monetized_web_content
 
     # 確保每篇文章都擁有 100% 官方可外嵌播放的 YouTube 精華
     if not post_data.get("youtube_video_id"):
@@ -917,7 +998,8 @@ async def main_async():
         "subtitle": subtitle,
         "category": category,
         "topic_type": topic_type,
-        "content": monetized_content,
+        "content": monetized_web_content,
+        "telegram_caption": tg_caption,
         "image_url": img_link_for_record,
         "created_at": datetime.now().isoformat(),
         "author": "Una (@Una_next)"
@@ -926,11 +1008,20 @@ async def main_async():
         json.dump(backup_payload, f, ensure_ascii=False, indent=2)
     upload_to_r2(json_filename, f"posts/{json_filename}")
 
-    # 7. 儲存至 Astro 靜態網站 (src/content/posts/)
+    # 7. 儲存至 Astro 靜態網站 (src/content/posts/) -> 存入長篇深度完整專題
     save_post_as_markdown(post_data, img_link_for_record, source_label)
 
-    # 8. 推送至 Telegram 頻道
-    tg_message = f"🏆 *{title}*\n\n_{subtitle}_\n\n{monetized_content}\n\n#xGameRadar #{category} #Una_next"
+    # 8. 推送至 Telegram 頻道 -> 發布簡明熱血重點 + 裝備直送 + 直達網站全文連結
+    tg_message = (
+        f"🏆 *{title}*\n"
+        f"⚡ _{subtitle}_\n\n"
+        f"{tg_caption}\n\n"
+        f"🛒 *Una 裝備推薦*:\n"
+        f"👉 [{gear_kw.title()} Amazon 直送門市]({amazon_search_url})\n\n"
+        f"🌐 *閱讀完整深度專題與 4K 影片*:\n"
+        f"👉 [點擊直達 xGame Magazine 官方專題]({post_web_url})\n\n"
+        f"#xGameRadar #{category} #Una_next"
+    )
     send_telegram_post(tg_message, image_path=card_filename)
 
     # 9. 記錄於 SQLite 並清理暫存檔
