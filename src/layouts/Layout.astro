@@ -16,10 +16,9 @@ const {
   category = 'X-SPORTS'
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://xgame-radar.pages.dev');
-
-// Fetch GA4 Measurement ID from environment variables
-const gaId = import.meta.env.PUBLIC_GA_ID;
+const siteUrl = Astro.site ? Astro.site.toString() : 'https://unanext.fans';
+const canonicalURL = new URL(Astro.url.pathname, siteUrl);
+const gaId = import.meta.env.PUBLIC_GA_ID || '';
 ---
 
 <!doctype html>
@@ -32,38 +31,17 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
     <meta name="theme-color" content="#ff4d00" />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Google Analytics 4 (GA4) -->
     {gaId && (
-      <>
-        <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
-        <script is:inline define:vars={{ gaId }}>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-
-          gtag('config', gaId);
-        </script>
-      </>
+      <!-- Google Analytics GA4 -->
+      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+      <script is:inline define:vars={{ gaId }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', gaId);
+      </script>
     )}
 
-    ---
-// src/components/AffiliateCard.astro
-const { title, url, price } = Astro.props;
----
-
-<a 
-  href={url} 
-  target="_blank" 
-  rel="noopener noreferrer"
-  onclick={`gtag('event', 'select_promotion', {
-    'promotion_name': '${title}',
-    'creative_slot': 'AffiliateCard',
-    'value': '${price}'
-  });`}
-  class="bg-xorange text-white px-4 py-2 rounded font-bold"
->
-  查看商品詳情
-</a>
     <!-- SEO Meta Tags -->
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -71,7 +49,7 @@ const { title, url, price } = Astro.props;
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:url" content={canonicalURL.toString()} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={image} />
