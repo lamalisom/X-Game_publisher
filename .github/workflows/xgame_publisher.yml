@@ -50,7 +50,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y fonts-noto-cjk fonts-noto-color-emoji fonts-wqy-zenhei
           python -m pip install --upgrade pip
-          pip install requests google-genai feedparser Pillow playwright boto3 python-dateutil
+          pip install requests google-genai feedparser Pillow playwright boto3 python-dateutil beautifulsoup4
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Install Playwright Browsers & System Dependencies
         run: |
@@ -75,15 +76,17 @@ jobs:
           # 同時傳遞環境變數與 CLI 參數，確保 Python 能夠讀取 input 類別與語言
           python xgame_publisher.py "$CAT_INPUT" "$LANG_INPUT"
 
-      - name: Save & Commit SQLite DB
+      - name: Save & Commit Website Posts & SQLite DB
         if: always()
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          if [ -f xgame_radar.db ]; then
-            git add xgame_radar.db
-            git commit -m "chmod: update sqlite post db [skip ci]" || true
-            git push
+          git status
+          git add -A src/content/posts/ xgame_radar.db
+          if git diff --staged --quiet; then
+            echo "無任何新文章或資料庫異動，跳過提交。"
           else
-            echo "xgame_radar.db 不存在，跳過提交。"
+            git commit -m "feat(magazine): publish new extreme sports article [auto]"
+            git pull --rebase origin main || true
+            git push origin main || git push origin HEAD:main
           fi
