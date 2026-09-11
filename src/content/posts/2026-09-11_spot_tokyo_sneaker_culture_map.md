@@ -10,8 +10,6 @@ author: "Una (@Una_next)"
 city_tag: "TOKYO, JAPAN"
 featured: true
 gear_keyword: "crep protect sneaker spray cleaner"
-youtube_video_id: "Jk0nK1x9v1Q"
-youtube_video_title: "Mortar Tokyo & Tokyo Sneaker Street Culture Tour"
 spot_info:
   name: "東京八大球鞋與滑板選品殿堂 (Tokyo Sneaker & Skate Tour)"
   location: "東京都澀谷區、中目黑、原宿、銀座、上野"

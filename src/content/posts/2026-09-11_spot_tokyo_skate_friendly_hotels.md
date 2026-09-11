@@ -10,8 +10,6 @@ author: "Una (@Una_next)"
 city_tag: "TOKYO, JAPAN"
 featured: true
 gear_keyword: "skateboard bag backpack travel carry"
-youtube_video_id: "bPFuh1AKS-s"
-youtube_video_title: "Shibuya Miyashita Park Rooftop Skatepark & Tokyo Street Session"
 spot_info:
   name: "東京四大滑板友善設計酒店 (Skate-friendly Hotels)"
   location: "東京都澀谷區、豐島區大塚、中央區日本橋兜町"

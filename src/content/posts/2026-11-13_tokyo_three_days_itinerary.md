@@ -10,8 +10,6 @@ author: "Una (@Una_next)"
 city_tag: "TOKYO, JAPAN"
 featured: true
 gear_keyword: "skateboard backpack carry strap travel"
-youtube_video_id: "X4X4wXj6cQw"
-youtube_video_title: "SLS Tokyo 2026 Street League Skateboarding & Tokyo Culture Preview"
 event_info:
   event_name: "Tokyo Weekend Special: Art, Sake, Skate & Music (Nov 13-15, 2026)"
   dates: "2026-11-13 至 2026-11-15"
