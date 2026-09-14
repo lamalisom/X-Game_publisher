@@ -67,6 +67,17 @@ const categoryPosts = allPosts.filter((post) => {
         <p class="text-sm text-gray-300 leading-relaxed">
           {desc}
         </p>
+        {category === 'spots' && (
+          <div class="pt-3">
+            <a
+              href="/spots/map"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-black text-xs uppercase tracking-wider hover:opacity-90 transition shadow-glow-cyan"
+            >
+              <span>🗺️ 切換至全球互動空間地圖模式 (Interactive Map)</span>
+              <span>→</span>
+            </a>
+          </div>
+        )}
       </div>
       <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-xorange/10 rounded-full blur-3xl pointer-events-none"></div>
     </div>
