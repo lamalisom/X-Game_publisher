@@ -1,0 +1,424 @@
+[
+  {
+    "osm_id": 1001,
+    "name": "柴灣池畔滑板場 (Chai Wan Skatepark)",
+    "slug": "spot_hongkong_chai_wan",
+    "category": "SKATE",
+    "sub_category": "street_bowl",
+    "latitude": 22.2635,
+    "longitude": 114.2372,
+    "city": "Hong Kong",
+    "country": "Hong Kong",
+    "formatted_address": "香港柴灣新廈街柴灣游泳池旁",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "fee_details": "免費入場 (公眾康文署場地)",
+    "opening_hours": "07:00 - 22:00",
+    "surface_type": "Smooth Concrete",
+    "features": [
+      "深淺雙水泥碗池",
+      "Quarterpipe 街式斜台",
+      "大理石 Hubba",
+      "夜間照明"
+    ],
+    "photos": [
+      "/images/chai_wan_skatepark.jpg"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Chai+Wan+Hong+Kong&latitude=22.2635&longitude=114.2372",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=Hong+Kong+Skateboard",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=pro-tec+wrist+guards+skateboard&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1002,
+    "name": "荔枝角公園美孚滑板場 (Mei Foo Skatepark)",
+    "slug": "spot_hongkong_lai_chi_kok",
+    "category": "SKATE",
+    "sub_category": "vert_bowl",
+    "latitude": 22.3361,
+    "longitude": 114.1378,
+    "city": "Hong Kong",
+    "country": "Hong Kong",
+    "formatted_address": "香港九龍荔枝角荔灣道1號 (美孚站旁)",
+    "difficulty": "Intermediate / Pro",
+    "fee_type": "FREE",
+    "fee_details": "免費入場",
+    "opening_hours": "07:00 - 22:00",
+    "surface_type": "High-Density Concrete",
+    "features": [
+      "全港最深 Vert 巨型碗池 (2.8米)",
+      "國際賽大階梯",
+      "Pump Track 連續泵道"
+    ],
+    "photos": [
+      "/images/lai_chi_kok_park.jpg"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Lai+Chi+Kok+Hong+Kong&latitude=22.3361&longitude=114.1378",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=Hong+Kong+extreme+sports",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=triple+8+sweatsaver+helmet&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1003,
+    "name": "The Berrics (Los Angeles)",
+    "slug": "spot_california_the_berrics",
+    "category": "SKATE",
+    "sub_category": "indoor_plaza",
+    "latitude": 34.0195,
+    "longitude": -118.2345,
+    "city": "Los Angeles",
+    "country": "USA",
+    "formatted_address": "2545 E 12th St, Los Angeles, CA 90021",
+    "difficulty": "Pro",
+    "fee_type": "MEMBERSHIP",
+    "fee_details": "私人會員與特邀制",
+    "opening_hours": "09:00 - 23:00",
+    "surface_type": "Indoor Hardwood & Metal",
+    "features": [
+      "BATB 官方賽道",
+      "頂級室內滑板街區",
+      "專業 4K 直播機位"
+    ],
+    "photos": [
+      "/images/the_berrics.jpg"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Downtown+Los+Angeles&latitude=34.0195&longitude=-118.2345",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=Los+Angeles+attractions",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=bones+reds+bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1004,
+    "name": "Bondi Skate Park Bowl (Sydney)",
+    "slug": "spot_bondi_bowl_sydney",
+    "category": "SKATE",
+    "sub_category": "ocean_bowl",
+    "latitude": -33.8915,
+    "longitude": 151.2767,
+    "city": "Sydney",
+    "country": "Australia",
+    "formatted_address": "Queen Elizabeth Dr, Bondi Beach NSW 2026",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "fee_details": "全天候免費開放",
+    "opening_hours": "24 Hours",
+    "surface_type": "Oceanfront Concrete",
+    "features": [
+      "10-foot 深度碗池",
+      "邦代海灘無敵海景",
+      "街式斜坡"
+    ],
+    "photos": [
+      "/images/bondi_bowl.jpg"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Bondi+Beach+Sydney&latitude=-33.8915&longitude=151.2767",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=Sydney+Bondi+surf+skate",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=spitfire+skateboard+wheels&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1005,
+    "name": "Bowl de Marseille Prado (France)",
+    "slug": "spot_marseille_bowl_france",
+    "category": "SKATE",
+    "sub_category": "legendary_bowl",
+    "latitude": 43.2558,
+    "longitude": 5.3736,
+    "city": "Marseille",
+    "country": "France",
+    "formatted_address": "Plage du Prado, 13008 Marseille",
+    "difficulty": "Advanced",
+    "fee_type": "FREE",
+    "fee_details": "免費開放",
+    "opening_hours": "08:00 - 22:00",
+    "surface_type": "Graffiti Concrete",
+    "features": [
+      "世界傳奇三聯三葉草碗池",
+      "地中海海風",
+      "塗鴉藝術"
+    ],
+    "photos": [
+      "/images/marseille_bowl.jpg"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Marseille+Prado&latitude=43.2558&longitude=5.3736",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=Marseille+France+pass",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=187+killer+pads+pro+knee&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1006,
+    "name": "宮下公園 MIYASHITA PARK 頂樓滑板場",
+    "slug": "spot_tokyo_miyashita_park",
+    "category": "SKATE",
+    "sub_category": "rooftop_bowl",
+    "latitude": 35.662,
+    "longitude": 139.702,
+    "city": "Tokyo",
+    "country": "Japan",
+    "formatted_address": "東京都渋谷区神宮前6丁目20-10",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "fee_details": "約 ¥500 - ¥1,000 / 2小時",
+    "opening_hours": "09:00 - 22:00",
+    "surface_type": "Rooftop Smooth Concrete",
+    "features": [
+      "空中全景碗池",
+      "街式斜台",
+      "直通 sequence 酒店",
+      "夜間照明"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=sequence+MIYASHITA+PARK+Tokyo&latitude=35.6620&longitude=139.7020",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=Tokyo+Shibuya+pass",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=nike+sb+dunk+low&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1007,
+    "name": "Mortar Tokyo 滑板與街頭美學名所",
+    "slug": "spot_tokyo_mortar",
+    "category": "SKATE",
+    "sub_category": "skateshop_hub",
+    "latitude": 35.6645,
+    "longitude": 139.7005,
+    "city": "Tokyo",
+    "country": "Japan",
+    "formatted_address": "東京都渋谷区神南1-3-4",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "fee_details": "精品選品店與咖啡吧",
+    "opening_hours": "11:00 - 20:00",
+    "surface_type": "Architectural Concrete",
+    "features": [
+      "Nike SB Quickstrike 發售",
+      "頂級滑板裝備",
+      "精品咖啡"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=800&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Shibuya+Tokyo&latitude=35.6645&longitude=139.7005",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=Tokyo+Shibuya",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=crep+protect+spray&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 2001,
+    "name": "Teahupo'o Barrel (Tahiti)",
+    "slug": "spot_tahiti_teahupoo_barrel",
+    "category": "SURF",
+    "sub_category": "heavy_reef_break",
+    "latitude": -17.8475,
+    "longitude": -149.2672,
+    "city": "Teahupo'o",
+    "country": "French Polynesia",
+    "formatted_address": "Teahupo'o, Taiarapu-Ouest, Tahiti",
+    "difficulty": "Pro Only",
+    "fee_type": "FREE",
+    "fee_details": "需搭乘接駁船出海",
+    "opening_hours": "Sunrise to Sunset",
+    "surface_type": "Shallow Coral Reef",
+    "features": [
+      "世界最兇猛厚實管浪 (The End of the Road)",
+      "巴黎奧運衝浪主場",
+      "WSL 巡迴賽"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=800&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Tahiti+Teahupoo&latitude=-17.8475&longitude=-149.2672",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=Tahiti+surf+boat",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=dakine+surfboard+leash+heavy+duty&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 2002,
+    "name": "Banzai Pipeline (North Shore Oahu, Hawaii)",
+    "slug": "spot_hawaii_pipeline",
+    "category": "SURF",
+    "sub_category": "reef_barrel",
+    "latitude": 21.6649,
+    "longitude": -158.0538,
+    "city": "Oahu",
+    "country": "USA",
+    "formatted_address": "Ehukai Beach Park, Haleiwa, HI 96712",
+    "difficulty": "Advanced / Pro",
+    "fee_type": "FREE",
+    "fee_details": "免費海灘",
+    "opening_hours": "24 Hours",
+    "surface_type": "Sharp Lava Reef",
+    "features": [
+      "衝浪聖杯巨浪管浪",
+      "WSL Pipe Masters 賽場",
+      "世界級觀浪點"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=North+Shore+Oahu+Hawaii&latitude=21.6649&longitude=-158.0538",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=Hawaii+Oahu+surf",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=fcs+surfboard+fins&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 2003,
+    "name": "香港大浪灣 (Big Wave Bay HK)",
+    "slug": "spot_hongkong_big_wave_bay",
+    "category": "SURF",
+    "sub_category": "beach_break",
+    "latitude": 22.2464,
+    "longitude": 114.2494,
+    "city": "Hong Kong",
+    "country": "Hong Kong",
+    "formatted_address": "香港島石澳大浪灣道",
+    "difficulty": "Beginner / Intermediate",
+    "fee_type": "FREE",
+    "fee_details": "公眾海灘",
+    "opening_hours": "Sunrise to Sunset",
+    "surface_type": "Sand Beach Break",
+    "features": [
+      "香港最具代表性衝浪點",
+      "周邊多家租板沖水店",
+      "秋春東北季候風好浪"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=800&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Shek+O+Hong+Kong&latitude=22.2464&longitude=114.2494",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=Hong+Kong+Big+Wave+Bay+surf",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=rip+curl+wetsuit+surfing&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 3001,
+    "name": "B-PUMP Ogikubo 攀岩抱石館 (Tokyo)",
+    "slug": "spot_tokyo_bpump_ogikubo",
+    "category": "CLIMB",
+    "sub_category": "world_cup_gym",
+    "latitude": 35.7042,
+    "longitude": 139.6198,
+    "city": "Tokyo",
+    "country": "Japan",
+    "formatted_address": "東京都杉並区上荻1丁目27-8",
+    "difficulty": "All Levels / Pro",
+    "fee_type": "PAID",
+    "fee_details": "單次入場約 ¥2,200 - ¥2,750",
+    "opening_hours": "12:00 - 23:00 (平日) / 10:00 - 21:00 (週末)",
+    "surface_type": "Comp Style Plywood & Fiberglass Holds",
+    "features": [
+      "IFSC 世界盃定線團隊",
+      "頂尖選手訓練基地",
+      "全空調完備抱石區"
+    ],
+    "photos": [
+      "/images/janja_climbing.jpg"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Ogikubo+Tokyo&latitude=35.7042&longitude=139.6198",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=Tokyo+climbing",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=la+sportiva+solution+comp+climbing+shoes&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 3002,
+    "name": "Kletterzentrum Innsbruck (Austria)",
+    "slug": "spot_austria_kletterzentrum_innsbruck",
+    "category": "CLIMB",
+    "sub_category": "olympic_centre",
+    "latitude": 47.2725,
+    "longitude": 11.4118,
+    "city": "Innsbruck",
+    "country": "Austria",
+    "formatted_address": "Matthias-Schmid-Straße 12, 6020 Innsbruck",
+    "difficulty": "All Levels / Pro",
+    "fee_type": "PAID",
+    "fee_details": "€14 - €20 / Day Pass",
+    "opening_hours": "09:00 - 22:00",
+    "surface_type": "Lead & Boulder Outdoor / Indoor Walls",
+    "features": [
+      "全球最大綜合攀岩中心之一",
+      "IFSC 世界盃主場",
+      "戶外先鋒競技大牆"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&w=800&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Innsbruck+Austria&latitude=47.2725&longitude=11.4118",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=Innsbruck+Austria",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=black+diamond+climbing+harness&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 3003,
+    "name": "香港獅子山天然岩場 (Lion Rock Crag)",
+    "slug": "spot_hongkong_lion_rock_crag",
+    "category": "CLIMB",
+    "sub_category": "outdoor_granite_crag",
+    "latitude": 22.3524,
+    "longitude": 114.1867,
+    "city": "Hong Kong",
+    "country": "Hong Kong",
+    "formatted_address": "香港九龍獅子山郊野公園",
+    "difficulty": "Intermediate / Advanced / Multi-pitch",
+    "fee_type": "FREE",
+    "fee_details": "天然岩壁 (需自備保護裝備)",
+    "opening_hours": "Sunrise to Sunset",
+    "surface_type": "Solid Granite",
+    "features": [
+      "G総計 50+ 條天然先鋒與傳統攀登路線",
+      "俯瞰九龍全景",
+      "香港精神地標"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1564769662533-4f00a87b4056?auto=format&fit=crop&w=800&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Kowloon+Hong+Kong&latitude=22.3524&longitude=114.1867",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=Hong+Kong+outdoor+hiking",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=petzl+gri+gri+belay+device&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 4001,
+    "name": "Brisbane Sleeman SX BMX Track (Australia)",
+    "slug": "spot_brisbane_bmx_track",
+    "category": "BMX",
+    "sub_category": "supercross_track",
+    "latitude": -27.514,
+    "longitude": 153.149,
+    "city": "Brisbane",
+    "country": "Australia",
+    "formatted_address": "Old Cleveland Rd & Tilley Rd, Chandler QLD 4155",
+    "difficulty": "Intermediate / Pro",
+    "fee_type": "PAID",
+    "fee_details": "俱樂部與公開訓練段",
+    "opening_hours": "08:00 - 20:00",
+    "surface_type": "Asphalt Berms & Clay Jumps",
+    "features": [
+      "奧運 8 米出發台",
+      "連續急速波浪壓抬 (Rhythms)",
+      "UCI 認證規格"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=800&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Brisbane+Australia&latitude=-27.5140&longitude=153.1490",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=Brisbane+Australia",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=fox+racing+bmx+full+face+helmet&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 4002,
+    "name": "Velosolutions Pump Track (Zurich, Switzerland)",
+    "slug": "spot_zurich_velosolutions_pumptrack",
+    "category": "BMX",
+    "sub_category": "asphalt_pumptrack",
+    "latitude": 47.3769,
+    "longitude": 8.5417,
+    "city": "Zurich",
+    "country": "Switzerland",
+    "formatted_address": "Zurich Bike Park, Allmend Brunau, 8045 Zurich",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "fee_details": "公眾免費開放",
+    "opening_hours": "08:00 - 21:00",
+    "surface_type": "Precision Asphalt",
+    "features": [
+      "Velosolutions 原廠旗艦設計",
+      "連續壓波與大傾角彎牆",
+      "滑板、BMX 通用"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&w=800&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Zurich+Switzerland&latitude=47.3769&longitude=8.5417",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=Zurich+Switzerland+pass",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=g-form+pro-x3+knee+pads&tag=kait02bc-20"
+  }
+]
