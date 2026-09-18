@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import os
 import re
 import sys
@@ -56,6 +57,13 @@ def extract_clean_url(url_str):
         clean_u = match.group(0)
         return clean_u.rstrip('.,;)]}')
     return clean_token_or_url(url_str)
+
+def sanitize_single_line_text(val):
+    """清理標題與副標，去除換行與多餘前後引號"""
+    if not val:
+        return ""
+    cleaned = str(val).replace('\r', ' ').replace('\n', ' ').strip()
+    return re.sub(r'\s+', ' ', cleaned)
 
 def url_to_base64(image_url):
     clean_url = extract_clean_url(image_url)
@@ -196,7 +204,6 @@ def search_embeddable_youtube_video(query, category_key="SKATE"):
         if res.status_code == 200:
             vids = re.findall(r'"videoId":"([a-zA-Z0-9_-]{11})"', res.text)
             for vid in vids[:6]:
-                # 必須通過 oEmbed 驗證，確保 100% 存在且允許外嵌播放
                 oembed_url = f"https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v={vid}&format=json"
                 o_res = requests.get(oembed_url, timeout=3)
                 if o_res.status_code == 200:
@@ -207,7 +214,6 @@ def search_embeddable_youtube_video(query, category_key="SKATE"):
     except Exception as e:
         print(f"⚠️ YouTube 影片自動搜尋跳過: {e}")
 
-    # 分類備案官方 100% 存在且可播放影片
     fallback_map = {
         "SKATE": ("4YYTNkAdDD8", "Tony Hawk Lands FIRST-EVER 900 | World of X Games"),
         "BMX": ("E-VClAvTgSU", "Best of Logan Martin | Men BMX Freestyle Paris 2024 Highlights"),
@@ -240,9 +246,7 @@ def fetch_latest_rss_news(category_key):
 
             articles.append(f"- {title}: {clean_summary} (來源: {link})")
 
-            # 嘗試抓取官方媒體圖片
             if not official_img:
-                # 檢查 RSS 內建 media_content
                 if 'media_content' in entry and len(entry['media_content']) > 0:
                     official_img = entry['media_content'][0].get('url')
                 elif 'media_thumbnail' in entry and len(entry['media_thumbnail']) > 0:
@@ -250,7 +254,6 @@ def fetch_latest_rss_news(category_key):
                 elif 'enclosures' in entry and len(entry['enclosures']) > 0:
                     official_img = entry['enclosures'][0].get('href')
                 
-                # 若 RSS 內無圖片但有文章網址，爬取官網 og:image
                 if not official_img and link:
                     scraped_img, scraped_yt = scrape_official_media(link)
                     if scraped_img:
@@ -270,13 +273,11 @@ def fetch_latest_rss_news(category_key):
 # 3. GEMINI AI CONTENT ENGINE (RICH PILLARS)
 # ==========================================
 def generate_rich_autonomous_post(category, topic_type, official_img=None, official_yt=None):
-    """當 Gemini API 離線或未提供金鑰時，自動從極限運動精選知識庫生成深度專題"""
     cat = category.upper()
-    timestamp_str = datetime.now().strftime("%Y-%m-%d")
 
     autonomous_db = {
         "CLIMB": {
-            "title": f"🏆 IFSC 運動攀登世界巡迴焦點戰報：解析 8b+ 極限抱石與雙料路線密碼",
+            "title": "🏆 IFSC 運動攀登世界巡迴焦點戰報：解析 8b+ 極限抱石與雙料路線密碼",
             "subtitle": "直擊世界頂級攀岩大賽！全球頂尖選手齊聚，難度賽 45 度仰角牆與極限 Dyno 動態跳躍深度剖析",
             "city_tag": "INNSBRUCK",
             "gear_keyword": "climbing shoes chalk bag petzl harness",
@@ -308,7 +309,7 @@ def generate_rich_autonomous_post(category, topic_type, official_img=None, offic
             }
         },
         "SKATE": {
-            "title": f"🏆 SLS 街式滑板超級王冠總決賽倒數：全球頂級滑手終極陣容與招牌大招前瞻",
+            "title": "🏆 SLS 街式滑板超級王冠總決賽倒數：全球頂級滑手終極陣容與招牌大招前瞻",
             "subtitle": "直擊 SLS Super Crown 街式滑板最高殿堂！Nyjah Huston 與堀米雄斗的極限技術對決",
             "city_tag": "LOS ANGELES",
             "gear_keyword": "skateboarding shoes helmet protective gear",
@@ -340,7 +341,7 @@ SLS (Street League Skateboarding) Super Crown 總決賽作為全球最具含金�
             }
         },
         "BMX": {
-            "title": f"🏆 UCI BMX Freestyle 極限自由式世界巡迴賽：空中 720 空翻與連續神技解析",
+            "title": "🏆 UCI BMX Freestyle 極限自由式世界巡迴賽：空中 720 空翻與連續神技解析",
             "subtitle": "極限空中美學！解析全球頂尖 BMX 選手如何以超大滯空時間鎖定分站金牌與 Hyper 戰車配置",
             "city_tag": "GOLD COAST",
             "gear_keyword": "bmx helmet gloves fox racing",
@@ -370,7 +371,7 @@ UCI BMX Freestyle 自由式世界盃黃金海岸站展開激烈廝殺。本站�
             }
         },
         "SURF": {
-            "title": f"🏆 WSL 世界衝浪巡迴賽夏威夷 Pipeline 站：直擊致命巨浪管與王者對決",
+            "title": "🏆 WSL 世界衝浪巡迴賽夏威夷 Pipeline 站：直擊致命巨浪管與王者對決",
             "subtitle": "衝浪界的終極殿堂！解析冬季北太平洋超強湧浪下的管浪深度切入與計分關鍵",
             "city_tag": "OAHU HAWAII",
             "gear_keyword": "surfing wetsuit rip curl fcs fins",
@@ -402,7 +403,7 @@ UCI BMX Freestyle 自由式世界盃黃金海岸站展開激烈廝殺。本站�
             }
         },
         "SNOW": {
-            "title": f"🏆 X Games 冬季極限單板 SuperPipe 總決賽：空中三周轉體 1440 終極震撼",
+            "title": "🏆 X Games 冬季極限單板 SuperPipe 總決賽：空中三周轉體 1440 終極震撼",
             "subtitle": "直擊 22 尺巨型 U 型槽之戰！全球頂級單板滑雪選手的極限騰空與抓板美學",
             "city_tag": "ASPEN COLORADO",
             "gear_keyword": "snowboard goggles anon burton helmet",
@@ -435,9 +436,9 @@ UCI BMX Freestyle 自由式世界盃黃金海岸站展開激烈廝殺。本站�
 
     base = autonomous_db.get(cat, autonomous_db["SKATE"])
     return {
-        "title": base["title"],
-        "subtitle": base["subtitle"],
-        "city_tag": base["city_tag"],
+        "title": sanitize_single_line_text(base["title"]),
+        "subtitle": sanitize_single_line_text(base["subtitle"]),
+        "city_tag": sanitize_single_line_text(base["city_tag"]),
         "gear_keyword": base["gear_keyword"],
         "telegram_caption": base["telegram_caption"],
         "website_full_content": base["website_full_content"],
@@ -465,7 +466,6 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 
     rss_context, official_img, official_yt = fetch_latest_rss_news(display_category)
 
-    # 內容輪播排程：五大支柱
     weekday = datetime.now().weekday()
     SCHEDULE_MAP = {
         0: {"type": "EVENT", "title": "🗓️ 未來3-12個月賽事雷達與近期戰報"},
@@ -481,7 +481,6 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
     active_topic = topic_type if topic_type else current_schedule["type"]
     active_title = current_schedule["title"]
 
-    # 若有 API Key，嘗試呼叫 Google Gemini API
     if api_key:
         lang_map = {
             "zh-hk": "繁體中文（廣東話/香港口語，語氣熱血且極具社群吸引力）",
@@ -501,8 +500,8 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 必須以嚴格的 JSON 格式回傳（請勿輸出 Markdown 區塊或多餘文字），包含以下欄位：
 
 {{
-  "title": "精煉且具震撼力的封面主標題（嚴禁【】符號，約 20-35 字）",
-  "subtitle": "副標題或一句話亮點總結（約 30-50 字）",
+  "title": "精煉且具震撼力的封面主標題（嚴禁換行與【】符號，約 20-35 字）",
+  "subtitle": "副標題或一句話亮點總結（嚴禁換行，約 30-50 字）",
   "city_tag": "舉辦城市英文或主題城市（例如: TOKYO, SYDNEY, CALIFORNIA, GLOBAL）",
   "gear_keyword": "純英文推薦裝備搜尋關鍵字（例如: skate shoes pro / bmx helmet / surfing wetsuit，嚴禁中文）",
   "telegram_caption": "【📱 Telegram 社群專用速報短文】：約 100-150 字，極致精練，熱血 Emoji 列點總結 3 大賽事/動作/場地核心亮點，並帶有強烈社群互動號召！",
@@ -545,7 +544,6 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 """
         print(f"🤖 今日專欄: 【{active_title}】，正在呼叫 Gemini API 生成深度專題...")
         
-        # 動態偵測 API Key 支援的有效 Gemini 模型
         available_models = []
         try:
             list_res = requests.get(f"https://generativelanguage.googleapis.com/v1beta/models?key={api_key}", timeout=10)
@@ -560,7 +558,6 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
         except Exception as e:
             print(f"⚠️ 模型清單自動查詢跳過: {e}")
 
-        # 若未自動取得，使用最全面之相容清單
         if not available_models:
             available_models = [
                 "gemini-1.5-flash-latest",
@@ -597,6 +594,9 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
                         
                         parsed = json.loads(raw_text)
                         if parsed and isinstance(parsed, dict) and parsed.get("title"):
+                            parsed["title"] = sanitize_single_line_text(parsed.get("title", ""))
+                            parsed["subtitle"] = sanitize_single_line_text(parsed.get("subtitle", ""))
+                            parsed["city_tag"] = sanitize_single_line_text(parsed.get("city_tag", "GLOBAL"))
                             if official_img:
                                 parsed["official_cover_image"] = official_img
                             if official_yt:
@@ -608,7 +608,6 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
                 except Exception as e:
                     pass
 
-    # 若 API 離線或未設定金鑰，啟用自主深度專題生成引擎
     print(f"⚡ 啟用極限運動精選知識庫生成【{display_category}】深度專題...")
     return generate_rich_autonomous_post(display_category, active_topic, official_img, official_yt)
 
@@ -674,7 +673,6 @@ CATEGORY_ACTION_IMAGES = {
 }
 
 def get_action_sports_image(keyword, category_key="SKATE"):
-    """精準抓取對應運動項目的高畫質相片，徹底杜絕披薩與多肉植物等無關圖片"""
     cat = category_key.upper() if category_key else "SKATE"
     if cat not in CATEGORY_ACTION_IMAGES:
         cat = "SKATE"
@@ -683,7 +681,6 @@ def get_action_sports_image(keyword, category_key="SKATE"):
     if pexels_key:
         try:
             headers = {"Authorization": pexels_key}
-            # 確保搜尋詞強烈關聯極限運動
             search_query = f"{cat.lower()} action sports {keyword}".strip()
             clean_keyword = quote(search_query)
             url = f"https://api.pexels.com/v1/search?query={clean_keyword}&per_page=3&orientation=landscape"
@@ -695,7 +692,6 @@ def get_action_sports_image(keyword, category_key="SKATE"):
         except Exception as e:
             print(f"⚠️ Pexels 搜尋跳過: {e}")
 
-    # 預設使用真實極限運動相片庫
     selected = random.choice(CATEGORY_ACTION_IMAGES.get(cat, CATEGORY_ACTION_IMAGES["SKATE"]))
     print(f"📸 選用【{cat}】高畫質運動相片庫: {selected}")
     return selected
@@ -790,23 +786,29 @@ def upload_to_r2(local_file_path, r2_object_name):
         return None
 
 # ==========================================
-# 8. MARKDOWN POST GENERATOR (ASTRO COMPATIBLE)
+# 8. MARKDOWN POST GENERATOR (100% ASTRO & YAML SAFE)
 # ==========================================
 def save_post_as_markdown(post_data, image_url, source_label="Official / Editorial"):
     timestamp = datetime.now().strftime("%Y-%m-%d")
     category_key = post_data.get("category", "SKATE").upper()
     topic_type = post_data.get("topic_type", "GENERAL").upper()
-    title = post_data.get("title", "").replace('"', '\\"')
-    subtitle = post_data.get("subtitle", "").replace('"', '\\"')
-    gear_kw = post_data.get("gear_keyword", "extreme sports gear")
-    clean_slug = re.sub(r'[^a-zA-Z0-9]', '_', post_data.get("city_tag", "global").lower())[:15]
+    
+    # 徹底清除標題與副標換行符號
+    title = sanitize_single_line_text(post_data.get("title", f"{category_key} 特刊"))
+    subtitle = sanitize_single_line_text(post_data.get("subtitle", ""))
+    city_tag = sanitize_single_line_text(post_data.get("city_tag", "GLOBAL"))
+    gear_kw = post_data.get("gear_keyword", "extreme sports gear").strip()
+    
+    clean_slug = re.sub(r'[^a-zA-Z0-9]', '_', city_tag.lower())[:15]
+    if not clean_slug or clean_slug == "_":
+        clean_slug = "global"
     
     posts_dir = os.path.join("src", "content", "posts")
     os.makedirs(posts_dir, exist_ok=True)
     filename = f"{timestamp}_{category_key.lower()}_{clean_slug}.md"
     filepath = os.path.join(posts_dir, filename)
 
-    # 組合 YAML Frontmatter
+    # 組合 YAML Frontmatter 字典
     frontmatter_dict = {
         "title": title,
         "subtitle": subtitle,
@@ -816,54 +818,55 @@ def save_post_as_markdown(post_data, image_url, source_label="Official / Editori
         "cover_image": image_url,
         "cover_image_source": source_label,
         "author": "Una (@Una_next)",
-        "city_tag": post_data.get("city_tag", "GLOBAL"),
+        "city_tag": city_tag,
         "featured": True,
         "gear_keyword": gear_kw
     }
 
     if post_data.get("youtube_video_id"):
-        frontmatter_dict["youtube_video_id"] = post_data["youtube_video_id"]
-        frontmatter_dict["youtube_video_title"] = post_data.get("youtube_video_title", "官方精彩精華")
+        frontmatter_dict["youtube_video_id"] = str(post_data["youtube_video_id"]).strip()
+        frontmatter_dict["youtube_video_title"] = sanitize_single_line_text(post_data.get("youtube_video_title", "官方精彩精華"))
 
-    if post_data.get("expert_info") and post_data["expert_info"].get("name"):
+    if post_data.get("expert_info") and isinstance(post_data["expert_info"], dict) and post_data["expert_info"].get("name"):
         frontmatter_dict["expert_info"] = post_data["expert_info"]
 
-    if post_data.get("spot_info") and post_data["spot_info"].get("name"):
+    if post_data.get("spot_info") and isinstance(post_data["spot_info"], dict) and post_data["spot_info"].get("name"):
         frontmatter_dict["spot_info"] = post_data["spot_info"]
 
-    if post_data.get("event_info") and post_data["event_info"].get("event_name"):
+    if post_data.get("event_info") and isinstance(post_data["event_info"], dict) and post_data["event_info"].get("event_name"):
         frontmatter_dict["event_info"] = post_data["event_info"]
 
-    if post_data.get("trick_info") and post_data["trick_info"].get("trick_name"):
+    if post_data.get("trick_info") and isinstance(post_data["trick_info"], dict) and post_data["trick_info"].get("trick_name"):
         frontmatter_dict["trick_info"] = post_data["trick_info"]
 
-    if post_data.get("safety_gear_info") and post_data["safety_gear_info"].get("gear_type"):
+    if post_data.get("safety_gear_info") and isinstance(post_data["safety_gear_info"], dict) and post_data["safety_gear_info"].get("gear_type"):
         frontmatter_dict["safety_gear_info"] = post_data["safety_gear_info"]
 
     # Affiliate Product Object
     amazon_search_url = f"https://www.amazon.com/s?k={quote(gear_kw)}&tag={AMAZON_AFFILIATE_ID}"
     frontmatter_dict["affiliate_products"] = [
         {
-            "title": post_data.get("recommended_gear_title", f"{gear_kw.title()} 專業裝備"),
+            "title": sanitize_single_line_text(post_data.get("recommended_gear_title", f"{gear_kw.title()} 專業裝備")),
             "subtitle": "Amazon 官方直送・全球職業選手信賴",
             "search_term": gear_kw,
             "amazon_url": amazon_search_url,
-            "recommended_for": post_data.get("recommended_gear_reason", "日常訓練與賽事高強度防護必備"),
+            "recommended_for": sanitize_single_line_text(post_data.get("recommended_gear_reason", "日常訓練與賽事高強度防護必備")),
             "badge_text": "Una 編輯推薦"
         }
     ]
 
-    # 格式化 YAML Frontmatter
+    # 100% 絕對安全的 YAML 生成邏輯 (使用 json.dumps 自動處理所有引號、冒號與換行)
     yaml_lines = ["---"]
     for k, v in frontmatter_dict.items():
         if isinstance(v, (dict, list)):
-            json_str = json.dumps(v, ensure_ascii=False)
-            # 轉換為標準 YAML 物件結構
-            yaml_lines.append(f"{k}: {json_str}")
+            yaml_lines.append(f"{k}: {json.dumps(v, ensure_ascii=False)}")
         elif isinstance(v, bool):
             yaml_lines.append(f"{k}: {'true' if v else 'false'}")
+        elif isinstance(v, (int, float)):
+            yaml_lines.append(f"{k}: {v}")
         else:
-            yaml_lines.append(f"{k}: \"{v}\"")
+            # 使用 json.dumps 保證字串被嚴格且安全地轉義，徹底杜絕 YAML 報錯
+            yaml_lines.append(f"{k}: {json.dumps(str(v), ensure_ascii=False)}")
     yaml_lines.append("---")
     yaml_lines.append("")
     yaml_lines.append(f"![{title}]({image_url})")
@@ -872,7 +875,7 @@ def save_post_as_markdown(post_data, image_url, source_label="Official / Editori
 
     with open(filepath, "w", encoding="utf-8") as f:
         f.write("\n".join(yaml_lines))
-    print(f"📝 Astro Markdown 文章已生成: {filepath}")
+    print(f"📝 Astro Markdown 文章已生成 (100% YAML Safe): {filepath}")
     return filepath
 
 # ==========================================
@@ -960,6 +963,8 @@ async def main_async():
     # 計算網站文章專屬 URL
     today_date_str = datetime.now().strftime("%Y-%m-%d")
     clean_slug = re.sub(r'[^a-zA-Z0-9]', '_', city_tag.lower())[:15]
+    if not clean_slug or clean_slug == "_":
+        clean_slug = "global"
     post_slug = f"{today_date_str}_{category.lower()}_{clean_slug}"
     post_web_url = f"https://unanext.fans/posts/{post_slug}/"
     amazon_search_url = f"https://www.amazon.com/s?k={quote(gear_kw)}&tag={AMAZON_AFFILIATE_ID}"
