@@ -3,17 +3,26 @@
 unanext.fans | Global Extreme Sports Spot Hub - Enhanced Multi-Region ETL Engine
 ================================================================================
 Automated OpenStreetMap (Overpass API) extraction, transformation, and
-Supabase PostGIS batch upsert pipeline with robust BBox & Country alias matching.
+Supabase PostGIS batch upsert pipeline with robust BBox, Official Site OG image,
+OSM/Wikimedia photo harvesting, and Category-accurate real venue Fallbacks.
 """
 
 import os
 import sys
 import json
 import time
+import re
 import urllib.parse
 import argparse
 import requests
 from typing import List, Dict, Any, Optional
+
+# 可選：若有安裝 BeautifulSoup 則使用，若無則降級為正則表達式快速解析
+try:
+    from bs4 import BeautifulSoup
+    HAS_BS4 = True
+except ImportError:
+    HAS_BS4 = False
 
 OVERPASS_SERVERS = [
     "https://overpass-api.de/api/interpreter",
@@ -68,6 +77,99 @@ KNOWN_REGION_BBOX = {
 }
 
 AFFILIATE_AMAZON_TAG = os.getenv("AMAZON_AFFILIATE_TAG", "kait02bc-20")
+GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY", "")
+
+# 專屬高畫質運動實景 Fallback 圖片庫（精準匹配場地風格）
+CATEGORY_FALLBACK_IMAGES = {
+    "SKATE": [
+        "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "CLIMB": [
+        "https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1564769662533-4f00a87b4056?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "SURF": [
+        "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "BMX": [
+        "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1571068316344-75bc76f77890?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&w=1000&q=80"
+    ]
+}
+
+def extract_spot_photos(tags: Dict[str, str], name: str, city: str, category: str, lat: float, lng: float) -> List[str]:
+    """提取官方圖片、OSM 實景圖、官網 og:image 或高品質實景圖庫"""
+    photos = []
+    
+    # 1. 檢查 OSM 節點中直連的圖片網址
+    for tag_key in ["image", "image:url", "photo", "url:image", "mapillary"]:
+        val = tags.get(tag_key)
+        if val and (val.startswith("http://") or val.startswith("https://")):
+            photos.append(val)
+            break
+            
+    # 2. 檢查 Wikimedia Commons 檔案標籤
+    if not photos:
+        wikimedia = tags.get("wikimedia_commons") or tags.get("image")
+        if wikimedia and (wikimedia.startswith("File:") or wikimedia.startswith("file:")):
+            clean_file = wikimedia.split(":", 1)[1].strip().replace(" ", "_")
+            wiki_url = f"https://commons.wikimedia.org/wiki/Special:FilePath/{urllib.parse.quote(clean_file)}?width=1000"
+            photos.append(wiki_url)
+
+    # 3. 檢查官方網站 OpenGraph (og:image)
+    if not photos:
+        website_url = tags.get("website") or tags.get("contact:website") or tags.get("url")
+        if website_url and website_url.startswith("http"):
+            try:
+                resp = requests.get(website_url, timeout=3, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
+                if resp.status_code == 200:
+                    html = resp.text
+                    og_img = None
+                    if HAS_BS4:
+                        soup = BeautifulSoup(html, "html.parser")
+                        tag = soup.find("meta", property="og:image") or soup.find("meta", attrs={"name": "twitter:image"})
+                        if tag and tag.get("content"):
+                            og_img = tag.get("content")
+                    else:
+                        match = re.search(r'<meta\s+[^>]*property=["\']og:image["\'][^>]*content=["\']([^"\']+)["\']', html, re.IGNORECASE)
+                        if match:
+                            og_img = match.group(1)
+                            
+                    if og_img:
+                        if not og_img.startswith("http"):
+                            og_img = urllib.parse.urljoin(website_url, og_img)
+                        photos.append(og_img)
+            except Exception:
+                pass
+
+    # 4. 若有設定 GOOGLE_MAPS_API_KEY，嘗試透過 Google Places 取得用戶真實實拍照
+    if not photos and GOOGLE_MAPS_API_KEY:
+        try:
+            search_query = f"{name} {city}".strip()
+            find_url = f"https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input={urllib.parse.quote(search_query)}&inputtype=textquery&fields=photos&key={GOOGLE_MAPS_API_KEY}"
+            resp = requests.get(find_url, timeout=4).json()
+            candidates = resp.get("candidates", [])
+            if candidates and "photos" in candidates[0]:
+                photo_ref = candidates[0]["photos"][0]["photo_reference"]
+                google_photo_url = f"https://maps.googleapis.com/maps/api/place/photo?maxwidth=1000&photoreference={photo_ref}&key={GOOGLE_MAPS_API_KEY}"
+                photos.append(google_photo_url)
+        except Exception:
+            pass
+
+    # 5. 若無任何線上圖，使用該運動項目的高畫質現場實景圖（保證無咖啡等不相關圖）
+    if not photos:
+        fallback_list = CATEGORY_FALLBACK_IMAGES.get(category, CATEGORY_FALLBACK_IMAGES["SKATE"])
+        # 利用坐標 Hash 固定指派一張圖，保證同一個場地每次開啟顯示相同的實景風格
+        img_idx = int(abs(lat * 1000 + lng * 1000)) % len(fallback_list)
+        photos.append(fallback_list[img_idx])
+
+    return photos
 
 def build_overpass_query(category: str, area_name: Optional[str] = None, bbox: Optional[List[float]] = None) -> str:
     """Constructs optimized Overpass QL query with timeout and center tags."""
@@ -221,6 +323,9 @@ def transform_element(element: Dict[str, Any], default_category: str) -> Optiona
 
     affiliates = build_affiliate_links(name, city, country, default_category, lat, lng)
     
+    # 執行全自動相片提取與關聯
+    photos = extract_spot_photos(tags, name, city, default_category, lat, lng)
+    
     return {
         "osm_id": osm_id,
         "name": name,
@@ -238,7 +343,7 @@ def transform_element(element: Dict[str, Any], default_category: str) -> Optiona
         "opening_hours": tags.get("opening_hours", "依現場公告"),
         "surface_type": tags.get("surface", "Standard"),
         "features": features,
-        "photos": [],
+        "photos": photos,
         "tags": tags,
         **affiliates
     }
