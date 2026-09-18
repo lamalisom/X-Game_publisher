@@ -1,0 +1,359 @@
+---
+interface Props {
+  initialLat?: number;
+  initialLng?: number;
+  initialZoom?: number;
+  selectedCategory?: string;
+}
+
+const {
+  initialLat = 22.3193,
+  initialLng = 114.1694,
+  initialZoom = 11,
+  selectedCategory = 'ALL'
+} = Astro.props;
+
+const mapboxToken = import.meta.env.PUBLIC_MAPBOX_TOKEN || '';
+---
+
+<div class="relative w-full h-[78vh] min-h-[550px] rounded-3xl overflow-hidden border border-xborder bg-xdark shadow-2xl">
+  
+  <!-- Mapbox CSS & JS -->
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css" rel="stylesheet" />
+  <script is:inline src="https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js"></script>
+
+  <!-- Top Floating Controls: Category Filter & Stats -->
+  <div class="absolute top-4 left-4 right-4 z-20 flex flex-wrap items-center justify-between gap-3 pointer-events-none">
+    
+    <!-- Sport Category Buttons -->
+    <div class="flex items-center gap-1.5 p-1.5 rounded-2xl bg-xblack/85 backdrop-blur-md border border-xborder/80 shadow-xl pointer-events-auto overflow-x-auto max-w-full">
+      <button data-cat="ALL" class="cat-btn px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-200 bg-xorange text-white shadow-glow-orange">
+        🔥 全部 ALL
+      </button>
+      <button data-cat="SKATE" class="cat-btn px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xcard transition-all">
+        🛹 滑板 SKATE
+      </button>
+      <button data-cat="CLIMB" class="cat-btn px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xcard transition-all">
+        🧗 攀岩 CLIMB
+      </button>
+      <button data-cat="SURF" class="cat-btn px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xcard transition-all">
+        🏄 衝浪 SURF
+      </button>
+      <button data-cat="BMX" class="cat-btn px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xcard transition-all">
+        🚲 小輪 BMX
+      </button>
+    </div>
+
+    <!-- Live Status & Spot Counter -->
+    <div class="hidden sm:flex items-center gap-3 px-4 py-2 rounded-2xl bg-xblack/85 backdrop-blur-md border border-xborder/80 shadow-xl pointer-events-auto text-xs font-mono">
+      <span class="flex items-center gap-1.5 text-cyan-400 font-bold">
+        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+        <span id="spots-count">載入中...</span>
+      </span>
+      <span class="text-gray-500">|</span>
+      <span class="text-gray-400 text-[11px]">BBox 空間查詢引擎</span>
+    </div>
+  </div>
+
+  <!-- Map Container -->
+  <div id="mapbox-container" class="w-full h-full"></div>
+
+  <!-- Quick Zoom & Reset Presets (Bottom Left) -->
+  <div class="absolute bottom-6 left-6 z-20 flex flex-wrap gap-2 pointer-events-auto">
+    <div class="px-3 py-1.5 rounded-xl bg-xblack/90 backdrop-blur-md border border-xborder text-[11px] font-mono text-gray-300 flex items-center gap-2 shadow-lg">
+      <span class="text-gray-400">快速切換：</span>
+      <button class="city-preset hover:text-xorange font-bold transition" data-lng="114.1694" data-lat="22.3193" data-zoom="11">🇭🇰 香港</button>
+      <span>·</span>
+      <button class="city-preset hover:text-xorange font-bold transition" data-lng="139.7020" data-lat="35.6620" data-zoom="11">🇯🇵 東京</button>
+      <span>·</span>
+      <button class="city-preset hover:text-xorange font-bold transition" data-lng="-118.2437" data-lat="34.0522" data-zoom="10">🇺🇸 加州</button>
+      <span>·</span>
+      <button class="city-preset hover:text-xorange font-bold transition" data-lng="151.2093" data-lat="-33.8688" data-zoom="10">🇦🇺 悉尼</button>
+      <span>·</span>
+      <button class="city-preset hover:text-xorange font-bold transition" data-lng="5.3698" data-lat="43.2965" data-zoom="11">🇫🇷 法國</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Custom Styles for Mapbox Markers & Popup -->
+<style is:global>
+  .mapboxgl-popup-content {
+    background: #111116 !important;
+    color: #f3f4f6 !important;
+    border-radius: 1.25rem !important;
+    padding: 0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8) !important;
+    overflow: hidden !important;
+    max-width: 320px !important;
+    width: 300px !important;
+  }
+  .mapboxgl-popup-tip {
+    border-top-color: #111116 !important;
+  }
+  .mapboxgl-popup-close-button {
+    color: #fff !important;
+    padding: 6px 10px !important;
+    font-size: 16px !important;
+    z-index: 10 !important;
+  }
+</style>
+
+<script is:inline define:vars={{ mapboxToken, initialLat, initialLng, initialZoom, selectedCategory }}>
+  let currentCategory = selectedCategory || 'ALL';
+  let map;
+
+  function initMap() {
+    mapboxgl.accessToken = mapboxToken || 'pk.eyJ1IjoibGVvLWthaXQiLCJhIjoiY20wa3F6Z2YwMGV5bDJrczE1a2kyeG11dyJ9.E8y4kE5c9v8Z3c8w2v3q4w';
+
+    map = new mapboxgl.Map({
+      container: 'mapbox-container',
+      style: 'mapbox://styles/mapbox/dark-v11',
+      center: [initialLng, initialLat],
+      zoom: initialZoom,
+      attributionControl: false,
+    });
+
+    map.addControl(new mapboxgl.NavigationControl({ showCompass: true }), 'bottom-right');
+    map.addControl(new mapboxgl.GeolocateControl({ positionOptions: { enableHighAccuracy: true }, trackUserLocation: true }), 'bottom-right');
+
+    map.on('load', () => {
+      // 1. Add GeoJSON Source with Clustering
+      map.addSource('spots-source', {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: [] },
+        cluster: true,
+        clusterMaxZoom: 14,
+        clusterRadius: 50,
+      });
+
+      // 2. Clusters Layer
+      map.addLayer({
+        id: 'clusters',
+        type: 'circle',
+        source: 'spots-source',
+        filter: ['has', 'point_count'],
+        paint: {
+          'circle-color': [
+            'step',
+            ['get', 'point_count'],
+            '#ff5500', 10,
+            '#f59e0b', 30,
+            '#06b6d4', 75,
+            '#a855f7'
+          ],
+          'circle-radius': [
+            'step',
+            ['get', 'point_count'],
+            18, 10,
+            24, 30,
+            30, 75,
+            36
+          ],
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#ffffff',
+        },
+      });
+
+      // 3. Cluster Count Label
+      map.addLayer({
+        id: 'cluster-count',
+        type: 'symbol',
+        source: 'spots-source',
+        filter: ['has', 'point_count'],
+        layout: {
+          'text-field': '{point_count_abbreviated}',
+          'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+          'text-size': 12,
+        },
+        paint: {
+          'text-color': '#ffffff',
+        },
+      });
+
+      // 4. Unclustered Individual Spot Markers Layer
+      map.addLayer({
+        id: 'unclustered-point',
+        type: 'circle',
+        source: 'spots-source',
+        filter: ['!', ['has', 'point_count']],
+        paint: {
+          'circle-color': [
+            'match',
+            ['get', 'category'],
+            'SKATE', '#ff5500',
+            'CLIMB', '#10b981',
+            'SURF', '#06b6d4',
+            'BMX', '#a855f7',
+            'SNOW', '#38bdf8',
+            '#ff5500'
+          ],
+          'circle-radius': 8,
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#ffffff',
+        },
+      });
+
+      // Cluster Click -> Zoom In
+      map.on('click', 'clusters', (e) => {
+        const features = map.queryRenderedFeatures(e.point, { layers: ['clusters'] });
+        const clusterId = features[0].properties.cluster_id;
+        map.getSource('spots-source').getClusterExpansionZoom(clusterId, (err, zoom) => {
+          if (err) return;
+          map.easeTo({
+            center: features[0].geometry.coordinates,
+            zoom: zoom + 1,
+            duration: 600,
+          });
+        });
+      });
+
+      // Single Spot Click -> Interactive Popup
+      map.on('click', 'unclustered-point', (e) => {
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const prop = e.features[0].properties;
+
+        let featuresArr = [];
+        try {
+          featuresArr = typeof prop.features === 'string' ? JSON.parse(prop.features) : (prop.features || []);
+        } catch (_) {}
+
+        let photosArr = [];
+        try {
+          photosArr = typeof prop.photos === 'string' ? JSON.parse(prop.photos) : (prop.photos || []);
+        } catch (_) {}
+
+        const coverPhoto = photosArr[0] || 'https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=600&q=80';
+        const navUrl = `https://www.google.com/maps/dir/?api=1&destination=${coordinates[1]},${coordinates[0]}`;
+
+        const categoryColors = {
+          SKATE: 'bg-[#ff5500]',
+          CLIMB: 'bg-emerald-600',
+          SURF: 'bg-cyan-600',
+          BMX: 'bg-purple-600',
+          SNOW: 'bg-sky-600',
+        };
+        const badgeBg = categoryColors[prop.category] || 'bg-[#ff5500]';
+
+        const popupHtml = `
+          <div class="flex flex-col text-white font-sans">
+            <div class="relative h-28 w-full overflow-hidden bg-gray-900">
+              <img src="${coverPhoto}" alt="${prop.name}" class="w-full h-full object-cover" />
+              <div class="absolute top-2 left-2 ${badgeBg} text-white px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider">
+                ${prop.category} · ${prop.difficulty || 'All Levels'}
+              </div>
+            </div>
+            
+            <div class="p-3.5 space-y-2.5">
+              <div>
+                <h4 class="font-black text-sm text-white leading-snug">${prop.name}</h4>
+                <p class="text-[11px] text-gray-400 font-mono mt-0.5">📍 ${prop.city || prop.country || 'Global Spot'}</p>
+              </div>
+
+              ${featuresArr.length > 0 ? `
+                <div class="flex flex-wrap gap-1">
+                  ${featuresArr.slice(0, 3).map(f => `<span class="px-1.5 py-0.5 rounded bg-white/10 text-[10px] text-gray-300 font-mono">${f}</span>`).join('')}
+                </div>
+              ` : ''}
+
+              <!-- Commercial & Navigation Funnel -->
+              <div class="grid grid-cols-2 gap-1.5 pt-2 border-t border-white/10 text-xs">
+                <a href="${navUrl}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-1 py-1.5 px-2 rounded-lg bg-white/10 hover:bg-white/20 text-white font-bold transition text-center">
+                  🧭 路線導航
+                </a>
+                <a href="${prop.affiliate_gear_url || 'https://www.amazon.com/s?k=extreme+sports+gear&tag=kait02bc-20'}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-1 py-1.5 px-2 rounded-lg bg-[#ff5500] hover:bg-[#e04b00] text-white font-bold transition text-center shadow-glow-orange">
+                  🛒 裝備推薦
+                </a>
+                <a href="${prop.affiliate_hotel_url || 'https://www.agoda.com'}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-1 py-1.5 px-2 rounded-lg bg-blue-600/80 hover:bg-blue-600 text-white font-bold transition text-center">
+                  🏨 附近酒店
+                </a>
+                <a href="${prop.affiliate_ticket_url || 'https://www.klook.com'}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-1 py-1.5 px-2 rounded-lg bg-orange-600/80 hover:bg-orange-600 text-white font-bold transition text-center">
+                  🎟️ 體驗預約
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+
+        new mapboxgl.Popup({ offset: 15 })
+          .setLngLat(coordinates)
+          .setHTML(popupHtml)
+          .addTo(map);
+      });
+
+      // Cursor hover feedback
+      map.on('mouseenter', 'clusters', () => { map.getCanvas().style.cursor = 'pointer'; });
+      map.on('mouseleave', 'clusters', () => { map.getCanvas().style.cursor = ''; });
+      map.on('mouseenter', 'unclustered-point', () => { map.getCanvas().style.cursor = 'pointer'; });
+      map.on('mouseleave', 'unclustered-point', () => { map.getCanvas().style.cursor = ''; });
+
+      fetchBBoxSpots();
+      map.on('moveend', fetchBBoxSpots);
+    });
+  }
+
+  let fetchTimeout = null;
+  function fetchBBoxSpots() {
+    if (!map || !map.getSource('spots-source')) return;
+
+    if (fetchTimeout) clearTimeout(fetchTimeout);
+
+    fetchTimeout = setTimeout(async () => {
+      const bounds = map.getBounds();
+      const zoom = map.getZoom();
+      const minLng = bounds.getWest();
+      const minLat = bounds.getSouth();
+      const maxLng = bounds.getEast();
+      const maxLat = bounds.getNorth();
+
+      const endpoint = `/api/spots?minLng=${minLng.toFixed(4)}&minLat=${minLat.toFixed(4)}&maxLng=${maxLng.toFixed(4)}&maxLat=${maxLat.toFixed(4)}&category=${currentCategory}&zoom=${Math.round(zoom)}`;
+
+      try {
+        const resp = await fetch(endpoint);
+        if (resp.ok) {
+          const geojson = await resp.json();
+          map.getSource('spots-source').setData(geojson);
+          
+          const countEl = document.getElementById('spots-count');
+          if (countEl) {
+            countEl.innerText = `${geojson.features?.length || 0} 個場地點位 (當前視窗)`;
+          }
+        }
+      } catch (err) {
+        console.error('Failed to query spots in BBox:', err);
+      }
+    }, 150);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initMap();
+
+    const catButtons = document.querySelectorAll('.cat-btn');
+    catButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const targetCat = btn.getAttribute('data-cat');
+        currentCategory = targetCat;
+
+        catButtons.forEach(b => {
+          b.className = 'cat-btn px-3 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xcard transition-all';
+        });
+        btn.className = 'cat-btn px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-200 bg-xorange text-white shadow-glow-orange';
+
+        fetchBBoxSpots();
+      });
+    });
+
+    const presets = document.querySelectorAll('.city-preset');
+    presets.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const lng = parseFloat(btn.getAttribute('data-lng'));
+        const lat = parseFloat(btn.getAttribute('data-lat'));
+        const zoom = parseFloat(btn.getAttribute('data-zoom'));
+        if (map) {
+          map.flyTo({ center: [lng, lat], zoom: zoom, speed: 1.2 });
+        }
+      });
+    });
+  });
+</script>
