@@ -45,13 +45,13 @@ const mapboxToken = import.meta.env.PUBLIC_MAPBOX_TOKEN || '';
     </div>
 
     <!-- Live Status & Spot Counter -->
-    <div class="hidden sm:flex items-center gap-3 px-4 py-2 rounded-2xl bg-xblack/85 backdrop-blur-md border border-xborder/80 shadow-xl pointer-events-auto text-xs font-mono">
+    <div class="flex items-center gap-3 px-4 py-2 rounded-2xl bg-xblack/85 backdrop-blur-md border border-xborder/80 shadow-xl pointer-events-auto text-xs font-mono">
       <span class="flex items-center gap-1.5 text-cyan-400 font-bold">
-        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
-        <span id="spots-count">載入中...</span>
+        <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+        <span id="spots-count">探索中...</span>
       </span>
       <span class="text-gray-500">|</span>
-      <span class="text-gray-400 text-[11px]">BBox 空間查詢引擎</span>
+      <span class="text-gray-400 text-[11px]">BBox 空間雷達</span>
     </div>
   </div>
 
@@ -103,6 +103,7 @@ const mapboxToken = import.meta.env.PUBLIC_MAPBOX_TOKEN || '';
 <script is:inline define:vars={{ mapboxToken, initialLat, initialLng, initialZoom, selectedCategory }}>
   let currentCategory = selectedCategory || 'ALL';
   let map;
+  let cachedSpots = [];
 
   function initMap() {
     mapboxgl.accessToken = mapboxToken || 'pk.eyJ1IjoibGVvLWthaXQiLCJhIjoiY20wa3F6Z2YwMGV5bDJrczE1a2kyeG11dyJ9.E8y4kE5c9v8Z3c8w2v3q4w';
@@ -118,8 +119,8 @@ const mapboxToken = import.meta.env.PUBLIC_MAPBOX_TOKEN || '';
     map.addControl(new mapboxgl.NavigationControl({ showCompass: true }), 'bottom-right');
     map.addControl(new mapboxgl.GeolocateControl({ positionOptions: { enableHighAccuracy: true }, trackUserLocation: true }), 'bottom-right');
 
-    map.on('load', () => {
-      // 1. Add GeoJSON Source with Clustering
+    map.on('load', async () => {
+      // 1. 初始化資料來源
       map.addSource('spots-source', {
         type: 'geojson',
         data: { type: 'FeatureCollection', features: [] },
@@ -128,7 +129,7 @@ const mapboxToken = import.meta.env.PUBLIC_MAPBOX_TOKEN || '';
         clusterRadius: 50,
       });
 
-      // 2. Clusters Layer
+      // 2. 聚類圓圈圖層
       map.addLayer({
         id: 'clusters',
         type: 'circle',
@@ -156,7 +157,7 @@ const mapboxToken = import.meta.env.PUBLIC_MAPBOX_TOKEN || '';
         },
       });
 
-      // 3. Cluster Count Label
+      // 3. 聚類數量數字標籤
       map.addLayer({
         id: 'cluster-count',
         type: 'symbol',
@@ -172,7 +173,7 @@ const mapboxToken = import.meta.env.PUBLIC_MAPBOX_TOKEN || '';
         },
       });
 
-      // 4. Unclustered Individual Spot Markers Layer
+      // 4. 單獨點位標記圖層
       map.addLayer({
         id: 'unclustered-point',
         type: 'circle',
@@ -195,7 +196,7 @@ const mapboxToken = import.meta.env.PUBLIC_MAPBOX_TOKEN || '';
         },
       });
 
-      // Cluster Click -> Zoom In
+      // 點擊聚類放大
       map.on('click', 'clusters', (e) => {
         const features = map.queryRenderedFeatures(e.point, { layers: ['clusters'] });
         const clusterId = features[0].properties.cluster_id;
@@ -209,7 +210,7 @@ const mapboxToken = import.meta.env.PUBLIC_MAPBOX_TOKEN || '';
         });
       });
 
-      // Single Spot Click -> Interactive Popup
+      // 點擊單個點位彈出商業卡片
       map.on('click', 'unclustered-point', (e) => {
         const coordinates = e.features[0].geometry.coordinates.slice();
         const prop = e.features[0].properties;
@@ -282,17 +283,25 @@ const mapboxToken = import.meta.env.PUBLIC_MAPBOX_TOKEN || '';
           .addTo(map);
       });
 
-      // Cursor hover feedback
       map.on('mouseenter', 'clusters', () => { map.getCanvas().style.cursor = 'pointer'; });
       map.on('mouseleave', 'clusters', () => { map.getCanvas().style.cursor = ''; });
       map.on('mouseenter', 'unclustered-point', () => { map.getCanvas().style.cursor = 'pointer'; });
       map.on('mouseleave', 'unclustered-point', () => { map.getCanvas().style.cursor = ''; });
+
+      // 預先載入靜態全域快取
+      try {
+        const res = await fetch('/data/global_spots.json');
+        if (res.ok) {
+          cachedSpots = await res.json();
+        }
+      } catch (_) {}
 
       fetchBBoxSpots();
       map.on('moveend', fetchBBoxSpots);
     });
   }
 
+  // 高效能視窗資料載入與降級渲染
   let fetchTimeout = null;
   function fetchBBoxSpots() {
     if (!map || !map.getSource('spots-source')) return;
@@ -307,23 +316,54 @@ const mapboxToken = import.meta.env.PUBLIC_MAPBOX_TOKEN || '';
       const maxLng = bounds.getEast();
       const maxLat = bounds.getNorth();
 
-      const endpoint = `/api/spots?minLng=${minLng.toFixed(4)}&minLat=${minLat.toFixed(4)}&maxLng=${maxLng.toFixed(4)}&maxLat=${maxLat.toFixed(4)}&category=${currentCategory}&zoom=${Math.round(zoom)}`;
+      let geojsonData = null;
 
+      // 1. 嘗試請求後端 API
       try {
+        const endpoint = `/api/spots?minLng=${minLng.toFixed(4)}&minLat=${minLat.toFixed(4)}&maxLng=${maxLng.toFixed(4)}&maxLat=${maxLat.toFixed(4)}&category=${currentCategory}&zoom=${Math.round(zoom)}`;
         const resp = await fetch(endpoint);
         if (resp.ok) {
-          const geojson = await resp.json();
-          map.getSource('spots-source').setData(geojson);
-          
-          const countEl = document.getElementById('spots-count');
-          if (countEl) {
-            countEl.innerText = `${geojson.features?.length || 0} 個場地點位 (當前視窗)`;
+          const res = await resp.json();
+          if (res.features && res.features.length > 0) {
+            geojsonData = res;
           }
         }
-      } catch (err) {
-        console.error('Failed to query spots in BBox:', err);
+      } catch (_) {}
+
+      // 2. 自動秒速降級至靜態 CDN 資料集
+      if (!geojsonData && cachedSpots.length > 0) {
+        const filtered = cachedSpots.filter((s) => {
+          const inBbox = s.longitude >= minLng && s.longitude <= maxLng && s.latitude >= minLat && s.latitude <= maxLat;
+          const matchesCat = currentCategory === 'ALL' || s.category === currentCategory;
+          return inBbox && matchesCat;
+        });
+
+        geojsonData = {
+          type: 'FeatureCollection',
+          features: filtered.map((s) => ({
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [s.longitude, s.latitude],
+            },
+            properties: s,
+          })),
+        };
       }
-    }, 150);
+
+      // 3. 更新圖層與計數
+      if (geojsonData) {
+        map.getSource('spots-source').setData(geojsonData);
+        const countEl = document.getElementById('spots-count');
+        if (countEl) {
+          const total = geojsonData.features?.length || 0;
+          countEl.innerText = total > 0 ? `${total} 個極限點位` : `可視區尚無點位 (可縮小地圖)`;
+        }
+      } else {
+        const countEl = document.getElementById('spots-count');
+        if (countEl) countEl.innerText = `0 個極限點位`;
+      }
+    }, 120);
   }
 
   document.addEventListener('DOMContentLoaded', () => {
