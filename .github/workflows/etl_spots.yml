@@ -1,0 +1,73 @@
+name: ETL Ingest Global Spots (OSM)
+
+on:
+  workflow_dispatch:
+    inputs:
+      country:
+        description: '目標國家/地區 (Target Country, e.g. Japan, Hong Kong, France, USA)'
+        required: false
+        default: 'Japan'
+        type: string
+      category:
+        description: '運動項目 (Category)'
+        required: true
+        default: 'ALL'
+        type: choice
+        options:
+          - ALL
+          - SKATE
+          - CLIMB
+          - SURF
+          - BMX
+
+jobs:
+  run_etl:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          pip install requests python-dotenv
+
+      - name: Run Overpass ETL Pipeline
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          AMAZON_AFFILIATE_TAG: 'kait02bc-20'
+        run: |
+          COUNTRY_PARAM="${{ github.event.inputs.country }}"
+          CATEGORY_PARAM="${{ github.event.inputs.category }}"
+          
+          if [ -n "$COUNTRY_PARAM" ]; then
+            python3 scripts/etl_osm_spots.py --country "$COUNTRY_PARAM" --category "$CATEGORY_PARAM"
+          else
+            python3 scripts/etl_osm_spots.py --category "$CATEGORY_PARAM"
+          fi
+
+      - name: Commit & Push Updated Datasets
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/
+          if git diff --staged --quiet; then
+            echo "No file changes to commit."
+          else
+            git commit -m "chore(etl): update global spots dataset for ${{ github.event.inputs.country }} [auto]"
+            git pull --rebase origin main || true
+            git push origin main || git push origin HEAD:main
+            echo "✅ Successfully synced and pushed to main branch!"
+          fi
