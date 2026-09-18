@@ -1,20 +1,9 @@
 #!/usr/bin/env python3
 """
-unanext.fans | Global Extreme Sports Spot Hub - ETL Data Ingestion Engine
-========================================================================
+unanext.fans | Global Extreme Sports Spot Hub - Enhanced Multi-Region ETL Engine
+================================================================================
 Automated OpenStreetMap (Overpass API) extraction, transformation, and
-Supabase PostGIS batch upsert pipeline.
-
-Supports:
-- 🛹 Skateboarding (Skateparks, Street plazas, Bowls)
-- 🧗 Climbing & Bouldering (Indoor Gyms, Natural Crags, Boulders)
-- 🏄 Surfing (Surf Breaks, Point Breaks, Beach Breaks)
-- 🚲 BMX & Pump Tracks (BMX Tracks, Asphalt Pump Tracks)
-
-Usage:
-  python3 scripts/etl_osm_spots.py --country "Japan" --category "SKATE"
-  python3 scripts/etl_osm_spots.py --bbox 22.1,113.8,22.6,114.4 --category "ALL"
-  python3 scripts/etl_osm_spots.py --global --limit 500
+Supabase PostGIS batch upsert pipeline with robust BBox & Country alias matching.
 """
 
 import os
@@ -60,15 +49,40 @@ CATEGORY_TAG_QUERIES = {
     ]
 }
 
+# 預定義熱門地區 BBox 坐標 (minLat, minLng, maxLat, maxLng) 提升查詢命中率與速度
+KNOWN_REGION_BBOX = {
+    "hong kong": [22.15, 113.83, 22.58, 114.45],
+    "hk": [22.15, 113.83, 22.58, 114.45],
+    "香港": [22.15, 113.83, 22.58, 114.45],
+    "tokyo": [35.50, 139.50, 35.85, 139.95],
+    "東京": [35.50, 139.50, 35.85, 139.95],
+    "japan": [31.0, 129.5, 45.5, 145.8],
+    "日本": [31.0, 129.5, 45.5, 145.8],
+    "taiwan": [21.8, 119.8, 25.4, 122.1],
+    "台灣": [21.8, 119.8, 25.4, 122.1],
+    "sydney": [-34.15, 150.60, -33.55, 151.35],
+    "los angeles": [33.70, -118.67, 34.34, -118.15],
+    "california": [32.5, -124.5, 42.0, -114.1],
+    "paris": [48.75, 2.15, 48.95, 2.45],
+    "france": [42.3, -4.8, 51.1, 8.2]
+}
+
 AFFILIATE_AMAZON_TAG = os.getenv("AMAZON_AFFILIATE_TAG", "kait02bc-20")
 
 def build_overpass_query(category: str, area_name: Optional[str] = None, bbox: Optional[List[float]] = None) -> str:
     """Constructs optimized Overpass QL query with timeout and center tags."""
     filters = CATEGORY_TAG_QUERIES.get(category, [])
     
-    if bbox:
-        # bbox format: minLat, minLng, maxLat, maxLng
-        spatial_filter = f"({bbox[0]},{bbox[1]},{bbox[2]},{bbox[3]})"
+    # 優先使用精確 BBox 範圍
+    target_bbox = bbox
+    if not target_bbox and area_name:
+        clean_area = area_name.strip().lower()
+        if clean_area in KNOWN_REGION_BBOX:
+            target_bbox = KNOWN_REGION_BBOX[clean_area]
+            print(f"🗺️ 自動套用【{area_name}】專屬地理 BBox 坐標加速查詢: {target_bbox}")
+
+    if target_bbox:
+        spatial_filter = f"({target_bbox[0]},{target_bbox[1]},{target_bbox[2]},{target_bbox[3]})"
         statements = "".join([f"  {f}{spatial_filter};\n" for f in filters])
         query = f"""
 [out:json][timeout:90];
@@ -77,18 +91,23 @@ def build_overpass_query(category: str, area_name: Optional[str] = None, bbox: O
 out center tags 500;
 """
     elif area_name:
-        statements = "".join([f'  {f}(area.searchArea);\n' for f in filters])
+        # 多語系 Area 匹配
         query = f"""
-[out:json][timeout:120];
-area["name"="{area_name}"]->.searchArea;
+[out:json][timeout:90];
 (
-{statements});
+  area["name:en"="{area_name}"];
+  area["name"="{area_name}"];
+  area["ISO3166-1"="{area_name.upper()}"];
+)->.searchArea;
+(
+""" + "".join([f'  {f}(area.searchArea);\n' for f in filters]) + f"""
+);
 out center tags 500;
 """
     else:
         statements = "".join([f'  {f};\n' for f in filters])
         query = f"""
-[out:json][timeout:120];
+[out:json][timeout:90];
 (
 {statements});
 out center tags 300;
@@ -99,18 +118,18 @@ def fetch_overpass_data(query: str) -> List[Dict[str, Any]]:
     """Executes query with server rotation and retry backoff."""
     for server in OVERPASS_SERVERS:
         try:
-            print(f"📡 Querying Overpass API [{server}]...")
-            resp = requests.post(server, data={"data": query}, timeout=95)
+            print(f"📡 查詢 Overpass API 伺服器 [{server}]...")
+            resp = requests.post(server, data={"data": query}, timeout=45)
             if resp.status_code == 200:
                 data = resp.json()
                 elements = data.get("elements", [])
-                print(f"✅ Retrieved {len(elements)} raw spatial elements.")
+                print(f"✅ 成功抓取 {len(elements)} 筆原始空間點位數據！")
                 return elements
             elif resp.status_code == 429:
-                print("⏳ Rate limited (429), switching server...")
+                print("⏳ 遭遇請求頻率限制 (429)，自動切換備用伺服器...")
                 time.sleep(2)
         except Exception as e:
-            print(f"⚠️ Server error on {server}: {e}, switching...")
+            print(f"⚠️ 伺服器連線略過 ({server}): {e}")
             time.sleep(1)
     return []
 
@@ -123,14 +142,14 @@ def build_affiliate_links(name: str, city: str, country: str, category: str, lat
     """Generates localized Agoda, Klook, and Amazon affiliate funnel URLs."""
     location_query = urllib.parse.quote(f"{name} {city}".strip())
     
-    # 1. Agoda / Booking Hotel Search Link
+    # 1. Agoda 附近住宿
     hotel_url = f"https://www.agoda.com/search?text={location_query}&latitude={lat}&longitude={lng}"
     
-    # 2. Klook / KKday Experience Search Link
+    # 2. Klook 體驗預約
     ticket_query = urllib.parse.quote(f"{city or country} {category.lower()} experience")
     ticket_url = f"https://www.klook.com/zh-HK/search/result/?query={ticket_query}"
     
-    # 3. Amazon Equipment with Affiliate Tag
+    # 3. Amazon 專屬防護裝備 (帶 Tag)
     gear_keywords = {
         "SKATE": "skateboard helmet pads bones bearings",
         "CLIMB": "climbing shoes chalk bag harness",
@@ -152,14 +171,12 @@ def transform_element(element: Dict[str, Any], default_category: str) -> Optiona
     tags = element.get("tags", {})
     osm_id = element.get("id")
     
-    # Coordinates extraction (supports node lat/lon and way center lat/lon)
     lat = element.get("lat") or element.get("center", {}).get("lat")
     lng = element.get("lon") or element.get("center", {}).get("lon")
     
     if not lat or not lng or not osm_id:
         return None
     
-    # Name extraction with multilingual fallback
     name = (
         tags.get("name:zh-hk") or 
         tags.get("name:zh") or 
@@ -168,7 +185,6 @@ def transform_element(element: Dict[str, Any], default_category: str) -> Optiona
         f"{default_category} Spot #{osm_id}"
     )
     
-    # Sub-category classification
     sub_category = "general"
     if default_category == "SKATE":
         if "bowl" in name.lower() or tags.get("skatepark:bowl") == "yes":
@@ -193,7 +209,6 @@ def transform_element(element: Dict[str, Any], default_category: str) -> Optiona
     country = tags.get("addr:country") or tags.get("country") or ""
     address = tags.get("addr:full") or tags.get("addr:street") or ""
     
-    # Features extraction
     features = []
     if tags.get("lit") == "yes":
         features.append("夜間照明 (Night Lighting)")
@@ -204,7 +219,6 @@ def transform_element(element: Dict[str, Any], default_category: str) -> Optiona
     if tags.get("skatepark:material"):
         features.append(f"結構: {tags.get('skatepark:material')}")
 
-    # Affiliate URLs
     affiliates = build_affiliate_links(name, city, country, default_category, lat, lng)
     
     return {
@@ -242,7 +256,6 @@ def upsert_to_supabase(records: List[Dict[str, Any]], supabase_url: str, supabas
         "Prefer": "resolution=merge-duplicates"
     }
     
-    # Batch in chunks of 50
     chunk_size = 50
     total_inserted = 0
     
@@ -252,20 +265,38 @@ def upsert_to_supabase(records: List[Dict[str, Any]], supabase_url: str, supabas
             resp = requests.post(endpoint, json=chunk, headers=headers, timeout=20)
             if resp.status_code in [200, 201, 204]:
                 total_inserted += len(chunk)
-                print(f"  ⚡ Upserted {len(chunk)} spots (Batch {i // chunk_size + 1})...")
+                print(f"  ⚡ 成功寫入 {len(chunk)} 個點位 (批次 {i // chunk_size + 1})...")
             else:
-                print(f"  ❌ Failed chunk ({resp.status_code}): {resp.text[:120]}")
+                print(f"  ❌ 批次寫入回應 ({resp.status_code}): {resp.text[:120]}")
         except Exception as e:
-            print(f"  ❌ Error during batch upsert: {e}")
+            print(f"  ❌ Supabase 連線寫入異常: {e}")
             
     return total_inserted
+
+def merge_with_existing_dataset(new_records: List[Dict[str, Any]], json_path: str) -> List[Dict[str, Any]]:
+    """以 osm_id 為主鍵進行增量合併，確保舊點位不遺失"""
+    existing_map = {}
+    if os.path.exists(json_path):
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                old_list = json.load(f)
+                for item in old_list:
+                    if "osm_id" in item:
+                        existing_map[item["osm_id"]] = item
+        except Exception as e:
+            print(f"⚠️ 讀取現有資料集略過: {e}")
+
+    for item in new_records:
+        existing_map[item["osm_id"]] = item
+
+    return list(existing_map.values())
 
 def main():
     parser = argparse.ArgumentParser(description="unanext.fans Global Spots ETL Engine")
     parser.add_argument("--category", choices=["SKATE", "CLIMB", "SURF", "BMX", "ALL"], default="ALL")
-    parser.add_argument("--country", type=str, help="Target country (e.g., 'Japan', 'Hong Kong')")
+    parser.add_argument("--country", type=str, help="Target country or city (e.g., 'Hong Kong', 'Tokyo', 'Japan')")
     parser.add_argument("--bbox", type=str, help="Bounding box minLat,minLng,maxLat,maxLng")
-    parser.add_argument("--export-json", type=str, default="public/data/global_spots.json", help="Export to local JSON file")
+    parser.add_argument("--export-json", type=str, default="public/data/global_spots.json", help="Export path")
     
     args = parser.parse_args()
     
@@ -275,7 +306,7 @@ def main():
     all_transformed = []
     
     for cat in categories:
-        print(f"\n🚀 Running ETL Pipeline for Category: 【{cat}】")
+        print(f"\n🚀 啟動【{cat}】運動項目 ETL 管道...")
         query = build_overpass_query(cat, area_name=args.country, bbox=bbox_coords)
         raw_elements = fetch_overpass_data(query)
         
@@ -285,27 +316,28 @@ def main():
             if transformed:
                 cat_transformed.append(transformed)
                 
-        print(f"🎯 Successfully processed {len(cat_transformed)} valid spots for {cat}.")
+        print(f"🎯 成功解析 {len(cat_transformed)} 個合規的【{cat}】極限運動場地。")
         all_transformed.extend(cat_transformed)
         time.sleep(1)
 
-    # Save to local JSON fallback
+    # 進行增量合併，保證歷史與手動維護點位永遠保留
+    merged_data = merge_with_existing_dataset(all_transformed, args.export_json)
+    
     os.makedirs(os.path.dirname(args.export_json), exist_ok=True)
     with open(args.export_json, "w", encoding="utf-8") as f:
-        json.dump(all_transformed, f, ensure_ascii=False, indent=2)
-    print(f"\n💾 Saved {len(all_transformed)} total spots to local fallback: {args.export_json}")
+        json.dump(merged_data, f, ensure_ascii=False, indent=2)
+    print(f"\n💾 成功累積儲存 {len(merged_data)} 個場地點位至全域資料集: {args.export_json}")
     
-    # Supabase Ingestion
+    # 寫入 Supabase PostGIS
     supabase_url = os.getenv("SUPABASE_URL")
     supabase_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_ANON_KEY")
     
     if supabase_url and supabase_key:
-        print(f"\n☁️ Syncing {len(all_transformed)} spots with Supabase PostGIS...")
+        print(f"\n☁️ 正在與 Supabase PostGIS 空間資料庫同步...")
         upserted_count = upsert_to_supabase(all_transformed, supabase_url, supabase_key)
-        print(f"✨ Supabase Sync Complete! Upserted {upserted_count} records.")
+        print(f"✨ Supabase 同步完成！本次寫入/更新了 {upserted_count} 筆記錄。")
     else:
-        print("\n💡 NOTE: SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY not configured in env.")
-        print("  Local static JSON dataset generated successfully for immediate Astro frontend use!")
+        print("\n💡 提示：目前使用靜態 JSON 資料集模式，前端地圖已即時生效！")
 
 if __name__ == "__main__":
     main()
