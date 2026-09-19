@@ -28,56 +28,10 @@
 4. **⚙️ GitHub Actions 每日自動化工作流 (`.github/workflows/daily_publisher.yml`)**:
    - 每日定時自動執行新聞抓取、AI 生成、Telegram 發布、靜態網站建置並自動 Commit & Push 回儲存庫。
 
----
 
-## 🛠️ 本機快速啟動 (Local Quick Start)
-
-### 1. 安裝前端依賴並啟動網站
-```bash
-# 安裝 Node.js 依賴
-npm install
-
-# 啟動本機開發伺服器
-npm run dev
-
-# 進行靜態網站打包建置 (SSG)
-npm run build
-```
-
-### 2. 本機執行 Python 自動發布腳本
-```bash
-# 安裝 Python 依賴
-pip install -r requirements.txt
-playwright install chromium
-
-# 執行自動發布
-python xgame_publisher.py AUTO zh-hk
-```
-
----
-
-## 🔑 環境變數設定 (Environment Variables / GitHub Secrets)
-
-請在 GitHub Repository 的 `Settings > Secrets and variables > Actions` 或本地 `.env` 中設定：
-
-| 環境變數名稱 | 說明 | 範例 / 預設值 |
-| :--- | :--- | :--- |
-| `GEMINI_API_KEY` | Google Gemini AI API 金鑰 | `AIzaSy...` |
-| `TELEGRAM_BOT_TOKEN` | Telegram Bot Token | `123456:ABC-DEF...` |
-| `TELEGRAM_CHAT_ID` | Telegram 頻道或群組 ID | `@Una_next` 或 `-100xxxxxx` |
-| `AMAZON_AFFILIATE_ID`| Amazon 聯盟行銷代碼 | `kait02bc-20` |
-| `PEXELS_API_KEY` | Pexels 高清圖庫 API 金鑰 (選填) | `...` |
-| `R2_ACCOUNT_ID` | Cloudflare R2 Account ID (選填) | `...` |
-| `R2_ACCESS_KEY_ID` | Cloudflare R2 Access Key ID (選填) | `...` |
-| `R2_SECRET_ACCESS_KEY`| Cloudflare R2 Secret Access Key (選填) | `...` |
-| `R2_BUCKET_NAME` | Cloudflare R2 Bucket 名稱 | `xgame-radar-media` |
-| `R2_PUBLIC_DOMAIN` | Cloudflare R2 自訂公開域名 (選填) | `https://cdn.example.com` |
-
----
 
 ## 📁 專案目錄結構
 
-```
 ├── .github/
 │   └── workflows/
 │       ├── daily_publisher.yml      # 每日排程自動發布與網站建置
