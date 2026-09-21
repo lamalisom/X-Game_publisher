@@ -81,12 +81,13 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git status
-          git add -A src/content/posts/ xgame_radar.db
+          git add -A src/content/posts/
           if git diff --staged --quiet; then
-            echo "無任何新文章或資料庫異動，跳過提交。"
+            echo "無任何新文章異動，跳過提交。"
           else
             git commit -m "feat(magazine): publish new extreme sports article [auto]"
+            git stash --include-untracked || true
             git pull --rebase origin main || true
+            git stash pop || true
             git push origin main || git push origin HEAD:main
           fi
