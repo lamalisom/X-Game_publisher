@@ -76,93 +76,87 @@ const totalSpots = spots.length;
         <span id="filtered-count-display" class="text-cyan-400 font-bold">
           ⚡ 顯示中：{totalSpots} 個場地
         </span>
-        <span>提示：點擊「🧭 路線導航」可直接開啟 Google Maps；「🌐 官方網站」直接開啟場地官網</span>
+        <span>提示：點擊「🧭 路線導航」可直接開啟 Google Maps；「🌐 官方網站」直接開啟場地官方資訊</span>
       </div>
     </div>
 
     <div id="spots-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {spots.map((spot) => {
-        const cat = spot.category || 'SKATE';
-        const badgeColor = cat === 'SKATE' ? 'text-xorange border-xorange/40' : (cat === 'CLIMB' ? 'text-emerald-400 border-emerald-500/40' : (cat === 'SURF' ? 'text-cyan-400 border-cyan-500/40' : 'text-purple-400 border-purple-500/40'));
-        const officialUrl = spot.website || ;
-        
-        return (
-          <article
-            class="spot-card rounded-2xl bg-xcard border border-xborder hover:border-xorange/60 transition-all duration-300 overflow-hidden flex flex-col justify-between group hover:-translate-y-1 shadow-lg p-5 space-y-4"
-            data-category={spot.category}
-            data-search={}
-          >
-            <div class="space-y-3">
-              <div class="flex items-center justify-between">
-                <span class={}>
-                  {spot.category}
-                </span>
-                <span class="px-2 py-0.5 rounded-full bg-black/50 text-[10px] font-bold text-cyan-300 font-mono border border-white/10">
-                  {spot.difficulty || 'All Levels'}
-                </span>
-                <span class="px-2 py-0.5 rounded bg-black/50 text-[10px] font-mono text-emerald-400">
-                  {spot.fee_type || 'OPEN'}
-                </span>
-              </div>
-
-              <div>
-                <h3 class="font-black text-base text-white group-hover:text-xorange transition-colors leading-snug">
-                  {spot.name}
-                </h3>
-                <p class="text-xs text-gray-400 font-mono flex items-center gap-1 mt-1">
-                  <span>📍</span>
-                  <span class="truncate">{spot.city ?  : (spot.country || 'Global')}</span>
-                </p>
-              </div>
-
-              {spot.features && spot.features.length > 0 && (
-                <div class="flex flex-wrap gap-1 pt-1">
-                  {spot.features.slice(0, 3).map((f) => (
-                    <span class="px-1.5 py-0.5 rounded bg-white/5 text-[10px] text-gray-300 font-mono border border-white/5">
-                      {f}
-                    </span>
-                  ))}
-                </div>
-              )}
+      {spots.map((spot) => (
+        <article
+          class="spot-card rounded-2xl bg-xcard border border-xborder hover:border-xorange/60 transition-all duration-300 overflow-hidden flex flex-col justify-between group hover:-translate-y-1 shadow-lg p-5 space-y-4"
+          data-category={spot.category}
+          data-search={}
+        >
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded-full bg-black/80 text-[10px] font-black uppercase border border-xorange/40 text-xorange">
+                {spot.category || 'SKATE'}
+              </span>
+              <span class="px-2 py-0.5 rounded-full bg-black/50 text-[10px] font-bold text-cyan-300 font-mono border border-white/10">
+                {spot.difficulty || 'All Levels'}
+              </span>
+              <span class="px-2 py-0.5 rounded bg-black/50 text-[10px] font-mono text-emerald-400">
+                {spot.fee_type || 'OPEN'}
+              </span>
             </div>
 
-            <div class="grid grid-cols-2 gap-2 pt-3 border-t border-xborder/60 text-xs">
-              <a
-                href={}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex items-center justify-center gap-1 py-2 px-2.5 rounded-xl bg-xdark hover:bg-xcard border border-xborder text-white font-bold transition text-center"
-              >
-                🧭 路線導航
-              </a>
-              <a
-                href={spot.affiliate_gear_url || 'https://www.amazon.com/s?k=extreme+sports+gear&tag=kait02bc-20'}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex items-center justify-center gap-1 py-2 px-2.5 rounded-xl bg-xorange hover:bg-orange-600 text-white font-bold transition text-center shadow-glow-orange"
-              >
-                🛒 推薦裝備
-              </a>
-              <a
-                href={spot.affiliate_hotel_url || }
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex items-center justify-center gap-1 py-2 px-2.5 rounded-xl bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/40 text-blue-300 font-bold transition text-center"
-              >
-                🏨 附近住宿
-              </a>
-              <a
-                href={officialUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex items-center justify-center gap-1 py-2 px-2.5 rounded-xl bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/40 text-emerald-300 font-bold transition text-center"
-              >
-                🌐 官方網站
-              </a>
+            <div>
+              <h3 class="font-black text-base text-white group-hover:text-xorange transition-colors leading-snug">
+                {spot.name}
+              </h3>
+              <p class="text-xs text-gray-400 font-mono flex items-center gap-1 mt-1">
+                <span>📍</span>
+                <span class="truncate">{spot.city ?  : (spot.country || 'Global')}</span>
+              </p>
             </div>
-          </article>
-        );
-      })}
+
+            {spot.features && spot.features.length > 0 && (
+              <div class="flex flex-wrap gap-1 pt-1">
+                {spot.features.slice(0, 3).map((f) => (
+                  <span class="px-1.5 py-0.5 rounded bg-white/5 text-[10px] text-gray-300 font-mono border border-white/5">
+                    {f}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 pt-3 border-t border-xborder/60 text-xs">
+            <a
+              href={}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center justify-center gap-1 py-2 px-2.5 rounded-xl bg-xdark hover:bg-xcard border border-xborder text-white font-bold transition text-center"
+            >
+              🧭 路線導航
+            </a>
+            <a
+              href={spot.affiliate_gear_url || 'https://www.amazon.com/s?k=extreme+sports+gear&tag=kait02bc-20'}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center justify-center gap-1 py-2 px-2.5 rounded-xl bg-xorange hover:bg-orange-600 text-white font-bold transition text-center shadow-glow-orange"
+            >
+              🛒 推薦裝備
+            </a>
+            <a
+              href={spot.affiliate_hotel_url || }
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center justify-center gap-1 py-2 px-2.5 rounded-xl bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/40 text-blue-300 font-bold transition text-center"
+            >
+              🏨 附近住宿
+            </a>
+            <a
+              href={spot.website || }
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center justify-center gap-1 py-2 px-2.5 rounded-xl bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/40 text-emerald-300 font-bold transition text-center"
+            >
+              🌐 官方網站
+            </a>
+          </div>
+        </article>
+      ))}
     </div>
 
   </div>
