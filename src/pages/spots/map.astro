@@ -1,18 +1,12 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import SpotMapbox from '../../components/SpotMapbox.astro';
-import fs from 'fs';
-import path from 'path';
+import { getCollection } from 'astro:content';
 
-let spotsData = [];
-try {
-  const jsonPath = path.resolve(process.cwd(), 'public/data/global_spots.json');
-  if (fs.existsSync(jsonPath)) {
-    spotsData = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
-  }
-} catch (e) {
-  spotsData = [];
-}
+const allPosts = await getCollection('posts');
+const spotArticles = allPosts
+  .filter((p) => p.data.topic_type === 'SPOT' || p.data.spot_info !== undefined)
+  .slice(0, 6);
 ---
 
 <Layout
@@ -21,7 +15,6 @@ try {
 >
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10">
     
-    <!-- Header Banner -->
     <div class="rounded-3xl bg-gradient-to-r from-xcard via-xdark to-xcard border border-xborder p-6 sm:p-10 relative overflow-hidden">
       <div class="space-y-3 max-w-3xl relative z-10">
         <div class="flex items-center gap-2">
@@ -29,7 +22,7 @@ try {
             GLOBAL SPOTS RADAR
           </span>
           <span class="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs font-bold font-mono">
-            已收錄 {spotsData.length > 0 ? spotsData.length : 179}+ 個頂級場地
+            收錄頂級官方場地
           </span>
         </div>
         <h1 class="text-3xl sm:text-5xl font-black text-white leading-tight tracking-tight uppercase">
@@ -42,194 +35,61 @@ try {
       <div class="absolute -right-10 -bottom-10 w-80 h-80 bg-xorange/10 rounded-full blur-3xl pointer-events-none"></div>
     </div>
 
-    <!-- Live Interactive Search & Filter Controls -->
-    <div class="space-y-4">
-      <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-4 rounded-2xl bg-xcard border border-xborder">
-        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
-          <button data-cat="ALL" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider bg-xorange text-white shadow-glow-orange transition">
-            🔥 全部 ({spotsData.length})
-          </button>
-          <button data-cat="SKATE" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition">
-            🛹 滑板 SKATE
-          </button>
-          <button data-cat="CLIMB" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition">
-            🧗 攀岩 CLIMB
-          </button>
-          <button data-cat="SURF" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition">
-            🏄 衝浪 SURF
-          </button>
-          <button data-cat="BMX" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition">
-            🚲 小輪 BMX
-          </button>
-        </div>
-
-        <div class="relative min-w-[260px]">
-          <input
-            type="text"
-            id="spot-search-input"
-            placeholder="🔍 搜尋城市、場地名稱 (例如: 東京、柴灣)..."
-            class="w-full px-4 py-2.5 rounded-xl bg-xdark border border-xborder text-white text-xs focus:outline-none focus:border-xorange font-mono"
-          />
-        </div>
-      </div>
-
-      <div class="flex items-center justify-between text-xs font-mono text-gray-400 px-2">
-        <span id="filtered-count-display" class="text-cyan-400 font-bold">
-          ⚡ 顯示中：{spotsData.length} 個場地
+    <section class="space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg font-black text-white flex items-center gap-2">
+          <span>📡 實時衛星與點位視圖 (Live Spot Radar)</span>
+        </h2>
+        <span class="text-xs text-gray-400 font-mono hidden sm:inline-block">
+          💡 點擊標記可開啟官方導航與官方網站
         </span>
-        <span>提示：點擊「🧭 路線導航」可直接開啟 Google Maps 官方路徑</span>
       </div>
-    </div>
 
-    <!-- Interactive Spot Cards Grid -->
-    <div id="spots-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {spotsData.map((spot: any) => {
-        const navUrl = `https://www.google.com/maps/dir/?api=1&destination=${spot.latitude},${spot.longitude}`;
-        const coverImg = (spot.photos && spot.photos.length > 0) 
-          ? spot.photos[0] 
-          : (spot.category === 'SKATE' 
-              ? '"spot-card rounded-2xl bg-xcard border border-xborder hover:border-xorange/60 transition-all duration-300 overflow-hidden flex flex-col justify-between group hover:-translate-y-1 shadow-lg"
-            data-category={spot.category}
-            data-search={`${spot.name} ${spot.city || ''} ${spot.country || ''} ${spot.formatted_address || ''}`.toLowerCase()}
-          >
-            <div class="relative h-44 overflow-hidden bg-xdark">
-              <img
-                src={coverImg}
-                alt={spot.name}
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                loading="lazy"
-              />
-              <div class="absolute top-3 left-3 flex gap-1.5">
-                <span class="px-2.5 py-0.5 rounded-full bg-black/80 backdrop-blur-md text-[10px] font-black uppercase text-xorange border border-xorange/40">
-                  {spot.category}
+      <SpotMapbox />
+    </section>
+
+    <section class="space-y-6 pt-6">
+      <div class="flex items-center justify-between border-b border-xborder pb-4">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
+            <span>📍 精選場地官方攻略</span>
+          </h2>
+          <p class="text-xs text-gray-400 font-mono mt-1">設施規格、防護裝備與交通攻略</p>
+        </div>
+        <a href="/spots" class="text-xs font-bold text-xorange hover:underline font-mono">
+          瀏覽全部列表 →
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {spotArticles.map((post) => (
+          <article class="rounded-2xl bg-xcard border border-xborder hover:border-xorange/60 transition-all duration-300 overflow-hidden flex flex-col group hover:-translate-y-1 shadow-lg p-5 justify-between space-y-4">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-full bg-xorange/20 text-xorange text-[10px] font-bold font-mono border border-xorange/30">
+                  {post.data.category || 'SPOT'}
                 </span>
-                <span class="px-2 py-0.5 rounded-full bg-black/80 backdrop-blur-md text-[10px] font-bold text-cyan-300 font-mono border border-white/10">
-                  {spot.difficulty || 'All Levels'}
+                <span class="text-[11px] text-gray-400 font-mono">
+                  📍 {post.data.city_tag || 'Global'}
                 </span>
               </div>
-              <div class="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-black/70 backdrop-blur-sm text-[10px] font-mono text-gray-300">
-                {spot.fee_type || 'FREE'}
-              </div>
+              <h3 class="text-base font-black text-white group-hover:text-xorange transition-colors leading-snug">
+                {post.data.title}
+              </h3>
             </div>
-
-            <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
-              <div class="space-y-2">
-                <h3 class="font-black text-base text-white group-hover:text-xorange transition-colors leading-snug">
-                  {spot.name}
-                </h3>
-                <p class="text-xs text-gray-400 font-mono flex items-center gap-1">
-                  <span>📍</span>
-                  <span class="truncate">{spot.city ? `${spot.city}, ` : ''}{spot.country || 'Global'}</span>
-                </p>
-                {spot.formatted_address && (
-                  <p class="text-[11px] text-gray-500 line-clamp-1">{spot.formatted_address}</p>
-                )}
-              </div>
-
-              {spot.features && spot.features.length > 0 && (
-                <div class="flex flex-wrap gap-1 pt-1">
-                  {spot.features.slice(0, 3).map((feat: string) => (
-                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-xdark text-gray-300 border border-xborder/40">
-                      ✓ {feat}
-                    </span>
-                  ))}
-                </div>
-              )}
-
-              <div class="grid grid-cols-2 gap-2 pt-3 border-t border-xborder/60 text-xs">
-                <a
-                  href={navUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="flex items-center justify-center gap-1 py-2 px-2.5 rounded-xl bg-xdark hover:bg-xcard border border-xborder text-white font-bold transition text-center"
-                >
-                  🧭 路線導航
-                </a>
-                <a
-                  href={spot.affiliate_gear_url || 'https://www.amazon.com/s?k=extreme+sports+gear&tag=kait02bc-20'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="flex items-center justify-center gap-1 py-2 px-2.5 rounded-xl bg-xorange hover:bg-orange-600 text-white font-bold transition text-center shadow-glow-orange"
-                >
-                  🛒 推薦裝備
-                </a>
-                <a
-                  href={spot.affiliate_hotel_url || 'https://www.agoda.com'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="flex items-center justify-center gap-1 py-2 px-2.5 rounded-xl bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/40 text-blue-300 font-bold transition text-center"
-                >
-                  🏨 附近住宿
-                </a>
-                <a
-                  href={spot.affiliate_ticket_url || 'https://www.google.com'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="flex items-center justify-center gap-1 py-2 px-2.5 rounded-xl bg-yellow-600/30 hover:bg-yellow-600/50 border border-yellow-500/40 text-yellow-300 font-bold transition text-center"
-                >
-                  🌐 官方網站
-                </a>
-              </div>
+            
+            <div class="pt-3 border-t border-xborder/60 flex items-center justify-between text-xs">
+              <a href={} class="text-cyan-400 hover:underline font-bold">
+                閱讀完整攻略 →
+              </a>
+              <a href={} target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 rounded-lg bg-emerald-600/20 text-emerald-300 font-bold hover:bg-emerald-600/40 border border-emerald-500/30">
+                🌐 官方網站
+              </a>
             </div>
           </article>
-        );
-      })}
-    </div>
+        ))}
+      </div>
+    </section>
 
   </div>
 </Layout>
-
-<script is:inline>
-  document.addEventListener('DOMContentLoaded', () => {
-    let currentCategory = 'ALL';
-    let searchQuery = '';
-
-    const searchInput = document.getElementById('spot-search-input');
-    const filterButtons = document.querySelectorAll('.cat-filter-btn');
-    const cards = document.querySelectorAll('.spot-card');
-    const counterDisplay = document.getElementById('filtered-count-display');
-
-    function applyFilter() {
-      let visibleCount = 0;
-
-      cards.forEach((card) => {
-        const cardCat = card.getAttribute('data-category');
-        const cardSearch = card.getAttribute('data-search') || '';
-
-        const matchesCat = currentCategory === 'ALL' || cardCat === currentCategory;
-        const matchesSearch = !searchQuery || cardSearch.includes(searchQuery);
-
-        if (matchesCat && matchesSearch) {
-          card.style.display = 'flex';
-          visibleCount++;
-        } else {
-          card.style.display = 'none';
-        }
-      });
-
-      if (counterDisplay) {
-        counterDisplay.innerText = `⚡ 顯示中：${visibleCount} 個極限場地`;
-      }
-    }
-
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
-        searchQuery = e.target.value.toLowerCase().trim();
-        applyFilter();
-      });
-    }
-
-    filterButtons.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        currentCategory = btn.getAttribute('data-cat');
-
-        filterButtons.forEach((b) => {
-          b.className = 'cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition';
-        });
-        btn.className = 'cat-filter-btn px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider bg-xorange text-white shadow-glow-orange transition';
-
-        applyFilter();
-      });
-    });
-  });
-</script>
