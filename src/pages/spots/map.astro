@@ -10,14 +10,18 @@ interface SpotItem {
   fee_type?: string;
   city?: string;
   country?: string;
-  latitude: number;
-  longitude: number;
+  latitude?: number;
+  longitude?: number;
+  lat?: number;
+  lng?: number;
   features?: string[];
   website?: string;
   affiliate_gear_url?: string;
   affiliate_hotel_url?: string;
   badgeClass?: string;
   officialUrl?: string;
+  hasDirectSite?: boolean;
+  navUrl?: string;
   searchStr?: string;
   displayLocation?: string;
 }
@@ -34,7 +38,17 @@ try {
       if (cat === 'SURF') badgeClass = 'text-cyan-400 border-cyan-500/40';
       if (cat === 'BMX') badgeClass = 'text-purple-400 border-purple-500/40';
 
-      const officialUrl = s.website || ('https://www.google.com/search?q=' + encodeURIComponent((s.name || '') + ' ' + (s.city || '') + ' official website'));
+      const latitude = s.latitude ?? s.lat;
+      const longitude = s.longitude ?? s.lng;
+      const navUrl = (latitude && longitude)
+        ? ('https://www.google.com/maps/dir/?api=1&destination=' + latitude + ',' + longitude)
+        : ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((s.name || '') + ' ' + (s.city || '')));
+
+      const hasDirectSite = Boolean(s.website && s.website.startsWith('http'));
+      const officialUrl = hasDirectSite
+        ? s.website
+        : ('https://www.google.com/search?q=' + encodeURIComponent((s.name || '') + ' ' + (s.city || '') + ' official site'));
+
       const searchStr = ((s.name || '') + ' ' + (s.city || '') + ' ' + (s.country || '')).toLowerCase();
       const displayLocation = s.city ? (s.city + (s.country ? ', ' + s.country : '')) : (s.country || 'Global');
 
@@ -42,6 +56,8 @@ try {
         ...s,
         badgeClass,
         officialUrl,
+        hasDirectSite,
+        navUrl,
         searchStr,
         displayLocation
       };
@@ -114,7 +130,7 @@ const totalSpots = spots.length;
         <span id="filtered-count-display" class="text-cyan-400 font-bold">
           ⚡ 顯示中：{totalSpots} 個場地
         </span>
-        <span>提示：點擊「🧭 路線導航」可直接開啟 Google Maps；「🌐 官方網站」直接開啟場地官方資訊</span>
+        <span>提示：點擊「🧭 路線導航」開啟 Google Maps 路線；「🌐 官方網站」直接開啟場地官方網址</span>
       </div>
     </div>
 
@@ -161,7 +177,7 @@ const totalSpots = spots.length;
 
           <div class="grid grid-cols-2 gap-2 pt-3 border-t border-xborder/60 text-xs">
             <a
-              href={}
+              href={spot.navUrl}
               target="_blank"
               rel="noopener noreferrer"
               class="flex items-center justify-center gap-1 py-2 px-2.5 rounded-xl bg-xdark hover:bg-xcard border border-xborder text-white font-bold transition text-center"
@@ -190,7 +206,7 @@ const totalSpots = spots.length;
               rel="noopener noreferrer"
               class="flex items-center justify-center gap-1 py-2 px-2.5 rounded-xl bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500/40 text-emerald-300 font-bold transition text-center"
             >
-              🌐 官方網站
+              {spot.hasDirectSite ? '🌐 官方網站' : '🔍 官方資訊'}
             </a>
           </div>
         </article>
