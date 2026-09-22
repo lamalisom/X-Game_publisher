@@ -88,12 +88,7 @@ try {
         const coverImg = (spot.photos && spot.photos.length > 0) 
           ? spot.photos[0] 
           : (spot.category === 'SKATE' 
-              ? 'https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=600&q=80'
-              : 'https://images.unsplash.com/photo-1516762689617-e1cffcef479d?auto=format&fit=crop&w=600&q=80');
-
-        return (
-          <article 
-            class="spot-card rounded-2xl bg-xcard border border-xborder hover:border-xorange/60 transition-all duration-300 overflow-hidden flex flex-col justify-between group hover:-translate-y-1 shadow-lg"
+              ? '"spot-card rounded-2xl bg-xcard border border-xborder hover:border-xorange/60 transition-all duration-300 overflow-hidden flex flex-col justify-between group hover:-translate-y-1 shadow-lg"
             data-category={spot.category}
             data-search={`${spot.name} ${spot.city || ''} ${spot.country || ''} ${spot.formatted_address || ''}`.toLowerCase()}
           >
