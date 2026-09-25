@@ -35,7 +35,7 @@ const postsCollection = defineCollection({
     spot_info: z.object({
       name: z.string(),
       location: z.string(),
-      difficulty: z.enum(['All Levels', 'Beginner', 'Intermediate', 'Advanced', 'Pro']).default('All Levels'),
+      difficulty: z.string().default('All Levels'),
       features: z.array(z.string()).optional(),
       fee: z.string().optional(),
       best_season_or_hours: z.string().optional(),
