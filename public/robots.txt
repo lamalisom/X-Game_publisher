@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://xgame-radar.pages.dev/rss.xml
+Sitemap: https://unanext.fans/sitemap-index.xml

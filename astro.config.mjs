@@ -1,3 +1,4 @@
+import sitemap from '@astrojs/sitemap';
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 
@@ -5,6 +6,7 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
   site: 'https://unanext.fans',
   integrations: [
+    sitemap(),
     tailwind({
       applyBaseStyles: true,
     })
