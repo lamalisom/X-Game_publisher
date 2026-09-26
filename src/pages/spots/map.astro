@@ -34,19 +34,43 @@ interface SpotItem {
 function resolveLocation(lat: number, lng: number, rawCountry: string, rawCity: string, rawName: string) {
   const fullTxt = (rawCountry + ' ' + rawCity + ' ' + rawName).toLowerCase();
   
-  // 1. 🇯🇵 日本 (Japan)
-  if (fullTxt.includes('japan') || fullTxt.includes('日本') || /[\u3040-\u30ff]/.test(rawName) || (lat >= 24.0 && lat <= 46.0 && lng >= 122.0 && lng <= 154.0)) {
-    let city = '日本地區';
-    if (fullTxt.includes('東京') || fullTxt.includes('tokyo') || fullTxt.includes('shibuya') || fullTxt.includes('shinjuku') || (lat >= 35.53 && lat <= 35.89 && lng >= 139.34 && lng <= 139.92)) city = '東京 Tokyo';
-    else if (fullTxt.includes('大阪') || fullTxt.includes('osaka') || fullTxt.includes('sakai') || (lat >= 34.40 && lat <= 34.88 && lng >= 135.32 && lng <= 135.75)) city = '大阪 Osaka';
-    else if (fullTxt.includes('京都') || fullTxt.includes('kyoto') || (lat >= 34.85 && lat <= 35.32 && lng >= 135.55 && lng <= 135.88)) city = '京都 Kyoto';
-    else if (fullTxt.includes('神奈川') || fullTxt.includes('kanagawa') || fullTxt.includes('yokohama') || fullTxt.includes('湘南') || (lat >= 35.12 && lat <= 35.60 && lng >= 139.00 && lng <= 139.75)) city = '神奈川/湘南 Kanagawa';
-    else if (fullTxt.includes('埼玉') || fullTxt.includes('saitama') || (lat >= 35.75 && lat <= 36.28 && lng >= 138.90 && lng <= 139.90)) city = '埼玉 Saitama';
-    else if (fullTxt.includes('千葉') || fullTxt.includes('chiba') || (lat >= 34.90 && lat <= 35.95 && lng >= 139.80 && lng <= 140.88)) city = '千葉 Chiba';
-    else if (fullTxt.includes('北海道') || fullTxt.includes('hokkaido') || fullTxt.includes('sapporo') || (lat >= 41.30 && lat <= 45.60)) city = '北海道 Hokkaido';
-    else if (fullTxt.includes('福岡') || fullTxt.includes('fukuoka') || (lat >= 33.20 && lat <= 33.95 && lng >= 130.00 && lng <= 131.05)) city = '福岡 Fukuoka';
-    else if (fullTxt.includes('沖繩') || fullTxt.includes('okinawa') || (lat >= 26.00 && lat <= 27.00 && lng >= 127.50 && lng <= 128.50)) city = '沖繩 Okinawa';
+  // 1. 🇯🇵 日本 (Japan 全境 47 都道府縣精準覆蓋)
+  if (fullTxt.includes('japan') || fullTxt.includes('日本') || (lat >= 24.0 && lat <= 46.0 && lng >= 122.0 && lng <= 154.0)) {
+    let city = '日本';
+    
+    // 文字地名優先匹配
+    if (fullTxt.includes('東京') || fullTxt.includes('tokyo') || fullTxt.includes('shibuya') || fullTxt.includes('shinjuku') || fullTxt.includes('世田谷') || fullTxt.includes('江東')) city = '東京 Tokyo';
+    else if (fullTxt.includes('大阪') || fullTxt.includes('osaka') || fullTxt.includes('sakai')) city = '大阪 Osaka';
+    else if (fullTxt.includes('京都') || fullTxt.includes('kyoto')) city = '京都 Kyoto';
+    else if (fullTxt.includes('神奈川') || fullTxt.includes('kanagawa') || fullTxt.includes('yokohama') || fullTxt.includes('湘南') || fullTxt.includes('川崎')) city = '神奈川/湘南 Kanagawa';
+    else if (fullTxt.includes('埼玉') || fullTxt.includes('saitama')) city = '埼玉 Saitama';
+    else if (fullTxt.includes('千葉') || fullTxt.includes('chiba')) city = '千葉 Chiba';
+    else if (fullTxt.includes('北海道') || fullTxt.includes('hokkaido') || fullTxt.includes('sapporo')) city = '北海道 Hokkaido';
+    else if (fullTxt.includes('青森') || fullTxt.includes('八戶') || fullTxt.includes('長根') || fullTxt.includes('仙台') || fullTxt.includes('宮城') || fullTxt.includes('東北')) city = '青森/東北 Tohoku';
+    else if (fullTxt.includes('長野') || fullTxt.includes('新潟') || fullTxt.includes('白馬') || fullTxt.includes('靜岡') || fullTxt.includes('shizuoka')) city = '長野/靜岡/中部 Chubu';
     else if (fullTxt.includes('愛知') || fullTxt.includes('名古屋') || fullTxt.includes('nagoya')) city = '愛知/名古屋 Aichi';
+    else if (fullTxt.includes('廣島') || fullTxt.includes('岡山') || fullTxt.includes('hiroshima')) city = '廣島/中國地區 Chugoku';
+    else if (fullTxt.includes('福岡') || fullTxt.includes('熊本') || fullTxt.includes('九州') || fullTxt.includes('fukuoka')) city = '福岡/九州 Kyushu';
+    else if (fullTxt.includes('沖繩') || fullTxt.includes('okinawa')) city = '沖繩 Okinawa';
+    
+    // 經緯度座標精準反查日本大區
+    else if (lat && lng) {
+      if (lat >= 35.53 && lat <= 35.89 && lng >= 139.34 && lng <= 139.92) city = '東京 Tokyo';
+      else if (lat >= 35.12 && lat <= 35.60 && lng >= 139.00 && lng <= 139.75) city = '神奈川/湘南 Kanagawa';
+      else if (lat >= 35.75 && lat <= 36.28 && lng >= 138.90 && lng <= 139.90) city = '埼玉 Saitama';
+      else if (lat >= 34.90 && lat <= 35.95 && lng >= 139.80 && lng <= 140.88) city = '千葉 Chiba';
+      else if (lat >= 34.40 && lat <= 34.88 && lng >= 135.32 && lng <= 135.75) city = '大阪 Osaka';
+      else if (lat >= 34.85 && lat <= 35.32 && lng >= 135.55 && lng <= 135.88) city = '京都 Kyoto';
+      else if (lat >= 34.50 && lat <= 35.50 && lng >= 134.50 && lng <= 135.40) city = '兵庫/神戶 Kobe';
+      else if (lat >= 38.00 && lat <= 41.50) city = '東北/青森/宮城 Tohoku';
+      else if (lat >= 41.50 && lat <= 45.60) city = '北海道 Hokkaido';
+      else if (lat >= 34.70 && lat <= 37.50 && lng >= 136.00 && lng <= 139.00) city = '中部/長野/靜岡 Chubu';
+      else if (lat >= 33.50 && lat <= 35.50 && lng >= 131.00 && lng <= 134.50) city = '中國/四國地區 Chugoku';
+      else if (lat >= 31.00 && lat <= 34.00 && lng >= 129.50 && lng <= 132.00) city = '九州/福岡 Kyushu';
+      else if (lat >= 24.00 && lat <= 28.00) city = '沖繩 Okinawa';
+      else city = '關東地區 Kanto';
+    }
+    
     return { code: 'JP', country: '日本 Japan', flag: '🇯🇵', city };
   }
 
