@@ -28,6 +28,24 @@ interface SpotItem {
   regionTag?: string;
 }
 
+// 🌍 全球通用地理經緯度邊界矩陣
+const GLOBAL_BOUNDS = [
+  { code: 'JP', name: '日本 Japan', flag: '🇯🇵', latMin: 24.0, latMax: 46.0, lngMin: 122.0, lngMax: 154.0 },
+  { code: 'HK', name: '香港 Hong Kong', flag: '🇭🇰', latMin: 22.1, latMax: 22.6, lngMin: 113.8, lngMax: 114.5 },
+  { code: 'TW', name: '台灣 Taiwan', flag: '🇹🇼', latMin: 21.8, latMax: 25.4, lngMin: 119.9, lngMax: 122.1 },
+  { code: 'US', name: '美國 USA', flag: '🇺🇸', latMin: 24.5, latMax: 49.4, lngMin: -125.0, lngMax: -66.9 },
+  { code: 'US', name: '美國 USA (夏威夷)', flag: '🇺🇸', latMin: 18.9, latMax: 22.3, lngMin: -160.3, lngMax: -154.8 },
+  { code: 'AU', name: '澳洲 Australia', flag: '🇦🇺', latMin: -44.0, latMax: -10.0, lngMin: 112.0, lngMax: 154.0 },
+  { code: 'FR', name: '法國 France', flag: '🇫🇷', latMin: 41.3, latMax: 51.1, lngMin: -5.2, lngMax: 9.6 },
+  { code: 'GB', name: '英國 UK', flag: '🇬🇧', latMin: 49.8, latMax: 59.4, lngMin: -8.6, lngMax: 1.8 },
+  { code: 'CA', name: '加拿大 Canada', flag: '🇨🇦', latMin: 41.6, latMax: 70.0, lngMin: -141.0, lngMax: -52.6 },
+  { code: 'DE', name: '德國 Germany', flag: '🇩🇪', latMin: 47.2, latMax: 55.1, lngMin: 5.8, lngMax: 15.1 },
+  { code: 'CH', name: '瑞士 Switzerland', flag: '🇨🇭', latMin: 45.8, latMax: 47.8, lngMin: 5.9, lngMax: 10.5 },
+  { code: 'TH', name: '泰國 Thailand', flag: '🇹🇭', latMin: 5.6, latMax: 20.5, lngMin: 97.3, lngMax: 105.7 },
+  { code: 'ES', name: '西班牙 Spain', flag: '🇪🇸', latMin: 36.0, latMax: 43.8, lngMin: -9.3, lngMax: 4.3 },
+  { code: 'NZ', name: '紐西蘭 New Zealand', flag: '🇳🇿', latMin: -47.3, latMax: -34.4, lngMin: 166.4, lngMax: 178.6 },
+];
+
 let spots: SpotItem[] = [];
 try {
   const jsonPath = path.resolve(process.cwd(), 'public/data/global_spots.json');
@@ -51,88 +69,48 @@ try {
         gearKeyword = 'snowboard goggles gloves';
       }
 
-      const latitude = s.latitude ?? s.lat;
-      const longitude = s.longitude ?? s.lng;
+      const spotLat = s.latitude ?? s.lat;
+      const spotLng = s.longitude ?? s.lng;
       
-      const navUrl = (latitude && longitude)
-        ? ('https://www.google.com/maps/dir/?api=1&destination=' + latitude + ',' + longitude)
+      const navUrl = (spotLat && spotLng)
+        ? ('https://www.google.com/maps/dir/?api=1&destination=' + spotLat + ',' + spotLng)
         : ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((s.name || '') + ' ' + (s.city || '')));
 
-      const hotelUrl = (latitude && longitude)
-        ? ('https://www.google.com/maps/search/hotels/@' + latitude + ',' + longitude + ',15z')
+      const hotelUrl = (spotLat && spotLng)
+        ? ('https://www.google.com/maps/search/hotels/@' + spotLat + ',' + spotLng + ',15z')
         : ('https://www.google.com/maps/search/' + encodeURIComponent('hotels near ' + (s.name || s.city || '')));
 
-      // 精準地理邊界與關鍵字多重判定
-      const latitude = s.latitude ?? s.lat;
-      const longitude = s.longitude ?? s.lng;
       let countryName = s.country || 'Global';
       let cityName = s.city || '';
       let countryCode = 'ALL';
       let flag = '🌍';
 
-      const nameStr = s.name || '';
-      const fullLoc = (countryName + ' ' + cityName + ' ' + nameStr).toLowerCase();
+      const rawCountry = (s.country || '').toLowerCase();
+      const rawCity = (s.city || '').toLowerCase();
 
-      // 1. 日本判定 (經緯度 24~46N, 122~154E 或 含有日文字元)
-      const isJapanCoord = latitude >= 24.0 && latitude <= 46.0 && longitude >= 122.0 && longitude <= 154.0;
-      const hasJapanese = /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff]/.test(nameStr);
-      
-      if (isJapanCoord || fullLoc.includes('japan') || fullLoc.includes('日本') || fullLoc.includes('tokyo') || fullLoc.includes('東京') || fullLoc.includes('osaka')) {
-        countryName = '日本 Japan';
-        countryCode = 'JP';
-        flag = '🇯🇵';
-        if (!cityName && isJapanCoord) {
-          if (latitude >= 35.0 && latitude <= 36.0 && longitude >= 139.0 && longitude <= 140.0) cityName = '東京圈 Tokyo';
-          else if (latitude >= 34.5 && latitude <= 35.0 && longitude >= 135.0 && longitude <= 136.0) cityName = '關西 Kansai';
-          else cityName = '日本各地';
+      // 1. 經緯度邊界自動判定
+      if (spotLat && spotLng) {
+        for (const g of GLOBAL_BOUNDS) {
+          if (spotLat >= g.latMin && spotLat <= g.latMax && spotLng >= g.lngMin && spotLng <= g.lngMax) {
+            countryCode = g.code;
+            countryName = g.name;
+            flag = g.flag;
+            break;
+          }
         }
-      } else if (fullLoc.includes('hong kong') || fullLoc.includes('香港') || (latitude >= 22.1 && latitude <= 22.6 && longitude >= 113.8 && longitude <= 114.5)) {
-        countryName = '香港 Hong Kong';
-        countryCode = 'HK';
-        flag = '🇭🇰';
-      } else if (fullLoc.includes('usa') || fullLoc.includes('united states') || fullLoc.includes('美國') || fullLoc.includes('california') || fullLoc.includes('hawaii')) {
-        countryName = '美國 USA';
-        countryCode = 'US';
-        flag = '🇺🇸';
-      } else if (fullLoc.includes('australia') || fullLoc.includes('澳洲') || fullLoc.includes('sydney') || fullLoc.includes('brisbane')) {
-        countryName = '澳洲 Australia';
-        countryCode = 'AU';
-        flag = '🇦🇺';
-      } else if (fullLoc.includes('france') || fullLoc.includes('法國') || fullLoc.includes('marseille') || fullLoc.includes('paris')) {
-        countryName = '法國 France';
-        countryCode = 'FR';
-        flag = '🇫🇷';
-      } else if (fullLoc.includes('switzerland') || fullLoc.includes('瑞士') || fullLoc.includes('zurich')) {
-        countryName = '瑞士 Switzerland';
-        countryCode = 'CH';
-        flag = '🇨🇭';
       }
 
-      const fullLoc = (countryName + ' ' + cityName + ' ' + (s.name || '')).toLowerCase();
-      if (fullLoc.includes('japan') || fullLoc.includes('日本') || fullLoc.includes('tokyo') || fullLoc.includes('東京') || fullLoc.includes('osaka') || fullLoc.includes('大阪')) {
-        countryName = '日本 Japan';
-        countryCode = 'JP';
-        flag = '🇯🇵';
-      } else if (fullLoc.includes('hong kong') || fullLoc.includes('香港') || fullLoc.includes('chai wan') || fullLoc.includes('mei foo')) {
-        countryName = '香港 Hong Kong';
-        countryCode = 'HK';
-        flag = '🇭🇰';
-      } else if (fullLoc.includes('usa') || fullLoc.includes('united states') || fullLoc.includes('美國') || fullLoc.includes('california') || fullLoc.includes('hawaii') || fullLoc.includes('los angeles')) {
-        countryName = '美國 USA';
-        countryCode = 'US';
-        flag = '🇺🇸';
-      } else if (fullLoc.includes('australia') || fullLoc.includes('澳洲') || fullLoc.includes('sydney') || fullLoc.includes('brisbane') || fullLoc.includes('bondi')) {
-        countryName = '澳洲 Australia';
-        countryCode = 'AU';
-        flag = '🇦🇺';
-      } else if (fullLoc.includes('france') || fullLoc.includes('法國') || fullLoc.includes('marseille') || fullLoc.includes('paris')) {
-        countryName = '法國 France';
-        countryCode = 'FR';
-        flag = '🇫🇷';
-      } else if (fullLoc.includes('switzerland') || fullLoc.includes('瑞士') || fullLoc.includes('zurich')) {
-        countryName = '瑞士 Switzerland';
-        countryCode = 'CH';
-        flag = '🇨🇭';
+      // 2. 文字特徵輔助匹配
+      if (countryCode === 'ALL') {
+        if (rawCountry.includes('japan') || rawCountry.includes('日本') || rawCity.includes('tokyo') || /[\u3040-\u30ff]/.test(s.name || '')) {
+          countryCode = 'JP'; countryName = '日本 Japan'; flag = '🇯🇵';
+        } else if (rawCountry.includes('hong kong') || rawCountry.includes('香港')) {
+          countryCode = 'HK'; countryName = '香港 Hong Kong'; flag = '🇭🇰';
+        } else if (rawCountry.includes('taiwan') || rawCountry.includes('台灣')) {
+          countryCode = 'TW'; countryName = '台灣 Taiwan'; flag = '🇹🇼';
+        } else if (rawCountry.includes('usa') || rawCountry.includes('united states') || rawCountry.includes('美國')) {
+          countryCode = 'US'; countryName = '美國 USA'; flag = '🇺🇸';
+        }
       }
 
       const regionTag = flag + ' ' + countryName + (cityName ? ' · ' + cityName : '');
@@ -152,6 +130,8 @@ try {
 
       return {
         ...s,
+        latitude: spotLat,
+        longitude: spotLng,
         badgeClass,
         officialUrl,
         navUrl,
