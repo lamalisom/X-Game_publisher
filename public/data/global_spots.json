@@ -6520,5 +6520,247 @@
       "攀岩愛好者東京必朝聖殿堂"
     ],
     "website": "https://pump-climbing.com/gym/ogikubo/"
+  },
+  {
+    "osm_id": 9101,
+    "name": "千葉釣崎海岸奧運衝浪賽場 (Tsurigasaki Surfing Beach)",
+    "category": "SURF",
+    "sub_category": "beach_break",
+    "latitude": 35.3853,
+    "longitude": 140.4042,
+    "city": "千葉",
+    "country": "Japan",
+    "formatted_address": "日本千葉縣長生郡一宮町釣崎海岸",
+    "difficulty": "Intermediate / Pro",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "太平洋強勁右浪與沙灘浪",
+    "features": [
+      "東京奧運官方指定衝浪賽場",
+      "世界級海浪規格",
+      "日本職業衝浪巡迴賽常駐地",
+      "周邊衝浪名店聚落"
+    ],
+    "website": "https://www.town.ichinomiya.chiba.jp"
+  },
+  {
+    "osm_id": 9102,
+    "name": "神奈川湘南七里濱衝浪點 (Shichirigahama Surf Break)",
+    "category": "SURF",
+    "sub_category": "reef_break",
+    "latitude": 35.3056,
+    "longitude": 139.5186,
+    "city": "神奈川",
+    "country": "Japan",
+    "formatted_address": "日本神奈川縣鎌倉市七里濱海岸",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "礁石碎浪與長板優質浪",
+    "features": [
+      "江之電沿線絕美海景",
+      "遠眺江之島與富士山夕陽",
+      "適合長板 (Longboard) 玩家",
+      "周邊知名衝浪咖啡館"
+    ],
+    "website": "https://www.trip-kamakura.com"
+  },
+  {
+    "osm_id": 9103,
+    "name": "千葉鴨川前原海岸 (Kamogawa Maehara Beach Surf)",
+    "category": "SURF",
+    "sub_category": "beach_break",
+    "latitude": 35.1052,
+    "longitude": 140.1068,
+    "city": "千葉",
+    "country": "Japan",
+    "formatted_address": "日本千葉縣鴨川市前原海岸",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "平緩細緻沙灘浪",
+    "features": [
+      "南房總知名衝浪度假勝地",
+      "日本百選海灘之一",
+      "四季氣候溫暖浪況穩定",
+      "初學者友善浪況"
+    ],
+    "website": "https://www.city.kamogawa.lg.jp"
+  },
+  {
+    "osm_id": 9104,
+    "name": "靜岡伊豆白濱海岸 (Izu Shirahama Beach Surf)",
+    "category": "SURF",
+    "sub_category": "beach_break",
+    "latitude": 34.6908,
+    "longitude": 138.9692,
+    "city": "靜岡",
+    "country": "Japan",
+    "formatted_address": "日本靜岡縣下田市白濱海岸",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "白沙灘透明清澈海浪",
+    "features": [
+      "關東最美白沙海灘之一",
+      "水質清澈見底 (海水透明度極高)",
+      "夏季衝浪與日光浴熱點",
+      "周邊衝浪民宿林立"
+    ],
+    "website": "https://www.shimoda-city.info"
+  },
+  {
+    "osm_id": 9105,
+    "name": "宮崎日南青島海岸衝浪聖地 (Aoshima Surf Beach)",
+    "category": "SURF",
+    "sub_category": "beach_break",
+    "latitude": 31.8028,
+    "longitude": 131.4722,
+    "city": "福岡",
+    "country": "Japan",
+    "formatted_address": "日本宮崎縣宮崎市青島海岸",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "亞熱帶溫暖太平洋海浪",
+    "features": [
+      "日本九州衝浪第一聖地",
+      "南國亞熱帶度假氛圍",
+      "全年水溫溫和適合滑浪",
+      "「鬼之洗衣板」地質奇景旁"
+    ],
+    "website": "https://www.miyazaki-city.tourism.or.jp"
+  },
+  {
+    "osm_id": 9106,
+    "name": "B-PUMP Tokyo 秋葉原全日本最大室內攀岩館",
+    "category": "CLIMB",
+    "sub_category": "indoor_gym",
+    "latitude": 35.7022,
+    "longitude": 139.7695,
+    "city": "東京",
+    "country": "Japan",
+    "formatted_address": "東京都文京區湯島1-1-8 (秋葉原站旁)",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "opening_hours": "12:00 - 23:00 (平日) / 10:00 - 21:00 (週末)",
+    "surface_type": "整棟 4 層樓超巨型木質抱石與攀岩牆",
+    "features": [
+      "全日本佔地規模最大抱石館之一",
+      "頂樓露天 Space Boulder 抱石區",
+      "難度齊全 (新手入門到 V12 頂級)",
+      "秋葉原站步行 5 分鐘"
+    ],
+    "website": "https://pump-climbing.com/gym/akiba/"
+  },
+  {
+    "osm_id": 9107,
+    "name": "Rocky 抱石館 新宿旗艦店 (Rocky Bouldering Gym Shinjuku)",
+    "category": "CLIMB",
+    "sub_category": "indoor_gym",
+    "latitude": 35.6922,
+    "longitude": 139.7042,
+    "city": "東京",
+    "country": "Japan",
+    "formatted_address": "東京都新宿區歌舞伎町2-44-1 新宿地下旗艦館",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "opening_hours": "10:00 - 23:00",
+    "surface_type": "立體多角度幾何造型牆板",
+    "features": [
+      "東京交通最便利的核心攀岩館",
+      "每週更換全新定線線路",
+      "日本潮流設計與寬敞休息區",
+      "適合觀光旅客與夜間體驗"
+    ],
+    "website": "https://www.rocky-climbing.com"
+  },
+  {
+    "osm_id": 9108,
+    "name": "東京御岳溪谷天然抱石場 (Mitake Bouldering Crag)",
+    "category": "CLIMB",
+    "sub_category": "outdoor_crag",
+    "latitude": 35.8015,
+    "longitude": 139.1825,
+    "city": "東京",
+    "country": "Japan",
+    "formatted_address": "東京都青梅市御岳多摩川溪谷兩岸",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "opening_hours": "日間開放 (需自備抱石墊 Crash Pad)",
+    "surface_type": "多摩川水蝕天然砂岩與花崗岩塊 (Riverside Boulders)",
+    "features": [
+      "日本天然抱石運動聖地 (發祥地)",
+      "「忍者返 (Ninja-gaeshi)」世界知名神級路線",
+      "四季清幽紅葉溪谷美景",
+      "JR 御岳站出站即達"
+    ],
+    "website": "https://www.omekanko.gr.jp"
+  },
+  {
+    "osm_id": 9109,
+    "name": "PUMP 2 川崎全日本最高先鋒攀岩高牆館 (PUMP 2 Kawasaki)",
+    "category": "CLIMB",
+    "sub_category": "indoor_gym",
+    "latitude": 35.6025,
+    "longitude": 139.6015,
+    "city": "神奈川",
+    "country": "Japan",
+    "formatted_address": "神奈川縣川崎市高津區久地2-16-1",
+    "difficulty": "Intermediate / Pro",
+    "fee_type": "PAID",
+    "opening_hours": "12:00 - 23:00",
+    "surface_type": "15 米超高室內競技先鋒攀岩大懸壁 (Lead Wall)",
+    "features": [
+      "日本最高規格先鋒繩攀大牆 (Lead Climbing)",
+      "大型屋頂大懸角度攀爬區",
+      "日本國家代表隊常駐訓練基地",
+      "頂繩與自動保護器設施齊全"
+    ],
+    "website": "https://pump-climbing.com/gym/pump2/"
+  },
+  {
+    "osm_id": 9110,
+    "name": "長野小川山天然岩壁群 (Ogawayama Crag - 日本優勝美地)",
+    "category": "CLIMB",
+    "sub_category": "outdoor_crag",
+    "latitude": 35.9825,
+    "longitude": 138.6215,
+    "city": "長野",
+    "country": "Japan",
+    "formatted_address": "日本長野縣南佐久郡川上村迴目平",
+    "difficulty": "Intermediate / Pro",
+    "fee_type": "FREE",
+    "opening_hours": "春季至秋季開放 (露營勝地)",
+    "surface_type": "純白花崗岩巨型陡峭岩壁 (Granite Multi-pitch & Boulders)",
+    "features": [
+      "譽為「日本的優勝美地 (Yosemite of Japan)」",
+      "超過 1,000 條傳統裂隙與運動攀登線路",
+      "高山森林露營與抱石完美結合",
+      "全日本攀岩者一生必訪聖殿"
+    ],
+    "website": "https://kawakami.nagano.jp"
+  },
+  {
+    "osm_id": 9111,
+    "name": "Urban Bouldering Gym 心齋橋店 (Urban Bouldering Osaka)",
+    "category": "CLIMB",
+    "sub_category": "indoor_gym",
+    "latitude": 34.6722,
+    "longitude": 135.5015,
+    "city": "大阪",
+    "country": "Japan",
+    "formatted_address": "大阪府大阪市中央區南船場3-4-26",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "opening_hours": "10:00 - 23:00",
+    "surface_type": "現代潮流幾何造型木質抱石牆",
+    "features": [
+      "大阪市中心最核心潮流抱石館",
+      "心齋橋站步行僅需 3 分鐘",
+      "適合觀光購物行程順道運動體驗",
+      "初學者提供免費指導與租鞋服務"
+    ],
+    "website": "https://urban-climbing.com"
   }
 ]
