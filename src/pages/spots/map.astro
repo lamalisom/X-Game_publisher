@@ -115,6 +115,15 @@ function resolveLocation(lat: number, lng: number, rawCountry: string, rawCity: 
     return { code: 'TH', country: '泰國 Thailand', flag: '🇹🇭', city };
   }
 
+    // 9. 🇸🇪 瑞典 (Sweden)
+  if (fullTxt.includes('sweden') || fullTxt.includes('瑞典') || fullTxt.includes('sverige') || (lat >= 55.3 && lat <= 69.1 && lng >= 11.0 && lng <= 24.2)) {
+    let city = '瑞典 Sweden';
+    if (fullTxt.includes('stockholm') || fullTxt.includes('斯德哥爾摩') || (lat >= 59.2 && lat <= 59.5 && lng >= 17.8 && lng <= 18.2)) city = '斯德哥爾摩 Stockholm';
+    else if (fullTxt.includes('malmö') || fullTxt.includes('malmo') || fullTxt.includes('馬爾默') || (lat >= 55.5 && lat <= 55.7 && lng >= 12.9 && lng <= 13.1)) city = '馬爾默 Malmö';
+    else if (fullTxt.includes('gothenburg') || fullTxt.includes('göteborg') || fullTxt.includes('哥德堡')) city = '哥德堡 Gothenburg';
+    return { code: 'SE', country: '瑞典 Sweden', flag: '🇸🇪', city };
+  }
+
   // 預設全球
   return { code: 'ALL', country: rawCountry || 'Global', flag: '🌍', city: rawCity || '全球據點' };
 }
@@ -253,6 +262,9 @@ const totalSpots = spots.length;
         </button>
         <button data-country="TH" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
           🇹🇭 泰國 (Thailand)
+        </button>
+              <button data-country="SE" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
+          🇸🇪 瑞典 (Sweden)
         </button>
       </div>
     </div>
