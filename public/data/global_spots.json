@@ -8827,5 +8827,203 @@
       "適合初學休閒練習"
     ],
     "website": "https://khh.travel"
+  },
+  {
+    "osm_id": 9301,
+    "name": "加州威尼斯海灘滑板公園 (Venice Beach Skatepark)",
+    "category": "SKATE",
+    "sub_category": "skatepark_bowl",
+    "latitude": 33.9875,
+    "longitude": -118.4742,
+    "city": "加州 (洛杉磯)",
+    "country": "USA",
+    "formatted_address": "1800 Ocean Front Walk, Venice, CA 90291, United States",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "opening_hours": "08:00 - 日落 (日落後清場)",
+    "surface_type": "世界頂級純平水泥街區與雙階深碗池 (Iconic Beach Bowls)",
+    "features": [
+      "全球知名度最高滑板公園 (世界滑板朝聖第一地標)",
+      "緊鄰太平洋沙灘與棕櫚樹",
+      "設有經典街式階梯、Hubba 與傳奇碗池",
+      "眾多職業滑手與各國高手常駐"
+    ],
+    "website": "https://www.laparks.org/venice"
+  },
+  {
+    "osm_id": 9302,
+    "name": "加州 The Berrics 私人室內滑板殿堂",
+    "category": "SKATE",
+    "sub_category": "indoor_skatepark",
+    "latitude": 34.0215,
+    "longitude": -118.2312,
+    "city": "加州 (洛杉磯)",
+    "country": "USA",
+    "formatted_address": "2541 E 25th St, Los Angeles, CA 90058, United States",
+    "difficulty": "Pro",
+    "fee_type": "PAID",
+    "opening_hours": "特定活動與賽事預約開放 (BATB 賽場)",
+    "surface_type": "木質微拋光室內競技賽道",
+    "features": [
+      "Eric Koston 與 Steve Berra 創立之傳奇滑板場",
+      "世界知名 Battle at the Berrics (BATB) 比賽發祥地",
+      "全球街式滑手最高技術殿堂",
+      "全空調頂級木質道具"
+    ],
+    "website": "https://theberrics.com"
+  },
+  {
+    "osm_id": 9303,
+    "name": "加州 Vans 杭亭頓海灘滑板公園 (Vans Off The Wall Skatepark)",
+    "category": "SKATE",
+    "sub_category": "skatepark_bowl",
+    "latitude": 33.7125,
+    "longitude": -118.0012,
+    "city": "加州 (洛杉磯)",
+    "country": "USA",
+    "formatted_address": "7471 Center Ave, Huntington Beach, CA 92647, United States",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "opening_hours": "09:00 - 20:00",
+    "surface_type": "Vans 官方超大深碗池與極限街區",
+    "features": [
+      "佔地超過 4 萬平方英尺 (42,500 sq ft)",
+      "包含經典克洛弗碗池 (Clover Bowl) 與街式花園",
+      "附設 Vans 旗艦概念店",
+      "全美頂級免收費滑板公園之一"
+    ],
+    "website": "https://www.vans.com/skateparks.html"
+  },
+  {
+    "osm_id": 9304,
+    "name": "加州聖地牙哥華盛頓街滑板場 (Washington Street DIY Skatepark)",
+    "category": "SKATE",
+    "sub_category": "skatepark_diy",
+    "latitude": 32.7485,
+    "longitude": -117.1785,
+    "city": "加州 (聖地牙哥)",
+    "country": "USA",
+    "formatted_address": "Pacific Hwy & W Washington St, San Diego, CA 92101, United States",
+    "difficulty": "Intermediate / Pro",
+    "fee_type": "FREE",
+    "opening_hours": "24 小時開放",
+    "surface_type": "高架橋下硬核手作水泥碗池 (DIY Concrete Transitions)",
+    "features": [
+      "全球最著名 DIY 自建滑板公園傳奇",
+      "滑手自發澆灌水泥打造的高難度碗池",
+      "橋下遮陽避雨、極具街頭龐克文化氛圍",
+      "聖地牙哥硬核滑板精神象徵"
+    ],
+    "website": "https://ws-skatepark.org"
+  },
+  {
+    "osm_id": 9305,
+    "name": "夏威夷歐胡島北岸管道浪 (Banzai Pipeline)",
+    "category": "SURF",
+    "sub_category": "reef_break",
+    "latitude": 21.6645,
+    "longitude": -158.0538,
+    "city": "夏威夷",
+    "country": "USA",
+    "formatted_address": "Ehukai Beach Park, Haleiwa, Oahu, HI 96712, United States",
+    "difficulty": "Pro",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "暗礁重管巨浪 (Heavy Shallow Reef Barrel)",
+    "features": [
+      "全球衝浪界「聖杯 (Mecca of Surfing)」",
+      "WSL 巡迴賽開幕戰 Pipeline Masters 賽場",
+      "超巨型完美圓形管浪 (Barrel)",
+      "僅適合世界級頂尖好手挑戰"
+    ],
+    "website": "https://www.gohawaii.com/islands/oahu"
+  },
+  {
+    "osm_id": 9306,
+    "name": "加州下棧橋浪點 (Lower Trestles - San Clemente)",
+    "category": "SURF",
+    "sub_category": "point_break",
+    "latitude": 33.3852,
+    "longitude": -117.5895,
+    "city": "加州 (洛杉磯)",
+    "country": "USA",
+    "formatted_address": "San Onofre State Beach, San Clemente, CA 92672, United States",
+    "difficulty": "Intermediate / Pro",
+    "fee_type": "FREE",
+    "opening_hours": "06:00 - 日落",
+    "surface_type": "鵝卵石與沙底完美 A-Frame 浪",
+    "features": [
+      "被譽為「世界上最完美的比賽浪型」",
+      "WSL 世界衝浪總決賽 (Finals) 御用場地",
+      "左浪與右浪皆具極致滑行延伸性",
+      "加州衝浪工業心臟地帶"
+    ],
+    "website": "https://www.parks.ca.gov/?page_id=658"
+  },
+  {
+    "osm_id": 9307,
+    "name": "加州杭亭頓海灘衝浪城 (Huntington Beach Pier - Surf City USA)",
+    "category": "SURF",
+    "sub_category": "beach_break",
+    "latitude": 33.6552,
+    "longitude": -118.0045,
+    "city": "加州 (洛杉磯)",
+    "country": "USA",
+    "formatted_address": "Main St & Pacific Coast Hwy, Huntington Beach, CA 92648, United States",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "opening_hours": "05:00 - 22:00",
+    "surface_type": "木質棧橋兩側經典沙灘碎浪",
+    "features": [
+      "美國衝浪公開賽 (US Open of Surfing) 主場",
+      "「Surf City USA」官方認證衝浪之都",
+      "長度延伸進太平洋的壯觀地標棧橋",
+      "周邊衝浪名人堂與歷史名店"
+    ],
+    "website": "https://www.surfcityusa.com"
+  },
+  {
+    "osm_id": 9308,
+    "name": "加州聖地牙哥 Sweetwater 巨型自行車公園 (Sweetwater Bike Park)",
+    "category": "BMX",
+    "sub_category": "pump_track",
+    "latitude": 32.6985,
+    "longitude": -117.0215,
+    "city": "加州 (聖地牙哥)",
+    "country": "USA",
+    "formatted_address": "5710 Sweetwater Rd, Bonita, CA 91902, United States",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "opening_hours": "09:00 - 日落",
+    "surface_type": "專業連環波浪瀝青泵道與高低土坡跳台",
+    "features": [
+      "南加州佔地最廣專業極限單車公園",
+      "初中高三條獨立 Pump Track 賽道",
+      "設有大型木質跳台區 (Jump Lines)",
+      "全美 BMX 與山地車愛好者樂園"
+    ],
+    "website": "https://www.sdparks.org"
+  },
+  {
+    "osm_id": 9309,
+    "name": "加州優勝美地國家公園酋長岩 (El Capitan - Yosemite Valley)",
+    "category": "CLIMB",
+    "sub_category": "big_wall",
+    "latitude": 37.734,
+    "longitude": -119.6375,
+    "city": "加州 (優勝美地)",
+    "country": "USA",
+    "formatted_address": "Yosemite National Park, Yosemite Valley, CA 95389, United States",
+    "difficulty": "Pro",
+    "fee_type": "PAID",
+    "opening_hours": "國家公園全年開放",
+    "surface_type": "3,000 英尺 (900 米) 垂直平滑純花崗岩大岩壁 (The Nose / Dawn Wall)",
+    "features": [
+      "全球大岩壁攀登 (Big Wall Climbing) 終極聖殿",
+      "奧斯卡得獎紀錄片《赤手登峰 (Free Solo)》主場",
+      "「The Nose」與「Dawn Wall」世界最艱鉅傳奇路線",
+      "一生必看之地球奇蹟岩壁"
+    ],
+    "website": "https://www.nps.gov/yose/index.htm"
   }
 ]
