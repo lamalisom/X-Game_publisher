@@ -8629,5 +8629,203 @@
       "台中海線視野極佳"
     ],
     "website": "https://travel.taichung.gov.tw"
+  },
+  {
+    "osm_id": 9211,
+    "name": "宜蘭頭城雙獅海灘 (Twin Lions Beach Surf)",
+    "category": "SURF",
+    "sub_category": "beach_break",
+    "latitude": 24.8825,
+    "longitude": 121.8415,
+    "city": "宜蘭",
+    "country": "Taiwan",
+    "formatted_address": "台灣宜蘭縣頭城鎮濱海路二段雙獅海灘",
+    "difficulty": "Intermediate / Pro",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "立體沙灘浪 (A-Frame Beach Break)",
+    "features": [
+      "烏石港北側進階玩家首選",
+      "浪型左右開花 (A-Frame)",
+      "短板與花式動作絕佳起跳浪",
+      "相對人潮較烏石港舒適"
+    ],
+    "website": "https://www.necoast-nsa.gov.tw"
+  },
+  {
+    "osm_id": 9212,
+    "name": "宜蘭大溪蜜月灣 (Honeymoon Bay Surf)",
+    "category": "SURF",
+    "sub_category": "beach_break",
+    "latitude": 24.9385,
+    "longitude": 121.8952,
+    "city": "宜蘭",
+    "country": "Taiwan",
+    "formatted_address": "台灣宜蘭縣頭城鎮大溪里蜜月灣",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "馬蹄形海灣沙灘混合碎浪",
+    "features": [
+      "台灣早期衝浪發源經典海灣",
+      "細軟黑沙灘與群山環繞",
+      "浪高適中適合各級別玩家",
+      "大溪火車站步行可達"
+    ],
+    "website": "https://travel.yilan.tw"
+  },
+  {
+    "osm_id": 9213,
+    "name": "新北金山中角灣國際衝浪基地 (Zhongjiao Bay Surf Base)",
+    "category": "SURF",
+    "sub_category": "beach_break",
+    "latitude": 25.2345,
+    "longitude": 121.6212,
+    "city": "新北",
+    "country": "Taiwan",
+    "formatted_address": "台灣新北市金山區海邊路中角灣",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "半月形海灣沙灘浪",
+    "features": [
+      "北台灣設備最完善衝浪基地",
+      "官方衝浪遊客服務中心與淋浴間",
+      "浪況平緩安全 (新手與學校首選)",
+      "可租借長短板與 SUP"
+    ],
+    "website": "https://newtaipei.travel"
+  },
+  {
+    "osm_id": 9214,
+    "name": "台東東河河口世界級浪點 (Donghe River Mouth Surf)",
+    "category": "SURF",
+    "sub_category": "point_break",
+    "latitude": 22.9712,
+    "longitude": 121.3125,
+    "city": "台東",
+    "country": "Taiwan",
+    "formatted_address": "台灣台東縣東河鄉馬武窟溪出海口",
+    "difficulty": "Intermediate / Pro",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "鵝卵石與沙底定點浪 (Cobblestone Point Break)",
+    "features": [
+      "WSL 國際衝浪大賽官方場地之一",
+      "浪形漂亮完整且推力強大",
+      "秋冬東北季風期浪況極佳",
+      "台東衝浪部落文化核心"
+    ],
+    "website": "https://tour.taitung.gov.tw"
+  },
+  {
+    "osm_id": 9215,
+    "name": "台東金樽漁港左手浪 (Jinzun Left Point Break)",
+    "category": "SURF",
+    "sub_category": "point_break",
+    "latitude": 22.9525,
+    "longitude": 121.2985,
+    "city": "台東",
+    "country": "Taiwan",
+    "formatted_address": "台灣台東縣東河鄉金樽漁港旁海岸",
+    "difficulty": "Pro",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "世界頂級左手管浪 (Left-hand Reef Point)",
+    "features": [
+      "每年 WSL 台灣國際公開賽指定決賽場",
+      "世界頂尖衝浪選手讚譽浪點",
+      "浪壁陡峭速度極快、容易起管 (Barrels)",
+      "台灣最具國際知名度大浪點"
+    ],
+    "website": "https://www.taiwanopenofsurfing.org"
+  },
+  {
+    "osm_id": 9216,
+    "name": "台東都蘭黑沙灘 (Dulan Beach Surf)",
+    "category": "SURF",
+    "sub_category": "beach_break",
+    "latitude": 22.8685,
+    "longitude": 121.2285,
+    "city": "台東",
+    "country": "Taiwan",
+    "formatted_address": "台灣台東縣東河鄉都蘭海邊 (近都蘭鼻)",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "黑沙灘平緩連綿碎浪",
+    "features": [
+      "悠閒自由的阿美族部落生活圈",
+      "長浪持續性好、適合長板順浪滑行",
+      "觀賞日出日落絕景",
+      "眾多國內外衝浪背包客聚落"
+    ],
+    "website": "https://tour.taitung.gov.tw"
+  },
+  {
+    "osm_id": 9217,
+    "name": "屏東墾丁佳樂水衝浪聖地 (Jialeshui Surf Beach)",
+    "category": "SURF",
+    "sub_category": "point_break",
+    "latitude": 21.9885,
+    "longitude": 120.8415,
+    "city": "屏東",
+    "country": "Taiwan",
+    "formatted_address": "台灣屏東縣滿州鄉滿州村佳樂水風景區旁",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "砂岩河口定點浪 (Rivermouth Cobblestone/Sand)",
+    "features": [
+      "台灣衝浪文化的最早發祥聖地",
+      "超長浪壁 (Long Wall)，可連續滑行數百米",
+      "長板 (Longboard) 愛好者的終極天堂",
+      "全年氣候溫暖、海水清澈"
+    ],
+    "website": "https://www.ktnp.gov.tw"
+  },
+  {
+    "osm_id": 9218,
+    "name": "屏東墾丁南灣浪點 (Nanwan Beach Surf)",
+    "category": "SURF",
+    "sub_category": "beach_break",
+    "latitude": 21.9585,
+    "longitude": 120.7615,
+    "city": "屏東",
+    "country": "Taiwan",
+    "formatted_address": "台灣屏東縣恆春鎮南灣路南灣海水浴場",
+    "difficulty": "Intermediate / Pro",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "金黃細沙灘沙浪",
+    "features": [
+      "夏季颱風外圍環流帶來世界級右浪",
+      "金黃色貝殼沙灘與熱帶度假景觀",
+      "墾丁最熱鬧人氣海灣",
+      "周邊衝浪店、酒吧與民宿齊備"
+    ],
+    "website": "https://www.ktnp.gov.tw"
+  },
+  {
+    "osm_id": 9219,
+    "name": "高雄旗津海水浴場衝浪區 (Cijin Beach Surf)",
+    "category": "SURF",
+    "sub_category": "beach_break",
+    "latitude": 22.6085,
+    "longitude": 120.2685,
+    "city": "高雄",
+    "country": "Taiwan",
+    "formatted_address": "台灣高雄市旗津區廟前路1號 (旗津海岸公園旁)",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "黑沙灘都會近岸浪",
+    "features": [
+      "南台灣都會型衝浪勝地",
+      "搭渡輪或過港隧道即達",
+      "黃昏夕陽海景壯麗",
+      "適合初學休閒練習"
+    ],
+    "website": "https://khh.travel"
   }
 ]
