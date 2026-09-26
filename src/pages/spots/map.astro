@@ -7,6 +7,8 @@ interface SpotItem {
   name: string;
   category: string;
   difficulty?: string;
+  difficultyCn?: string;
+  feeCn?: string;
   fee_type?: string;
   city?: string;
   country?: string;
@@ -168,6 +170,29 @@ try {
         : ('https://www.google.com/search?q=' + encodeURIComponent((s.name || '') + ' ' + (geo.city || '') + ' official site'));
 
       const gearUrl = 'https://www.amazon.com/s?k=' + encodeURIComponent(gearKeyword) + '&tag=kait02bc-20';
+
+      // 🌟 難度與建議暢玩時間中文轉換
+      let difficultyCn = '🌟 全級別適用 · ⏱️ 1-2小時';
+      const rawDiff = (s.difficulty || '').toLowerCase();
+      if (rawDiff.includes('beginner') || rawDiff.includes('初')) {
+        difficultyCn = '🔰 初階新手 · ⏱️ 1小時';
+      } else if (rawDiff.includes('intermediate') || rawDiff.includes('中')) {
+        difficultyCn = '⚡ 中階進階 · ⏱️ 2-3小時';
+      } else if (rawDiff.includes('pro') || rawDiff.includes('advanced') || rawDiff.includes('高') || rawDiff.includes('專')) {
+        difficultyCn = '🔥 專業級 · ⏱️ 3小時+';
+      }
+
+      // 🏷️ 入場與收費狀態中文轉換
+      let feeCn = '🔓 公開開放';
+      const rawFee = (s.fee_type || '').toUpperCase();
+      if (rawFee === 'FREE' || (s.fee_details && s.fee_details.includes('免費'))) {
+        feeCn = '🟢 免費入場 Free';
+      } else if (rawFee === 'PAID' || rawFee === 'FEE') {
+        feeCn = '🎫 需收費/購票';
+      } else {
+        feeCn = '🔓 開放場地';
+      }
+
       const searchStr = ((s.name || '') + ' ' + geo.country + ' ' + geo.city + ' ' + regionTag + ' ' + environment).toLowerCase();
 
       return {
@@ -182,6 +207,8 @@ try {
         countryCode: geo.code,
         regionTag,
         environment,
+        difficultyCn,
+        feeCn,
         searchStr
       };
     });
@@ -320,10 +347,10 @@ const totalSpots = spots.length;
               </div>
               <div class="flex items-center gap-1.5">
                 <span class="px-2 py-0.5 rounded-full bg-black/50 text-[10px] font-bold text-cyan-300 font-mono border border-white/10">
-                  {spot.difficulty || 'All Levels'}
+                  {spot.difficultyCn}
                 </span>
                 <span class="px-2 py-0.5 rounded bg-black/50 text-[10px] font-mono text-emerald-400 border border-emerald-500/20">
-                  {spot.fee_type || 'FREE'}
+                  {spot.feeCn}
                 </span>
               </div>
             </div>
