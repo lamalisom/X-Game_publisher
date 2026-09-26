@@ -24,6 +24,7 @@ interface SpotItem {
   hotelUrl?: string;
   gearUrl?: string;
   searchStr?: string;
+  countryCode?: string;
   regionTag?: string;
 }
 
@@ -61,14 +62,40 @@ try {
         ? ('https://www.google.com/maps/search/hotels/@' + latitude + ',' + longitude + ',15z')
         : ('https://www.google.com/maps/search/' + encodeURIComponent('hotels near ' + (s.name || s.city || '')));
 
-      let regionTag = '🌍 全球 Global';
-      if (s.country && s.city) {
-        regionTag = s.country + ' · ' + s.city;
-      } else if (s.city) {
-        regionTag = s.city;
-      } else if (s.country) {
-        regionTag = s.country;
+      // 精準國家與地區匹配
+      let countryName = s.country || 'Global';
+      let cityName = s.city || '';
+      let countryCode = 'ALL';
+      let flag = '🌍';
+
+      const fullLoc = (countryName + ' ' + cityName + ' ' + (s.name || '')).toLowerCase();
+      if (fullLoc.includes('japan') || fullLoc.includes('日本') || fullLoc.includes('tokyo') || fullLoc.includes('東京') || fullLoc.includes('osaka') || fullLoc.includes('大阪')) {
+        countryName = '日本 Japan';
+        countryCode = 'JP';
+        flag = '🇯🇵';
+      } else if (fullLoc.includes('hong kong') || fullLoc.includes('香港') || fullLoc.includes('chai wan') || fullLoc.includes('mei foo')) {
+        countryName = '香港 Hong Kong';
+        countryCode = 'HK';
+        flag = '🇭🇰';
+      } else if (fullLoc.includes('usa') || fullLoc.includes('united states') || fullLoc.includes('美國') || fullLoc.includes('california') || fullLoc.includes('hawaii') || fullLoc.includes('los angeles')) {
+        countryName = '美國 USA';
+        countryCode = 'US';
+        flag = '🇺🇸';
+      } else if (fullLoc.includes('australia') || fullLoc.includes('澳洲') || fullLoc.includes('sydney') || fullLoc.includes('brisbane') || fullLoc.includes('bondi')) {
+        countryName = '澳洲 Australia';
+        countryCode = 'AU';
+        flag = '🇦🇺';
+      } else if (fullLoc.includes('france') || fullLoc.includes('法國') || fullLoc.includes('marseille') || fullLoc.includes('paris')) {
+        countryName = '法國 France';
+        countryCode = 'FR';
+        flag = '🇫🇷';
+      } else if (fullLoc.includes('switzerland') || fullLoc.includes('瑞士') || fullLoc.includes('zurich')) {
+        countryName = '瑞士 Switzerland';
+        countryCode = 'CH';
+        flag = '🇨🇭';
       }
+
+      const regionTag = flag + ' ' + countryName + (cityName ? ' · ' + cityName : '');
 
       let environment = '🏞️ 室外場 Outdoor';
       const nameAndFeatures = ((s.name || '') + ' ' + (s.features ? s.features.join(' ') : '') + ' ' + (s.surface_type || '')).toLowerCase();
@@ -81,7 +108,7 @@ try {
         : ('https://www.google.com/search?q=' + encodeURIComponent((s.name || '') + ' ' + (s.city || '') + ' official site'));
 
       const gearUrl = 'https://www.amazon.com/s?k=' + encodeURIComponent(gearKeyword) + '&tag=kait02bc-20';
-      const searchStr = ((s.name || '') + ' ' + (s.city || '') + ' ' + (s.country || '') + ' ' + regionTag + ' ' + environment).toLowerCase();
+      const searchStr = ((s.name || '') + ' ' + (s.city || '') + ' ' + (s.country || '') + ' ' + countryName + ' ' + regionTag + ' ' + environment).toLowerCase();
 
       return {
         ...s,
@@ -90,6 +117,7 @@ try {
         navUrl,
         hotelUrl,
         gearUrl,
+        countryCode,
         regionTag,
         environment,
         searchStr
@@ -105,57 +133,90 @@ const totalSpots = spots.length;
 
 <Layout
   title="📍 全球極限運動場地雷達庫 (Global Action Spots Radar) | xGame Radar"
-  description="即時探索全球滑板場、碗池、衝浪浪點、攀岩抱石館與 BMX 泵道。附國家地區規格、環境設施、Google Maps 導航與周邊推薦。"
+  description="即時按國家地區與運動分類探索全球滑板場、碗池、衝浪浪點、攀岩抱石館與 BMX 泵道。附精準導航與官方周邊資訊。"
 >
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
     
     <!-- Header Banner -->
     <div class="rounded-3xl bg-gradient-to-r from-xcard via-xdark to-xcard border border-xborder p-6 sm:p-10 relative overflow-hidden">
       <div class="space-y-3 max-w-3xl relative z-10">
         <div class="flex items-center gap-2">
           <span class="px-3 py-1 rounded-full bg-xorange text-white text-xs font-black uppercase tracking-wider shadow-glow-orange">
-            SPOTS RADAR
+            GLOBAL SPOTS RADAR
           </span>
           <span class="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs font-bold font-mono">
-            收錄 {totalSpots}+ 個頂級場地
+            已收錄 {totalSpots}+ 個頂級場地
           </span>
         </div>
         <h1 class="text-3xl sm:text-5xl font-black text-white leading-tight tracking-tight uppercase">
-          全球極限運動 <span class="text-xorange">場地與環境庫</span>
+          全球極限運動 <span class="text-xorange">國家與場地庫</span>
         </h1>
         <p class="text-sm sm:text-base text-gray-300 font-medium leading-relaxed">
-          收錄全球街式滑板場（Skatepark）、室內/室外碗池、世界級衝浪浪點、攀岩抱石館與 BMX 泵道，提供精準國家地區標籤、設施規格與導航。
+          支援即時搜尋各國滑板場、巨型碗池、衝浪浪點、攀岩抱石館與 BMX 泵道，快速查看國家地區規格與路線導航。
         </p>
       </div>
       <div class="absolute -right-10 -bottom-10 w-80 h-80 bg-xorange/10 rounded-full blur-3xl pointer-events-none"></div>
     </div>
 
-    <!-- Filter & Search Controls -->
+    <!-- 1️⃣ 國家 / 地區快速切換標籤 -->
+    <div class="space-y-3 p-4 rounded-2xl bg-xcard/60 border border-xborder">
+      <div class="text-xs font-bold font-mono text-gray-400 flex items-center gap-1.5">
+        <span>🌍</span>
+        <span>熱門國家 / 地區快速篩選：</span>
+      </div>
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+        <button data-country="ALL" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-black uppercase bg-xorange text-white shadow-glow-orange shrink-0 transition">
+          🔥 全部國家 (ALL)
+        </button>
+        <button data-country="JP" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
+          🇯🇵 日本 (Japan)
+        </button>
+        <button data-country="HK" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
+          🇭🇰 香港 (Hong Kong)
+        </button>
+        <button data-country="US" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
+          🇺🇸 美國 (USA)
+        </button>
+        <button data-country="AU" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
+          🇦🇺 澳洲 (Australia)
+        </button>
+        <button data-country="FR" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
+          🇫🇷 法國 (France)
+        </button>
+        <button data-country="CH" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
+          🇨🇭 瑞士 (Switzerland)
+        </button>
+      </div>
+    </div>
+
+    <!-- 2️⃣ 運動分類篩選與即時國家搜尋框 -->
     <div class="space-y-4">
       <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-4 rounded-2xl bg-xcard border border-xborder">
-        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
-          <button data-cat="ALL" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider bg-xorange text-white shadow-glow-orange transition">
-            🔥 全部 ({totalSpots})
+        <!-- 運動分類 -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
+          <button data-cat="ALL" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider bg-white/10 text-white hover:bg-white/20 transition">
+            全部運動
           </button>
           <button data-cat="SKATE" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition">
-            🛹 滑板 SKATE
+            🛹 滑板
           </button>
           <button data-cat="CLIMB" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition">
-            🧗 攀岩 CLIMB
+            🧗 攀岩
           </button>
           <button data-cat="SURF" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition">
-            🏄 衝浪 SURF
+            🏄 衝浪
           </button>
           <button data-cat="BMX" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition">
-            🚲 小輪 BMX
+            🚲 BMX
           </button>
         </div>
 
-        <div class="relative min-w-[280px]">
+        <!-- 關鍵字搜尋框 (支援國家/城市/中英文) -->
+        <div class="relative min-w-[300px]">
           <input
             type="text"
             id="spot-search-input"
-            placeholder="🔍 搜尋國家、城市、室內/室外 (例: 日本、香港、室內)..."
+            placeholder="🔍 搜尋國家、城市、場地 (例如: 日本、東京、香港、加州)..."
             class="w-full px-4 py-2.5 rounded-xl bg-xdark border border-xborder text-white text-xs focus:outline-none focus:border-xorange font-mono"
           />
         </div>
@@ -165,16 +226,17 @@ const totalSpots = spots.length;
         <span id="filtered-count-display" class="text-cyan-400 font-bold">
           ⚡ 顯示中：{totalSpots} 個場地
         </span>
-        <span>提示：所有導航與周邊住宿連結均已優化，100% 支援即時開啟</span>
+        <span>提示：可同時結合「國家標籤」與「運動分類」交叉篩選</span>
       </div>
     </div>
 
-    <!-- Spot Cards Grid -->
+    <!-- 3️⃣ 場地卡片網格 -->
     <div id="spots-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {spots.map((spot) => (
         <article
           class="spot-card rounded-2xl bg-xcard border border-xborder hover:border-xorange/60 transition-all duration-300 overflow-hidden flex flex-col justify-between group hover:-translate-y-1 shadow-lg p-5 space-y-4"
           data-category={spot.category}
+          data-country={spot.countryCode}
           data-search={spot.searchStr}
         >
           <div class="space-y-3">
@@ -198,15 +260,15 @@ const totalSpots = spots.length;
               </div>
             </div>
 
-            <!-- 場地名稱與國家地區 -->
+            <!-- 場地名稱與【國家＋地區標籤】 -->
             <div>
               <h3 class="font-black text-base text-white group-hover:text-xorange transition-colors leading-snug">
                 {spot.name}
               </h3>
-              <!-- 國家＋地區標籤 -->
-              <div class="inline-flex items-center gap-1 mt-2 px-2.5 py-1 rounded-lg bg-xdark border border-white/10 text-xs font-mono text-yellow-400">
+              <!-- 國家＋地區高亮徽章 -->
+              <div class="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-lg bg-xdark border border-white/10 text-xs font-mono text-yellow-400 font-bold shadow-inner">
                 <span>📍</span>
-                <span class="font-bold truncate">{spot.regionTag}</span>
+                <span class="truncate">{spot.regionTag}</span>
               </div>
             </div>
 
@@ -266,10 +328,12 @@ const totalSpots = spots.length;
   <script is:inline>
     document.addEventListener('DOMContentLoaded', () => {
       let currentCategory = 'ALL';
+      let currentCountry = 'ALL';
       let searchQuery = '';
 
       const searchInput = document.getElementById('spot-search-input');
       const catButtons = document.querySelectorAll('.cat-filter-btn');
+      const countryButtons = document.querySelectorAll('.country-filter-btn');
       const cards = document.querySelectorAll('.spot-card');
       const countDisplay = document.getElementById('filtered-count-display');
 
@@ -278,12 +342,14 @@ const totalSpots = spots.length;
 
         cards.forEach((card) => {
           const cardCat = card.getAttribute('data-category');
+          const cardCountry = card.getAttribute('data-country');
           const searchData = card.getAttribute('data-search') || '';
 
           const matchesCat = currentCategory === 'ALL' || cardCat === currentCategory;
+          const matchesCountry = currentCountry === 'ALL' || cardCountry === currentCountry;
           const matchesSearch = !searchQuery || searchData.includes(searchQuery.toLowerCase());
 
-          if (matchesCat && matchesSearch) {
+          if (matchesCat && matchesCountry && matchesSearch) {
             card.style.display = 'flex';
             visibleCount++;
           } else {
@@ -296,6 +362,7 @@ const totalSpots = spots.length;
         }
       }
 
+      // 即時關鍵字搜尋 (國家/城市/場地名稱)
       if (searchInput) {
         searchInput.addEventListener('input', (e) => {
           searchQuery = e.target.value.trim();
@@ -303,6 +370,21 @@ const totalSpots = spots.length;
         });
       }
 
+      // 國家切換
+      countryButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          currentCountry = btn.getAttribute('data-country');
+
+          countryButtons.forEach((b) => {
+            b.className = 'country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition';
+          });
+          btn.className = 'country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-black uppercase bg-xorange text-white shadow-glow-orange shrink-0 transition';
+
+          filterSpots();
+        });
+      });
+
+      // 運動分類切換
       catButtons.forEach((btn) => {
         btn.addEventListener('click', () => {
           currentCategory = btn.getAttribute('data-cat');
@@ -310,7 +392,7 @@ const totalSpots = spots.length;
           catButtons.forEach((b) => {
             b.className = 'cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition';
           });
-          btn.className = 'cat-filter-btn px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider bg-xorange text-white shadow-glow-orange transition';
+          btn.className = 'cat-filter-btn px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider bg-white/20 text-white shadow-glow-orange transition';
 
           filterSpots();
         });
