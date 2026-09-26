@@ -8459,5 +8459,175 @@
     "affiliate_hotel_url": "https://www.agoda.com/search?text=cowabunga%21&latitude=24.3258215&longitude=120.6998876",
     "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
     "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9201,
+    "name": "台北觀山河濱公園極限滑板場 (Guanshan Skatepark)",
+    "category": "SKATE",
+    "latitude": 25.0612,
+    "longitude": 121.5725,
+    "city": "台北",
+    "country": "Taiwan",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "features": [
+      "台北知名街式與碗池滑板地標",
+      "夜間照明完善",
+      "設有專業斜台、階梯與滑桿"
+    ],
+    "website": "https://heo.gov.taipei"
+  },
+  {
+    "osm_id": 9202,
+    "name": "台北南港極限運動訓練中心 (Nangang Extreme Sports)",
+    "category": "SKATE",
+    "latitude": 25.0536,
+    "longitude": 121.6052,
+    "city": "台北",
+    "country": "Taiwan",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "features": [
+      "捷運南港站旁交通極便利",
+      "街式道具與深碗池齊全",
+      "定期舉辦全台滑板大賽"
+    ],
+    "website": "https://sports.gov.taipei"
+  },
+  {
+    "osm_id": 9203,
+    "name": "新北永和綠寶石河濱滑板場 (Emerald Riverside Skatepark)",
+    "category": "SKATE",
+    "latitude": 25.0125,
+    "longitude": 121.5122,
+    "city": "新北",
+    "country": "Taiwan",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "features": [
+      "雙和地區人氣滑板場",
+      "平地寬敞新手友善",
+      "新店溪畔涼爽通風"
+    ],
+    "website": "https://www.hrcm.ntpc.gov.tw"
+  },
+  {
+    "osm_id": 9204,
+    "name": "台中市極限運動場 (Taichung Extreme Sports Park - 豐富公園)",
+    "category": "SKATE",
+    "latitude": 24.1328,
+    "longitude": 120.6515,
+    "city": "台中",
+    "country": "Taiwan",
+    "difficulty": "Intermediate / Pro",
+    "fee_type": "FREE",
+    "features": [
+      "中台灣最具規模極限公園",
+      "少數具備大型 Vert 半管設施",
+      "街道區與雙碗池"
+    ],
+    "website": "https://www.sports.taichung.gov.tw"
+  },
+  {
+    "osm_id": 9205,
+    "name": "台南極限運動場 (Tainan Extreme Sports Park)",
+    "category": "SKATE",
+    "latitude": 22.9815,
+    "longitude": 120.2185,
+    "city": "台南",
+    "country": "Taiwan",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "features": [
+      "南台灣經典滑板聚落",
+      "跳台與碗壁一應俱全",
+      "適合初學到進階滑手"
+    ],
+    "website": "https://sports.tainan.gov.tw"
+  },
+  {
+    "osm_id": 9206,
+    "name": "高雄中正極限運動場 (Kaohsiung Extreme Sports Park)",
+    "category": "SKATE",
+    "latitude": 22.6285,
+    "longitude": 120.3342,
+    "city": "高雄",
+    "country": "Taiwan",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "features": [
+      "高雄最大公立極限場",
+      "捷運技擊館站直達",
+      "夜間強力照明"
+    ],
+    "website": "https://sports.kcg.gov.tw"
+  },
+  {
+    "osm_id": 9207,
+    "name": "台北內湖彩虹河濱公園專業泵道 (Neihu Rainbow Pump Track)",
+    "category": "BMX",
+    "latitude": 25.0568,
+    "longitude": 121.5812,
+    "city": "台北",
+    "country": "Taiwan",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "features": [
+      "全台人氣第一專業瀝青 Pump Track",
+      "適合 BMX 小輪車與滑板壓抬",
+      "橋下避雨夜間有照明"
+    ],
+    "website": "https://heo.gov.taipei"
+  },
+  {
+    "osm_id": 9208,
+    "name": "新北樹林極限運動泥地土坡場 (Shulin Dirt Jump & BMX)",
+    "category": "BMX",
+    "latitude": 24.9852,
+    "longitude": 121.4115,
+    "city": "新北",
+    "country": "Taiwan",
+    "difficulty": "Intermediate / Pro",
+    "fee_type": "FREE",
+    "features": [
+      "專業泥地土坡跳台 (Dirt Jump)",
+      "BMX 空中花式訓練基地",
+      "高挑戰性刺激度"
+    ],
+    "website": "https://www.shulin.ntpc.gov.tw"
+  },
+  {
+    "osm_id": 9209,
+    "name": "桃園大溪河濱公園波浪泵道 (Daxi Riverside Pump Track)",
+    "category": "BMX",
+    "latitude": 24.8912,
+    "longitude": 121.2845,
+    "city": "桃園",
+    "country": "Taiwan",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "features": [
+      "標準河濱 Pump Track",
+      "適合 BMX 壓抬平衡技巧練習",
+      "周邊落羽松景觀優美"
+    ],
+    "website": "https://travel.tycg.gov.tw"
+  },
+  {
+    "osm_id": 9210,
+    "name": "台中清水鰲峰山極限運動場 (Taichung Aofeng Mountain Park)",
+    "category": "BMX",
+    "latitude": 24.2752,
+    "longitude": 120.5825,
+    "city": "台中",
+    "country": "Taiwan",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "features": [
+      "山坡地形波浪極限單車場",
+      "結合體能競技與波浪壓抬",
+      "台中海線視野極佳"
+    ],
+    "website": "https://travel.taichung.gov.tw"
   }
 ]
