@@ -1,3 +1,23 @@
+
+def get_r2_history(r2_client, bucket_name):
+    """從 Cloudflare R2 讀取已發布的歷史文章與圖片清單"""
+    history = {'titles': set(), 'images': set(), 'slugs': set()}
+    if not r2_client or not bucket_name:
+        return history
+    try:
+        paginator = r2_client.get_paginator('list_objects_v2')
+        for page in paginator.paginate(Bucket=bucket_name, Prefix='posts/'):
+            for obj in page.get('Contents', []):
+                key = obj.get('Key', '')
+                history['slugs'].add(key.replace('posts/', '').replace('.json', ''))
+        for page in paginator.paginate(Bucket=bucket_name, Prefix='cards/'):
+            for obj in page.get('Contents', []):
+                key = obj.get('Key', '')
+                history['images'].add(key.replace('cards/', ''))
+        print(f"📡 從 Cloudflare R2 成功同步歷史資料庫：{len(history['slugs'])} 篇文章, {len(history['images'])} 張歷史圖片")
+    except Exception as e:
+        print(f"⚠️ 讀取 R2 歷史記錄失敗 (將使用本地比對): {e}")
+    return history
 #!/usr/bin/env python3
 import os
 import re
