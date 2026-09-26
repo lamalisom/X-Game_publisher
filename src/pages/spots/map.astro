@@ -74,15 +74,42 @@ function resolveLocation(lat: number, lng: number, rawCountry: string, rawCity: 
     return { code: 'JP', country: '日本 Japan', flag: '🇯🇵', city };
   }
 
-  // 2. 🇭🇰 香港 (Hong Kong)
-  if (fullTxt.includes('hong kong') || fullTxt.includes('香港') || (lat >= 22.1 && lat <= 22.6 && lng >= 113.8 && lng <= 114.5)) {
-    let city = '香港全區';
-    if (fullTxt.includes('柴灣') || fullTxt.includes('chai wan')) city = '柴灣 Chai Wan';
-    else if (fullTxt.includes('荔枝角') || fullTxt.includes('美孚') || fullTxt.includes('mei foo')) city = '荔枝角/美孚 Mei Foo';
-    else if (fullTxt.includes('大浪灣') || fullTxt.includes('big wave')) city = '大浪灣 Big Wave Bay';
-    else if (fullTxt.includes('獅子山') || fullTxt.includes('lion rock')) city = '獅子山 Lion Rock';
-    else if (fullTxt.includes('觀塘') || fullTxt.includes('kwun tong')) city = '觀塘 Kwun Tong';
-    else if (fullTxt.includes('將軍澳') || fullTxt.includes('tseung kwan o')) city = '將軍澳 TKO';
+  // 2. 🇭🇰 香港 (Hong Kong 全境 18 區經緯度精確細分)
+  if (fullTxt.includes('hong kong') || fullTxt.includes('香港') || (lat >= 22.14 && lat <= 22.58 && lng >= 113.80 && lng <= 114.45)) {
+    let city = '香港';
+    
+    // 文字地標優先匹配
+    if (fullTxt.includes('柴灣') || fullTxt.includes('chai wan') || fullTxt.includes('小西灣')) city = '港島東 · 柴灣 Chai Wan';
+    else if (fullTxt.includes('荔枝角') || fullTxt.includes('美孚') || fullTxt.includes('mei foo') || fullTxt.includes('深水埗')) city = '九龍 · 荔枝角/美孚 Mei Foo';
+    else if (fullTxt.includes('大浪灣') || fullTxt.includes('big wave') || fullTxt.includes('石澳') || fullTxt.includes('shek o')) city = '港島南 · 大浪灣/石澳 Big Wave Bay';
+    else if (fullTxt.includes('獅子山') || fullTxt.includes('lion rock') || fullTxt.includes('黃大仙')) city = '九龍 · 獅子山 Lion Rock';
+    else if (fullTxt.includes('觀塘') || fullTxt.includes('kwun tong') || fullTxt.includes('九龍灣') || fullTxt.includes('啟德')) city = '九龍東 · 觀塘/啟德 Kwun Tong';
+    else if (fullTxt.includes('將軍澳') || fullTxt.includes('tseung kwan o') || fullTxt.includes('坑口') || fullTxt.includes('寶琳')) city = '新界 · 將軍澳 TKO';
+    else if (fullTxt.includes('屯門') || fullTxt.includes('tuen mun') || fullTxt.includes('友愛') || fullTxt.includes('安定')) city = '新界西 · 屯門 Tuen Mun';
+    else if (fullTxt.includes('元朗') || fullTxt.includes('yuen long') || fullTxt.includes('天水圍')) city = '新界西 · 元朗/天水圍 Yuen Long';
+    else if (fullTxt.includes('粉嶺') || fullTxt.includes('fanling') || fullTxt.includes('安樂村') || fullTxt.includes('上水')) city = '新界北 · 粉嶺/上水 Fanling';
+    else if (fullTxt.includes('沙田') || fullTxt.includes('sha tin') || fullTxt.includes('馬鞍山')) city = '新界 · 沙田/馬鞍山 Sha Tin';
+    else if (fullTxt.includes('荃灣') || fullTxt.includes('tsuen wan') || fullTxt.includes('葵涌') || fullTxt.includes('青衣')) city = '新界 · 荃灣/葵青 Tsuen Wan';
+    else if (fullTxt.includes('灣仔') || fullTxt.includes('銅鑼灣') || fullTxt.includes('維園') || fullTxt.includes('中環')) city = '港島 · 灣仔/中西區 Central';
+    else if (fullTxt.includes('東涌') || fullTxt.includes('大嶼山') || fullTxt.includes('梅窩')) city = '離島 · 大嶼山/東涌 Lantau';
+    
+    // 經緯度座標精確反查香港分區
+    else if (lat && lng) {
+      if (lat >= 22.25 && lat <= 22.29 && lng >= 114.20 && lng <= 114.27) city = '港島東 · 柴灣/東區 Eastern';
+      else if (lat >= 22.20 && lat <= 22.26 && lng >= 114.18 && lng <= 114.26) city = '港島南 · 大浪灣/石澳 South';
+      else if (lat >= 22.26 && lat <= 22.29 && lng >= 114.12 && lng <= 114.20) city = '港島 · 灣仔/中西區 Central';
+      else if (lat >= 22.31 && lat <= 22.35 && lng >= 114.12 && lng <= 114.17) city = '九龍 · 荔枝角/美孚 Mei Foo';
+      else if (lat >= 22.30 && lat <= 22.34 && lng >= 114.19 && lng <= 114.24) city = '九龍東 · 觀塘/啟德 Kwun Tong';
+      else if (lat >= 22.33 && lat <= 22.37 && lng >= 114.17 && lng <= 114.21) city = '九龍 · 獅子山/黃大仙 Wong Tai Sin';
+      else if (lat >= 22.29 && lat <= 22.33 && lng >= 114.24 && lng <= 114.28) city = '新界 · 將軍澳 TKO';
+      else if (lat >= 22.36 && lat <= 22.42 && lng >= 114.16 && lng <= 114.25) city = '新界 · 沙田 Sha Tin';
+      else if (lat >= 22.36 && lat <= 22.42 && lng >= 113.95 && lng <= 114.02) city = '新界西 · 屯門 Tuen Mun';
+      else if (lat >= 22.42 && lat <= 22.48 && lng >= 113.98 && lng <= 114.06) city = '新界西 · 元朗 Yuen Long';
+      else if (lat >= 22.47 && lat <= 22.52 && lng >= 114.12 && lng <= 114.16) city = '新界北 · 粉嶺/上水 Fanling';
+      else if (lat >= 22.25 && lat <= 22.32 && lng >= 113.88 && lng <= 114.00) city = '離島 · 大嶼山/東涌 Lantau';
+      else city = '香港市區 HK Urban';
+    }
+    
     return { code: 'HK', country: '香港 Hong Kong', flag: '🇭🇰', city };
   }
 
