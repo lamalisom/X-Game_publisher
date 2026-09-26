@@ -1,5 +1,5 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import Layout from '../../../layouts/Layout.astro';
 import fs from 'fs';
 import path from 'path';
 
@@ -7,8 +7,7 @@ interface SpotItem {
   name: string;
   category: string;
   difficulty?: string;
-  difficultyCn?: string;
-  feeCn?: string;
+  fee_type?: string;
   city?: string;
   country?: string;
   latitude?: number;
@@ -29,107 +28,69 @@ interface SpotItem {
   regionTag?: string;
 }
 
-function resolveLocationZH(lat: number, lng: number, rawCountry: string, rawCity: string, rawName: string) {
+function resolveLocationEN(lat: number, lng: number, rawCountry: string, rawCity: string, rawName: string) {
   const fullTxt = (rawCountry + ' ' + rawCity + ' ' + rawName).toLowerCase();
   
-  // 1. 🇯🇵 日本
+  // 1. Japan
   if (fullTxt.includes('japan') || fullTxt.includes('日本') || /[\u3040-\u30ff]/.test(rawName) || (lat >= 24.0 && lat <= 46.0 && lng >= 122.0 && lng <= 154.0)) {
-    let city = '日本';
-    if (fullTxt.includes('東京') || fullTxt.includes('tokyo') || fullTxt.includes('shibuya') || fullTxt.includes('shinjuku') || fullTxt.includes('世田谷') || (lat >= 35.53 && lat <= 35.89 && lng >= 139.34 && lng <= 139.92)) city = '東京';
-    else if (fullTxt.includes('大阪') || fullTxt.includes('osaka') || fullTxt.includes('sakai') || (lat >= 34.40 && lat <= 34.88 && lng >= 135.32 && lng <= 135.75)) city = '大阪';
-    else if (fullTxt.includes('京都') || fullTxt.includes('kyoto') || (lat >= 34.85 && lat <= 35.32 && lng >= 135.55 && lng <= 135.88)) city = '京都';
-    else if (fullTxt.includes('神奈川') || fullTxt.includes('kanagawa') || fullTxt.includes('yokohama') || fullTxt.includes('湘南') || (lat >= 35.12 && lat <= 35.60 && lng >= 139.00 && lng <= 139.75)) city = '神奈川 / 湘南';
-    else if (fullTxt.includes('埼玉') || fullTxt.includes('saitama') || (lat >= 35.75 && lat <= 36.28 && lng >= 138.90 && lng <= 139.90)) city = '埼玉';
-    else if (fullTxt.includes('千葉') || fullTxt.includes('chiba') || (lat >= 34.90 && lat <= 35.95 && lng >= 139.80 && lng <= 140.88)) city = '千葉';
-    else if (fullTxt.includes('北海道') || fullTxt.includes('hokkaido') || fullTxt.includes('sapporo') || (lat >= 41.30 && lat <= 45.60)) city = '北海道';
-    else if (fullTxt.includes('青森') || fullTxt.includes('八戶') || fullTxt.includes('長根') || fullTxt.includes('仙台') || fullTxt.includes('東北') || (lat >= 38.00 && lat <= 41.50)) city = '青森 / 東北';
-    else if (fullTxt.includes('長野') || fullTxt.includes('靜岡') || fullTxt.includes('白馬') || (lat >= 34.70 && lat <= 37.50 && lng >= 136.00 && lng <= 139.00)) city = '長野 / 靜岡 / 中部';
-    else if (fullTxt.includes('愛知') || fullTxt.includes('名古屋')) city = '愛知 / 名古屋';
-    else if (fullTxt.includes('廣島') || fullTxt.includes('岡山') || (lat >= 33.50 && lat <= 35.50 && lng >= 131.00 && lng <= 134.50)) city = '廣島 / 中國地區';
-    else if (fullTxt.includes('福岡') || fullTxt.includes('熊本') || fullTxt.includes('九州') || (lat >= 31.00 && lat <= 34.00 && lng >= 129.50 && lng <= 132.00)) city = '福岡 / 九州';
-    else if (fullTxt.includes('沖繩') || (lat >= 24.00 && lat <= 28.00)) city = '沖繩';
-    else city = '關東地區';
-    return { code: 'JP', country: '日本', flag: '🇯🇵', city };
+    let city = 'Japan Region';
+    if (fullTxt.includes('東京') || fullTxt.includes('tokyo') || (lat >= 35.53 && lat <= 35.89 && lng >= 139.34 && lng <= 139.92)) city = 'Tokyo';
+    else if (fullTxt.includes('大阪') || fullTxt.includes('osaka') || (lat >= 34.40 && lat <= 34.88 && lng >= 135.32 && lng <= 135.75)) city = 'Osaka';
+    else if (fullTxt.includes('京都') || fullTxt.includes('kyoto') || (lat >= 34.85 && lat <= 35.32 && lng >= 135.55 && lng <= 135.88)) city = 'Kyoto';
+    else if (fullTxt.includes('kanagawa') || fullTxt.includes('yokohama') || (lat >= 35.12 && lat <= 35.60 && lng >= 139.00 && lng <= 139.75)) city = 'Kanagawa';
+    else if (fullTxt.includes('saitama') || (lat >= 35.75 && lat <= 36.28 && lng >= 138.90 && lng <= 139.90)) city = 'Saitama';
+    else if (fullTxt.includes('hokkaido') || fullTxt.includes('sapporo')) city = 'Hokkaido';
+    else city = 'Kanto Region';
+    return { code: 'JP', country: 'Japan', flag: '🇯🇵', city };
   }
 
-  // 2. 🇭🇰 香港 (全區精確覆蓋，消滅香港市區)
+  // 2. Hong Kong
   if (fullTxt.includes('hong kong') || fullTxt.includes('香港') || (lat >= 22.14 && lat <= 22.58 && lng >= 113.80 && lng <= 114.45)) {
-    let city = '香港';
-    if (fullTxt.includes('柴灣') || fullTxt.includes('chai wan') || fullTxt.includes('小西灣') || (lat >= 22.25 && lat <= 22.29 && lng >= 114.22 && lng <= 114.27)) city = '港島東 · 柴灣';
-    else if (fullTxt.includes('荔枝角') || fullTxt.includes('美孚') || fullTxt.includes('mei foo') || fullTxt.includes('深水埗') || (lat >= 22.33 && lat <= 22.35 && lng >= 114.13 && lng <= 114.16)) city = '九龍西 · 荔枝角 / 美孚';
-    else if (fullTxt.includes('大浪灣') || fullTxt.includes('big wave') || fullTxt.includes('石澳') || (lat >= 22.22 && lat <= 22.26 && lng >= 114.23 && lng <= 114.26)) city = '港島南 · 大浪灣 / 石澳';
-    else if (fullTxt.includes('獅子山') || fullTxt.includes('lion rock') || fullTxt.includes('黃大仙') || (lat >= 22.34 && lat <= 22.37 && lng >= 114.17 && lng <= 114.21)) city = '九龍 · 獅子山';
-    else if (fullTxt.includes('觀塘') || fullTxt.includes('kwun tong') || fullTxt.includes('九龍灣') || fullTxt.includes('啟德') || (lat >= 22.30 && lat <= 22.33 && lng >= 114.20 && lng <= 114.24)) city = '九龍東 · 觀塘 / 啟德';
-    else if (fullTxt.includes('旺角') || fullTxt.includes('油麻地') || fullTxt.includes('佐敦') || fullTxt.includes('尖沙咀') || (lat >= 22.29 && lat <= 22.32 && lng >= 114.16 && lng <= 114.18)) city = '九龍 · 油尖旺 / 旺角';
-    else if (fullTxt.includes('灣仔') || fullTxt.includes('銅鑼灣') || fullTxt.includes('中環') || fullTxt.includes('維園') || (lat >= 22.27 && lat <= 22.29 && lng >= 114.14 && lng <= 114.19)) city = '港島 · 灣仔 / 中西區';
-    else if (fullTxt.includes('將軍澳') || fullTxt.includes('坑口') || (lat >= 22.29 && lat <= 22.33 && lng >= 114.24 && lng <= 114.28)) city = '新界 · 將軍澳';
-    else if (fullTxt.includes('屯門') || (lat >= 22.36 && lat <= 22.42 && lng >= 113.95 && lng <= 114.02)) city = '新界西 · 屯門';
-    else if (fullTxt.includes('元朗') || fullTxt.includes('天水圍') || (lat >= 22.42 && lat <= 22.48 && lng >= 113.98 && lng <= 114.06)) city = '新界西 · 元朗 / 天水圍';
-    else if (fullTxt.includes('粉嶺') || fullTxt.includes('上水') || (lat >= 22.47 && lat <= 22.52 && lng >= 114.12 && lng <= 114.16)) city = '新界北 · 粉嶺 / 上水';
-    else if (fullTxt.includes('沙田') || fullTxt.includes('馬鞍山') || (lat >= 22.36 && lat <= 22.42 && lng >= 114.16 && lng <= 114.25)) city = '新界 · 沙田 / 馬鞍山';
-    else if (fullTxt.includes('荃灣') || fullTxt.includes('葵涌') || (lat >= 22.35 && lat <= 22.39 && lng >= 114.10 && lng <= 114.14)) city = '新界 · 荃灣 / 葵青';
-    else if (fullTxt.includes('東涌') || fullTxt.includes('大嶼山') || (lat >= 22.25 && lat <= 22.32 && lng >= 113.88 && lng <= 114.00)) city = '離島 · 大嶼山 / 東涌';
-    else city = '九龍 / 新界核心區';
-    return { code: 'HK', country: '香港', flag: '🇭🇰', city };
+    let city = 'Hong Kong';
+    if (fullTxt.includes('chai wan') || fullTxt.includes('柴灣')) city = 'HK Island · Chai Wan';
+    else if (fullTxt.includes('mei foo') || fullTxt.includes('荔枝角')) city = 'Kowloon · Mei Foo';
+    else if (fullTxt.includes('big wave') || fullTxt.includes('大浪灣')) city = 'HK Island · Big Wave Bay';
+    else if (fullTxt.includes('lion rock') || fullTxt.includes('獅子山')) city = 'Kowloon · Lion Rock';
+    else if (fullTxt.includes('kwun tong') || fullTxt.includes('觀塘')) city = 'Kowloon East · Kwun Tong';
+    else if (fullTxt.includes('tseung kwan o') || fullTxt.includes('將軍澳')) city = 'New Territories · TKO';
+    else city = 'Kowloon / NT Urban';
+    return { code: 'HK', country: 'Hong Kong', flag: '🇭🇰', city };
   }
 
-  // 3. 🇹🇼 台灣
-  if (fullTxt.includes('taiwan') || fullTxt.includes('台灣') || fullTxt.includes('臺灣') || (lat >= 21.8 && lat <= 25.4 && lng >= 119.9 && lng <= 122.1)) {
-    let city = '台灣';
-    if (fullTxt.includes('台北') || fullTxt.includes('taipei')) city = '台北';
-    else if (fullTxt.includes('新北')) city = '新北';
-    else if (fullTxt.includes('台中')) city = '台中';
-    else if (fullTxt.includes('高雄')) city = '高雄';
-    else if (fullTxt.includes('宜蘭') || fullTxt.includes('頭城')) city = '宜蘭 / 頭城';
-    return { code: 'TW', country: '台灣', flag: '🇹🇼', city };
-  }
-
-  // 4. 🇺🇸 美國
+  // 3. USA
   if (fullTxt.includes('usa') || fullTxt.includes('united states') || fullTxt.includes('美國') || (lat >= 24.5 && lat <= 49.4 && lng >= -125.0 && lng <= -66.9) || (lat >= 18.9 && lat <= 22.3 && lng >= -160.3 && lng <= -154.8)) {
-    let city = '美國';
-    if (fullTxt.includes('hawaii') || fullTxt.includes('oahu') || fullTxt.includes('pipeline') || (lat >= 18.9 && lat <= 22.3 && lng >= -160.3 && lng <= -154.8)) city = '夏威夷';
-    else if (fullTxt.includes('california') || fullTxt.includes('los angeles') || fullTxt.includes('berrics') || (lat >= 32.5 && lat <= 42.0 && lng >= -124.4 && lng <= -114.1)) city = '加州 (洛杉磯)';
-    else if (fullTxt.includes('florida') || fullTxt.includes('miami')) city = '佛羅里達';
-    else if (fullTxt.includes('new york')) city = '紐約';
-    return { code: 'US', country: '美國', flag: '🇺🇸', city };
+    let city = 'USA';
+    if (fullTxt.includes('hawaii') || (lat >= 18.9 && lat <= 22.3 && lng >= -160.3 && lng <= -154.8)) city = 'Hawaii';
+    else if (fullTxt.includes('california') || (lat >= 32.5 && lat <= 42.0 && lng >= -124.4 && lng <= -114.1)) city = 'California (LA)';
+    else if (fullTxt.includes('new york')) city = 'New York';
+    return { code: 'US', country: 'USA', flag: '🇺🇸', city };
   }
 
-  // 5. 🇦🇺 澳洲
+  // 4. Australia
   if (fullTxt.includes('australia') || fullTxt.includes('澳洲') || (lat >= -44.0 && lat <= -10.0 && lng >= 112.0 && lng <= 154.0)) {
-    let city = '澳洲';
-    if (fullTxt.includes('sydney') || fullTxt.includes('bondi') || (lat >= -34.2 && lat <= -33.5 && lng >= 150.5 && lng <= 151.4)) city = '雪梨 (邦代)';
-    else if (fullTxt.includes('brisbane') || fullTxt.includes('gold coast')) city = '黃金海岸 / 布里斯本';
-    else if (fullTxt.includes('melbourne')) city = '墨爾本';
-    return { code: 'AU', country: '澳洲', flag: '🇦🇺', city };
+    let city = 'Australia';
+    if (fullTxt.includes('sydney') || fullTxt.includes('bondi')) city = 'Sydney (Bondi)';
+    else if (fullTxt.includes('brisbane')) city = 'Brisbane';
+    return { code: 'AU', country: 'Australia', flag: '🇦🇺', city };
   }
 
-  // 6. 🇫🇷 法國
-  if (fullTxt.includes('france') || fullTxt.includes('法國') || fullTxt.includes('tahiti') || (lat >= 41.3 && lat <= 51.1 && lng >= -5.2 && lng <= 9.6) || (lat >= -18.0 && lat <= -17.0 && lng >= -150.0 && lng <= -149.0)) {
-    let city = '法國';
-    if (fullTxt.includes('teahupoo') || fullTxt.includes('tahiti')) city = '大溪地 (提阿胡波)';
-    else if (fullTxt.includes('marseille') || fullTxt.includes('prado')) city = '馬賽';
-    else if (fullTxt.includes('paris')) city = '巴黎';
-    return { code: 'FR', country: '法國', flag: '🇫🇷', city };
+  // 5. France
+  if (fullTxt.includes('france') || fullTxt.includes('法國') || (lat >= 41.3 && lat <= 51.1 && lng >= -5.2 && lng <= 9.6) || (lat >= -18.0 && lat <= -17.0 && lng >= -150.0 && lng <= -149.0)) {
+    let city = 'France';
+    if (fullTxt.includes('teahupoo') || fullTxt.includes('tahiti')) city = 'Tahiti (Teahupoo)';
+    else if (fullTxt.includes('marseille')) city = 'Marseille';
+    return { code: 'FR', country: 'France', flag: '🇫🇷', city };
   }
 
-  // 7. 🇸🇪 瑞典
+  // 6. Sweden
   if (fullTxt.includes('sweden') || fullTxt.includes('瑞典') || (lat >= 55.3 && lat <= 69.1 && lng >= 11.0 && lng <= 24.2)) {
-    let city = '瑞典';
-    if (fullTxt.includes('stockholm') || (lat >= 59.2 && lat <= 59.5 && lng >= 17.8 && lng <= 18.2)) city = '斯德哥爾摩';
-    else if (fullTxt.includes('malm') || (lat >= 55.5 && lat <= 55.7 && lng >= 12.9 && lng <= 13.1)) city = '馬爾默';
-    else if (fullTxt.includes('gothenburg')) city = '哥德堡';
-    return { code: 'SE', country: '瑞典', flag: '🇸🇪', city };
+    let city = 'Sweden';
+    if (fullTxt.includes('stockholm')) city = 'Stockholm';
+    else if (fullTxt.includes('malm')) city = 'Malmö';
+    return { code: 'SE', country: 'Sweden', flag: '🇸🇪', city };
   }
 
-  // 8. 🇨🇭 瑞士 / 奧地利
-  if (fullTxt.includes('switzerland') || fullTxt.includes('瑞士') || fullTxt.includes('austria') || fullTxt.includes('奧地利')) {
-    let city = '瑞士 / 阿爾卑斯';
-    if (fullTxt.includes('zurich')) city = '蘇黎世';
-    else if (fullTxt.includes('innsbruck')) city = '因斯布魯克';
-    return { code: 'CH', country: '瑞士', flag: '🇨🇭', city };
-  }
-
-  return { code: 'ALL', country: rawCountry || '全球', flag: '🌍', city: rawCity || '熱門據點' };
+  return { code: 'ALL', country: rawCountry || 'Global', flag: '🌍', city: rawCity || 'Spots' };
 }
 
 let spots: SpotItem[] = [];
@@ -160,45 +121,25 @@ try {
       
       const navUrl = (spotLat && spotLng)
         ? ('https://www.google.com/maps/dir/?api=1&destination=' + spotLat + ',' + spotLng)
-        : ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((s.name || '') + ' ' + (s.city || '')));
+        : ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((s.name || '')));
 
       const hotelAffiliateCid = '1898765';
       const hotelUrl = (spotLat && spotLng)
         ? ('https://www.agoda.com/partners/partnersearch.aspx?cid=' + hotelAffiliateCid + '&latitude=' + spotLat + '&longitude=' + spotLng + '&text=' + encodeURIComponent((s.name || '')) + '&pcs=1')
         : ('https://www.agoda.com/search?text=' + encodeURIComponent((s.name || '')));
 
-      const geo = resolveLocationZH(spotLat, spotLng, s.country || '', s.city || '', s.name || '');
+      const geo = resolveLocationEN(spotLat, spotLng, s.country || '', s.city || '', s.name || '');
       const regionTag = geo.flag + ' ' + geo.country + ' · ' + geo.city;
 
-      let environment = '🏞️ 室外場';
+      let environment = '🏞️ Outdoor';
       const nameAndFeatures = ((s.name || '') + ' ' + (s.features ? s.features.join(' ') : '') + ' ' + (s.surface_type || '')).toLowerCase();
-      if (nameAndFeatures.includes('indoor') || nameAndFeatures.includes('室內') || nameAndFeatures.includes('gym') || nameAndFeatures.includes('館') || cat === 'CLIMB') {
-        environment = '🏠 室內館';
-      }
-
-      // 中文難度
-      let difficultyCn = '🌟 全級別適用 · ⏱️ 1-2小時';
-      const rawDiff = (s.difficulty || '').toLowerCase();
-      if (rawDiff.includes('beginner') || rawDiff.includes('初')) {
-        difficultyCn = '🔰 初階新手 · ⏱️ 1小時';
-      } else if (rawDiff.includes('intermediate') || rawDiff.includes('中')) {
-        difficultyCn = '⚡ 中階進階 · ⏱️ 2-3小時';
-      } else if (rawDiff.includes('pro') || rawDiff.includes('advanced') || rawDiff.includes('高') || rawDiff.includes('專')) {
-        difficultyCn = '🔥 專業級 · ⏱️ 3小時+';
-      }
-
-      // 中文開放狀態
-      let feeCn = '🔓 開放場地';
-      const rawFee = (s.fee_type || '').toUpperCase();
-      if (rawFee === 'FREE' || (s.fee_details && s.fee_details.includes('免費'))) {
-        feeCn = '🟢 免費入場';
-      } else if (rawFee === 'PAID' || rawFee === 'FEE') {
-        feeCn = '🎫 需收費';
+      if (nameAndFeatures.includes('indoor') || nameAndFeatures.includes('gym') || cat === 'CLIMB') {
+        environment = '🏠 Indoor';
       }
 
       const officialUrl = (s.website && s.website.startsWith('http'))
         ? s.website
-        : ('https://www.google.com/search?q=' + encodeURIComponent((s.name || '') + ' ' + (geo.city || '') + ' 官方網站'));
+        : ('https://www.google.com/search?q=' + encodeURIComponent((s.name || '') + ' ' + (geo.city || '') + ' official site'));
 
       const gearUrl = 'https://www.amazon.com/s?k=' + encodeURIComponent(gearKeyword) + '&tag=kait02bc-20';
       const searchStr = ((s.name || '') + ' ' + geo.country + ' ' + geo.city + ' ' + regionTag + ' ' + environment).toLowerCase();
@@ -215,8 +156,6 @@ try {
         countryCode: geo.code,
         regionTag,
         environment,
-        difficultyCn,
-        feeCn,
         searchStr
       };
     });
@@ -229,16 +168,15 @@ const totalSpots = spots.length;
 ---
 
 <Layout
-  title="📍 全球極限運動場地雷達庫 (Global Action Spots Radar) | xGame Radar"
-  description="即時探索全球滑板場、碗池、衝浪浪點、攀岩抱石館與 BMX 泵道。附國家分區規格、路線導航與周邊推薦。"
+  title="📍 Global Extreme Spots Radar | xGame Radar"
+  description="Explore worldwide skateparks, bowls, surf breaks, climbing gyms, and pump tracks. Filter by country and sports category."
 >
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
     
-    <!-- 頂部切換語言按鈕 -->
     <div class="flex justify-end">
-      <a href="/spots/map/en" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-xcard border border-xborder text-xs font-mono text-gray-300 hover:text-white hover:border-cyan-500 transition">
+      <a href="/spots/map" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-xcard border border-xborder text-xs font-mono text-gray-300 hover:text-white hover:border-cyan-500 transition">
         <span>🌐</span>
-        <span class="font-bold">Switch to English (英文版) →</span>
+        <span class="font-bold">切換至繁體中文版 (Chinese) →</span>
       </a>
     </div>
 
@@ -247,87 +185,79 @@ const totalSpots = spots.length;
       <div class="space-y-3 max-w-3xl relative z-10">
         <div class="flex items-center gap-2">
           <span class="px-3 py-1 rounded-full bg-xorange text-white text-xs font-black uppercase tracking-wider shadow-glow-orange">
-            場地雷達庫
+            GLOBAL SPOTS RADAR
           </span>
           <span class="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs font-bold font-mono">
-            已收錄 {totalSpots}+ 個頂級場地
+            {totalSpots}+ Top Spots Indexed
           </span>
         </div>
-        <h1 class="text-3xl sm:text-5xl font-black text-white leading-tight tracking-tight">
-          全球極限運動 <span class="text-xorange">場地探索庫</span>
+        <h1 class="text-3xl sm:text-5xl font-black text-white leading-tight tracking-tight uppercase">
+          Action Sports <span class="text-xorange">Spots Hub</span>
         </h1>
         <p class="text-sm sm:text-base text-gray-300 font-medium leading-relaxed">
-          收錄全球街式滑板場、巨型碗池、世界級浪點、抱石攀岩館與 BMX 泵道，支援按國家與城市即時搜尋。
+          Discover world-class skateparks, bowls, surf breaks, climbing crags/gyms, and BMX pump tracks.
         </p>
       </div>
       <div class="absolute -right-10 -bottom-10 w-80 h-80 bg-xorange/10 rounded-full blur-3xl pointer-events-none"></div>
     </div>
 
-    <!-- 1️⃣ 國家快速切換標籤 (純中文) -->
+    <!-- 1️⃣ Country Filter -->
     <div class="space-y-3 p-4 rounded-2xl bg-xcard/60 border border-xborder">
       <div class="text-xs font-bold font-mono text-gray-400 flex items-center gap-1.5">
         <span>🌍</span>
-        <span>熱門國家快速篩選：</span>
+        <span>Quick Country Filter:</span>
       </div>
       <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
         <button data-country="ALL" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-black uppercase bg-xorange text-white shadow-glow-orange shrink-0 transition">
-          🔥 全部國家
+          🔥 All Countries
         </button>
         <button data-country="JP" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇯🇵 日本
+          🇯🇵 Japan
         </button>
         <button data-country="HK" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇭🇰 香港
-        </button>
-        <button data-country="TW" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇹🇼 台灣
+          🇭🇰 Hong Kong
         </button>
         <button data-country="US" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇺🇸 美國
+          🇺🇸 USA
         </button>
         <button data-country="AU" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇦🇺 澳洲
+          🇦🇺 Australia
         </button>
         <button data-country="FR" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇫🇷 法國
+          🇫🇷 France
         </button>
         <button data-country="SE" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇸🇪 瑞典
-        </button>
-        <button data-country="CH" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇨🇭 瑞士
+          🇸🇪 Sweden
         </button>
       </div>
     </div>
 
-    <!-- 2️⃣ 運動分類篩選與即時搜尋框 -->
+    <!-- 2️⃣ Category Filter & Search -->
     <div class="space-y-4">
       <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-4 rounded-2xl bg-xcard border border-xborder">
-        <!-- 運動分類 -->
         <div class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
           <button data-cat="ALL" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider bg-white/10 text-white hover:bg-white/20 transition">
-            全部運動
+            All Sports
           </button>
           <button data-cat="SKATE" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition">
-            🛹 滑板
+            🛹 Skate
           </button>
           <button data-cat="CLIMB" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition">
-            🧗 攀岩
+            🧗 Climb
           </button>
           <button data-cat="SURF" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition">
-            🏄 衝浪
+            🏄 Surf
           </button>
           <button data-cat="BMX" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition">
             🚲 BMX
           </button>
         </div>
 
-        <!-- 關鍵字搜尋框 -->
         <div class="relative min-w-[320px]">
           <input
             type="text"
             id="spot-search-input"
-            placeholder="🔍 搜尋國家、分區 (例如: 東京、柴灣、美孚、台北、加州)..."
+            placeholder="🔍 Search city, spot (e.g. Tokyo, Bondi, LA, Chai Wan)..."
             class="w-full px-4 py-2.5 rounded-xl bg-xdark border border-xborder text-white text-xs focus:outline-none focus:border-xorange font-mono"
           />
         </div>
@@ -335,13 +265,13 @@ const totalSpots = spots.length;
 
       <div class="flex items-center justify-between text-xs font-mono text-gray-400 px-2">
         <span id="filtered-count-display" class="text-cyan-400 font-bold">
-          ⚡ 顯示中：{totalSpots} 個場地
+          ⚡ Showing: {totalSpots} Spots
         </span>
-        <span>提示：點擊導航開啟 Google Maps；點擊酒店開啟周邊訂房</span>
+        <span>Tip: Click Directions for Google Maps; Click Hotels for Agoda deals</span>
       </div>
     </div>
 
-    <!-- 3️⃣ 場地卡片網格 (純中文版) -->
+    <!-- 3️⃣ Cards Grid -->
     <div id="spots-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {spots.map((spot) => (
         <article
@@ -362,10 +292,10 @@ const totalSpots = spots.length;
               </div>
               <div class="flex items-center gap-1.5">
                 <span class="px-2 py-0.5 rounded-full bg-black/50 text-[10px] font-bold text-cyan-300 font-mono border border-white/10">
-                  {spot.difficultyCn}
+                  {spot.difficulty || 'All Levels'}
                 </span>
                 <span class="px-2 py-0.5 rounded bg-black/50 text-[10px] font-mono text-emerald-400 border border-emerald-500/20">
-                  {spot.feeCn}
+                  {spot.fee_type || 'FREE'}
                 </span>
               </div>
             </div>
@@ -393,16 +323,16 @@ const totalSpots = spots.length;
 
           <div class="grid grid-cols-2 gap-2 pt-3 border-t border-xborder/60 text-xs">
             <a href={spot.navUrl} target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-1 py-2 px-2 rounded-xl bg-xdark hover:bg-xcard border border-xborder text-white font-bold transition text-center shadow-sm">
-              🧭 路線導航
+              🧭 Directions
             </a>
             <a href={spot.hotelUrl} target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-1 py-2 px-2 rounded-xl bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30 text-blue-300 font-bold transition text-center">
-              🏨 周邊酒店
+              🏨 Hotels
             </a>
             <a href={spot.gearUrl} target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-1 py-2 px-2 rounded-xl bg-xorange hover:bg-orange-600 text-white font-bold transition text-center shadow-glow-orange">
-              🛒 專屬裝備
+              🛒 Gear
             </a>
             <a href={spot.officialUrl} target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-1 py-2 px-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/40 border border-emerald-500/30 text-emerald-300 font-bold transition text-center">
-              🌐 官方資訊
+              🌐 Official
             </a>
           </div>
         </article>
@@ -444,7 +374,7 @@ const totalSpots = spots.length;
         });
 
         if (countDisplay) {
-          countDisplay.innerText = `⚡ 顯示中：${visibleCount} 個場地`;
+          countDisplay.innerText = `⚡ Showing: ${visibleCount} Spots`;
         }
       }
 
