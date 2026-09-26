@@ -5381,5 +5381,880 @@
     "affiliate_ticket_url": "https://www.google.com/search?q=BMX%20Spot%20%231110198753%20%20official%20website",
     "affiliate_gear_url": "https://www.amazon.com/s?k=bmx%20helmet%20gloves%20knee%20guards&tag=kait02bc-20",
     "website": ""
+  },
+  {
+    "osm_id": 6766871756,
+    "name": "8five2shop",
+    "slug": "8five2shop_6766871756",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.281022,
+    "longitude": 114.183899,
+    "city": "Hong Kong",
+    "country": "",
+    "formatted_address": "謝斐道 Jaffe Road",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.storeberry.chat/shops/j189/logo/O124LoI6eRrgeqPms00azutFkuK0k4aW.jpg"
+    ],
+    "tags": {
+      "addr:city": "Hong Kong",
+      "addr:district": "Causeway Bay",
+      "addr:housenumber": "522",
+      "addr:street": "謝斐道 Jaffe Road",
+      "contact:instagram": "8FIVE2SHOP",
+      "level": "1",
+      "name": "8five2shop",
+      "phone": "+852 25739872",
+      "shop": "sports",
+      "sport": "skateboard",
+      "start_date": "1999",
+      "website": "https://shop.8five2.com"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=8five2shop%20Hong%20Kong&latitude=22.2810219&longitude=114.1838993",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=Hong%20Kong%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 6766910185,
+    "name": "HKIT",
+    "slug": "hkit_6766910185",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.300438,
+    "longitude": 114.175527,
+    "city": "Hong Kong",
+    "country": "",
+    "formatted_address": "加連威老道 Granville Road",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "addr:city": "Hong Kong",
+      "addr:district": "尖沙咀 Tsim Sha Tsui",
+      "addr:housenumber": "2/F 55",
+      "addr:street": "加連威老道 Granville Road",
+      "name": "HKIT",
+      "phone": "+852 2891 3716",
+      "shop": "sports",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=HKIT%20Hong%20Kong&latitude=22.3004382&longitude=114.1755271",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=Hong%20Kong%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 158664759,
+    "name": "SKATE Spot #158664759",
+    "slug": "skate_spot_158664759_158664759",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.335283,
+    "longitude": 114.136735,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23158664759&latitude=22.3352827&longitude=114.1367354",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 240396638,
+    "name": "SKATE Spot #240396638",
+    "slug": "skate_spot_240396638_240396638",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.335658,
+    "longitude": 114.191041,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23240396638&latitude=22.3356577&longitude=114.1910415",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 261065665,
+    "name": "SKATE Spot #261065665",
+    "slug": "skate_spot_261065665_261065665",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.367887,
+    "longitude": 114.175021,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23261065665&latitude=22.3678873&longitude=114.1750205",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 261874037,
+    "name": "SKATE Spot #261874037",
+    "slug": "skate_spot_261874037_261874037",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.34416,
+    "longitude": 114.108044,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23261874037&latitude=22.3441604&longitude=114.1080439",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 299215609,
+    "name": "SKATE Spot #299215609",
+    "slug": "skate_spot_299215609_299215609",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.315123,
+    "longitude": 114.226903,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23299215609&latitude=22.3151227&longitude=114.2269026",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 300687013,
+    "name": "SKATE Spot #300687013",
+    "slug": "skate_spot_300687013_300687013",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.384387,
+    "longitude": 114.107091,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23300687013&latitude=22.384387&longitude=114.1070914",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 302739956,
+    "name": "SKATE Spot #302739956",
+    "slug": "skate_spot_302739956_302739956",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.318113,
+    "longitude": 114.258642,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23302739956&latitude=22.3181125&longitude=114.258642",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 302740043,
+    "name": "極限運動場",
+    "slug": "極限運動場_302740043",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.314681,
+    "longitude": 114.260222,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "極限運動場 Skatepark",
+      "name:en": "Skatepark",
+      "name:zh": "極限運動場",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=%E6%A5%B5%E9%99%90%E9%81%8B%E5%8B%95%E5%A0%B4&latitude=22.3146808&longitude=114.2602222",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 369116407,
+    "name": "安樂門街遊樂場",
+    "slug": "安樂門街遊樂場_369116407",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.500168,
+    "longitude": 114.147426,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "paved",
+    "features": [
+      "夜間照明 (Night Lighting)",
+      "地面材質: paved"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "landuse": "construction",
+      "lit": "yes",
+      "name": "安樂門街遊樂場 On Lok Mun Street Playground",
+      "name:en": "On Lok Mun Street Playground",
+      "name:zh": "安樂門街遊樂場",
+      "outdoor": "only",
+      "proposed:demolished:leisure": "sports_centre",
+      "ramp:wheelchair": "yes",
+      "sport": "skateboard",
+      "surface": "paved",
+      "toilets": "yes"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=%E5%AE%89%E6%A8%82%E9%96%80%E8%A1%97%E9%81%8A%E6%A8%82%E5%A0%B4&latitude=22.5001676&longitude=114.1474256",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 452706163,
+    "name": "博愛醫院元朗商會極限運動場",
+    "slug": "博愛醫院元朗商會極限運動場_452706163",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.443572,
+    "longitude": 114.018317,
+    "city": "元朗 Yuen Long",
+    "country": "",
+    "formatted_address": "公園北路 Town Park Road North",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "paved",
+    "features": [
+      "夜間照明 (Night Lighting)",
+      "地面材質: paved"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "addr:city": "元朗 Yuen Long",
+      "addr:housenumber": "36",
+      "addr:street": "公園北路 Town Park Road North",
+      "leisure": "pitch",
+      "lit": "yes",
+      "name": "博愛醫院元朗商會極限運動場 Pok Oi Hospital Yuen Long Merchants Association Extreme Sports Park",
+      "name:en": "Pok Oi Hospital Yuen Long Merchants Association Extreme Sports Park",
+      "name:zh": "博愛醫院元朗商會極限運動場",
+      "sport": "skateboard",
+      "surface": "paved"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=%E5%8D%9A%E6%84%9B%E9%86%AB%E9%99%A2%E5%85%83%E6%9C%97%E5%95%86%E6%9C%83%E6%A5%B5%E9%99%90%E9%81%8B%E5%8B%95%E5%A0%B4%20%E5%85%83%E6%9C%97%20Yuen%20Long&latitude=22.4435721&longitude=114.0183169",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%E5%85%83%E6%9C%97%20Yuen%20Long%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 559351059,
+    "name": "SKATE Spot #559351059",
+    "slug": "skate_spot_559351059_559351059",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.416179,
+    "longitude": 114.22914,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23559351059&latitude=22.4161789&longitude=114.2291398",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 651944648,
+    "name": "柴灣池畔花園滑板場",
+    "slug": "柴灣池畔花園滑板場_651944648",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.264257,
+    "longitude": 114.245866,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "07:00-22:00",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "柴灣池畔花園滑板場 Chai Wan Pool-side Garden Skateboard Ground",
+      "name:en": "Chai Wan Pool-side Garden Skateboard Ground",
+      "name:zh": "柴灣池畔花園滑板場",
+      "opening_hours": "07:00-22:00",
+      "phone": "25642539",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=%E6%9F%B4%E7%81%A3%E6%B1%A0%E7%95%94%E8%8A%B1%E5%9C%92%E6%BB%91%E6%9D%BF%E5%A0%B4&latitude=22.2642572&longitude=114.2458658",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 671515447,
+    "name": "SKATE Spot #671515447",
+    "slug": "skate_spot_671515447_671515447",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.374793,
+    "longitude": 113.960522,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23671515447&latitude=22.3747925&longitude=113.9605217",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 798609016,
+    "name": "SKATE Spot #798609016",
+    "slug": "skate_spot_798609016_798609016",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.370945,
+    "longitude": 114.126726,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23798609016&latitude=22.3709449&longitude=114.126726",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 805915262,
+    "name": "SKATE Spot #805915262",
+    "slug": "skate_spot_805915262_805915262",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.291752,
+    "longitude": 113.951176,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23805915262&latitude=22.291752&longitude=113.9511764",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 827793925,
+    "name": "SKATE Spot #827793925",
+    "slug": "skate_spot_827793925_827793925",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.354458,
+    "longitude": 114.124516,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23827793925&latitude=22.3544577&longitude=114.124516",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 894607538,
+    "name": "極限運動場",
+    "slug": "極限運動場_894607538",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.343586,
+    "longitude": 114.203581,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "concrete",
+    "features": [
+      "地面材質: concrete"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "極限運動場",
+      "name:en": "Skatepark",
+      "name:zh": "極限運動場",
+      "sport": "skateboard",
+      "surface": "concrete"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=%E6%A5%B5%E9%99%90%E9%81%8B%E5%8B%95%E5%A0%B4&latitude=22.3435856&longitude=114.2035805",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 923300235,
+    "name": "SKATE Spot #923300235",
+    "slug": "skate_spot_923300235_923300235",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.579739,
+    "longitude": 114.165166,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23923300235&latitude=22.5797391&longitude=114.165166",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1053652666,
+    "name": "SKATE Spot #1053652666",
+    "slug": "skate_spot_1053652666_1053652666",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.455702,
+    "longitude": 114.000738,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231053652666&latitude=22.4557018&longitude=114.0007376",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1092385110,
+    "name": "海滨滑板营",
+    "slug": "海滨滑板营_1092385110",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.545685,
+    "longitude": 113.873921,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "海滨滑板营",
+      "name:en": "OH Bay Skatepark",
+      "name:zh": "海滨滑板营",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=%E6%B5%B7%E6%BB%A8%E6%BB%91%E6%9D%BF%E8%90%A5&latitude=22.5456847&longitude=113.8739212",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1173191335,
+    "name": "SKATE Spot #1173191335",
+    "slug": "skate_spot_1173191335_1173191335",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.355703,
+    "longitude": 114.132206,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231173191335&latitude=22.3557031&longitude=114.1322062",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1352480314,
+    "name": "SKATE Spot #1352480314",
+    "slug": "skate_spot_1352480314_1352480314",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.426502,
+    "longitude": 114.264576,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "label": "滑板公園 Skate Park",
+      "label:en": "Skate Park",
+      "label:zh": "滑板公園",
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231352480314&latitude=22.4265015&longitude=114.2645757",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1414100584,
+    "name": "SKATE Spot #1414100584",
+    "slug": "skate_spot_1414100584_1414100584",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.501853,
+    "longitude": 114.14832,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231414100584&latitude=22.5018529&longitude=114.1483201",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1414100585,
+    "name": "SKATE Spot #1414100585",
+    "slug": "skate_spot_1414100585_1414100585",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.50186,
+    "longitude": 114.148204,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231414100585&latitude=22.5018603&longitude=114.1482039",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1415842475,
+    "name": "SKATE Spot #1415842475",
+    "slug": "skate_spot_1415842475_1415842475",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.539994,
+    "longitude": 113.887436,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231415842475&latitude=22.5399942&longitude=113.8874361",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1498936728,
+    "name": "SKATE Spot #1498936728",
+    "slug": "skate_spot_1498936728_1498936728",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.497946,
+    "longitude": 113.917966,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231498936728&latitude=22.4979457&longitude=113.9179659",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1550319221,
+    "name": "星系轮滑场",
+    "slug": "星系轮滑场_1550319221",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 22.556932,
+    "longitude": 114.09053,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "area": "yes",
+      "highway": "pedestrian",
+      "leisure": "pitch",
+      "name": "星系轮滑场",
+      "name:zh-Hans": "星系轮滑场",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=%E6%98%9F%E7%B3%BB%E8%BD%AE%E6%BB%91%E5%9C%BA&latitude=22.5569323&longitude=114.0905301",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
   }
 ]
