@@ -1,0 +1,82 @@
+---
+interface Props {
+  category?: string;
+  keyword?: string;
+}
+
+const { category = 'ALL', keyword } = Astro.props;
+
+const BASE_AFF_URL = 'https://www.fanatics.com/?irclickid=2nf0erTBhxyZT--V-%3A28xzUqUkrzdkzrEXSG2g0&irgwc=1&afsrc=1&_s=afl_impact&utm_source=Impact&utm_medium=affiliates&SSAID=5822815';
+
+// 根據主題動態推薦熱門分類
+const categoryKeywords: Record<string, { title: string; desc: string; query: string }> = {
+  SKATE: {
+    title: '🛹 官方極限滑板與街頭服飾正品',
+    desc: 'Nike SB、Vans、Thrasher、X Games 與奧運滑板隊官方聯名裝備',
+    query: 'skateboard'
+  },
+  SURF: {
+    title: '🏄 世界衝浪大賽與海灘正品裝備',
+    desc: 'WSL、Hurley、Quiksilver、Billabong 官方防曬衣與衝浪周邊',
+    query: 'surf'
+  },
+  BMX: {
+    title: '🚲 BMX 極限單車與越野官方周邊',
+    desc: 'Fox Racing、Red Bull、Oakley 專業護具與騎士隊服',
+    query: 'bmx'
+  },
+  SNOW: {
+    title: '🏂 單板滑雪與雪季官方聯名防寒服',
+    desc: 'Burton、The North Face、X Games 雪地護目鏡與防風雪服',
+    query: 'snowboard'
+  },
+  CLIMB: {
+    title: '🧗 攀岩抱石與戶外探索官方正品',
+    desc: 'Black Diamond、Petzl、Columbia 戶外運動機能服飾',
+    query: 'outdoor'
+  },
+  ALL: {
+    title: '🏆 Fanatics 全球官方授權運動正品專區',
+    desc: '全球頂級極限賽事、國家隊正品隊服、帽子、鞋款與配件直送',
+    query: 'action-sports'
+  }
+};
+
+const currentInfo = categoryKeywords[category.toUpperCase()] || categoryKeywords.ALL;
+const targetUrl = BASE_AFF_URL;
+---
+
+<div class="my-8 p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-[#0d1117] via-xdark to-[#161b22] border border-cyan-500/30 shadow-2xl relative overflow-hidden group">
+  <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 relative z-10">
+    <div class="space-y-1.5 max-w-xl">
+      <div class="flex items-center gap-2">
+        <span class="px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[10px] font-black tracking-wider uppercase font-mono border border-cyan-500/30">
+          OFFICIAL LICENSED GEAR
+        </span>
+        <span class="text-xs text-yellow-400 font-bold font-mono">
+          ⚡ 官方正品直送
+        </span>
+      </div>
+      <h3 class="text-base sm:text-lg font-black text-white group-hover:text-cyan-400 transition-colors">
+        {currentInfo.title}
+      </h3>
+      <p class="text-xs text-gray-400 leading-relaxed">
+        {currentInfo.desc}
+      </p>
+    </div>
+
+    <a
+      href={targetUrl}
+      target="_blank"
+      rel="sponsored noopener noreferrer"
+      class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-black text-xs uppercase tracking-wider transition-all duration-200 shadow-glow-cyan hover:scale-105 shrink-0"
+    >
+      <span>🛍️ 前往 Fanatics 官方旗艦店</span>
+      <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+      </svg>
+    </a>
+  </div>
+
+  <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none"></div>
+</div>
