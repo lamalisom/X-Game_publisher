@@ -73,14 +73,34 @@ function resolveLocationZH(lat: number, lng: number, rawCountry: string, rawCity
     return { code: 'HK', country: '香港', flag: '🇭🇰', city };
   }
 
-  // 3. 🇹🇼 台灣
+  // 3. 🇹🇼 台灣 (Taiwan 全台各縣市精準經緯度反查)
   if (fullTxt.includes('taiwan') || fullTxt.includes('台灣') || fullTxt.includes('臺灣') || (lat >= 21.8 && lat <= 25.4 && lng >= 119.9 && lng <= 122.1)) {
     let city = '台灣';
-    if (fullTxt.includes('台北') || fullTxt.includes('taipei')) city = '台北';
-    else if (fullTxt.includes('新北')) city = '新北';
-    else if (fullTxt.includes('台中')) city = '台中';
-    else if (fullTxt.includes('高雄')) city = '高雄';
-    else if (fullTxt.includes('宜蘭') || fullTxt.includes('頭城')) city = '宜蘭 / 頭城';
+    
+    // 文字優先匹配
+    if (fullTxt.includes('台北') || fullTxt.includes('taipei') || fullTxt.includes('觀山') || fullTxt.includes('南港') || fullTxt.includes('內湖') || fullTxt.includes('松山') || fullTxt.includes('士林')) city = '台北 Taipei';
+    else if (fullTxt.includes('新北') || fullTxt.includes('new taipei') || fullTxt.includes('永和') || fullTxt.includes('樹林') || fullTxt.includes('板橋') || fullTxt.includes('淡水') || fullTxt.includes('龍洞')) city = '新北 New Taipei';
+    else if (fullTxt.includes('桃園') || fullTxt.includes('大溪') || fullTxt.includes('中壢') || fullTxt.includes('taoyuan')) city = '桃園 Taoyuan';
+    else if (fullTxt.includes('新竹') || fullTxt.includes('hsinchu')) city = '新竹 Hsinchu';
+    else if (fullTxt.includes('台中') || fullTxt.includes('taichung') || fullTxt.includes('清水') || fullTxt.includes('鰲峰') || fullTxt.includes('豐富公園')) city = '台中 Taichung';
+    else if (fullTxt.includes('台南') || fullTxt.includes('tainan')) city = '台南 Tainan';
+    else if (fullTxt.includes('高雄') || fullTxt.includes('kaohsiung') || fullTxt.includes('技擊館') || fullTxt.includes('中正')) city = '高雄 Kaohsiung';
+    else if (fullTxt.includes('宜蘭') || fullTxt.includes('頭城') || fullTxt.includes('烏石港') || fullTxt.includes('yilan')) city = '宜蘭 / 頭城 Yilan';
+    else if (fullTxt.includes('花蓮') || fullTxt.includes('hualien') || fullTxt.includes('台東') || fullTxt.includes('東河') || fullTxt.includes('墾丁')) city = '東部海岸 / 墾丁';
+    
+    // 經緯度座標精準反查
+    else if (lat && lng) {
+      if (lat >= 25.00 && lat <= 25.20 && lng >= 121.45 && lng <= 121.65) city = '台北 / 新北 Taipei';
+      else if (lat >= 24.80 && lat <= 25.05 && lng >= 121.15 && lng <= 121.45) city = '桃園 Taoyuan';
+      else if (lat >= 24.60 && lat <= 24.90 && lng >= 120.90 && lng <= 121.20) city = '新竹 Hsinchu';
+      else if (lat >= 24.00 && lat <= 24.40 && lng >= 120.40 && lng <= 120.90) city = '台中 Taichung';
+      else if (lat >= 22.85 && lat <= 23.40 && lng >= 120.10 && lng <= 120.50) city = '台南 / 嘉義 Tainan';
+      else if (lat >= 22.45 && lat <= 22.85 && lng >= 120.20 && lng <= 120.55) city = '高雄 Kaohsiung';
+      else if (lat >= 24.60 && lat <= 25.00 && lng >= 121.65 && lng <= 121.95) city = '宜蘭 Yilan';
+      else if (lat >= 21.80 && lat <= 22.10) city = '屏東 / 墾丁 Kenting';
+      else city = '台灣西部都會區';
+    }
+    
     return { code: 'TW', country: '台灣', flag: '🇹🇼', city };
   }
 
