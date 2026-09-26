@@ -62,11 +62,51 @@ try {
         ? ('https://www.google.com/maps/search/hotels/@' + latitude + ',' + longitude + ',15z')
         : ('https://www.google.com/maps/search/' + encodeURIComponent('hotels near ' + (s.name || s.city || '')));
 
-      // 精準國家與地區匹配
+      // 精準地理邊界與關鍵字多重判定
+      const latitude = s.latitude ?? s.lat;
+      const longitude = s.longitude ?? s.lng;
       let countryName = s.country || 'Global';
       let cityName = s.city || '';
       let countryCode = 'ALL';
       let flag = '🌍';
+
+      const nameStr = s.name || '';
+      const fullLoc = (countryName + ' ' + cityName + ' ' + nameStr).toLowerCase();
+
+      // 1. 日本判定 (經緯度 24~46N, 122~154E 或 含有日文字元)
+      const isJapanCoord = latitude >= 24.0 && latitude <= 46.0 && longitude >= 122.0 && longitude <= 154.0;
+      const hasJapanese = /[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff]/.test(nameStr);
+      
+      if (isJapanCoord || fullLoc.includes('japan') || fullLoc.includes('日本') || fullLoc.includes('tokyo') || fullLoc.includes('東京') || fullLoc.includes('osaka')) {
+        countryName = '日本 Japan';
+        countryCode = 'JP';
+        flag = '🇯🇵';
+        if (!cityName && isJapanCoord) {
+          if (latitude >= 35.0 && latitude <= 36.0 && longitude >= 139.0 && longitude <= 140.0) cityName = '東京圈 Tokyo';
+          else if (latitude >= 34.5 && latitude <= 35.0 && longitude >= 135.0 && longitude <= 136.0) cityName = '關西 Kansai';
+          else cityName = '日本各地';
+        }
+      } else if (fullLoc.includes('hong kong') || fullLoc.includes('香港') || (latitude >= 22.1 && latitude <= 22.6 && longitude >= 113.8 && longitude <= 114.5)) {
+        countryName = '香港 Hong Kong';
+        countryCode = 'HK';
+        flag = '🇭🇰';
+      } else if (fullLoc.includes('usa') || fullLoc.includes('united states') || fullLoc.includes('美國') || fullLoc.includes('california') || fullLoc.includes('hawaii')) {
+        countryName = '美國 USA';
+        countryCode = 'US';
+        flag = '🇺🇸';
+      } else if (fullLoc.includes('australia') || fullLoc.includes('澳洲') || fullLoc.includes('sydney') || fullLoc.includes('brisbane')) {
+        countryName = '澳洲 Australia';
+        countryCode = 'AU';
+        flag = '🇦🇺';
+      } else if (fullLoc.includes('france') || fullLoc.includes('法國') || fullLoc.includes('marseille') || fullLoc.includes('paris')) {
+        countryName = '法國 France';
+        countryCode = 'FR';
+        flag = '🇫🇷';
+      } else if (fullLoc.includes('switzerland') || fullLoc.includes('瑞士') || fullLoc.includes('zurich')) {
+        countryName = '瑞士 Switzerland';
+        countryCode = 'CH';
+        flag = '🇨🇭';
+      }
 
       const fullLoc = (countryName + ' ' + cityName + ' ' + (s.name || '')).toLowerCase();
       if (fullLoc.includes('japan') || fullLoc.includes('日本') || fullLoc.includes('tokyo') || fullLoc.includes('東京') || fullLoc.includes('osaka') || fullLoc.includes('大阪')) {
