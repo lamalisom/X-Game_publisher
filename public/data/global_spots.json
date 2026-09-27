@@ -9223,5 +9223,247 @@
       "美東衝浪選手競賽勝地"
     ],
     "website": "https://www.nps.gov/caha/index.htm"
+  },
+  {
+    "osm_id": 9320,
+    "name": "佛羅里達坦帕滑板場 (Skatepark of Tampa - SPoT)",
+    "category": "SKATE",
+    "sub_category": "indoor_skatepark",
+    "latitude": 27.9715,
+    "longitude": -82.4112,
+    "city": "佛羅里達",
+    "country": "USA",
+    "formatted_address": "4215 E Columbus Dr, Tampa, FL 33605, United States",
+    "difficulty": "Intermediate / Pro",
+    "fee_type": "PAID",
+    "opening_hours": "12:00 - 21:00",
+    "surface_type": "室內專業木質賽道與室外水泥街道區",
+    "features": [
+      "全球傳奇賽事 Tampa Pro / Tampa Am 發祥地",
+      "滑板界三十餘年歷史聖地",
+      "設有經典木質金字塔台、滑桿與碗池",
+      "職業選手必經殿堂"
+    ],
+    "website": "https://skateparkoftampa.com"
+  },
+  {
+    "osm_id": 9321,
+    "name": "俄勒岡波特蘭伯恩賽德 DIY 滑板場 (Burnside Skatepark)",
+    "category": "SKATE",
+    "sub_category": "skatepark_diy",
+    "latitude": 45.5225,
+    "longitude": -122.6625,
+    "city": "俄勒岡",
+    "country": "USA",
+    "formatted_address": "SE 2nd Ave, Portland, OR 97232, United States (Burnside Bridge 下)",
+    "difficulty": "Pro",
+    "fee_type": "FREE",
+    "opening_hours": "24 小時開放",
+    "surface_type": "橋下全手工澆築極限水泥弧面與碗壁",
+    "features": [
+      "全球 DIY 滑板場鼻祖 (全世界滑板文化圖騰)",
+      "出現於《Tony Hawk Pro Skater》經典遊戲中",
+      "橋下遮雨、充滿傳奇街頭塗鴉",
+      "高難度緊湊轉換弧面"
+    ],
+    "website": "https://burnside-skatepark.com"
+  },
+  {
+    "osm_id": 9322,
+    "name": "紐約布魯克林麥卡倫滑板公園 (McCarren Park Skatepark)",
+    "category": "SKATE",
+    "sub_category": "skatepark_street",
+    "latitude": 40.7195,
+    "longitude": -73.9515,
+    "city": "紐約",
+    "country": "USA",
+    "formatted_address": "Bayard St & Union Ave, Brooklyn, NY 11222, United States",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "opening_hours": "07:00 - 22:00",
+    "surface_type": "平滑耐磨水泥街式地形 (NYC Street Layout)",
+    "features": [
+      "紐約滑板文化最核心活躍聚集地",
+      "Nike SB 合作設計改裝升級",
+      "包含 Manhattan 街頭風格階梯、Ledger 與斜台",
+      "威廉斯堡潮流街區旁"
+    ],
+    "website": "https://www.nycgovparks.org"
+  },
+  {
+    "osm_id": 9323,
+    "name": "德州北休士頓全美最大滑板公園 (North Houston Skatepark)",
+    "category": "SKATE",
+    "sub_category": "skatepark_bowl",
+    "latitude": 29.9515,
+    "longitude": -95.4215,
+    "city": "德州",
+    "country": "USA",
+    "formatted_address": "12351 Kuykendahl Rd, Houston, TX 77067, United States",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "opening_hours": "08:00 - 21:00",
+    "surface_type": "78,000 平方英尺超巨型平滑水泥綜合場地",
+    "features": [
+      "全北美佔地面積最大滑板公園 (78,000 sq ft)",
+      "具備全尺寸得克薩斯巨型碗池 (Texas Bowl)",
+      "長達數百米的連續街道道具流線",
+      "免費入場且夜間全面照明"
+    ],
+    "website": "https://northhoustonartsandresort.org"
+  },
+  {
+    "osm_id": 9324,
+    "name": "內華達拉斯維加斯紅石峽谷 (Red Rock Canyon Climbing)",
+    "category": "CLIMB",
+    "sub_category": "outdoor_crag",
+    "latitude": 36.1352,
+    "longitude": -115.4275,
+    "city": "內華達",
+    "country": "USA",
+    "formatted_address": "Red Rock Canyon National Conservation Area, Las Vegas, NV 89161",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "opening_hours": "06:00 - 日落",
+    "surface_type": "阿茲特克紅色砂岩巨型岩壁群 (Aztec Sandstone Multi-pitch & Boulders)",
+    "features": [
+      "全美最負盛名砂岩運動攀登與傳統攀登名所",
+      "超過 2,000 條傳統與先鋒攀爬路線",
+      "壯觀紅褐色峽谷荒漠景觀",
+      "離拉斯維加斯大道僅 30 分鐘車程"
+    ],
+    "website": "https://www.redrockcanyonlv.org"
+  },
+  {
+    "osm_id": 9325,
+    "name": "肯塔基紅河峽谷天然岩場 (Red River Gorge - RRG)",
+    "category": "CLIMB",
+    "sub_category": "outdoor_crag",
+    "latitude": 37.7852,
+    "longitude": -83.6815,
+    "city": "肯塔基",
+    "country": "USA",
+    "formatted_address": "Daniel Boone National Forest, Stanton, KY 40380, United States",
+    "difficulty": "Intermediate / Pro",
+    "fee_type": "FREE",
+    "opening_hours": "日間開放",
+    "surface_type": "超強摩擦力硬質砂岩大懸垂與岩洞 (Steep Sandstone Overhangs)",
+    "features": [
+      "全球運動攀岩者 (Sport Climbers) 終極朝聖地",
+      "以超長線路、巨大懸傾角度與口袋點 (Pockets) 聞名",
+      "「Miguel's Pizza」全球攀岩者著名大本營",
+      "森林環抱原始大自然"
+    ],
+    "website": "https://www.fs.usda.gov/dbnf"
+  },
+  {
+    "osm_id": 9326,
+    "name": "猶他錫安國家公園大砂岩壁 (Zion National Park Big Walls)",
+    "category": "CLIMB",
+    "sub_category": "big_wall",
+    "latitude": 37.2985,
+    "longitude": -113.0265,
+    "city": "猶他",
+    "country": "USA",
+    "formatted_address": "Zion National Park, Springdale, UT 84767, United States",
+    "difficulty": "Pro",
+    "fee_type": "PAID",
+    "opening_hours": "國家公園全年開放",
+    "surface_type": "2,000 英尺垂直納瓦霍紅砂岩大岩壁 (Navajo Sandstone Clifftops)",
+    "features": [
+      "美國西南壯麗紅色巨石峽谷大岩壁",
+      "挑戰傳統器械攀登與多繩段大峭壁 (Moonlight Buttress)",
+      "鬼斧神工峽谷地質絕景",
+      "僅供具備完整大岩壁經驗者挑戰"
+    ],
+    "website": "https://www.nps.gov/zion"
+  },
+  {
+    "osm_id": 9327,
+    "name": "Sender One 洛杉磯國際頂級攀岩中心 (Sender One LAX)",
+    "category": "CLIMB",
+    "sub_category": "indoor_gym",
+    "latitude": 33.9485,
+    "longitude": -118.3715,
+    "city": "加州 (洛杉磯)",
+    "country": "USA",
+    "formatted_address": "11220 Hindry Ave, Los Angeles, CA 90045, United States (LAX 機場旁)",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "opening_hours": "06:00 - 22:00",
+    "surface_type": "奧運國際競賽規格 60 呎超高先鋒牆與超大抱石區",
+    "features": [
+      "傳奇攀岩大師 Chris Sharma 共同創辦",
+      "洛杉磯佔地最龐大現代化攀岩館 (30,000 sq ft)",
+      "奧運速度攀登 (Speed) 與世界杯抱石定線",
+      "鄰近 LAX 機場交通極佳"
+    ],
+    "website": "https://www.senderoneclimbing.com"
+  },
+  {
+    "osm_id": 9328,
+    "name": "加州 Woodward West 極限運動營地 (Woodward West)",
+    "category": "BMX",
+    "sub_category": "bmx_park",
+    "latitude": 35.1385,
+    "longitude": -118.5715,
+    "city": "加州 (洛杉磯)",
+    "country": "USA",
+    "formatted_address": "28400 Stallion Springs Dr, Tehachapi, CA 93561, United States",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "opening_hours": "營地預約開放與公開賽事日",
+    "surface_type": "室內外巨型木質跳台、海綿池 (Foam Pits) 與大型土坡群",
+    "features": [
+      "全球極限運動與 BMX 選手夢想殿堂 (The Mecca of Action Sports)",
+      "孕育最多 X Games 與奧運金牌得主的搖籃",
+      "配備安全訓練海綿池與木質大拋台",
+      "涵蓋室內公園、街道區與泥地跳台"
+    ],
+    "website": "https://www.woodwardwest.com"
+  },
+  {
+    "osm_id": 9329,
+    "name": "德州奧斯汀第九街泥地跳台群 (9th Street BMX Jumps - Austin)",
+    "category": "BMX",
+    "sub_category": "dirt_jumps",
+    "latitude": 30.2745,
+    "longitude": -97.7512,
+    "city": "德州",
+    "country": "USA",
+    "formatted_address": "900 W 9th St, Austin, TX 78703, United States (Duncan Park 內)",
+    "difficulty": "Intermediate / Pro",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "三十年手工打造壓實泥土跳台 (Legendary Dirt Jumps)",
+    "features": [
+      "全美歷史最悠久傳奇自建 BMX 土坡群之一 (超過30年歷史)",
+      "奧斯汀 BMX 文化核心象徵",
+      "多條連貫空中節奏跳台線 (Rhythm Lines)",
+      "樹蔭環繞、車友自發用心維護"
+    ],
+    "website": "https://austinparks.org"
+  },
+  {
+    "osm_id": 9330,
+    "name": "北卡羅來納美國國家水上中心泵道 (USNWC Mega Pump Track)",
+    "category": "BMX",
+    "sub_category": "pump_track",
+    "latitude": 35.2725,
+    "longitude": -81.0065,
+    "city": "北卡羅來納",
+    "country": "USA",
+    "formatted_address": "5000 Whitewater Center Pkwy, Charlotte, NC 28214, United States",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "opening_hours": "09:00 - 日落",
+    "surface_type": "全美最大規模專業鋪面瀝青泵道 (Velosolutions Asphalt Track)",
+    "features": [
+      "全美最大的瀝青波浪泵道複合園區",
+      "連綿起伏彎道與多條交叉路線設計",
+      "適合各年齡層 BMX 與登山車挑戰",
+      "結合國家戶外運動中心完備設施"
+    ],
+    "website": "https://whitewater.org"
   }
 ]
