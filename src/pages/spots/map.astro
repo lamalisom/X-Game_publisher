@@ -339,6 +339,7 @@ const totalSpots = spots.length;
           const matchQuery = !query || searchData.includes(query);
           const matchCat = cat === 'all' || searchData.includes(cat);
           // 🔥 嚴格比對國家代碼（禁止 substring 誤判）
+          // 嚴格比對國家代碼
           const matchCountry = (currentCountry === 'ALL') || (cardCountry === currentCountry);
 
           if (matchQuery && matchCat && matchCountry) {
