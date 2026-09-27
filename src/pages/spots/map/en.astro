@@ -28,69 +28,47 @@ interface SpotItem {
   regionTag?: string;
 }
 
-function resolveLocationEN(lat: number, lng: number, rawCountry: string, rawCity: string, rawName: string) {
-  const fullTxt = (rawCountry + ' ' + rawCity + ' ' + rawName).toLowerCase();
-  
-  // 1. Japan
-  if (fullTxt.includes('japan') || fullTxt.includes('日本') || /[\u3040-\u30ff]/.test(rawName) || (lat >= 24.0 && lat <= 46.0 && lng >= 122.0 && lng <= 154.0)) {
-    let city = 'Japan Region';
-    if (fullTxt.includes('東京') || fullTxt.includes('tokyo') || (lat >= 35.53 && lat <= 35.89 && lng >= 139.34 && lng <= 139.92)) city = 'Tokyo';
-    else if (fullTxt.includes('大阪') || fullTxt.includes('osaka') || (lat >= 34.40 && lat <= 34.88 && lng >= 135.32 && lng <= 135.75)) city = 'Osaka';
-    else if (fullTxt.includes('京都') || fullTxt.includes('kyoto') || (lat >= 34.85 && lat <= 35.32 && lng >= 135.55 && lng <= 135.88)) city = 'Kyoto';
-    else if (fullTxt.includes('kanagawa') || fullTxt.includes('yokohama') || (lat >= 35.12 && lat <= 35.60 && lng >= 139.00 && lng <= 139.75)) city = 'Kanagawa';
-    else if (fullTxt.includes('saitama') || (lat >= 35.75 && lat <= 36.28 && lng >= 138.90 && lng <= 139.90)) city = 'Saitama';
-    else if (fullTxt.includes('hokkaido') || fullTxt.includes('sapporo')) city = 'Hokkaido';
-    else city = 'Kanto Region';
-    return { code: 'JP', country: 'Japan', flag: '🇯🇵', city };
+function resolveLocationEN(item: any) {
+  const c = item.country || '';
+  const name = (item.name || '').toLowerCase();
+  const desc = (item.description || '').toLowerCase();
+  const lat = item.lat || 0;
+  const lng = item.lng || 0;
+
+  // 🇹🇭 Thailand
+  if (c === 'TH' || (lat >= 5.5 && lat <= 20.5 && lng >= 97.0 && lng <= 106.0)) {
+    if ((lat >= 13.5 && lat <= 14.1 && lng >= 100.2 && lng <= 100.9) || name.includes('bangkok')) return '📍 🇹🇭 Thailand · Bangkok';
+    if ((lat >= 7.7 && lat <= 8.3 && lng >= 98.2 && lng <= 98.5) || name.includes('phuket')) return '📍 🇹🇭 Thailand · Phuket';
+    if ((lat >= 18.5 && lat <= 19.1 && lng >= 98.7 && lng <= 99.3) || name.includes('chiang mai')) return '📍 🇹🇭 Thailand · Chiang Mai';
+    if ((lat >= 12.6 && lat <= 13.1 && lng >= 100.8 && lng <= 101.4) || name.includes('pattaya')) return '📍 🇹🇭 Thailand · Pattaya';
+    if ((lat >= 9.3 && lat <= 9.9 && lng >= 99.8 && lng <= 100.25) || name.includes('samui') || name.includes('phangan')) return '📍 🇹🇭 Thailand · Koh Samui';
+    if ((lat >= 7.9 && lat <= 8.25 && lng >= 98.7 && lng <= 99.1) || name.includes('krabi') || name.includes('railay')) return '📍 🇹🇭 Thailand · Krabi';
+    return '📍 🇹🇭 Thailand';
   }
 
-  // 2. Hong Kong
-  if (fullTxt.includes('hong kong') || fullTxt.includes('香港') || (lat >= 22.14 && lat <= 22.58 && lng >= 113.80 && lng <= 114.45)) {
-    let city = 'Hong Kong';
-    if (fullTxt.includes('chai wan') || fullTxt.includes('柴灣')) city = 'HK Island · Chai Wan';
-    else if (fullTxt.includes('mei foo') || fullTxt.includes('荔枝角')) city = 'Kowloon · Mei Foo';
-    else if (fullTxt.includes('big wave') || fullTxt.includes('大浪灣')) city = 'HK Island · Big Wave Bay';
-    else if (fullTxt.includes('lion rock') || fullTxt.includes('獅子山')) city = 'Kowloon · Lion Rock';
-    else if (fullTxt.includes('kwun tong') || fullTxt.includes('觀塘')) city = 'Kowloon East · Kwun Tong';
-    else if (fullTxt.includes('tseung kwan o') || fullTxt.includes('將軍澳')) city = 'New Territories · TKO';
-    else city = 'Kowloon / NT Urban';
-    return { code: 'HK', country: 'Hong Kong', flag: '🇭🇰', city };
+  // 🇮🇩 Indonesia
+  if (c === 'ID' || (lat >= -11.0 && lat <= 6.0 && lng >= 95.0 && lng <= 141.0)) {
+    if (lat >= -8.95 && lat <= -8.00 && lng >= 114.40 && lng <= 115.80) {
+      if ((lat >= -8.75 && lat <= -8.55 && lng >= 115.10 && lng <= 115.25) || name.includes('canggu') || name.includes('kuta') || name.includes('seminyak')) return '📍 🇮🇩 Indonesia · Bali · Canggu';
+      if ((lat >= -8.89 && lat <= -8.76 && lng >= 115.05 && lng <= 115.20) || name.includes('uluwatu') || name.includes('bukit')) return '📍 🇮🇩 Indonesia · Bali · Uluwatu';
+      return '📍 🇮🇩 Indonesia · Bali';
+    }
+    if ((lat >= -9.00 && lat <= -8.10 && lng >= 115.80 && lng <= 116.80) || name.includes('lombok')) return '📍 🇮🇩 Indonesia · Lombok';
+    if (name.includes('mentawai') || (lat >= -4.0 && lat <= 0.0 && lng >= 98.0 && lng <= 101.5)) return '📍 🇮🇩 Indonesia · Mentawai';
+    if (lat >= -8.9 && lat <= -5.8 && lng >= 105.0 && lng <= 114.5) return '📍 🇮🇩 Indonesia · Java';
+    return '📍 🇮🇩 Indonesia';
   }
 
-  // 3. USA
-  if (fullTxt.includes('usa') || fullTxt.includes('united states') || fullTxt.includes('美國') || (lat >= 24.5 && lat <= 49.4 && lng >= -125.0 && lng <= -66.9) || (lat >= 18.9 && lat <= 22.3 && lng >= -160.3 && lng <= -154.8)) {
-    let city = 'USA';
-    if (fullTxt.includes('hawaii') || (lat >= 18.9 && lat <= 22.3 && lng >= -160.3 && lng <= -154.8)) city = 'Hawaii';
-    else if (fullTxt.includes('california') || (lat >= 32.5 && lat <= 42.0 && lng >= -124.4 && lng <= -114.1)) city = 'California (LA)';
-    else if (fullTxt.includes('new york')) city = 'New York';
-    return { code: 'US', country: 'USA', flag: '🇺🇸', city };
+  // 🇸🇪 Sweden
+  if (c === 'SE' || (lat >= 55.0 && lat <= 69.5 && lng >= 11.0 && lng <= 24.5)) {
+    if ((lat >= 59.10 && lat <= 59.60 && lng >= 17.70 && lng <= 18.40) || name.includes('stockholm')) return '📍 🇸🇪 Sweden · Stockholm';
+    if ((lat >= 55.40 && lat <= 55.80 && lng >= 12.80 && lng <= 13.30) || name.includes('malmö') || name.includes('malmo')) return '📍 🇸🇪 Sweden · Malmö';
+    if ((lat >= 57.50 && lat <= 57.90 && lng >= 11.70 && lng <= 12.30) || name.includes('gothenburg')) return '📍 🇸🇪 Sweden · Gothenburg';
+    return '📍 🇸🇪 Sweden';
   }
 
-  // 4. Australia
-  if (fullTxt.includes('australia') || fullTxt.includes('澳洲') || (lat >= -44.0 && lat <= -10.0 && lng >= 112.0 && lng <= 154.0)) {
-    let city = 'Australia';
-    if (fullTxt.includes('sydney') || fullTxt.includes('bondi')) city = 'Sydney (Bondi)';
-    else if (fullTxt.includes('brisbane')) city = 'Brisbane';
-    return { code: 'AU', country: 'Australia', flag: '🇦🇺', city };
-  }
-
-  // 5. France
-  if (fullTxt.includes('france') || fullTxt.includes('法國') || (lat >= 41.3 && lat <= 51.1 && lng >= -5.2 && lng <= 9.6) || (lat >= -18.0 && lat <= -17.0 && lng >= -150.0 && lng <= -149.0)) {
-    let city = 'France';
-    if (fullTxt.includes('teahupoo') || fullTxt.includes('tahiti')) city = 'Tahiti (Teahupoo)';
-    else if (fullTxt.includes('marseille')) city = 'Marseille';
-    return { code: 'FR', country: 'France', flag: '🇫🇷', city };
-  }
-
-  // 6. Sweden
-  if (fullTxt.includes('sweden') || fullTxt.includes('瑞典') || (lat >= 55.3 && lat <= 69.1 && lng >= 11.0 && lng <= 24.2)) {
-    let city = 'Sweden';
-    if (fullTxt.includes('stockholm')) city = 'Stockholm';
-    else if (fullTxt.includes('malm')) city = 'Malmö';
-    return { code: 'SE', country: 'Sweden', flag: '🇸🇪', city };
-  }
-
-  return { code: 'ALL', country: rawCountry || 'Global', flag: '🌍', city: rawCity || 'Spots' };
+  // Fallback
+  return `📍 ${item.country || 'Global'} · ${item.city || 'Spot'}`;
 }
 
 let spots: SpotItem[] = [];

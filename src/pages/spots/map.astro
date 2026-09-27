@@ -29,127 +29,51 @@ interface SpotItem {
   regionTag?: string;
 }
 
-function resolveLocationZH(lat: number, lng: number, rawCountry: string, rawCity: string, rawName: string) {
-  const fullTxt = (rawCountry + ' ' + rawCity + ' ' + rawName).toLowerCase();
-  
-  // 1. 🇯🇵 日本
-  if (fullTxt.includes('japan') || fullTxt.includes('日本') || /[\u3040-\u30ff]/.test(rawName) || (lat >= 24.0 && lat <= 46.0 && lng >= 122.0 && lng <= 154.0)) {
-    let city = '日本';
-    if (fullTxt.includes('東京') || fullTxt.includes('tokyo') || fullTxt.includes('shibuya') || fullTxt.includes('shinjuku') || fullTxt.includes('世田谷') || (lat >= 35.53 && lat <= 35.89 && lng >= 139.34 && lng <= 139.92)) city = '東京';
-    else if (fullTxt.includes('大阪') || fullTxt.includes('osaka') || fullTxt.includes('sakai') || (lat >= 34.40 && lat <= 34.88 && lng >= 135.32 && lng <= 135.75)) city = '大阪';
-    else if (fullTxt.includes('京都') || fullTxt.includes('kyoto') || (lat >= 34.85 && lat <= 35.32 && lng >= 135.55 && lng <= 135.88)) city = '京都';
-    else if (fullTxt.includes('神奈川') || fullTxt.includes('kanagawa') || fullTxt.includes('yokohama') || fullTxt.includes('湘南') || (lat >= 35.12 && lat <= 35.60 && lng >= 139.00 && lng <= 139.75)) city = '神奈川 / 湘南';
-    else if (fullTxt.includes('埼玉') || fullTxt.includes('saitama') || (lat >= 35.75 && lat <= 36.28 && lng >= 138.90 && lng <= 139.90)) city = '埼玉';
-    else if (fullTxt.includes('千葉') || fullTxt.includes('chiba') || (lat >= 34.90 && lat <= 35.95 && lng >= 139.80 && lng <= 140.88)) city = '千葉';
-    else if (fullTxt.includes('北海道') || fullTxt.includes('hokkaido') || fullTxt.includes('sapporo') || (lat >= 41.30 && lat <= 45.60)) city = '北海道';
-    else if (fullTxt.includes('青森') || fullTxt.includes('八戶') || fullTxt.includes('長根') || fullTxt.includes('仙台') || fullTxt.includes('東北') || (lat >= 38.00 && lat <= 41.50)) city = '青森 / 東北';
-    else if (fullTxt.includes('長野') || fullTxt.includes('靜岡') || fullTxt.includes('白馬') || (lat >= 34.70 && lat <= 37.50 && lng >= 136.00 && lng <= 139.00)) city = '長野 / 靜岡 / 中部';
-    else if (fullTxt.includes('愛知') || fullTxt.includes('名古屋')) city = '愛知 / 名古屋';
-    else if (fullTxt.includes('廣島') || fullTxt.includes('岡山') || (lat >= 33.50 && lat <= 35.50 && lng >= 131.00 && lng <= 134.50)) city = '廣島 / 中國地區';
-    else if (fullTxt.includes('福岡') || fullTxt.includes('熊本') || fullTxt.includes('九州') || (lat >= 31.00 && lat <= 34.00 && lng >= 129.50 && lng <= 132.00)) city = '福岡 / 九州';
-    else if (fullTxt.includes('沖繩') || (lat >= 24.00 && lat <= 28.00)) city = '沖繩';
-    else city = '關東地區';
-    return { code: 'JP', country: '日本', flag: '🇯🇵', city };
+function resolveLocationZH(item: any) {
+  const c = item.country || '';
+  const name = (item.name || '').toLowerCase();
+  const desc = (item.description || '').toLowerCase();
+  const lat = item.lat || 0;
+  const lng = item.lng || 0;
+
+  // 🇹🇭 泰國 (Thailand)
+  if (c === 'TH' || (lat >= 5.5 && lat <= 20.5 && lng >= 97.0 && lng <= 106.0)) {
+    if ((lat >= 13.5 && lat <= 14.1 && lng >= 100.2 && lng <= 100.9) || name.includes('bangkok') || name.includes('曼谷')) return '📍 🇹🇭 泰國 · 曼谷 Bangkok';
+    if ((lat >= 7.7 && lat <= 8.3 && lng >= 98.2 && lng <= 98.5) || name.includes('phuket') || name.includes('普吉')) return '📍 🇹🇭 泰國 · 普吉島 Phuket';
+    if ((lat >= 18.5 && lat <= 19.1 && lng >= 98.7 && lng <= 99.3) || name.includes('chiang mai') || name.includes('清邁')) return '📍 🇹🇭 泰國 · 清邁 Chiang Mai';
+    if ((lat >= 12.6 && lat <= 13.1 && lng >= 100.8 && lng <= 101.4) || name.includes('pattaya') || name.includes('芭達雅')) return '📍 🇹🇭 泰國 · 芭達雅 Pattaya';
+    if ((lat >= 9.3 && lat <= 9.9 && lng >= 99.8 && lng <= 100.25) || name.includes('samui') || name.includes('phangan') || name.includes('蘇梅')) return '📍 🇹🇭 泰國 · 蘇梅島 Koh Samui';
+    if ((lat >= 7.9 && lat <= 8.25 && lng >= 98.7 && lng <= 99.1) || name.includes('krabi') || name.includes('railay') || name.includes('甲米')) return '📍 🇹🇭 泰國 · 甲米 Krabi';
+    return '📍 🇹🇭 泰國 Thailand';
   }
 
-  // 2. 🇭🇰 香港 (全區精確覆蓋，消滅香港市區)
-  if (fullTxt.includes('hong kong') || fullTxt.includes('香港') || (lat >= 22.14 && lat <= 22.58 && lng >= 113.80 && lng <= 114.45)) {
-    let city = '香港';
-    if (fullTxt.includes('柴灣') || fullTxt.includes('chai wan') || fullTxt.includes('小西灣') || (lat >= 22.25 && lat <= 22.29 && lng >= 114.22 && lng <= 114.27)) city = '港島東 · 柴灣';
-    else if (fullTxt.includes('荔枝角') || fullTxt.includes('美孚') || fullTxt.includes('mei foo') || fullTxt.includes('深水埗') || (lat >= 22.33 && lat <= 22.35 && lng >= 114.13 && lng <= 114.16)) city = '九龍西 · 荔枝角 / 美孚';
-    else if (fullTxt.includes('大浪灣') || fullTxt.includes('big wave') || fullTxt.includes('石澳') || (lat >= 22.22 && lat <= 22.26 && lng >= 114.23 && lng <= 114.26)) city = '港島南 · 大浪灣 / 石澳';
-    else if (fullTxt.includes('獅子山') || fullTxt.includes('lion rock') || fullTxt.includes('黃大仙') || (lat >= 22.34 && lat <= 22.37 && lng >= 114.17 && lng <= 114.21)) city = '九龍 · 獅子山';
-    else if (fullTxt.includes('觀塘') || fullTxt.includes('kwun tong') || fullTxt.includes('九龍灣') || fullTxt.includes('啟德') || (lat >= 22.30 && lat <= 22.33 && lng >= 114.20 && lng <= 114.24)) city = '九龍東 · 觀塘 / 啟德';
-    else if (fullTxt.includes('旺角') || fullTxt.includes('油麻地') || fullTxt.includes('佐敦') || fullTxt.includes('尖沙咀') || (lat >= 22.29 && lat <= 22.32 && lng >= 114.16 && lng <= 114.18)) city = '九龍 · 油尖旺 / 旺角';
-    else if (fullTxt.includes('灣仔') || fullTxt.includes('銅鑼灣') || fullTxt.includes('中環') || fullTxt.includes('維園') || (lat >= 22.27 && lat <= 22.29 && lng >= 114.14 && lng <= 114.19)) city = '港島 · 灣仔 / 中西區';
-    else if (fullTxt.includes('將軍澳') || fullTxt.includes('坑口') || (lat >= 22.29 && lat <= 22.33 && lng >= 114.24 && lng <= 114.28)) city = '新界 · 將軍澳';
-    else if (fullTxt.includes('屯門') || (lat >= 22.36 && lat <= 22.42 && lng >= 113.95 && lng <= 114.02)) city = '新界西 · 屯門';
-    else if (fullTxt.includes('元朗') || fullTxt.includes('天水圍') || (lat >= 22.42 && lat <= 22.48 && lng >= 113.98 && lng <= 114.06)) city = '新界西 · 元朗 / 天水圍';
-    else if (fullTxt.includes('粉嶺') || fullTxt.includes('上水') || (lat >= 22.47 && lat <= 22.52 && lng >= 114.12 && lng <= 114.16)) city = '新界北 · 粉嶺 / 上水';
-    else if (fullTxt.includes('沙田') || fullTxt.includes('馬鞍山') || (lat >= 22.36 && lat <= 22.42 && lng >= 114.16 && lng <= 114.25)) city = '新界 · 沙田 / 馬鞍山';
-    else if (fullTxt.includes('荃灣') || fullTxt.includes('葵涌') || (lat >= 22.35 && lat <= 22.39 && lng >= 114.10 && lng <= 114.14)) city = '新界 · 荃灣 / 葵青';
-    else if (fullTxt.includes('東涌') || fullTxt.includes('大嶼山') || (lat >= 22.25 && lat <= 22.32 && lng >= 113.88 && lng <= 114.00)) city = '離島 · 大嶼山 / 東涌';
-    else city = '九龍 / 新界核心區';
-    return { code: 'HK', country: '香港', flag: '🇭🇰', city };
-  }
-
-  // 3. 🇹🇼 台灣 (Taiwan 全台各縣市精準經緯度反查)
-  if (fullTxt.includes('taiwan') || fullTxt.includes('台灣') || fullTxt.includes('臺灣') || (lat >= 21.8 && lat <= 25.4 && lng >= 119.9 && lng <= 122.1)) {
-    let city = '台灣';
-    
-    // 文字優先匹配
-    if (fullTxt.includes('台北') || fullTxt.includes('taipei') || fullTxt.includes('觀山') || fullTxt.includes('南港') || fullTxt.includes('內湖') || fullTxt.includes('松山') || fullTxt.includes('士林')) city = '台北 Taipei';
-    else if (fullTxt.includes('新北') || fullTxt.includes('new taipei') || fullTxt.includes('永和') || fullTxt.includes('樹林') || fullTxt.includes('板橋') || fullTxt.includes('淡水') || fullTxt.includes('龍洞')) city = '新北 New Taipei';
-    else if (fullTxt.includes('桃園') || fullTxt.includes('大溪') || fullTxt.includes('中壢') || fullTxt.includes('taoyuan')) city = '桃園 Taoyuan';
-    else if (fullTxt.includes('新竹') || fullTxt.includes('hsinchu')) city = '新竹 Hsinchu';
-    else if (fullTxt.includes('台中') || fullTxt.includes('taichung') || fullTxt.includes('清水') || fullTxt.includes('鰲峰') || fullTxt.includes('豐富公園')) city = '台中 Taichung';
-    else if (fullTxt.includes('台南') || fullTxt.includes('tainan')) city = '台南 Tainan';
-    else if (fullTxt.includes('高雄') || fullTxt.includes('kaohsiung') || fullTxt.includes('技擊館') || fullTxt.includes('中正')) city = '高雄 Kaohsiung';
-    else if (fullTxt.includes('宜蘭') || fullTxt.includes('頭城') || fullTxt.includes('烏石港') || fullTxt.includes('yilan')) city = '宜蘭 / 頭城 Yilan';
-    else if (fullTxt.includes('花蓮') || fullTxt.includes('hualien') || fullTxt.includes('台東') || fullTxt.includes('東河') || fullTxt.includes('墾丁')) city = '東部海岸 / 墾丁';
-    
-    // 經緯度座標精準反查
-    else if (lat && lng) {
-      if (lat >= 25.00 && lat <= 25.20 && lng >= 121.45 && lng <= 121.65) city = '台北 / 新北 Taipei';
-      else if (lat >= 24.80 && lat <= 25.05 && lng >= 121.15 && lng <= 121.45) city = '桃園 Taoyuan';
-      else if (lat >= 24.60 && lat <= 24.90 && lng >= 120.90 && lng <= 121.20) city = '新竹 Hsinchu';
-      else if (lat >= 24.00 && lat <= 24.40 && lng >= 120.40 && lng <= 120.90) city = '台中 Taichung';
-      else if (lat >= 22.85 && lat <= 23.40 && lng >= 120.10 && lng <= 120.50) city = '台南 / 嘉義 Tainan';
-      else if (lat >= 22.45 && lat <= 22.85 && lng >= 120.20 && lng <= 120.55) city = '高雄 Kaohsiung';
-      else if (lat >= 24.60 && lat <= 25.00 && lng >= 121.65 && lng <= 121.95) city = '宜蘭 Yilan';
-      else if (lat >= 21.80 && lat <= 22.10) city = '屏東 / 墾丁 Kenting';
-      else city = '台灣西部都會區';
+  // 🇮🇩 印尼 (Indonesia)
+  if (c === 'ID' || (lat >= -11.0 && lat <= 6.0 && lng >= 95.0 && lng <= 141.0)) {
+    if (lat >= -8.95 && lat <= -8.00 && lng >= 114.40 && lng <= 115.80) {
+      if ((lat >= -8.75 && lat <= -8.55 && lng >= 115.10 && lng <= 115.25) || name.includes('canggu') || name.includes('kuta') || name.includes('seminyak') || name.includes('蒼古') || name.includes('庫塔')) {
+        return '📍 🇮🇩 印尼 · 峇里島 · 蒼古/庫塔 Canggu';
+      }
+      if ((lat >= -8.89 && lat <= -8.76 && lng >= 115.05 && lng <= 115.20) || name.includes('uluwatu') || name.includes('bukit') || name.includes('padang') || name.includes('烏魯瓦圖')) {
+        return '📍 🇮🇩 印尼 · 峇里島 · 烏魯瓦圖 Uluwatu';
+      }
+      return '📍 🇮🇩 印尼 · 峇里島 Bali';
     }
-    
-    return { code: 'TW', country: '台灣', flag: '🇹🇼', city };
+    if ((lat >= -9.00 && lat <= -8.10 && lng >= 115.80 && lng <= 116.80) || name.includes('lombok') || name.includes('龍目')) return '📍 🇮🇩 印尼 · 龍目島 Lombok';
+    if (name.includes('mentawai') || name.includes('明打威') || (lat >= -4.0 && lat <= 0.0 && lng >= 98.0 && lng <= 101.5)) return '📍 🇮🇩 印尼 · 明打威 Mentawai';
+    if (lat >= -8.9 && lat <= -5.8 && lng >= 105.0 && lng <= 114.5) return '📍 🇮🇩 印尼 · 爪哇 Java';
+    return '📍 🇮🇩 印尼 Indonesia';
   }
 
-  // 4. 🇺🇸 美國
-  if (fullTxt.includes('usa') || fullTxt.includes('united states') || fullTxt.includes('美國') || (lat >= 24.5 && lat <= 49.4 && lng >= -125.0 && lng <= -66.9) || (lat >= 18.9 && lat <= 22.3 && lng >= -160.3 && lng <= -154.8)) {
-    let city = '美國';
-    if (fullTxt.includes('hawaii') || fullTxt.includes('oahu') || fullTxt.includes('pipeline') || (lat >= 18.9 && lat <= 22.3 && lng >= -160.3 && lng <= -154.8)) city = '夏威夷';
-    else if (fullTxt.includes('california') || fullTxt.includes('los angeles') || fullTxt.includes('berrics') || (lat >= 32.5 && lat <= 42.0 && lng >= -124.4 && lng <= -114.1)) city = '加州 (洛杉磯)';
-    else if (fullTxt.includes('florida') || fullTxt.includes('miami')) city = '佛羅里達';
-    else if (fullTxt.includes('new york')) city = '紐約';
-    return { code: 'US', country: '美國', flag: '🇺🇸', city };
+  // 🇸🇪 瑞典 (Sweden)
+  if (c === 'SE' || (lat >= 55.0 && lat <= 69.5 && lng >= 11.0 && lng <= 24.5)) {
+    if ((lat >= 59.10 && lat <= 59.60 && lng >= 17.70 && lng <= 18.40) || name.includes('stockholm') || name.includes('斯德哥爾摩')) return '📍 🇸🇪 瑞典 · 斯德哥爾摩 Stockholm';
+    if ((lat >= 55.40 && lat <= 55.80 && lng >= 12.80 && lng <= 13.30) || name.includes('malmö') || name.includes('malmo') || name.includes('馬爾默')) return '📍 🇸🇪 瑞典 · 馬爾默 Malmö';
+    if ((lat >= 57.50 && lat <= 57.90 && lng >= 11.70 && lng <= 12.30) || name.includes('gothenburg') || name.includes('哥德堡')) return '📍 🇸🇪 瑞典 · 哥德堡 Gothenburg';
+    return '📍 🇸🇪 瑞典 Sweden';
   }
 
-  // 5. 🇦🇺 澳洲
-  if (fullTxt.includes('australia') || fullTxt.includes('澳洲') || (lat >= -44.0 && lat <= -10.0 && lng >= 112.0 && lng <= 154.0)) {
-    let city = '澳洲';
-    if (fullTxt.includes('sydney') || fullTxt.includes('bondi') || (lat >= -34.2 && lat <= -33.5 && lng >= 150.5 && lng <= 151.4)) city = '雪梨 (邦代)';
-    else if (fullTxt.includes('brisbane') || fullTxt.includes('gold coast')) city = '黃金海岸 / 布里斯本';
-    else if (fullTxt.includes('melbourne')) city = '墨爾本';
-    return { code: 'AU', country: '澳洲', flag: '🇦🇺', city };
-  }
-
-  // 6. 🇫🇷 法國
-  if (fullTxt.includes('france') || fullTxt.includes('法國') || fullTxt.includes('tahiti') || (lat >= 41.3 && lat <= 51.1 && lng >= -5.2 && lng <= 9.6) || (lat >= -18.0 && lat <= -17.0 && lng >= -150.0 && lng <= -149.0)) {
-    let city = '法國';
-    if (fullTxt.includes('teahupoo') || fullTxt.includes('tahiti')) city = '大溪地 (提阿胡波)';
-    else if (fullTxt.includes('marseille') || fullTxt.includes('prado')) city = '馬賽';
-    else if (fullTxt.includes('paris')) city = '巴黎';
-    return { code: 'FR', country: '法國', flag: '🇫🇷', city };
-  }
-
-  // 7. 🇸🇪 瑞典
-  if (fullTxt.includes('sweden') || fullTxt.includes('瑞典') || (lat >= 55.3 && lat <= 69.1 && lng >= 11.0 && lng <= 24.2)) {
-    let city = '瑞典';
-    if (fullTxt.includes('stockholm') || (lat >= 59.2 && lat <= 59.5 && lng >= 17.8 && lng <= 18.2)) city = '斯德哥爾摩';
-    else if (fullTxt.includes('malm') || (lat >= 55.5 && lat <= 55.7 && lng >= 12.9 && lng <= 13.1)) city = '馬爾默';
-    else if (fullTxt.includes('gothenburg')) city = '哥德堡';
-    return { code: 'SE', country: '瑞典', flag: '🇸🇪', city };
-  }
-
-  // 8. 🇨🇭 瑞士 / 奧地利
-  if (fullTxt.includes('switzerland') || fullTxt.includes('瑞士') || fullTxt.includes('austria') || fullTxt.includes('奧地利')) {
-    let city = '瑞士 / 阿爾卑斯';
-    if (fullTxt.includes('zurich')) city = '蘇黎世';
-    else if (fullTxt.includes('innsbruck')) city = '因斯布魯克';
-    return { code: 'CH', country: '瑞士', flag: '🇨🇭', city };
-  }
-
-  return { code: 'ALL', country: rawCountry || '全球', flag: '🌍', city: rawCity || '熱門據點' };
+  // Fallback
+  return `📍 ${item.country || 'Global'} · ${item.city || 'Spot'}`;
 }
 
 let spots: SpotItem[] = [];
