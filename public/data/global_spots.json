@@ -9025,5 +9025,203 @@
       "一生必看之地球奇蹟岩壁"
     ],
     "website": "https://www.nps.gov/yose/index.htm"
+  },
+  {
+    "osm_id": 9310,
+    "name": "夏威夷歐胡島威美亞灣巨浪點 (Waimea Bay Big Wave)",
+    "category": "SURF",
+    "sub_category": "reef_break",
+    "latitude": 21.6415,
+    "longitude": -158.0642,
+    "city": "夏威夷",
+    "country": "USA",
+    "formatted_address": "Waimea Bay, Haleiwa, Oahu, HI 96712, United States",
+    "difficulty": "Pro",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "外海深水大浪與海灣定點浪 (Big Wave Point Break)",
+    "features": [
+      "全球大浪衝浪運動發祥地",
+      "傳奇賽事 The Eddie Aikau 賽場",
+      "冬季浪高可達 30-40 呎 (10米+)",
+      "壯觀的天然深水海灣景觀"
+    ],
+    "website": "https://www.gohawaii.com/islands/oahu"
+  },
+  {
+    "osm_id": 9311,
+    "name": "夏威夷茂宜島大白鯊巨浪點 (Jaws / Pe'ahi)",
+    "category": "SURF",
+    "sub_category": "reef_break",
+    "latitude": 20.9412,
+    "longitude": -156.3015,
+    "city": "夏威夷",
+    "country": "USA",
+    "formatted_address": "Pe'ahi, Haiku, Maui, HI 96708, United States",
+    "difficulty": "Pro",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "深海懸崖巨浪 (Heavy Ocean Monster Wave)",
+    "features": [
+      "全球公認最強大、最凶猛巨浪之一 (Jaws)",
+      "拖曳衝浪 (Tow-in Surfing) 革命發源地",
+      "巨型立體浪壁與深邃管浪",
+      "僅供世界最頂級職業大浪選手挑戰"
+    ],
+    "website": "https://www.gohawaii.com/islands/maui"
+  },
+  {
+    "osm_id": 9312,
+    "name": "夏威夷歐胡島威基基海灘 (Waikiki Beach Surf Breaks)",
+    "category": "SURF",
+    "sub_category": "beach_break",
+    "latitude": 21.2765,
+    "longitude": -157.8285,
+    "city": "夏威夷",
+    "country": "USA",
+    "formatted_address": "Kalakaua Ave, Honolulu, Oahu, HI 96815, United States",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "平緩溫暖珊瑚礁與沙灘碎浪",
+    "features": [
+      "現代衝浪之父 Duke Kahanamoku 雕像旁",
+      "全球衝浪初學者與長板玩家夢幻勝地",
+      "鑽石頭山 (Diamond Head) 壯麗背景",
+      "全年溫暖舒適海水與衝浪學校齊備"
+    ],
+    "website": "https://www.gohawaii.com/islands/oahu"
+  },
+  {
+    "osm_id": 9313,
+    "name": "加州聖塔克魯茲汽船道 (Steamer Lane - Santa Cruz)",
+    "category": "SURF",
+    "sub_category": "point_break",
+    "latitude": 36.9535,
+    "longitude": -122.0252,
+    "city": "加州 (聖塔克魯茲)",
+    "country": "USA",
+    "formatted_address": "700 W Cliff Dr, Santa Cruz, CA 95060, United States",
+    "difficulty": "Intermediate / Pro",
+    "fee_type": "FREE",
+    "opening_hours": "06:00 - 日落",
+    "surface_type": "懸崖礁石定點右浪 (Cliff-side Right Point Break)",
+    "features": [
+      "北加州冷水衝浪重鎮核心",
+      "懸崖頂部衝浪燈塔博物館 (世界最佳觀賽視角)",
+      "Jack O'Neill 防寒衣革命試驗場",
+      "強勁而綿長的完美浪壁"
+    ],
+    "website": "https://www.cityofsantacruz.com"
+  },
+  {
+    "osm_id": 9314,
+    "name": "加州半月灣獨行俠巨浪點 (Mavericks - Half Moon Bay)",
+    "category": "SURF",
+    "sub_category": "reef_break",
+    "latitude": 37.4952,
+    "longitude": -122.5015,
+    "city": "加州 (舊金山灣區)",
+    "country": "USA",
+    "formatted_address": "Pillar Point, Half Moon Bay, CA 94019, United States",
+    "difficulty": "Pro",
+    "fee_type": "FREE",
+    "opening_hours": "冬季大浪期開放",
+    "surface_type": "冰冷北太平洋水下深海暗礁大浪",
+    "features": [
+      "北半球最著名冷水大浪衝浪勝殿",
+      "冬季太平洋風暴催生高達 60 呎巨浪",
+      "極限電影《衝破極限 (Chasing Mavericks)》發源地",
+      "全球極限大浪選手精神象徵"
+    ],
+    "website": "https://www.halfmoonbaychamber.org"
+  },
+  {
+    "osm_id": 9315,
+    "name": "加州馬里布衝浪者海灘 (Malibu Surfrider Beach)",
+    "category": "SURF",
+    "sub_category": "point_break",
+    "latitude": 34.0352,
+    "longitude": -118.6775,
+    "city": "加州 (洛杉磯)",
+    "country": "USA",
+    "formatted_address": "23050 Pacific Coast Hwy, Malibu, CA 90265, United States",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "經典右旋定點浪 (First, Second, Third Point)",
+    "features": [
+      "全球首個世界衝浪保護區 (World Surfing Reserve)",
+      "加州衝浪黃金時代的代表聖地",
+      "長板 (Longboard) 完美平順滑行浪",
+      "洛杉磯好萊塢名人與名流聚集地"
+    ],
+    "website": "https://www.parks.ca.gov/?page_id=835"
+  },
+  {
+    "osm_id": 9316,
+    "name": "加州紐波特楔形浪 (The Wedge - Newport Beach)",
+    "category": "SURF",
+    "sub_category": "shorebreak",
+    "latitude": 33.5935,
+    "longitude": -117.8812,
+    "city": "加州 (洛杉磯)",
+    "country": "USA",
+    "formatted_address": "2172 E Oceanfront, Newport Beach, CA 92661, United States",
+    "difficulty": "Pro",
+    "fee_type": "FREE",
+    "opening_hours": "06:00 - 22:00",
+    "surface_type": "防波堤反彈巨型近岸三角浪 (Rebound Shorebreak)",
+    "features": [
+      "全球最著名的近岸爆發三角浪 (The Wedge)",
+      "巨浪拍擊沙灘產生高達 20 呎巨型水牆",
+      "趴板 (Bodyboarding) 與極限衝浪朝聖地",
+      "極具觀賞性與震撼力的近岸視覺奇觀"
+    ],
+    "website": "https://www.newportbeachca.gov"
+  },
+  {
+    "osm_id": 9317,
+    "name": "佛羅里達可可海灘 (Cocoa Beach - East Coast Surf Capital)",
+    "category": "SURF",
+    "sub_category": "beach_break",
+    "latitude": 28.3185,
+    "longitude": -80.6075,
+    "city": "佛羅里達",
+    "country": "USA",
+    "formatted_address": "401 Meade Ave, Cocoa Beach, FL 32931, United States",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "大西洋細沙灘碎浪",
+    "features": [
+      "11座世界冠軍 Kelly Slater 的成長故鄉",
+      "美東最大 Ron Jon Surf Shop 旗艦店所在地",
+      "平緩清澈的大西洋浪況 (初學到職業皆宜)",
+      "附設可可海灘衝浪木棧橋"
+    ],
+    "website": "https://www.cityofcocoabeach.com"
+  },
+  {
+    "osm_id": 9318,
+    "name": "北卡羅來納哈特拉斯角 (Cape Hatteras - Outer Banks)",
+    "category": "SURF",
+    "sub_category": "beach_break",
+    "latitude": 35.2515,
+    "longitude": -75.5285,
+    "city": "北卡羅來納",
+    "country": "USA",
+    "formatted_address": "Cape Hatteras National Seashore, Buxton, NC 27920, United States",
+    "difficulty": "Intermediate / Pro",
+    "fee_type": "FREE",
+    "opening_hours": "全天開放",
+    "surface_type": "大西洋外海沙洲長浪 (Sandbar Barrels)",
+    "features": [
+      "美東最具代表性大浪與管浪聖地 (Outer Banks)",
+      "大西洋燈塔背景壯麗海岸線",
+      "受大西洋颶風季影響具備世界級浪高",
+      "美東衝浪選手競賽勝地"
+    ],
+    "website": "https://www.nps.gov/caha/index.htm"
   }
 ]
