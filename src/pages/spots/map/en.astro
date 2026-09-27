@@ -1,5 +1,5 @@
 ---
-import Layout from '../../../layouts/Layout.astro';
+import Layout from '../../layouts/Layout.astro';
 import fs from 'fs';
 import path from 'path';
 
@@ -7,7 +7,8 @@ interface SpotItem {
   name: string;
   category: string;
   difficulty?: string;
-  fee_type?: string;
+  difficultyCn?: string;
+  feeCn?: string;
   city?: string;
   country?: string;
   latitude?: number;
@@ -28,43 +29,47 @@ interface SpotItem {
   regionTag?: string;
 }
 
-function resolveLocationEN(spot: any) {
+function resolveLocationEN(item: any) {
   const c = item.country || '';
   const name = (item.name || '').toLowerCase();
   const desc = (item.description || '').toLowerCase();
   const lat = item.lat || 0;
   const lng = item.lng || 0;
 
-  // 🇹🇭 Thailand
+  // 🇹🇭 Thailand (Thailand)
   if (c === 'TH' || (lat >= 5.5 && lat <= 20.5 && lng >= 97.0 && lng <= 106.0)) {
-    if ((lat >= 13.5 && lat <= 14.1 && lng >= 100.2 && lng <= 100.9) || name.includes('bangkok')) return '📍 🇹🇭 Thailand · Bangkok';
-    if ((lat >= 7.7 && lat <= 8.3 && lng >= 98.2 && lng <= 98.5) || name.includes('phuket')) return '📍 🇹🇭 Thailand · Phuket';
-    if ((lat >= 18.5 && lat <= 19.1 && lng >= 98.7 && lng <= 99.3) || name.includes('chiang mai')) return '📍 🇹🇭 Thailand · Chiang Mai';
-    if ((lat >= 12.6 && lat <= 13.1 && lng >= 100.8 && lng <= 101.4) || name.includes('pattaya')) return '📍 🇹🇭 Thailand · Pattaya';
-    if ((lat >= 9.3 && lat <= 9.9 && lng >= 99.8 && lng <= 100.25) || name.includes('samui') || name.includes('phangan')) return '📍 🇹🇭 Thailand · Koh Samui';
-    if ((lat >= 7.9 && lat <= 8.25 && lng >= 98.7 && lng <= 99.1) || name.includes('krabi') || name.includes('railay')) return '📍 🇹🇭 Thailand · Krabi';
-    return '📍 🇹🇭 Thailand';
+    if ((lat >= 13.5 && lat <= 14.1 && lng >= 100.2 && lng <= 100.9) || name.includes('bangkok') || name.includes('曼谷')) return '📍 🇹🇭 Thailand · 曼谷 Bangkok';
+    if ((lat >= 7.7 && lat <= 8.3 && lng >= 98.2 && lng <= 98.5) || name.includes('phuket') || name.includes('普吉')) return '📍 🇹🇭 Thailand · 普吉島 Phuket';
+    if ((lat >= 18.5 && lat <= 19.1 && lng >= 98.7 && lng <= 99.3) || name.includes('chiang mai') || name.includes('清邁')) return '📍 🇹🇭 Thailand · 清邁 Chiang Mai';
+    if ((lat >= 12.6 && lat <= 13.1 && lng >= 100.8 && lng <= 101.4) || name.includes('pattaya') || name.includes('芭達雅')) return '📍 🇹🇭 Thailand · 芭達雅 Pattaya';
+    if ((lat >= 9.3 && lat <= 9.9 && lng >= 99.8 && lng <= 100.25) || name.includes('samui') || name.includes('phangan') || name.includes('蘇梅')) return '📍 🇹🇭 Thailand · 蘇梅島 Koh Samui';
+    if ((lat >= 7.9 && lat <= 8.25 && lng >= 98.7 && lng <= 99.1) || name.includes('krabi') || name.includes('railay') || name.includes('甲米')) return '📍 🇹🇭 Thailand · 甲米 Krabi';
+    return '📍 🇹🇭 Thailand Thailand';
   }
 
-  // 🇮🇩 Indonesia
+  // 🇮🇩 Indonesia (Indonesia)
   if (c === 'ID' || (lat >= -11.0 && lat <= 6.0 && lng >= 95.0 && lng <= 141.0)) {
     if (lat >= -8.95 && lat <= -8.00 && lng >= 114.40 && lng <= 115.80) {
-      if ((lat >= -8.75 && lat <= -8.55 && lng >= 115.10 && lng <= 115.25) || name.includes('canggu') || name.includes('kuta') || name.includes('seminyak')) return '📍 🇮🇩 Indonesia · Bali · Canggu';
-      if ((lat >= -8.89 && lat <= -8.76 && lng >= 115.05 && lng <= 115.20) || name.includes('uluwatu') || name.includes('bukit')) return '📍 🇮🇩 Indonesia · Bali · Uluwatu';
-      return '📍 🇮🇩 Indonesia · Bali';
+      if ((lat >= -8.75 && lat <= -8.55 && lng >= 115.10 && lng <= 115.25) || name.includes('canggu') || name.includes('kuta') || name.includes('seminyak') || name.includes('蒼古') || name.includes('庫塔')) {
+        return '📍 🇮🇩 Indonesia · 峇里島 · 蒼古/庫塔 Canggu';
+      }
+      if ((lat >= -8.89 && lat <= -8.76 && lng >= 115.05 && lng <= 115.20) || name.includes('uluwatu') || name.includes('bukit') || name.includes('padang') || name.includes('烏魯瓦圖')) {
+        return '📍 🇮🇩 Indonesia · 峇里島 · 烏魯瓦圖 Uluwatu';
+      }
+      return '📍 🇮🇩 Indonesia · 峇里島 Bali';
     }
-    if ((lat >= -9.00 && lat <= -8.10 && lng >= 115.80 && lng <= 116.80) || name.includes('lombok')) return '📍 🇮🇩 Indonesia · Lombok';
-    if (name.includes('mentawai') || (lat >= -4.0 && lat <= 0.0 && lng >= 98.0 && lng <= 101.5)) return '📍 🇮🇩 Indonesia · Mentawai';
-    if (lat >= -8.9 && lat <= -5.8 && lng >= 105.0 && lng <= 114.5) return '📍 🇮🇩 Indonesia · Java';
-    return '📍 🇮🇩 Indonesia';
+    if ((lat >= -9.00 && lat <= -8.10 && lng >= 115.80 && lng <= 116.80) || name.includes('lombok') || name.includes('龍目')) return '📍 🇮🇩 Indonesia · 龍目島 Lombok';
+    if (name.includes('mentawai') || name.includes('明打威') || (lat >= -4.0 && lat <= 0.0 && lng >= 98.0 && lng <= 101.5)) return '📍 🇮🇩 Indonesia · 明打威 Mentawai';
+    if (lat >= -8.9 && lat <= -5.8 && lng >= 105.0 && lng <= 114.5) return '📍 🇮🇩 Indonesia · 爪哇 Java';
+    return '📍 🇮🇩 Indonesia Indonesia';
   }
 
-  // 🇸🇪 Sweden
+  // 🇸🇪 Sweden (Sweden)
   if (c === 'SE' || (lat >= 55.0 && lat <= 69.5 && lng >= 11.0 && lng <= 24.5)) {
-    if ((lat >= 59.10 && lat <= 59.60 && lng >= 17.70 && lng <= 18.40) || name.includes('stockholm')) return '📍 🇸🇪 Sweden · Stockholm';
-    if ((lat >= 55.40 && lat <= 55.80 && lng >= 12.80 && lng <= 13.30) || name.includes('malmö') || name.includes('malmo')) return '📍 🇸🇪 Sweden · Malmö';
-    if ((lat >= 57.50 && lat <= 57.90 && lng >= 11.70 && lng <= 12.30) || name.includes('gothenburg')) return '📍 🇸🇪 Sweden · Gothenburg';
-    return '📍 🇸🇪 Sweden';
+    if ((lat >= 59.10 && lat <= 59.60 && lng >= 17.70 && lng <= 18.40) || name.includes('stockholm') || name.includes('斯德哥爾摩')) return '📍 🇸🇪 Sweden · 斯德哥爾摩 Stockholm';
+    if ((lat >= 55.40 && lat <= 55.80 && lng >= 12.80 && lng <= 13.30) || name.includes('malmö') || name.includes('malmo') || name.includes('馬爾默')) return '📍 🇸🇪 Sweden · 馬爾默 Malmö';
+    if ((lat >= 57.50 && lat <= 57.90 && lng >= 11.70 && lng <= 12.30) || name.includes('gothenburg') || name.includes('哥德堡')) return '📍 🇸🇪 Sweden · 哥德堡 Gothenburg';
+    return '📍 🇸🇪 Sweden Sweden';
   }
 
   // Fallback
@@ -99,7 +104,7 @@ try {
       
       const navUrl = (spotLat && spotLng)
         ? ('https://www.google.com/maps/dir/?api=1&destination=' + spotLat + ',' + spotLng)
-        : ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((s.name || '')));
+        : ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((s.name || '') + ' ' + (s.city || '')));
 
       const hotelAffiliateCid = '1898765';
       const hotelUrl = (spotLat && spotLng)
@@ -109,15 +114,35 @@ try {
       const geo = resolveLocationEN(spotLat, spotLng, s.country || '', s.city || '', s.name || '');
       const regionTag = geo.flag + ' ' + geo.country + ' · ' + geo.city;
 
-      let environment = '🏞️ Outdoor';
+      let environment = '🏞️ 室外場';
       const nameAndFeatures = ((s.name || '') + ' ' + (s.features ? s.features.join(' ') : '') + ' ' + (s.surface_type || '')).toLowerCase();
-      if (nameAndFeatures.includes('indoor') || nameAndFeatures.includes('gym') || cat === 'CLIMB') {
-        environment = '🏠 Indoor';
+      if (nameAndFeatures.includes('indoor') || nameAndFeatures.includes('室內') || nameAndFeatures.includes('gym') || nameAndFeatures.includes('館') || cat === 'CLIMB') {
+        environment = '🏠 室內館';
+      }
+
+      // 中文難度
+      let difficultyCn = '🌟 全級別適用 · ⏱️ 1-2小時';
+      const rawDiff = (s.difficulty || '').toLowerCase();
+      if (rawDiff.includes('beginner') || rawDiff.includes('初')) {
+        difficultyCn = '🔰 初階新手 · ⏱️ 1小時';
+      } else if (rawDiff.includes('intermediate') || rawDiff.includes('中')) {
+        difficultyCn = '⚡ 中階進階 · ⏱️ 2-3小時';
+      } else if (rawDiff.includes('pro') || rawDiff.includes('advanced') || rawDiff.includes('高') || rawDiff.includes('專')) {
+        difficultyCn = '🔥 專業級 · ⏱️ 3小時+';
+      }
+
+      // 中文開放狀態
+      let feeCn = '🔓 開放場地';
+      const rawFee = (s.fee_type || '').toUpperCase();
+      if (rawFee === 'FREE' || (s.fee_details && s.fee_details.includes('免費'))) {
+        feeCn = '🟢 免費入場';
+      } else if (rawFee === 'PAID' || rawFee === 'FEE') {
+        feeCn = '🎫 需收費';
       }
 
       const officialUrl = (s.website && s.website.startsWith('http'))
         ? s.website
-        : ('https://www.google.com/search?q=' + encodeURIComponent((s.name || '') + ' ' + (geo.city || '') + ' official site'));
+        : ('https://www.google.com/search?q=' + encodeURIComponent((s.name || '') + ' ' + (geo.city || '') + ' Official Site'));
 
       const gearUrl = 'https://www.amazon.com/s?k=' + encodeURIComponent(gearKeyword) + '&tag=kait02bc-20';
       const searchStr = ((s.name || '') + ' ' + geo.country + ' ' + geo.city + ' ' + regionTag + ' ' + environment).toLowerCase();
@@ -134,6 +159,8 @@ try {
         countryCode: geo.code,
         regionTag,
         environment,
+        difficultyCn,
+        feeCn,
         searchStr
       };
     });
@@ -146,15 +173,16 @@ const totalSpots = spots.length;
 ---
 
 <Layout
-  title="📍 Global Extreme Spots Radar | xGame Radar"
-  description="Explore worldwide skateparks, bowls, surf breaks, climbing gyms, and pump tracks. Filter by country and sports category."
+  title="📍 全球極限運動場地雷達庫 (Global Action Spots Radar) | xGame Radar"
+  description="即時探索全球滑板場、碗池、衝浪浪點、攀岩抱石館與 BMX 泵道。附國家分區規格、路線導航與周邊推薦。"
 >
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
     
+    <!-- 頂部切換語言按鈕 -->
     <div class="flex justify-end">
-      <a href="/spots/map" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-xcard border border-xborder text-xs font-mono text-gray-300 hover:text-white hover:border-cyan-500 transition">
+      <a href="/spots/map/en" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-xcard border border-xborder text-xs font-mono text-gray-300 hover:text-white hover:border-cyan-500 transition">
         <span>🌐</span>
-        <span class="font-bold">切換至繁體中文版 (Chinese) →</span>
+        <span class="font-bold">Switch to English (英文版) →</span>
       </a>
     </div>
 
@@ -163,27 +191,27 @@ const totalSpots = spots.length;
       <div class="space-y-3 max-w-3xl relative z-10">
         <div class="flex items-center gap-2">
           <span class="px-3 py-1 rounded-full bg-xorange text-white text-xs font-black uppercase tracking-wider shadow-glow-orange">
-            GLOBAL SPOTS RADAR
+            場地雷達庫
           </span>
           <span class="px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs font-bold font-mono">
-            {totalSpots}+ Top Spots Indexed
+            已收錄 {totalSpots}+ 個頂級場地
           </span>
         </div>
-        <h1 class="text-3xl sm:text-5xl font-black text-white leading-tight tracking-tight uppercase">
-          Action Sports <span class="text-xorange">Spots Hub</span>
+        <h1 class="text-3xl sm:text-5xl font-black text-white leading-tight tracking-tight">
+          全球極限運動 <span class="text-xorange">場地探索庫</span>
         </h1>
         <p class="text-sm sm:text-base text-gray-300 font-medium leading-relaxed">
-          Discover world-class skateparks, bowls, surf breaks, climbing crags/gyms, and BMX pump tracks.
+          收錄全球街式滑板場、巨型碗池、世界級浪點、抱石攀岩館與 BMX 泵道，支援按國家與城市即時搜尋。
         </p>
       </div>
       <div class="absolute -right-10 -bottom-10 w-80 h-80 bg-xorange/10 rounded-full blur-3xl pointer-events-none"></div>
     </div>
 
-    <!-- 1️⃣ Country Filter -->
+    <!-- 1️⃣ 國家快速切換標籤 (純中文) -->
     <div class="space-y-3 p-4 rounded-2xl bg-xcard/60 border border-xborder">
       <div class="text-xs font-bold font-mono text-gray-400 flex items-center gap-1.5">
         <span>🌍</span>
-        <span>Quick Country Filter:</span>
+        <span>熱門國家快速篩選：</span>
       </div>
       <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
       <button data-country="ALL" class="country-btn active px-3.5 py-1.5 rounded-full text-xs font-bold bg-xorange text-white shadow-lg shadow-xorange/20 transition">🔥 All Countries</button>
@@ -211,10 +239,10 @@ const totalSpots = spots.length;
               </div>
               <div class="flex items-center gap-1.5">
                 <span class="px-2 py-0.5 rounded-full bg-black/50 text-[10px] font-bold text-cyan-300 font-mono border border-white/10">
-                  {spot.difficulty || 'All Levels'}
+                  {spot.difficultyCn}
                 </span>
                 <span class="px-2 py-0.5 rounded bg-black/50 text-[10px] font-mono text-emerald-400 border border-emerald-500/20">
-                  {spot.fee_type || 'FREE'}
+                  {spot.feeCn}
                 </span>
               </div>
             </div>
@@ -231,7 +259,7 @@ const totalSpots = spots.length;
 
             {spot.features && spot.features.length > 0 && (
               <div class="flex flex-wrap gap-1 pt-1">
-                {spot.features.slice(0, 3).map((spot) => (
+                {spot.features.slice(0, 3).map((f) => (
                   <span class="px-2 py-0.5 rounded-md bg-white/5 text-[10px] text-gray-300 font-mono border border-white/5">
                     {f}
                   </span>
@@ -242,16 +270,16 @@ const totalSpots = spots.length;
 
           <div class="grid grid-cols-2 gap-2 pt-3 border-t border-xborder/60 text-xs">
             <a href={spot.navUrl} target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-1 py-2 px-2 rounded-xl bg-xdark hover:bg-xcard border border-xborder text-white font-bold transition text-center shadow-sm">
-              🧭 Directions
+              🧭 路線導航
             </a>
             <a href={spot.hotelUrl} target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-1 py-2 px-2 rounded-xl bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30 text-blue-300 font-bold transition text-center">
-              🏨 Hotels
+              🏨 周邊酒店
             </a>
             <a href={spot.gearUrl} target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-1 py-2 px-2 rounded-xl bg-xorange hover:bg-orange-600 text-white font-bold transition text-center shadow-glow-orange">
-              🛒 Gear
+              🛒 專屬裝備
             </a>
             <a href={spot.officialUrl} target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-1 py-2 px-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/40 border border-emerald-500/30 text-emerald-300 font-bold transition text-center">
-              🌐 Official
+              🌐 官方資訊
             </a>
           </div>
         </article>
@@ -293,7 +321,7 @@ const totalSpots = spots.length;
         });
 
         if (countDisplay) {
-          countDisplay.innerText = `⚡ Showing: ${visibleCount} Spots`;
+          countDisplay.innerText = `⚡ 顯示中：${visibleCount} 個場地`;
         }
       }
 
