@@ -166,7 +166,7 @@ try {
         ? ('https://www.agoda.com/partners/partnersearch.aspx?cid=' + hotelAffiliateCid + '&latitude=' + spotLat + '&longitude=' + spotLng + '&text=' + encodeURIComponent((s.name || '')) + '&pcs=1')
         : ('https://www.agoda.com/search?text=' + encodeURIComponent((s.name || '')));
 
-      const geo = resolveLocationZH(spotLat, spotLng, s.country || '', s.city || '', s.name || '');
+      const geo = resolveLocationZH(s.lat || 0, s.lng || 0, s.country || '', s.city || '', s.name || '');
       const regionTag = geo.flag + ' ' + geo.country + ' · ' + geo.city;
 
       let environment = '🏞️ 室外場';
