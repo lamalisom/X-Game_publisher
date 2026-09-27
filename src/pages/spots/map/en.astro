@@ -28,7 +28,7 @@ interface SpotItem {
   regionTag?: string;
 }
 
-function resolveLocationEN(item: any) {
+function resolveLocationEN(spot: any) {
   const c = item.country || '';
   const name = (item.name || '').toLowerCase();
   const desc = (item.description || '').toLowerCase();
@@ -231,7 +231,7 @@ const totalSpots = spots.length;
 
             {spot.features && spot.features.length > 0 && (
               <div class="flex flex-wrap gap-1 pt-1">
-                {spot.features.slice(0, 3).map((f) => (
+                {spot.features.slice(0, 3).map((spot) => (
                   <span class="px-2 py-0.5 rounded-md bg-white/5 text-[10px] text-gray-300 font-mono border border-white/5">
                     {f}
                   </span>
