@@ -30,38 +30,38 @@ function resolveLocationZH(lat: number, lng: number, countryCode: string, cityNa
 
   // 🇹🇭 泰國 (Thailand)
   if (c === 'TH' || (lat >= 5.5 && lat <= 20.5 && lng >= 97.0 && lng <= 106.0)) {
-    if ((lat >= 13.5 && lat <= 14.1 && lng >= 100.2 && lng <= 100.9) || name.includes('bangkok') || name.includes('曼谷')) return { flag: '🇹🇭', country: '泰國', city: '曼谷 Bangkok' };
-    if ((lat >= 7.7 && lat <= 8.3 && lng >= 98.2 && lng <= 98.5) || name.includes('phuket') || name.includes('普吉')) return { flag: '🇹🇭', country: '泰國', city: '普吉島 Phuket' };
-    if ((lat >= 18.5 && lat <= 19.1 && lng >= 98.7 && lng <= 99.3) || name.includes('chiang mai') || name.includes('清邁')) return { flag: '🇹🇭', country: '泰國', city: '清邁 Chiang Mai' };
-    if ((lat >= 12.6 && lat <= 13.1 && lng >= 100.8 && lng <= 101.4) || name.includes('pattaya') || name.includes('芭達雅')) return { flag: '🇹🇭', country: '泰國', city: '芭達雅 Pattaya' };
-    if ((lat >= 9.3 && lat <= 9.9 && lng >= 99.8 && lng <= 100.25) || name.includes('samui') || name.includes('蘇梅')) return { flag: '🇹🇭', country: '泰國', city: '蘇梅島 Koh Samui' };
-    if ((lat >= 7.9 && lat <= 8.25 && lng >= 98.7 && lng <= 99.1) || name.includes('krabi') || name.includes('甲米')) return { flag: '🇹🇭', country: '泰國', city: '甲米 Krabi' };
-    return { flag: '🇹🇭', country: '泰國', city: '泰國 Thailand' };
+    if ((lat >= 13.5 && lat <= 14.1 && lng >= 100.2 && lng <= 100.9) || name.includes('bangkok') || name.includes('曼谷')) return { flag: '🇹🇭', country: '泰國', city: '曼谷 Bangkok', code: 'TH' };
+    if ((lat >= 7.7 && lat <= 8.3 && lng >= 98.2 && lng <= 98.5) || name.includes('phuket') || name.includes('普吉')) return { flag: '🇹🇭', country: '泰國', city: '普吉島 Phuket', code: 'TH' };
+    if ((lat >= 18.5 && lat <= 19.1 && lng >= 98.7 && lng <= 99.3) || name.includes('chiang mai') || name.includes('清邁')) return { flag: '🇹🇭', country: '泰國', city: '清邁 Chiang Mai', code: 'TH' };
+    if ((lat >= 12.6 && lat <= 13.1 && lng >= 100.8 && lng <= 101.4) || name.includes('pattaya') || name.includes('芭達雅')) return { flag: '🇹🇭', country: '泰國', city: '芭達雅 Pattaya', code: 'TH' };
+    if ((lat >= 9.3 && lat <= 9.9 && lng >= 99.8 && lng <= 100.25) || name.includes('samui') || name.includes('蘇梅')) return { flag: '🇹🇭', country: '泰國', city: '蘇梅島 Koh Samui', code: 'TH' };
+    if ((lat >= 7.9 && lat <= 8.25 && lng >= 98.7 && lng <= 99.1) || name.includes('krabi') || name.includes('甲米')) return { flag: '🇹🇭', country: '泰國', city: '甲米 Krabi', code: 'TH' };
+    return { flag: '🇹🇭', country: '泰國', city: '泰國 Thailand', code: 'TH' };
   }
 
   // 🇮🇩 印尼 (Indonesia)
   if (c === 'ID' || (lat >= -11.0 && lat <= 6.0 && lng >= 95.0 && lng <= 141.0)) {
     if (lat >= -8.95 && lat <= -8.00 && lng >= 114.40 && lng <= 115.80) {
       if ((lat >= -8.75 && lat <= -8.55 && lng >= 115.10 && lng <= 115.25) || name.includes('canggu') || name.includes('kuta') || name.includes('seminyak') || name.includes('蒼古') || name.includes('庫塔')) {
-        return { flag: '🇮🇩', country: '印尼', city: '峇里島 · 蒼古/庫塔 Canggu' };
+        return { flag: '🇮🇩', country: '印尼', city: '峇里島 · 蒼古/庫塔 Canggu', code: 'ID' };
       }
       if ((lat >= -8.89 && lat <= -8.76 && lng >= 115.05 && lng <= 115.20) || name.includes('uluwatu') || name.includes('bukit') || name.includes('padang') || name.includes('烏魯瓦圖')) {
-        return { flag: '🇮🇩', country: '印尼', city: '峇里島 · 烏魯瓦圖 Uluwatu' };
+        return { flag: '🇮🇩', country: '印尼', city: '峇里島 · 烏魯瓦圖 Uluwatu', code: 'ID' };
       }
-      return { flag: '🇮🇩', country: '印尼', city: '峇里島 Bali' };
+      return { flag: '🇮🇩', country: '印尼', city: '峇里島 Bali', code: 'ID' };
     }
-    if ((lat >= -9.00 && lat <= -8.10 && lng >= 115.80 && lng <= 116.80) || name.includes('lombok') || name.includes('龍目')) return { flag: '🇮🇩', country: '印尼', city: '龍目島 Lombok' };
-    if (name.includes('mentawai') || name.includes('明打威') || (lat >= -4.0 && lat <= 0.0 && lng >= 98.0 && lng <= 101.5)) return { flag: '🇮🇩', country: '印尼', city: '明打威 Mentawai' };
-    if (lat >= -8.9 && lat <= -5.8 && lng >= 105.0 && lng <= 114.5) return { flag: '🇮🇩', country: '印尼', city: '爪哇 Java' };
-    return { flag: '🇮🇩', country: '印尼', city: '印尼 Indonesia' };
+    if ((lat >= -9.00 && lat <= -8.10 && lng >= 115.80 && lng <= 116.80) || name.includes('lombok') || name.includes('龍目')) return { flag: '🇮🇩', country: '印尼', city: '龍目島 Lombok', code: 'ID' };
+    if (name.includes('mentawai') || name.includes('明打威') || (lat >= -4.0 && lat <= 0.0 && lng >= 98.0 && lng <= 101.5)) return { flag: '🇮🇩', country: '印尼', city: '明打威 Mentawai', code: 'ID' };
+    if (lat >= -8.9 && lat <= -5.8 && lng >= 105.0 && lng <= 114.5) return { flag: '🇮🇩', country: '印尼', city: '爪哇 Java', code: 'ID' };
+    return { flag: '🇮🇩', country: '印尼', city: '印尼 Indonesia', code: 'ID' };
   }
 
   // 🇸🇪 瑞典 (Sweden)
   if (c === 'SE' || (lat >= 55.0 && lat <= 69.5 && lng >= 11.0 && lng <= 24.5)) {
-    if ((lat >= 59.10 && lat <= 59.60 && lng >= 17.70 && lng <= 18.40) || name.includes('stockholm') || name.includes('斯德哥爾摩')) return { flag: '🇸🇪', country: '瑞典', city: '斯德哥爾摩 Stockholm' };
-    if ((lat >= 55.40 && lat <= 55.80 && lng >= 12.80 && lng <= 13.30) || name.includes('malmö') || name.includes('馬爾默')) return { flag: '🇸🇪', country: '瑞典', city: '馬爾默 Malmö' };
-    if ((lat >= 57.50 && lat <= 57.90 && lng >= 11.70 && lng <= 12.30) || name.includes('gothenburg') || name.includes('哥德堡')) return { flag: '🇸🇪', country: '瑞典', city: '哥德堡 Gothenburg' };
-    return { flag: '🇸🇪', country: '瑞典', city: '瑞典 Sweden' };
+    if ((lat >= 59.10 && lat <= 59.60 && lng >= 17.70 && lng <= 18.40) || name.includes('stockholm') || name.includes('斯德哥爾摩')) return { flag: '🇸🇪', country: '瑞典', city: '斯德哥爾摩 Stockholm', code: 'SE' };
+    if ((lat >= 55.40 && lat <= 55.80 && lng >= 12.80 && lng <= 13.30) || name.includes('malmö') || name.includes('馬爾默')) return { flag: '🇸🇪', country: '瑞典', city: '馬爾默 Malmö', code: 'SE' };
+    if ((lat >= 57.50 && lat <= 57.90 && lng >= 11.70 && lng <= 12.30) || name.includes('gothenburg') || name.includes('哥德堡')) return { flag: '🇸🇪', country: '瑞典', city: '哥德堡 Gothenburg', code: 'SE' };
+    return { flag: '🇸🇪', country: '瑞典', city: '瑞典 Sweden', code: 'SE' };
   }
 
   // 🇯🇵 日本
@@ -165,7 +165,7 @@ try {
         id: s.id || String(Math.random()),
         name: s.name || '極限運動熱點',
         category: s.category || 'Extreme Sports',
-        country: s.country || '',
+        country: (geo as any).code || s.country || '',
         city: geo.city,
         environment,
         difficultyCn: s.difficulty || '全級別',
@@ -338,7 +338,8 @@ const totalSpots = spots.length;
 
           const matchQuery = !query || searchData.includes(query);
           const matchCat = cat === 'all' || searchData.includes(cat);
-          const matchCountry = currentCountry === 'ALL' || cardCountry === currentCountry || searchData.includes(currentCountry.toLowerCase());
+          // 🔥 嚴格比對國家代碼（禁止 substring 誤判）
+          const matchCountry = (currentCountry === 'ALL') || (cardCountry === currentCountry);
 
           if (matchQuery && matchCat && matchCountry) {
             card.style.display = 'flex';

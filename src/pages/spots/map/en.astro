@@ -165,7 +165,7 @@ try {
         id: s.id || String(Math.random()),
         name: s.name || '極限運動熱點',
         category: s.category || 'Extreme Sports',
-        country: s.country || '',
+        country: (geo as any).code || s.country || '',
         city: geo.city,
         environment,
         difficultyCn: s.difficulty || '全級別',
@@ -338,7 +338,8 @@ const totalSpots = spots.length;
 
           const matchQuery = !query || searchData.includes(query);
           const matchCat = cat === 'all' || searchData.includes(cat);
-          const matchCountry = currentCountry === 'ALL' || cardCountry === currentCountry || searchData.includes(currentCountry.toLowerCase());
+          // 🔥 嚴格比對國家代碼（禁止 substring 誤判）
+          const matchCountry = (currentCountry === 'ALL') || (cardCountry === currentCountry);
 
           if (matchQuery && matchCat && matchCountry) {
             card.style.display = 'flex';
