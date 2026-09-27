@@ -290,84 +290,17 @@ const totalSpots = spots.length;
         <span>熱門國家快速篩選：</span>
       </div>
       <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-        <button data-country="ALL" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-black uppercase bg-xorange text-white shadow-glow-orange shrink-0 transition">
-          🔥 全部國家
-        </button>
-        <button data-country="JP" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇯🇵 日本
-        </button>
-        <button data-country="HK" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇭🇰 香港
-        </button>
-        <button data-country="TW" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇹🇼 台灣
-        </button>
-        <button data-country="US" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇺🇸 美國
-        </button>
-        <button data-country="AU" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇦🇺 澳洲
-        </button>
-        <button data-country="FR" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇫🇷 法國
-        </button>
-        <button data-country="SE" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇸🇪 瑞典
-        </button>
-        <button data-country="CH" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇨🇭 瑞士
-        </button>
-      </div>
-    </div>
-
-    <!-- 2️⃣ 運動分類篩選與即時搜尋框 -->
-    <div class="space-y-4">
-      <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-4 rounded-2xl bg-xcard border border-xborder">
-        <!-- 運動分類 -->
-        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
-          <button data-cat="ALL" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider bg-white/10 text-white hover:bg-white/20 transition">
-            全部運動
-          </button>
-          <button data-cat="SKATE" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition">
-            🛹 滑板
-          </button>
-          <button data-cat="CLIMB" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition">
-            🧗 攀岩
-          </button>
-          <button data-cat="SURF" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition">
-            🏄 衝浪
-          </button>
-          <button data-cat="BMX" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition">
-            🚲 BMX
-          </button>
-        </div>
-
-        <!-- 關鍵字搜尋框 -->
-        <div class="relative min-w-[320px]">
-          <input
-            type="text"
-            id="spot-search-input"
-            placeholder="🔍 搜尋國家、分區 (例如: 東京、柴灣、美孚、台北、加州)..."
-            class="w-full px-4 py-2.5 rounded-xl bg-xdark border border-xborder text-white text-xs focus:outline-none focus:border-xorange font-mono"
-          />
-        </div>
-      </div>
-
-      <div class="flex items-center justify-between text-xs font-mono text-gray-400 px-2">
-        <span id="filtered-count-display" class="text-cyan-400 font-bold">
-          ⚡ 顯示中：{totalSpots} 個場地
-        </span>
-        <span>提示：點擊導航開啟 Google Maps；點擊酒店開啟周邊訂房</span>
-      </div>
-    </div>
-
-    <!-- 3️⃣ 場地卡片網格 (純中文版) -->
-    <div id="spots-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {spots.map((spot) => (
-        <article
-          class="spot-card rounded-2xl bg-xcard border border-xborder hover:border-xorange/60 transition-all duration-300 overflow-hidden flex flex-col justify-between group hover:-translate-y-1 shadow-lg p-5 space-y-4"
-          data-category={spot.category}
-          data-country={spot.countryCode}
+      <button data-country="ALL" class="country-btn active px-3.5 py-1.5 rounded-full text-xs font-bold bg-xorange text-white shadow-lg shadow-xorange/20 transition">🔥 全部國家</button>
+      <button data-country="JP" class="country-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇯🇵 日本</button>
+      <button data-country="HK" class="country-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇭🇰 香港</button>
+      <button data-country="TW" class="country-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇹🇼 台灣</button>
+      <button data-country="TH" class="country-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇹🇭 泰國</button>
+      <button data-country="ID" class="country-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇮🇩 印尼</button>
+      <button data-country="US" class="country-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇺🇸 美國</button>
+      <button data-country="AU" class="country-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇦🇺 澳洲</button>
+      <button data-country="FR" class="country-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇫🇷 法國</button>
+      <button data-country="SE" class="country-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇸🇪 瑞典</button>
+      <button data-country="CH" class="country-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇨🇭 瑞士</button>
           data-search={spot.searchStr}
         >
           <div class="space-y-3">

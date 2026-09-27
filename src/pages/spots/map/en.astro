@@ -208,76 +208,17 @@ const totalSpots = spots.length;
         <span>Quick Country Filter:</span>
       </div>
       <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-        <button data-country="ALL" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-black uppercase bg-xorange text-white shadow-glow-orange shrink-0 transition">
-          🔥 All Countries
-        </button>
-        <button data-country="JP" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇯🇵 Japan
-        </button>
-        <button data-country="HK" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇭🇰 Hong Kong
-        </button>
-        <button data-country="US" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇺🇸 USA
-        </button>
-        <button data-country="AU" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇦🇺 Australia
-        </button>
-        <button data-country="FR" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇫🇷 France
-        </button>
-        <button data-country="SE" class="country-filter-btn px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-xdark border border-white/10 shrink-0 transition">
-          🇸🇪 Sweden
-        </button>
-      </div>
-    </div>
-
-    <!-- 2️⃣ Category Filter & Search -->
-    <div class="space-y-4">
-      <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 p-4 rounded-2xl bg-xcard border border-xborder">
-        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
-          <button data-cat="ALL" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider bg-white/10 text-white hover:bg-white/20 transition">
-            All Sports
-          </button>
-          <button data-cat="SKATE" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition">
-            🛹 Skate
-          </button>
-          <button data-cat="CLIMB" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition">
-            🧗 Climb
-          </button>
-          <button data-cat="SURF" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition">
-            🏄 Surf
-          </button>
-          <button data-cat="BMX" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-gray-300 hover:text-white hover:bg-xdark transition">
-            🚲 BMX
-          </button>
-        </div>
-
-        <div class="relative min-w-[320px]">
-          <input
-            type="text"
-            id="spot-search-input"
-            placeholder="🔍 Search city, spot (e.g. Tokyo, Bondi, LA, Chai Wan)..."
-            class="w-full px-4 py-2.5 rounded-xl bg-xdark border border-xborder text-white text-xs focus:outline-none focus:border-xorange font-mono"
-          />
-        </div>
-      </div>
-
-      <div class="flex items-center justify-between text-xs font-mono text-gray-400 px-2">
-        <span id="filtered-count-display" class="text-cyan-400 font-bold">
-          ⚡ Showing: {totalSpots} Spots
-        </span>
-        <span>Tip: Click Directions for Google Maps; Click Hotels for Agoda deals</span>
-      </div>
-    </div>
-
-    <!-- 3️⃣ Cards Grid -->
-    <div id="spots-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {spots.map((spot) => (
-        <article
-          class="spot-card rounded-2xl bg-xcard border border-xborder hover:border-xorange/60 transition-all duration-300 overflow-hidden flex flex-col justify-between group hover:-translate-y-1 shadow-lg p-5 space-y-4"
-          data-category={spot.category}
-          data-country={spot.countryCode}
+      <button data-country="ALL" class="country-btn active px-3.5 py-1.5 rounded-full text-xs font-bold bg-xorange text-white shadow-lg shadow-xorange/20 transition">🔥 All Countries</button>
+      <button data-country="JP" class="country-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇯🇵 Japan</button>
+      <button data-country="HK" class="country-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇭🇰 Hong Kong</button>
+      <button data-country="TW" class="country-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇹🇼 Taiwan</button>
+      <button data-country="TH" class="country-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇹🇭 Thailand</button>
+      <button data-country="ID" class="country-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇮🇩 Indonesia</button>
+      <button data-country="US" class="country-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇺🇸 USA</button>
+      <button data-country="AU" class="country-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇦🇺 Australia</button>
+      <button data-country="FR" class="country-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇫🇷 France</button>
+      <button data-country="SE" class="country-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇸🇪 Sweden</button>
+      <button data-country="CH" class="country-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇨🇭 Switzerland</button>
           data-search={spot.searchStr}
         >
           <div class="space-y-3">
