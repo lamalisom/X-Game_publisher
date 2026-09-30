@@ -38,15 +38,64 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
     return { flag: '🇰🇷', countryZH: '韓國', countryEN: 'Korea', cityZH: city, cityEN: city, code: 'KR' };
   }
 
-  // 🇬🇧 英國 (UK / GB)
-  if (c === 'GB' || c === 'UK' || c === 'UNITED KINGDOM' || c === 'ENGLAND' || c === 'SCOTLAND' || c === 'WALES' || c === '英國' || (lat >= 49.8 && lat <= 60.9 && lng >= -8.6 && lng <= 1.8) || name.includes('london') || name.includes('cornwall') || name.includes('manchester')) {
-    let city = cityName || '倫敦 London';
-    if ((lat >= 51.30 && lat <= 51.70 && lng >= -0.50 && lng <= 0.30) || name.includes('london') || name.includes('倫敦')) city = '倫敦 London';
-    else if ((lat >= 50.00 && lat <= 50.90 && lng >= -5.80 && lng <= -4.20) || name.includes('cornwall') || name.includes('newquay')) city = '康沃爾 Cornwall';
-    else if ((lat >= 53.35 && lat <= 53.60 && lng >= -2.40 && lng <= -2.10) || name.includes('manchester') || name.includes('曼徹斯特')) city = '曼徹斯特 Manchester';
-    else if ((lat >= 51.40 && lat <= 51.55 && lng >= -2.70 && lng <= -2.50) || name.includes('bristol') || name.includes('布里斯托')) city = '布里斯托 Bristol';
-    else if ((lat >= 55.85 && lat <= 56.05 && lng >= -3.40 && lng <= -3.10) || name.includes('edinburgh') || name.includes('愛丁堡')) city = '愛丁堡 Edinburgh';
-    return { flag: '🇬🇧', countryZH: '英國', countryEN: 'UK', cityZH: city, cityEN: city, code: 'GB' };
+  // 🇬🇧 英國 (UK / Great Britain) - 12 大極限運動專屬分區
+  if (c === 'GB' || c === 'UK' || c === 'UNITED KINGDOM' || c === 'ENGLAND' || c === 'SCOTLAND' || c === 'WALES' || c === '英國' || (lat >= 49.8 && lat <= 60.9 && lng >= -8.6 && lng <= 1.8) || name.includes('london') || name.includes('cornwall') || name.includes('manchester') || name.includes('scotland') || name.includes('wales')) {
+    let cityZH = '英國 UK';
+    let cityEN = 'UK';
+
+    // 1. 蘇格蘭高地、愛丁堡、格拉斯哥 (Scotland: 55.5N ~ 60.5N)
+    if (lat >= 55.50 || name.includes('scotland') || name.includes('edinburgh') || name.includes('glasgow') || name.includes('cairngorm') || name.includes('glencoe')) {
+      if (name.includes('edinburgh') || (lat >= 55.85 && lat <= 56.05 && lng >= -3.40 && lng <= -3.10)) {
+        cityZH = '蘇格蘭 · 愛丁堡 Edinburgh'; cityEN = 'Scotland · Edinburgh';
+      } else if (name.includes('glasgow') || (lat >= 55.75 && lat <= 55.95 && lng >= -4.40 && lng <= -4.15)) {
+        cityZH = '蘇格蘭 · 格拉斯哥 Glasgow'; cityEN = 'Scotland · Glasgow';
+      } else {
+        cityZH = '蘇格蘭 Scotland'; cityEN = 'Scotland';
+      }
+    }
+    // 2. 康沃爾 & 德文郡 (Cornwall & Devon 滑浪之都: 50.0N ~ 51.3N, -5.8E ~ -2.9E)
+    else if ((lat >= 50.00 && lat <= 51.30 && lng >= -5.80 && lng <= -3.00) || name.includes('cornwall') || name.includes('newquay') || name.includes('fistral') || name.includes('devon') || name.includes('croyde')) {
+      cityZH = '康沃爾/德文 (滑浪聖地) Cornwall'; cityEN = 'Cornwall & Devon (Surf Hub)';
+    }
+    // 3. 布里斯托 & 巴斯 (Bristol / The Wave: 51.30N ~ 51.65N, -2.9E ~ -2.3E)
+    else if ((lat >= 51.30 && lat <= 51.65 && lng >= -2.90 && lng <= -2.30) || name.includes('bristol') || name.includes('the wave')) {
+      cityZH = '布里斯托 Bristol'; cityEN = 'Bristol';
+    }
+    // 4. 大曼徹斯特 & 利物浦 (Manchester & Liverpool: 53.2N ~ 53.7N, -3.1E ~ -2.0E)
+    else if ((lat >= 53.20 && lat <= 53.75 && lng >= -3.15 && lng <= -2.00) || name.includes('manchester') || name.includes('liverpool') || name.includes('graystone') || name.includes('chill factore')) {
+      if (name.includes('liverpool')) { cityZH = '利物浦 Liverpool'; cityEN = 'Liverpool'; }
+      else { cityZH = '曼徹斯特 Manchester'; cityEN = 'Manchester'; }
+    }
+    // 5. 威爾斯 (Wales: 51.3N ~ 53.5N, -5.5E ~ -2.6E)
+    else if ((lng <= -2.70 && lat >= 51.30 && lat <= 53.50) || name.includes('wales') || name.includes('cardiff') || name.includes('swansea') || name.includes('snowdonia')) {
+      cityZH = '威爾斯 Wales'; cityEN = 'Wales';
+    }
+    // 6. 伯明罕 & 西密德蘭 (Birmingham: 52.2N ~ 52.8N, -2.2E ~ -1.4E)
+    else if ((lat >= 52.20 && lat <= 52.80 && lng >= -2.20 && lng <= -1.40) || name.includes('birmingham')) {
+      cityZH = '伯明罕 Birmingham'; cityEN = 'Birmingham';
+    }
+    // 7. 約克郡 / 里茲 & 雪菲爾 (Leeds & Sheffield: 53.3N ~ 54.2N, -2.0E ~ -0.8E)
+    else if ((lat >= 53.30 && lat <= 54.20 && lng >= -2.00 && lng <= -0.80) || name.includes('leeds') || name.includes('sheffield')) {
+      cityZH = '里茲/雪菲爾 Leeds & Sheffield'; cityEN = 'Leeds & Sheffield';
+    }
+    // 8. 布萊頓 & 南海岸 (Brighton: 50.7N ~ 51.2N, -1.6E ~ 0.2E)
+    else if ((lat >= 50.70 && lat <= 51.20 && lng >= -1.60 && lng <= 0.20) || name.includes('brighton') || name.includes('southampton') || name.includes('portsmouth')) {
+      cityZH = '布萊頓/南海岸 Brighton'; cityEN = 'Brighton & South Coast';
+    }
+    // 9. 紐卡索 & 東北大區 (Newcastle: 54.5N ~ 55.8N, -2.2E ~ -1.0E)
+    else if ((lat >= 54.50 && lat <= 55.80 && lng >= -2.20 && lng <= -1.00) || name.includes('newcastle')) {
+      cityZH = '紐卡索 Newcastle'; cityEN = 'Newcastle';
+    }
+    // 10. 諾丁漢 & 東密德蘭 (Nottingham: 52.8N ~ 53.2N, -1.4E ~ -0.5E)
+    else if ((lat >= 52.80 && lat <= 53.20 && lng >= -1.40 && lng <= -0.50) || name.includes('nottingham')) {
+      cityZH = '諾丁漢 Nottingham'; cityEN = 'Nottingham';
+    }
+    // 11. 大倫敦地區 (Greater London: 51.28N ~ 51.70N, -0.52E ~ 0.33E)
+    else if ((lat >= 51.25 && lat <= 51.72 && lng >= -0.55 && lng <= 0.35) || name.includes('london') || name.includes('倫敦') || name.includes('southbank') || name.includes('baysixty6') || name.includes('stockwell')) {
+      cityZH = '倫敦 London'; cityEN = 'London';
+    }
+
+    return { flag: '🇬🇧', countryZH: '英國', countryEN: 'UK', cityZH, cityEN, code: 'GB' };
   }
 
   // 🇨🇦 加拿大 (CA)
