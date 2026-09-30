@@ -28,6 +28,58 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
   const name = (spotName || '').toLowerCase();
   const c = (countryRaw || '').trim().toUpperCase();
 
+  // 🇰🇷 韓國 (KR)
+  if (c === 'KR' || c === 'KOREA' || c === 'SOUTH KOREA' || c === '韓國' || c === '韩国' || (lat >= 33.0 && lat <= 38.6 && lng >= 125.5 && lng <= 129.8) || name.includes('korea') || name.includes('seoul') || name.includes('busan') || name.includes('jeju') || name.includes('首爾') || name.includes('釜山')) {
+    let city = cityName || '首爾 Seoul';
+    if ((lat >= 37.40 && lat <= 37.70 && lng >= 126.75 && lng <= 127.20) || name.includes('seoul') || name.includes('首爾')) city = '首爾 Seoul';
+    else if ((lat >= 35.05 && lat <= 35.35 && lng >= 128.95 && lng <= 129.30) || name.includes('busan') || name.includes('釜山')) city = '釜山 Busan';
+    else if ((lat >= 33.15 && lat <= 33.60 && lng >= 126.15 && lng <= 126.95) || name.includes('jeju') || name.includes('濟州')) city = '濟州島 Jeju';
+    else if ((lat >= 37.95 && lat <= 38.15 && lng >= 128.60 && lng <= 128.80) || name.includes('yangyang') || name.includes('襄陽')) city = '襄陽 Yangyang';
+    return { flag: '🇰🇷', countryZH: '韓國', countryEN: 'Korea', cityZH: city, cityEN: city, code: 'KR' };
+  }
+
+  // 🇬🇧 英國 (UK / GB)
+  if (c === 'GB' || c === 'UK' || c === 'UNITED KINGDOM' || c === 'ENGLAND' || c === 'SCOTLAND' || c === 'WALES' || c === '英國' || (lat >= 49.8 && lat <= 60.9 && lng >= -8.6 && lng <= 1.8) || name.includes('london') || name.includes('cornwall') || name.includes('manchester')) {
+    let city = cityName || '倫敦 London';
+    if ((lat >= 51.30 && lat <= 51.70 && lng >= -0.50 && lng <= 0.30) || name.includes('london') || name.includes('倫敦')) city = '倫敦 London';
+    else if ((lat >= 50.00 && lat <= 50.90 && lng >= -5.80 && lng <= -4.20) || name.includes('cornwall') || name.includes('newquay')) city = '康沃爾 Cornwall';
+    else if ((lat >= 53.35 && lat <= 53.60 && lng >= -2.40 && lng <= -2.10) || name.includes('manchester') || name.includes('曼徹斯特')) city = '曼徹斯特 Manchester';
+    else if ((lat >= 51.40 && lat <= 51.55 && lng >= -2.70 && lng <= -2.50) || name.includes('bristol') || name.includes('布里斯托')) city = '布里斯托 Bristol';
+    else if ((lat >= 55.85 && lat <= 56.05 && lng >= -3.40 && lng <= -3.10) || name.includes('edinburgh') || name.includes('愛丁堡')) city = '愛丁堡 Edinburgh';
+    return { flag: '🇬🇧', countryZH: '英國', countryEN: 'UK', cityZH: city, cityEN: city, code: 'GB' };
+  }
+
+  // 🇨🇦 加拿大 (CA)
+  if (c === 'CA' || c === 'CANADA' || c === '加拿大' || (lat >= 41.7 && lat <= 83.1 && lng >= -141.0 && lng <= -52.6) || name.includes('canada') || name.includes('vancouver') || name.includes('whistler') || name.includes('toronto')) {
+    let city = cityName || '溫哥華 Vancouver';
+    if ((lat >= 49.15 && lat <= 49.35 && lng >= -123.30 && lng <= -122.95) || name.includes('vancouver') || name.includes('溫哥華')) city = '溫哥華 Vancouver';
+    else if ((lat >= 50.05 && lat <= 50.20 && lng >= -123.05 && lng <= -122.85) || name.includes('whistler') || name.includes('惠斯勒')) city = '惠斯勒 Whistler';
+    else if ((lat >= 49.05 && lat <= 49.25 && lng >= -125.95 && lng <= -125.70) || name.includes('tofino') || name.includes('托菲諾')) city = '托菲諾 Tofino';
+    else if ((lat >= 43.55 && lat <= 43.85 && lng >= -79.60 && lng <= -79.20) || name.includes('toronto') || name.includes('多倫多')) city = '多倫多 Toronto';
+    else if ((lat >= 45.40 && lat <= 45.70 && lng >= -73.95 && lng <= -73.45) || name.includes('montreal') || name.includes('蒙特婁')) city = '蒙特婁 Montreal';
+    else if ((lat >= 51.10 && lat <= 51.25 && lng >= -115.65 && lng <= -115.50) || name.includes('banff') || name.includes('班夫')) city = '班夫 Banff';
+    return { flag: '🇨🇦', countryZH: '加拿大', countryEN: 'Canada', cityZH: city, cityEN: city, code: 'CA' };
+  }
+
+  // 🇫🇮 芬蘭 (FI)
+  if (c === 'FI' || c === 'FINLAND' || c === '芬蘭' || (lat >= 59.8 && lat <= 70.1 && lng >= 20.5 && lng <= 31.6) || name.includes('finland') || name.includes('helsinki') || name.includes('芬蘭')) {
+    let city = cityName || '赫爾辛基 Helsinki';
+    if ((lat >= 60.10 && lat <= 60.30 && lng >= 24.80 && lng <= 25.15) || name.includes('helsinki') || name.includes('赫爾辛基')) city = '赫爾辛基 Helsinki';
+    else if ((lat >= 61.45 && lat <= 61.55 && lng >= 23.70 && lng <= 23.90) || name.includes('tampere') || name.includes('坦佩雷')) city = '坦佩雷 Tampere';
+    else if ((lat >= 66.45 && lat <= 66.55 && lng >= 25.65 && lng <= 25.85) || name.includes('rovaniemi')) city = '羅瓦涅米 Rovaniemi';
+    return { flag: '🇫🇮', countryZH: '芬蘭', countryEN: 'Finland', cityZH: city, cityEN: city, code: 'FI' };
+  }
+
+  // 🇳🇴 挪威 (NO)
+  if (c === 'NO' || c === 'NORWAY' || c === '挪威' || (lat >= 57.9 && lat <= 71.2 && lng >= 4.6 && lng <= 31.1) || name.includes('norway') || name.includes('oslo') || name.includes('bergen') || name.includes('lofoten')) {
+    let city = cityName || '奧斯陸 Oslo';
+    if ((lat >= 59.85 && lat <= 60.05 && lng >= 10.60 && lng <= 10.90) || name.includes('oslo') || name.includes('奧斯陸')) city = '奧斯陸 Oslo';
+    else if ((lat >= 60.35 && lat <= 60.45 && lng >= 5.25 && lng <= 5.40) || name.includes('bergen') || name.includes('卑爾根')) city = '卑爾根 Bergen';
+    else if ((lat >= 67.80 && lat <= 68.60 && lng >= 12.80 && lng <= 15.20) || name.includes('lofoten') || name.includes('羅弗敦')) city = '羅弗敦 Lofoten';
+    else if ((lat >= 58.90 && lat <= 59.05 && lng >= 5.60 && lng <= 5.80) || name.includes('stavanger')) city = '斯塔萬格 Stavanger';
+    return { flag: '🇳🇴', countryZH: '挪威', countryEN: 'Norway', cityZH: city, cityEN: city, code: 'NO' };
+  }
+
   // 🇯🇵 日本
   if (c === 'JP' || c === 'JAPAN' || c === '日本' || (lat >= 24.0 && lat <= 46.0 && lng >= 122.0 && lng <= 154.0) || name.includes('japan') || name.includes('日本') || name.includes('tokyo') || name.includes('osaka')) {
     let city = cityName || '東京 Tokyo';
@@ -55,7 +107,7 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
   }
 
   // 🇺🇸 美國
-  if (c === 'US' || c === 'USA' || c === 'UNITED STATES' || c === '美國' || (lat >= 18.0 && lat <= 72.0 && lng >= -170.0 && lng <= -65.0) || name.includes('california') || name.includes('hawaii') || name.includes('usa')) {
+  if (c === 'US' || c === 'USA' || c === 'UNITED STATES' || c === '美國' || (lat >= 18.0 && lat <= 72.0 && lng >= -170.0 && lng <= -65.0)) {
     let city = cityName || '加州 California';
     if (name.includes('california') || name.includes('加州')) city = '加州 California';
     else if (name.includes('hawaii') || name.includes('夏威夷')) city = '夏威夷 Hawaii';
@@ -94,14 +146,17 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
     return { flag: '🇸🇪', countryZH: '瑞典', countryEN: 'Sweden', cityZH: city, cityEN: city, code: 'SE' };
   }
 
-  // 🇦🇺 澳洲
-  if (c === 'AU' || c === 'AUSTRALIA' || (lat >= -44.0 && lat <= -10.0 && lng >= 112.0 && lng <= 154.0)) return { flag: '🇦🇺', countryZH: '澳洲', countryEN: 'Australia', cityZH: cityName || '雪梨 Sydney', cityEN: cityName || 'Sydney', code: 'AU' };
   // 🇫🇷 法國
-  if (c === 'FR' || c === 'FRANCE' || (lat >= 41.0 && lat <= 51.5 && lng >= -5.5 && lng <= 10.0)) return { flag: '🇫🇷', countryZH: '法國', countryEN: 'France', cityZH: cityName || '巴黎 Paris', cityEN: cityName || 'Paris', code: 'FR' };
-  // 🇨🇭 瑞士
-  if (c === 'CH' || c === 'SWITZERLAND' || (lat >= 45.8 && lat <= 47.9 && lng >= 5.9 && lng <= 10.5)) return { flag: '🇨🇭', countryZH: '瑞士', countryEN: 'Switzerland', cityZH: cityName || '阿爾卑斯 Alps', cityEN: cityName || 'Alps', code: 'CH' };
+  if (c === 'FR' || c === 'FRANCE' || c === '法國' || (lat >= 41.0 && lat <= 51.5 && lng >= -5.5 && lng <= 10.0) || name.includes('france')) {
+    return { flag: '🇫🇷', countryZH: '法國', countryEN: 'France', cityZH: cityName || '巴黎 Paris', cityEN: cityName || 'Paris', code: 'FR' };
+  }
 
-  return { flag: '🌐', countryZH: countryRaw || '全球', countryEN: countryRaw || 'Global', cityZH: cityName || '熱點 Spot', cityEN: cityName || 'Spot', code: 'OTHER' };
+  // 🇨🇭 瑞士
+  if (c === 'CH' || c === 'SWITZERLAND' || c === '瑞士' || (lat >= 45.8 && lat <= 47.9 && lng >= 5.9 && lng <= 10.5)) {
+    return { flag: '🇨🇭', countryZH: '瑞士', countryEN: 'Switzerland', cityZH: cityName || '阿爾卑斯 Alps', cityEN: cityName || 'Alps', code: 'CH' };
+  }
+
+  return { flag: '🌐', countryZH: countryRaw || '全球', countryEN: countryRaw || 'Global', cityZH: cityName || '熱點 Spot', cityEN: cityName || 'Spot', code: c || 'OTHER' };
 }
 
 let spots: SpotItem[] = [];
@@ -231,14 +286,18 @@ const totalSpots = spots.length;
     <div class="flex items-center gap-2 overflow-x-auto pb-3 mb-4 scrollbar-none">
       <button data-country="ALL" class="country-filter-btn active px-3.5 py-1.5 rounded-full text-xs font-bold bg-xorange text-white shadow-lg shadow-xorange/20 transition">🔥 全部國家</button>
       <button data-country="JP" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇯🇵 日本</button>
+      <button data-country="KR" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇰🇷 韓國</button>
       <button data-country="HK" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇭🇰 香港</button>
       <button data-country="TW" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇹🇼 台灣</button>
+      <button data-country="GB" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇬🇧 英國</button>
+      <button data-country="CA" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇨🇦 加拿大</button>
+      <button data-country="US" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇺🇸 美國</button>
       <button data-country="TH" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇹🇭 泰國</button>
       <button data-country="ID" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇮🇩 印尼</button>
-      <button data-country="US" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇺🇸 美國</button>
-      <button data-country="AU" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇦🇺 澳洲</button>
-      <button data-country="FR" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇫🇷 法國</button>
+      <button data-country="FI" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇫🇮 芬蘭</button>
+      <button data-country="NO" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇳🇴 挪威</button>
       <button data-country="SE" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇸🇪 瑞典</button>
+      <button data-country="FR" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇫🇷 法國</button>
       <button data-country="CH" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇨🇭 瑞士</button>
     </div>
 
