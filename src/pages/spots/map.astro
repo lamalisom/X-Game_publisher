@@ -1,8 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import fs from 'node:fs';
-import path from 'node:path';
-import rawSpotsStatic from '../../../public/data/global_spots.json';
+import rawSpots from '../../../public/data/global_spots.json';
 
 interface SpotItem {
   id: string;
@@ -142,7 +140,7 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
 
   // 10. 🇭🇰 香港 (HK)
   if (c === 'HK' || c === 'HONG KONG' || c === 'HONGKONG' || c === '香港' || (lat >= 22.15 && lat <= 22.58 && lng >= 113.80 && lng <= 114.45) || name.includes('hong kong') || name.includes('香港')) {
-    return { flag: '🇭🇰', countryZH: '香港', countryEN: 'Hong Kong', cityZH: cityName || '香港 Hong Kong', cityEN: cityName || 'Hong Kong', code: 'HK' };
+    return { flag: '🇭🇰', countryZH: '香港', countryEN: 'Hong Kong', cityZH: cityName || '香港 Hong Kong', cityEN: 'Hong Kong', code: 'HK' };
   }
 
   // 11. 🇹🇼 台灣 (TW)
@@ -179,25 +177,13 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
   return { flag: '🌐', countryZH: countryRaw || '全球', countryEN: countryRaw || 'Global', cityZH: cityName || '熱點 Spot', cityEN: cityName || 'Spot', code: c || 'OTHER' };
 }
 
-let rawSpots: any[] = [];
-if (Array.isArray(rawSpotsStatic) && rawSpotsStatic.length > 0) {
-  rawSpots = rawSpotsStatic;
-} else {
-  try {
-    const p = path.resolve(process.cwd(), 'public/data/global_spots.json');
-    if (fs.existsSync(p)) rawSpots = JSON.parse(fs.readFileSync(p, 'utf-8'));
-  } catch (e) {
-    console.error('Fallback load error:', e);
-  }
-}
-
 const hotelAffiliateCid = '1959779';
 
-const spots: SpotItem[] = rawSpots.map((s: any) => {
+const spots: SpotItem[] = (rawSpots as any[]).map((s: any) => {
   const spotLat = s.latitude ?? s.lat ?? 0;
   const spotLng = s.longitude ?? s.lng ?? 0;
   const geo = resolveLocation(spotLat, spotLng, s.country || '', s.city || '', s.name || '');
-  const regionTag = ;
+  const regionTag = `${geo.flag} ${geo.countryZH} · ${geo.cityZH}`;
   
   const navUrl = (spotLat && spotLng)
     ? ('https://www.google.com/maps/dir/?api=1&destination=' + spotLat + ',' + spotLng)
@@ -207,24 +193,20 @@ const spots: SpotItem[] = rawSpots.map((s: any) => {
     ? ('https://www.agoda.com/partners/partnersearch.aspx?cid=' + hotelAffiliateCid + '&latitude=' + spotLat + '&longitude=' + spotLng + '&text=' + encodeURIComponent((s.name || '')) + '&pcs=1')
     : ('https://www.agoda.com/partners/partnersearch.aspx?cid=' + hotelAffiliateCid + '&city=' + encodeURIComponent((s.city || s.name || '')));
 
-  // 難度標準化 (ZH)
   const diffRaw = (s.difficulty || s.level || '').toLowerCase();
   let difficultyCn = '⚪ 全級別適用';
   if (diffRaw.includes('begin') || diffRaw.includes('easy') || diffRaw.includes('初')) difficultyCn = '🟢 初級新手';
   else if (diffRaw.includes('pro') || diffRaw.includes('adv') || diffRaw.includes('hard') || diffRaw.includes('高') || diffRaw.includes('專')) difficultyCn = '🔴 進階專業';
   else if (diffRaw.includes('inter') || diffRaw.includes('med') || diffRaw.includes('中')) difficultyCn = '🟡 中級玩家';
 
-  // 費用標準化 (ZH)
   const feeRaw = (s.fee || s.charge || '').toLowerCase();
   let feeCn = '🆓 免費開放';
   if (feeRaw.includes('pay') || feeRaw.includes('paid') || feeRaw.includes('fee') || feeRaw.includes('ticket') || feeRaw.includes('費') || feeRaw.includes('票') || feeRaw.includes('收費')) {
     feeCn = '🎟️ 付費入場';
   }
 
-  // 環境標準化 (ZH)
   const environment = s.indoor ? '🏢 室內' : '☀️ 室外';
 
-  // 類別標準化 (ZH)
   const catLower = (s.category || '').toLowerCase();
   let category = '⚡ 極限運動';
   let gearQuery = 'skateboarding+gear';
@@ -364,7 +346,7 @@ const totalSpots = spots.length;
           <div>
             <div class="flex items-center justify-between gap-2 mb-3">
               <div class="flex items-center gap-1.5 flex-wrap">
-                <span class={}>
+                <span class={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase border ${spot.badgeClass}`}>
                   {spot.category}
                 </span>
                 <span class="px-2 py-0.5 rounded-full text-[10px] bg-gray-800 text-gray-300 border border-gray-700">
@@ -448,6 +430,7 @@ const totalSpots = spots.length;
           const searchStr = (card.getAttribute('data-search') || '').toLowerCase();
           const cardCountry = (card.getAttribute('data-country') || '').toUpperCase();
 
+          const matchesQuery = !query || searchStr.includes(query);
           const matchesCat = cat === 'all' || searchStr.includes(cat);
           const matchesCountry = currentCountry === 'ALL' || cardCountry === currentCountry;
 
