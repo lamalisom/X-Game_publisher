@@ -101390,5 +101390,23 @@
       "頂級U型池與障礙滑雪公園",
       "長距離全景雪道"
     ]
+  },
+  {
+    "id": "snow_ch_davos",
+    "name": "Davos Klosters Jashn Snowpark",
+    "category": "SNOW",
+    "country": "CH",
+    "city": "達沃斯 Davos",
+    "lat": 46.8027,
+    "lng": 9.8355,
+    "indoor": false,
+    "difficulty": "All Levels",
+    "fee": "收費場地",
+    "website": "https://www.davos.ch",
+    "features": [
+      "阿爾卑斯最大自由式公園之一",
+      "經典粉雪道",
+      "超級U池"
+    ]
   }
 ]
