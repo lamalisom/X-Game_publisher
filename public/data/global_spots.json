@@ -101174,5 +101174,221 @@
       "極限滑雪公園賽事",
       "全英最佳訓練中心"
     ]
+  },
+  {
+    "id": "snow_jp_niseko",
+    "name": "Niseko Tokyu Grand HIRAFU (二世谷格蘭比羅夫)",
+    "category": "SNOW",
+    "country": "JP",
+    "city": "北海道 Hokkaido",
+    "lat": 42.8625,
+    "lng": 140.7028,
+    "indoor": false,
+    "difficulty": "All Levels",
+    "fee": "收費場地",
+    "website": "https://www.grand-hirafu.jp",
+    "features": [
+      "全球頂級JAPOW粉雪",
+      "超大夜滑區域",
+      "單板林道野雪"
+    ]
+  },
+  {
+    "id": "snow_jp_hakuba_happo",
+    "name": "Hakuba Happo-One Ski Resort (白馬八方尾根)",
+    "category": "SNOW",
+    "country": "JP",
+    "city": "長野/白馬 Hakuba",
+    "lat": 36.7022,
+    "lng": 137.8383,
+    "indoor": false,
+    "difficulty": "Intermediate / Pro",
+    "fee": "收費場地",
+    "website": "https://www.happo-one.jp",
+    "features": [
+      "長野冬奧高山速降賽道",
+      "1071米高低落差",
+      "白馬連峰全景"
+    ]
+  },
+  {
+    "id": "snow_jp_nozawa",
+    "name": "Nozawa Onsen Snow Resort (野澤溫泉滑雪場)",
+    "category": "SNOW",
+    "country": "JP",
+    "city": "長野/野澤 Nozawa",
+    "lat": 36.9208,
+    "lng": 138.4486,
+    "indoor": false,
+    "difficulty": "All Levels",
+    "fee": "收費場地",
+    "website": "https://nozawaski.com",
+    "features": [
+      "日落山頂粉雪區",
+      "日式百年溫泉街",
+      "自由式地形公園"
+    ]
+  },
+  {
+    "id": "snow_jp_rusutsu",
+    "name": "Rusutsu Resort Ski Area (留壽都滑雪度假村)",
+    "category": "SNOW",
+    "country": "JP",
+    "city": "北海道 Hokkaido",
+    "lat": 42.7486,
+    "lng": 140.9069,
+    "indoor": false,
+    "difficulty": "All Levels",
+    "fee": "收費場地",
+    "website": "https://rusutsu.com",
+    "features": [
+      "日本最佳滑雪度假村",
+      "極致疏林野雪道",
+      "37條多樣雪道"
+    ]
+  },
+  {
+    "id": "snow_jp_tomamu",
+    "name": "Hoshino Resorts TOMAMU (星野TOMAMU滑雪場)",
+    "category": "SNOW",
+    "country": "JP",
+    "city": "北海道 Hokkaido",
+    "lat": 43.0642,
+    "lng": 142.6192,
+    "indoor": false,
+    "difficulty": "All Levels",
+    "fee": "收費場地",
+    "website": "https://www.snowtomamu.jp",
+    "features": [
+      "開放式高級野雪區",
+      "微笑雪道地形公園",
+      "愛絲冰城設施"
+    ]
+  },
+  {
+    "id": "snow_jp_myoko",
+    "name": "Myoko Suginohara Ski Resort (妙高杉之原)",
+    "category": "SNOW",
+    "country": "JP",
+    "city": "新潟/妙高 Myoko",
+    "lat": 36.8772,
+    "lng": 138.1697,
+    "indoor": false,
+    "difficulty": "All Levels",
+    "fee": "收費場地",
+    "website": "https://www.princehotels.co.jp/ski/myoko/",
+    "features": [
+      "全日本最長8.5公里雪道",
+      "天然特大粉雪區",
+      "頂級Sugi Park單板道具"
+    ]
+  },
+  {
+    "id": "snow_jp_naeba",
+    "name": "Naeba & Kagura Ski Resort (苗場 & 神樂滑雪場)",
+    "category": "SNOW",
+    "country": "JP",
+    "city": "新潟/越後湯澤 Yuzawa",
+    "lat": 36.7936,
+    "lng": 138.7847,
+    "indoor": false,
+    "difficulty": "All Levels",
+    "fee": "收費場地",
+    "website": "https://www.princehotels.co.jp/ski/naeba/",
+    "features": [
+      "世界最長龍之纜車Dragondola",
+      "神樂深雪挑戰區",
+      "滑雪出入Ski-in Ski-out"
+    ]
+  },
+  {
+    "id": "snow_jp_shiga",
+    "name": "Shiga Kogen Mountain Resort (志賀高原聯合雪場)",
+    "category": "SNOW",
+    "country": "JP",
+    "city": "長野/志賀 Shiga",
+    "lat": 36.7214,
+    "lng": 138.5147,
+    "indoor": false,
+    "difficulty": "Intermediate / Pro",
+    "fee": "收費場地",
+    "website": "https://www.shigakogen.gr.jp",
+    "features": [
+      "日本最大規模18座雪場聯票",
+      "海拔2307米橫手山頂",
+      "天然無壓雪道"
+    ]
+  },
+  {
+    "id": "snow_jp_zao",
+    "name": "Zao Onsen Ski Resort (藏王溫泉滑雪場)",
+    "category": "SNOW",
+    "country": "JP",
+    "city": "山形/藏王 Zao",
+    "lat": 38.1611,
+    "lng": 140.4,
+    "indoor": false,
+    "difficulty": "All Levels",
+    "fee": "收費場地",
+    "website": "https://www.zao-ski.or.jp",
+    "features": [
+      "世界奇觀冬季樹冰群",
+      "樹冰原長距離巡航雪道",
+      "硫磺強酸古溫泉"
+    ]
+  },
+  {
+    "id": "snow_jp_gala",
+    "name": "GALA Yuzawa Snow Resort (GALA湯澤滑雪場)",
+    "category": "SNOW",
+    "country": "JP",
+    "city": "新潟/越後湯澤 Yuzawa",
+    "lat": 36.9458,
+    "lng": 138.7997,
+    "indoor": false,
+    "difficulty": "All Levels",
+    "fee": "收費場地",
+    "website": "https://gala.co.jp",
+    "features": [
+      "上越新幹線車站直通大廳",
+      "東京75分鐘直達",
+      "自由式跳台公園"
+    ]
+  },
+  {
+    "id": "snow_ch_titlis",
+    "name": "Engelberg-Titlis Snowpark & Glacier",
+    "category": "SNOW",
+    "country": "CH",
+    "city": "英格堡 Engelberg",
+    "lat": 46.7719,
+    "lng": 8.4381,
+    "indoor": false,
+    "difficulty": "All Levels",
+    "fee": "收費場地",
+    "website": "https://www.titlis.ch",
+    "features": [
+      "旋轉全景纜車",
+      "2000米超長垂直落差",
+      "冰川滑雪與跳台公園"
+    ]
+  },
+  {
+    "id": "snow_ch_grindelwald",
+    "name": "Grindelwald-First Snowpark (Jungfrau)",
+    "category": "SNOW",
+    "country": "CH",
+    "city": "因特拉肯/少女峰 Jungfrau",
+    "lat": 46.6597,
+    "lng": 8.0531,
+    "indoor": false,
+    "difficulty": "All Levels",
+    "fee": "收費場地",
+    "website": "https://www.jungfrau.ch",
+    "features": [
+      "少女峰與艾格峰全景",
+      "頂級U型池與障礙滑雪公園",
+      "長距離全景雪道"
+    ]
   }
 ]
