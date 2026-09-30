@@ -195,14 +195,15 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
     return { flag: '🇸🇪', countryZH: '瑞典', countryEN: 'Sweden', cityZH: city, cityEN: city, code: 'SE' };
   }
 
+  // 🇨🇭 瑞士
+  if (c === 'CH' || c === 'SWITZERLAND' || c === '瑞士' || (lat >= 45.8 && lat <= 47.9 && lng >= 5.9 && lng <= 10.5)) {
+    return { flag: '🇨🇭', countryZH: '瑞士', countryEN: 'Switzerland', cityZH: cityName || '阿爾卑斯 Alps', cityEN: cityName || 'Alps', code: 'CH' }
   // 🇫🇷 法國
   if (c === 'FR' || c === 'FRANCE' || c === '法國' || (lat >= 41.0 && lat <= 51.5 && lng >= -5.5 && lng <= 10.0) || name.includes('france')) {
     return { flag: '🇫🇷', countryZH: '法國', countryEN: 'France', cityZH: cityName || '巴黎 Paris', cityEN: cityName || 'Paris', code: 'FR' };
   }
 
-  // 🇨🇭 瑞士
-  if (c === 'CH' || c === 'SWITZERLAND' || c === '瑞士' || (lat >= 45.8 && lat <= 47.9 && lng >= 5.9 && lng <= 10.5)) {
-    return { flag: '🇨🇭', countryZH: '瑞士', countryEN: 'Switzerland', cityZH: cityName || '阿爾卑斯 Alps', cityEN: cityName || 'Alps', code: 'CH' };
+  ;
   }
 
   return { flag: '🌐', countryZH: countryRaw || '全球', countryEN: countryRaw || 'Global', cityZH: cityName || '熱點 Spot', cityEN: cityName || 'Spot', code: c || 'OTHER' };
