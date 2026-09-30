@@ -153,37 +153,61 @@ try {
         ? ('https://www.agoda.com/partners/partnersearch.aspx?cid=' + hotelAffiliateCid + '&latitude=' + spotLat + '&longitude=' + spotLng + '&text=' + encodeURIComponent((s.name || '')) + '&pcs=1')
         : ('https://www.agoda.com/partners/partnersearch.aspx?cid=' + hotelAffiliateCid + '&city=' + encodeURIComponent((s.city || s.name || '')));
 
+      // 難度標準化 (ZH)
+      const diffRaw = (s.difficulty || s.level || '').toLowerCase();
+      let difficultyFormatted = '⚪ 全級別適用';
+      if (diffRaw.includes('begin') || diffRaw.includes('easy') || diffRaw.includes('初')) difficultyFormatted = '🟢 初級新手';
+      else if (diffRaw.includes('pro') || diffRaw.includes('adv') || diffRaw.includes('hard') || diffRaw.includes('高') || diffRaw.includes('專')) difficultyFormatted = '🔴 進階專業';
+      else if (diffRaw.includes('inter') || diffRaw.includes('med') || diffRaw.includes('中')) difficultyFormatted = '🟡 中級玩家';
+
+      // 費用標準化 (ZH)
+      const feeRaw = (s.fee || s.charge || '').toLowerCase();
+      let feeFormatted = '🆓 免費開放';
+      if (feeRaw.includes('pay') || feeRaw.includes('paid') || feeRaw.includes('fee') || feeRaw.includes('ticket') || feeRaw.includes('費') || feeRaw.includes('票') || feeRaw.includes('收費')) {
+        feeFormatted = '🎟️ 付費入場';
+      }
+
+      // 環境標準化 (ZH)
+      const environmentFormatted = s.indoor ? '🏢 室內' : '☀️ 室外';
+
+      // 類別標準化 (ZH)
       const catLower = (s.category || '').toLowerCase();
+      let categoryFormatted = '⚡ 極限運動';
       let gearQuery = 'skateboarding+gear';
       let badgeClass = 'bg-orange-500/20 text-orange-400 border-orange-500/30';
-      if (catLower.includes('surf')) {
+
+      if (catLower.includes('surf') || catLower.includes('浪')) {
+        categoryFormatted = '🏄 滑浪 SURF';
         gearQuery = 'surfing+wetsuit+board';
         badgeClass = 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30';
-      } else if (catLower.includes('climb')) {
+      } else if (catLower.includes('skate') || catLower.includes('板')) {
+        categoryFormatted = '🛹 滑板 SKATE';
+        gearQuery = 'skateboarding+gear';
+        badgeClass = 'bg-orange-500/20 text-orange-400 border-orange-500/30';
+      } else if (catLower.includes('climb') || catLower.includes('岩')) {
+        categoryFormatted = '🧗 攀岩 CLIMB';
         gearQuery = 'climbing+shoes+chalk';
         badgeClass = 'bg-amber-500/20 text-amber-400 border-amber-500/30';
-      } else if (catLower.includes('bmx')) {
+      } else if (catLower.includes('bmx') || catLower.includes('車')) {
+        categoryFormatted = '🚲 BMX 極限單車';
         gearQuery = 'bmx+bike+helmet';
         badgeClass = 'bg-purple-500/20 text-purple-400 border-purple-500/30';
-      } else if (catLower.includes('snow')) {
+      } else if (catLower.includes('snow') || catLower.includes('雪')) {
+        categoryFormatted = '🏂 滑雪 SNOW';
         gearQuery = 'snowboard+goggles+jacket';
         badgeClass = 'bg-blue-500/20 text-blue-400 border-blue-500/30';
       }
-
-      const gearUrl = 'https://www.amazon.com/s?k=' + gearQuery + '&tag=xgame-20';
-      const officialUrl = s.website || ('https://www.google.com/search?q=' + encodeURIComponent((s.name || '') + ' official site'));
-      const environment = s.indoor ? '室內' : '室外';
       const searchStr = ((s.name || '') + ' ' + geo.country + ' ' + geo.city + ' ' + regionTag + ' ' + (s.category || '')).toLowerCase();
 
       return {
         id: s.id || String(Math.random()),
         name: s.name || '極限運動熱點',
-        category: s.category || 'Extreme Sports',
+        category: categoryFormatted,
         countryCode: geo.code,
         city: geo.city,
-        environment,
-        difficultyCn: s.difficulty || '全級別',
-        feeCn: s.fee || '免費開放',
+        environment: environmentFormatted,
+        difficultyCn: difficultyFormatted,
+        feeCn: feeFormatted,
         badgeClass,
         navUrl,
         hotelUrl,
