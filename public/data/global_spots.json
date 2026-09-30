@@ -10036,338 +10036,478 @@
   {
     "osm_id": 3247363512,
     "name": "Bali Green Surf",
+    "slug": "bali_green_surf_3247363512",
     "category": "SURF",
-    "sub_category": "pitch",
-    "latitude": -8.6861245,
-    "longitude": 115.1648296,
-    "city": "峇里島",
-    "country": "Indonesia",
-    "formatted_address": "峇里島 Bali (全球衝浪天堂), Indonesia",
+    "sub_category": "surf_break",
+    "latitude": -8.686125,
+    "longitude": 115.16483,
+    "city": "",
+    "country": "",
+    "formatted_address": "Jl. Drupadi, No. 09, Seminyak",
     "difficulty": "All Levels",
     "fee_type": "OPEN",
-    "opening_hours": "全天開放",
-    "surface_type": "專業極限運動鋪面",
-    "features": [
-      "Indonesia人氣熱點",
-      "標準SURF設施",
-      "極限社群推薦"
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
     ],
-    "website": "http://www.baligreensurf.net/"
+    "tags": {
+      "addr:postcode": "80361",
+      "addr:street": "Jl. Drupadi, No. 09, Seminyak",
+      "check_date": "2016-09-23",
+      "club": "sport",
+      "email": "baligreensurf@gmail.com",
+      "name": "Bali Green Surf",
+      "phone": "+62 361 9116350",
+      "sport": "surfing",
+      "website": "http://www.baligreensurf.net/"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Bali%20Green%20Surf&latitude=-8.6861245&longitude=115.1648296",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
   },
   {
     "osm_id": 4179399790,
-    "name": "峇里島 Bali (全球衝浪天堂) SURF Spot #4179399790",
+    "name": "SURF Spot #4179399790",
+    "slug": "surf_spot_4179399790_4179399790",
     "category": "SURF",
-    "sub_category": "pitch",
-    "latitude": -8.6582907,
-    "longitude": 115.1277943,
-    "city": "峇里島",
-    "country": "Indonesia",
-    "formatted_address": "峇里島 Bali (全球衝浪天堂), Indonesia",
+    "sub_category": "surf_break",
+    "latitude": -8.658291,
+    "longitude": 115.127794,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
     "difficulty": "All Levels",
     "fee_type": "OPEN",
-    "opening_hours": "全天開放",
-    "surface_type": "專業極限運動鋪面",
-    "features": [
-      "Indonesia人氣熱點",
-      "標準SURF設施",
-      "極限社群推薦"
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
     ],
-    "website": ""
+    "tags": {
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SURF%20Spot%20%234179399790&latitude=-8.6582907&longitude=115.1277943",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
   },
   {
     "osm_id": 4179507789,
     "name": "Batu Balong",
+    "slug": "batu_balong_4179507789",
     "category": "SURF",
-    "sub_category": "pitch",
-    "latitude": -8.6607007,
-    "longitude": 115.1302788,
-    "city": "峇里島",
-    "country": "Indonesia",
-    "formatted_address": "峇里島 Bali (全球衝浪天堂), Indonesia",
+    "sub_category": "surf_break",
+    "latitude": -8.660701,
+    "longitude": 115.130279,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
     "difficulty": "All Levels",
     "fee_type": "OPEN",
-    "opening_hours": "全天開放",
-    "surface_type": "專業極限運動鋪面",
-    "features": [
-      "Indonesia人氣熱點",
-      "標準SURF設施",
-      "極限社群推薦"
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
     ],
-    "website": ""
+    "tags": {
+      "name": "Batu Balong",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Batu%20Balong&latitude=-8.6607007&longitude=115.1302788",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
   },
   {
     "osm_id": 4370679156,
     "name": "Surf break",
+    "slug": "surf_break_4370679156",
     "category": "SURF",
-    "sub_category": "pitch",
-    "latitude": -8.7068156,
+    "sub_category": "surf_break",
+    "latitude": -8.706816,
     "longitude": 115.437036,
-    "city": "峇里島",
-    "country": "Indonesia",
-    "formatted_address": "峇里島 Bali (全球衝浪天堂), Indonesia",
+    "city": "",
+    "country": "",
+    "formatted_address": "",
     "difficulty": "All Levels",
     "fee_type": "OPEN",
-    "opening_hours": "全天開放",
-    "surface_type": "專業極限運動鋪面",
-    "features": [
-      "Indonesia人氣熱點",
-      "標準SURF設施",
-      "極限社群推薦"
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
     ],
-    "website": ""
+    "tags": {
+      "name": "Surf break",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Surf%20break&latitude=-8.7068156&longitude=115.437036",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
   },
   {
     "osm_id": 4534758210,
-    "name": "峇里島 Bali (全球衝浪天堂) SURF Spot #4534758210",
+    "name": "SURF Spot #4534758210",
+    "slug": "surf_spot_4534758210_4534758210",
     "category": "SURF",
-    "sub_category": "pitch",
-    "latitude": -8.8055465,
-    "longitude": 115.1134985,
-    "city": "峇里島",
-    "country": "Indonesia",
-    "formatted_address": "峇里島 Bali (全球衝浪天堂), Indonesia",
+    "sub_category": "surf_break",
+    "latitude": -8.805547,
+    "longitude": 115.113499,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
     "difficulty": "All Levels",
     "fee_type": "OPEN",
-    "opening_hours": "全天開放",
-    "surface_type": "專業極限運動鋪面",
-    "features": [
-      "Indonesia人氣熱點",
-      "標準SURF設施",
-      "極限社群推薦"
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
     ],
-    "website": ""
+    "tags": {
+      "shop": "yes",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SURF%20Spot%20%234534758210&latitude=-8.8055465&longitude=115.1134985",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
   },
   {
     "osm_id": 6618235488,
-    "name": "峇里島 Bali (全球衝浪天堂) SURF Spot #6618235488",
+    "name": "SURF Spot #6618235488",
+    "slug": "surf_spot_6618235488_6618235488",
     "category": "SURF",
-    "sub_category": "pitch",
-    "latitude": -8.6582468,
-    "longitude": 115.1293206,
-    "city": "峇里島",
-    "country": "Indonesia",
-    "formatted_address": "峇里島 Bali (全球衝浪天堂), Indonesia",
+    "sub_category": "surf_break",
+    "latitude": -8.658247,
+    "longitude": 115.129321,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
     "difficulty": "All Levels",
     "fee_type": "OPEN",
-    "opening_hours": "全天開放",
-    "surface_type": "專業極限運動鋪面",
-    "features": [
-      "Indonesia人氣熱點",
-      "標準SURF設施",
-      "極限社群推薦"
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1000&q=80"
     ],
-    "website": ""
+    "tags": {
+      "amenity": "surf_school",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SURF%20Spot%20%236618235488&latitude=-8.6582468&longitude=115.1293206",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
   },
   {
     "osm_id": 9954085189,
     "name": "Drifter kayu Aya",
+    "slug": "drifter_kayu_aya_9954085189",
     "category": "SURF",
-    "sub_category": "pitch",
+    "sub_category": "surf_break",
     "latitude": -8.68422,
-    "longitude": 115.1582143,
-    "city": "峇里島",
-    "country": "Indonesia",
-    "formatted_address": "峇里島 Bali (全球衝浪天堂), Indonesia",
+    "longitude": 115.158214,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
     "difficulty": "All Levels",
     "fee_type": "OPEN",
-    "opening_hours": "全天開放",
-    "surface_type": "專業極限運動鋪面",
-    "features": [
-      "Indonesia人氣熱點",
-      "標準SURF設施",
-      "極限社群推薦"
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1000&q=80"
     ],
-    "website": ""
+    "tags": {
+      "name": "Drifter kayu Aya",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Drifter%20kayu%20Aya&latitude=-8.68422&longitude=115.1582143",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
   },
   {
     "osm_id": 9960890951,
     "name": "Toko Selancar Surf Shop",
+    "slug": "toko_selancar_surf_shop_9960890951",
     "category": "SURF",
-    "sub_category": "pitch",
-    "latitude": -8.6896298,
-    "longitude": 115.1617436,
-    "city": "峇里島",
-    "country": "Indonesia",
-    "formatted_address": "峇里島 Bali (全球衝浪天堂), Indonesia",
+    "sub_category": "surf_break",
+    "latitude": -8.68963,
+    "longitude": 115.161744,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
     "difficulty": "All Levels",
     "fee_type": "OPEN",
-    "opening_hours": "全天開放",
-    "surface_type": "專業極限運動鋪面",
-    "features": [
-      "Indonesia人氣熱點",
-      "標準SURF設施",
-      "極限社群推薦"
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
     ],
-    "website": ""
+    "tags": {
+      "name": "Toko Selancar Surf Shop",
+      "shop": "surf",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Toko%20Selancar%20Surf%20Shop&latitude=-8.6896298&longitude=115.1617436",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
   },
   {
     "osm_id": 9971971409,
     "name": "Vissla Surf Brand",
+    "slug": "vissla_surf_brand_9971971409",
     "category": "SURF",
-    "sub_category": "pitch",
-    "latitude": -8.6928553,
-    "longitude": 115.1681379,
-    "city": "峇里島",
-    "country": "Indonesia",
-    "formatted_address": "峇里島 Bali (全球衝浪天堂), Indonesia",
+    "sub_category": "surf_break",
+    "latitude": -8.692855,
+    "longitude": 115.168138,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
     "difficulty": "All Levels",
     "fee_type": "OPEN",
-    "opening_hours": "全天開放",
-    "surface_type": "專業極限運動鋪面",
-    "features": [
-      "Indonesia人氣熱點",
-      "標準SURF設施",
-      "極限社群推薦"
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
     ],
-    "website": ""
+    "tags": {
+      "name": "Vissla Surf Brand",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Vissla%20Surf%20Brand&latitude=-8.6928553&longitude=115.1681379",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
   },
   {
     "osm_id": 10262390314,
     "name": "Surf Shack",
+    "slug": "surf_shack_10262390314",
     "category": "SURF",
-    "sub_category": "pitch",
-    "latitude": -8.7070975,
-    "longitude": 115.2622805,
-    "city": "峇里島",
-    "country": "Indonesia",
-    "formatted_address": "峇里島 Bali (全球衝浪天堂), Indonesia",
+    "sub_category": "surf_break",
+    "latitude": -8.707097,
+    "longitude": 115.262281,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
     "difficulty": "All Levels",
     "fee_type": "OPEN",
-    "opening_hours": "全天開放",
-    "surface_type": "專業極限運動鋪面",
-    "features": [
-      "Indonesia人氣熱點",
-      "標準SURF設施",
-      "極限社群推薦"
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1000&q=80"
     ],
-    "website": ""
+    "tags": {
+      "name": "Surf Shack",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Surf%20Shack&latitude=-8.7070975&longitude=115.2622805",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
   },
   {
     "osm_id": 13105416219,
-    "name": "峇里島 Bali (全球衝浪天堂) SURF Spot #13105416219",
+    "name": "SURF Spot #13105416219",
+    "slug": "surf_spot_13105416219_13105416219",
     "category": "SURF",
-    "sub_category": "pitch",
-    "latitude": -8.7986047,
-    "longitude": 115.1180903,
-    "city": "峇里島",
-    "country": "Indonesia",
-    "formatted_address": "峇里島 Bali (全球衝浪天堂), Indonesia",
+    "sub_category": "surf_break",
+    "latitude": -8.798605,
+    "longitude": 115.11809,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
     "difficulty": "All Levels",
     "fee_type": "OPEN",
-    "opening_hours": "全天開放",
-    "surface_type": "專業極限運動鋪面",
-    "features": [
-      "Indonesia人氣熱點",
-      "標準SURF設施",
-      "極限社群推薦"
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
     ],
-    "website": ""
+    "tags": {
+      "check_date": "2025-08-29",
+      "shop": "rental",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SURF%20Spot%20%2313105416219&latitude=-8.7986047&longitude=115.1180903",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
   },
   {
     "osm_id": 13760275019,
     "name": "Sanur Surf School",
+    "slug": "sanur_surf_school_13760275019",
     "category": "SURF",
-    "sub_category": "pitch",
-    "latitude": -8.7117961,
-    "longitude": 115.2498505,
-    "city": "峇里島",
-    "country": "Indonesia",
-    "formatted_address": "峇里島 Bali (全球衝浪天堂), Indonesia",
+    "sub_category": "surf_break",
+    "latitude": -8.711796,
+    "longitude": 115.24985,
+    "city": "Denpasar",
+    "country": "",
+    "formatted_address": "Jalan Pantai merta sari",
     "difficulty": "All Levels",
     "fee_type": "OPEN",
-    "opening_hours": "全天開放",
-    "surface_type": "專業極限運動鋪面",
-    "features": [
-      "Indonesia人氣熱點",
-      "標準SURF設施",
-      "極限社群推薦"
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
     ],
-    "website": ""
+    "tags": {
+      "addr:city": "Denpasar",
+      "addr:district": "Denpasar Selatan",
+      "addr:neighbourhood": "Sanur Kauh",
+      "addr:postcode": "80227",
+      "addr:province": "Bali",
+      "addr:street": "Jalan Pantai merta sari",
+      "amenity": "surf_school",
+      "description": "Surf school for beginners in Sanur, Bali with instructors.  Surfing, foil, and kiteboarding",
+      "education": "training",
+      "name": "Sanur Surf School",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Sanur%20Surf%20School%20Denpasar&latitude=-8.7117961&longitude=115.2498505",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=Denpasar%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
   },
   {
     "osm_id": 30904902,
     "name": "Legian Beach",
+    "slug": "legian_beach_30904902",
     "category": "SURF",
-    "sub_category": "pitch",
-    "latitude": -8.7034514,
-    "longitude": 115.1641041,
-    "city": "峇里島",
-    "country": "Indonesia",
-    "formatted_address": "峇里島 Bali (全球衝浪天堂), Indonesia",
+    "sub_category": "surf_break",
+    "latitude": -8.703451,
+    "longitude": 115.164104,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
     "difficulty": "All Levels",
     "fee_type": "OPEN",
-    "opening_hours": "全天開放",
-    "surface_type": "專業極限運動鋪面",
-    "features": [
-      "Indonesia人氣熱點",
-      "標準SURF設施",
-      "極限社群推薦"
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://photos.app.goo.gl/UM4f9Ue29gb2XJbL7"
     ],
-    "website": ""
+    "tags": {
+      "image": "https://photos.app.goo.gl/UM4f9Ue29gb2XJbL7",
+      "name": "Legian Beach",
+      "natural": "beach",
+      "sport": "surfing",
+      "tourism": "beach",
+      "url": "https://youtu.be/Blaqz2Xxwbo"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Legian%20Beach&latitude=-8.7034514&longitude=115.1641041",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
   },
   {
     "osm_id": 128027878,
     "name": "Balangan Beach",
+    "slug": "balangan_beach_128027878",
     "category": "SURF",
-    "sub_category": "pitch",
+    "sub_category": "surf_break",
     "latitude": -8.792296,
-    "longitude": 115.1232398,
-    "city": "峇里島",
-    "country": "Indonesia",
-    "formatted_address": "峇里島 Bali (全球衝浪天堂), Indonesia",
+    "longitude": 115.12324,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
     "difficulty": "All Levels",
     "fee_type": "OPEN",
-    "opening_hours": "全天開放",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
     "surface_type": "sand",
     "features": [
-      "Indonesia人氣熱點",
-      "標準SURF設施",
-      "極限社群推薦"
+      "地面材質: sand"
     ],
-    "website": ""
+    "photos": [
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Pantai Balangan",
+      "name:en": "Balangan Beach",
+      "name:id": "Pantai Balangan",
+      "natural": "beach",
+      "sport": "surfing",
+      "surface": "sand"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Balangan%20Beach&latitude=-8.792296&longitude=115.1232398",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
   },
   {
     "osm_id": 299142648,
     "name": "Shipwrecks Surf Spot",
+    "slug": "shipwrecks_surf_spot_299142648",
     "category": "SURF",
-    "sub_category": "pitch",
-    "latitude": -8.6701614,
-    "longitude": 115.4423072,
-    "city": "峇里島",
-    "country": "Indonesia",
-    "formatted_address": "峇里島 Bali (全球衝浪天堂), Indonesia",
+    "sub_category": "surf_break",
+    "latitude": -8.670161,
+    "longitude": 115.442307,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
     "difficulty": "All Levels",
     "fee_type": "OPEN",
-    "opening_hours": "全天開放",
-    "surface_type": "專業極限運動鋪面",
-    "features": [
-      "Indonesia人氣熱點",
-      "標準SURF設施",
-      "極限社群推薦"
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
     ],
-    "website": ""
+    "tags": {
+      "area": "yes",
+      "name": "Shipwrecks Surf Spot",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Shipwrecks%20Surf%20Spot&latitude=-8.6701614&longitude=115.4423072",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
   },
   {
     "osm_id": 1270556458,
     "name": "Salty Water Surf School",
+    "slug": "salty_water_surf_school_1270556458",
     "category": "SURF",
-    "sub_category": "pitch",
-    "latitude": -8.7928888,
-    "longitude": 115.1228945,
-    "city": "峇里島",
-    "country": "Indonesia",
-    "formatted_address": "峇里島 Bali (全球衝浪天堂), Indonesia",
+    "sub_category": "surf_break",
+    "latitude": -8.792889,
+    "longitude": 115.122895,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
     "difficulty": "All Levels",
     "fee_type": "OPEN",
-    "opening_hours": "全天開放",
-    "surface_type": "專業極限運動鋪面",
-    "features": [
-      "Indonesia人氣熱點",
-      "標準SURF設施",
-      "極限社群推薦"
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1000&q=80"
     ],
-    "website": ""
+    "tags": {
+      "name": "Salty Water Surf School",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Salty%20Water%20Surf%20School&latitude=-8.7928888&longitude=115.1228945",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
   },
   {
     "osm_id": 3745307876,
@@ -37671,5 +37811,4236 @@
     "affiliate_hotel_url": "https://www.agoda.com/search?text=BMX%20Spot%20%231560781765&latitude=55.6867967&longitude=11.1468534",
     "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20bmx%20experience",
     "affiliate_gear_url": "https://www.amazon.com/s?k=bmx%20helmet%20gloves%20knee%20guards&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 2506853439,
+    "name": "SKATE Spot #2506853439",
+    "slug": "skate_spot_2506853439_2506853439",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 2.158331,
+    "longitude": 117.504141,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%232506853439&latitude=2.1583308&longitude=117.5041408",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 3964259291,
+    "name": "Pretty Poison Bowl",
+    "slug": "pretty_poison_bowl_3964259291",
+    "category": "SKATE",
+    "sub_category": "bowl",
+    "latitude": -8.652693,
+    "longitude": 115.137893,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "concrete",
+    "features": [
+      "地面材質: concrete"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "Pretty Poison Bowl",
+      "operator": "Pretty Poison",
+      "sport": "skateboard",
+      "start_date": "2015",
+      "surface": "concrete"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Pretty%20Poison%20Bowl&latitude=-8.6526929&longitude=115.1378928",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 5526812811,
+    "name": "SKATE Spot #5526812811",
+    "slug": "skate_spot_5526812811_5526812811",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.127648,
+    "longitude": 104.053376,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%235526812811&latitude=1.1276483&longitude=104.0533764",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 6229194877,
+    "name": "Istri Kania Skatepark",
+    "slug": "istri_kania_skatepark_6229194877",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -8.536167,
+    "longitude": 115.401975,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "Istri Kania Skatepark",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Istri%20Kania%20Skatepark&latitude=-8.5361665&longitude=115.4019751",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 6356102171,
+    "name": "Go Sports",
+    "slug": "go_sports_6356102171",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.300917,
+    "longitude": 103.835763,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "level": "1",
+      "name": "Go Sports",
+      "shop": "sports",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Go%20Sports&latitude=1.3009173&longitude=103.8357626",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 6440052160,
+    "name": "SKATE Spot #6440052160",
+    "slug": "skate_spot_6440052160_6440052160",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.353271,
+    "longitude": 103.945851,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%236440052160&latitude=1.3532708&longitude=103.9458514",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 6838191153,
+    "name": "Motion Skatepark",
+    "slug": "motion_skatepark_6838191153",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -8.717533,
+    "longitude": 115.185851,
+    "city": "Kuta, Kabupaten Badung, Bali, Indonesia",
+    "country": "",
+    "formatted_address": "Jalan Sunset Road",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://static.wixstatic.com/media/cdf18e_d6f870d477da436eba65593afe2aae1b%7Emv2.png/v1/fit/w_2500,h_1330,al_c/cdf18e_d6f870d477da436eba65593afe2aae1b%7Emv2.png"
+    ],
+    "tags": {
+      "addr:city": "Kuta, Kabupaten Badung, Bali, Indonesia",
+      "addr:housenumber": "420",
+      "addr:postcode": "80361",
+      "addr:street": "Jalan Sunset Road",
+      "building": "yes",
+      "leisure": "sports_centre",
+      "name": "Motion Skatepark",
+      "sport": "skateboard",
+      "website": "https://www.motionsk8parks.com"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Motion%20Skatepark%20Kuta%2C%20Kabupaten%20Badung%2C%20Bali%2C%20Indonesia&latitude=-8.7175331&longitude=115.1858515",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=Kuta%2C%20Kabupaten%20Badung%2C%20Bali%2C%20Indonesia%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 7138657583,
+    "name": "SKATE Spot #7138657583",
+    "slug": "skate_spot_7138657583_7138657583",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 4.856406,
+    "longitude": 100.748815,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%237138657583&latitude=4.8564058&longitude=100.7488147",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 7398588607,
+    "name": "SKATE Spot #7398588607",
+    "slug": "skate_spot_7398588607_7398588607",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 2.838494,
+    "longitude": 101.725881,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%237398588607&latitude=2.8384938&longitude=101.725881",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 7746275428,
+    "name": "Santai Skate Shop",
+    "slug": "santai_skate_shop_7746275428",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -8.654977,
+    "longitude": 115.14176,
+    "city": "",
+    "country": "",
+    "formatted_address": "Jalan Raya Semat",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "addr:housenumber": "16",
+      "addr:postcode": "80361",
+      "addr:street": "Jalan Raya Semat",
+      "contact:instagram": "santai_skateshop",
+      "name": "Santai Skate Shop",
+      "phone": "+6285739054557",
+      "shop": "sports",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Santai%20Skate%20Shop&latitude=-8.6549774&longitude=115.1417597",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9574589610,
+    "name": "Por Vida Skateboarding",
+    "slug": "por_vida_skateboarding_9574589610",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.300071,
+    "longitude": 103.84918,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "addr:unit": "11",
+      "description": "indoor skateboarding park and scholl",
+      "leisure": "sports_centre",
+      "level": "-1",
+      "name": "Por Vida Skateboarding",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Por%20Vida%20Skateboarding&latitude=1.300071&longitude=103.8491796",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9843768083,
+    "name": "SKATE Spot #9843768083",
+    "slug": "skate_spot_9843768083_9843768083",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 5.412324,
+    "longitude": 100.327881,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%239843768083&latitude=5.4123242&longitude=100.327881",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9942071361,
+    "name": "The Ride Side",
+    "slug": "the_ride_side_9942071361",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.302264,
+    "longitude": 103.873144,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "addr:unit": "10",
+      "level": "0",
+      "name": "The Ride Side",
+      "shop": "sports",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=The%20Ride%20Side&latitude=1.3022641&longitude=103.873144",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9942272943,
+    "name": "Skate Park",
+    "slug": "skate_park_9942272943",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.306038,
+    "longitude": 103.874534,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "fixme": "resurvey",
+      "leisure": "stadium",
+      "level": "2",
+      "name": "Skate Park",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Skate%20Park&latitude=1.3060376&longitude=103.8745343",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 10269658850,
+    "name": "Rollerwa",
+    "slug": "rollerwa_10269658850",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 2.969736,
+    "longitude": 101.715081,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "level": "3",
+      "name": "Rollerwa",
+      "name:en": "Rollerwa",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Rollerwa&latitude=2.9697358&longitude=101.7150807",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 10980693159,
+    "name": "Skate Park Merjosari",
+    "slug": "skate_park_merjosari_10980693159",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -7.94561,
+    "longitude": 112.603607,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "concrete",
+    "features": [
+      "地面材質: concrete"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "access": "yes",
+      "leisure": "pitch",
+      "name": "Skate Park Merjosari",
+      "sport": "skateboard",
+      "surface": "concrete"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Skate%20Park%20Merjosari&latitude=-7.9456099&longitude=112.6036075",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 11144616755,
+    "name": "Lot 19 Skatepark",
+    "slug": "lot_19_skatepark_11144616755",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 3.209011,
+    "longitude": 101.705415,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "concrete",
+    "features": [
+      "地面材質: concrete"
+    ],
+    "photos": [
+      "https://static.cdninstagram.com/rsrc.php/v4/yD/r/R0fBIMurK8v.png"
+    ],
+    "tags": {
+      "contact:mobile": "+60133134691",
+      "leisure": "sports_centre",
+      "name": "Lot 19 Skatepark",
+      "sport": "skateboard",
+      "surface": "concrete",
+      "website": "https://lot19skatepark.com/"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Lot%2019%20Skatepark&latitude=3.2090111&longitude=101.7054148",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 11328837677,
+    "name": "SKATE Spot #11328837677",
+    "slug": "skate_spot_11328837677_11328837677",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.440828,
+    "longitude": 110.405926,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "concrete",
+    "features": [
+      "免費開放 (Free Access)",
+      "地面材質: concrete"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "access": "yes",
+      "fee": "no",
+      "leisure": "pitch",
+      "sport": "skateboard",
+      "surface": "concrete"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%2311328837677&latitude=1.4408283&longitude=110.4059263",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 12177034585,
+    "name": "Skatepark Bukit Kiara - Jabatan Belia & Sukan WP Kuala Lumpur",
+    "slug": "skatepark_bukit_kiara_jabatan_belia_suka_12177034585",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 3.141005,
+    "longitude": 101.646024,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "contact:instagram": "https://www.instagram.com/kiaraskatepark/",
+      "leisure": "pitch",
+      "name": "Skatepark Bukit Kiara - Jabatan Belia & Sukan WP Kuala Lumpur",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Skatepark%20Bukit%20Kiara%20-%20Jabatan%20Belia%20%26%20Sukan%20WP%20Kuala%20Lumpur&latitude=3.1410051&longitude=101.6460244",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 13110209338,
+    "name": "SKATE Spot #13110209338",
+    "slug": "skate_spot_13110209338_13110209338",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -8.888748,
+    "longitude": 116.276122,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "concrete",
+    "features": [
+      "夜間照明 (Night Lighting)",
+      "地面材質: concrete"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "access": "customers",
+      "leisure": "pitch",
+      "lit": "yes",
+      "sport": "skateboard",
+      "surface": "concrete"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%2313110209338&latitude=-8.8887481&longitude=116.2761224",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 13122151143,
+    "name": "SKATE Spot #13122151143",
+    "slug": "skate_spot_13122151143_13122151143",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -8.915452,
+    "longitude": 116.346641,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "access": "customers",
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%2313122151143&latitude=-8.9154522&longitude=116.3466413",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 13123146564,
+    "name": "SKATE Spot #13123146564",
+    "slug": "skate_spot_13123146564_13123146564",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -8.877872,
+    "longitude": 116.276098,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "access": "private",
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%2313123146564&latitude=-8.8778719&longitude=116.2760978",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 13681182101,
+    "name": "SKATEPRO",
+    "slug": "skatepro_13681182101",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.48438,
+    "longitude": 103.74696,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "SKATEPRO",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATEPRO&latitude=1.48438&longitude=103.74696",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 13690857776,
+    "name": "SKATE Spot #13690857776",
+    "slug": "skate_spot_13690857776_13690857776",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 3.930541,
+    "longitude": 102.356523,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%2313690857776&latitude=3.9305415&longitude=102.3565234",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 13869856256,
+    "name": "Skatepark Sport Center Blitar",
+    "slug": "skatepark_sport_center_blitar_13869856256",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -8.087441,
+    "longitude": 112.166353,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Skatepark Sport Center Blitar",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Skatepark%20Sport%20Center%20Blitar&latitude=-8.0874408&longitude=112.1663525",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 116577103,
+    "name": "极限滑轮公园",
+    "slug": "极限滑轮公园_116577103",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.308348,
+    "longitude": 103.939008,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "Xtreme SkatePark @ East Coast",
+      "name:zh": "极限滑轮公园",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=%E6%9E%81%E9%99%90%E6%BB%91%E8%BD%AE%E5%85%AC%E5%9B%AD&latitude=1.3083482&longitude=103.9390076",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 139056003,
+    "name": "SKATE Spot #139056003",
+    "slug": "skate_spot_139056003_139056003",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 3.092826,
+    "longitude": 101.646479,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "building": "yes",
+      "leisure": "sports_centre",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23139056003&latitude=3.0928264&longitude=101.6464788",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 231918986,
+    "name": "SCAPE Skate Park",
+    "slug": "scape_skate_park_231918986",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.299958,
+    "longitude": 103.838643,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "concrete",
+    "features": [
+      "地面材質: concrete"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "access": "yes",
+      "leisure": "pitch",
+      "name": "SCAPE Skate Park",
+      "sport": "skateboard",
+      "surface": "concrete",
+      "wheelchair": "yes"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SCAPE%20Skate%20Park&latitude=1.299958&longitude=103.8386431",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 261369157,
+    "name": "Penang Skate Park",
+    "slug": "penang_skate_park_261369157",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 5.429314,
+    "longitude": 100.29572,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "Penang Skate Park",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Penang%20Skate%20Park&latitude=5.4293136&longitude=100.29572",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 308807378,
+    "name": "SKATE Spot #308807378",
+    "slug": "skate_spot_308807378_308807378",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.438273,
+    "longitude": 103.790797,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23308807378&latitude=1.4382735&longitude=103.7907973",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 328564191,
+    "name": "SKATE Spot #328564191",
+    "slug": "skate_spot_328564191_328564191",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.345632,
+    "longitude": 103.691176,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "ground",
+    "features": [
+      "夜間照明 (Night Lighting)",
+      "地面材質: ground"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "building": "construction",
+      "leisure": "pitch",
+      "lit": "yes",
+      "sport": "skateboard",
+      "surface": "ground"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23328564191&latitude=1.3456318&longitude=103.6911762",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 369036554,
+    "name": "Taman Mesra Alam Sungai Sengkuang",
+    "slug": "taman_mesra_alam_sungai_sengkuang_369036554",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.495733,
+    "longitude": 103.78225,
+    "city": "Johor Bahru",
+    "country": "",
+    "formatted_address": "Jalan Batik",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "concrete",
+    "features": [
+      "夜間照明 (Night Lighting)",
+      "地面材質: concrete"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "addr:city": "Johor Bahru",
+      "addr:postcode": "80150",
+      "addr:street": "Jalan Batik",
+      "leisure": "pitch",
+      "lit": "yes",
+      "name": "Taman Mesra Alam Sungai Sengkuang",
+      "sport": "skateboard",
+      "surface": "concrete"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Taman%20Mesra%20Alam%20Sungai%20Sengkuang%20Johor%20Bahru&latitude=1.4957329&longitude=103.7822497",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=Johor%20Bahru%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 370519338,
+    "name": "Urban Skate Park",
+    "slug": "urban_skate_park_370519338",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 3.160646,
+    "longitude": 101.719132,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [
+      "夜間照明 (Night Lighting)"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "disused:shop": "mall",
+      "leisure": "pitch",
+      "lit": "yes",
+      "name": "Urban Skate Park",
+      "name:en": "Urban Skate Park",
+      "old_name": "Ampang Park Shopping Centre",
+      "old_name:zh": "安邦购物中心",
+      "sport": "skateboard",
+      "start_date": "2023",
+      "wikidata": "Q4748043",
+      "wikimedia_commons": "Category:Ampang Park Shopping Center",
+      "wikipedia": "en:Ampang Park"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Urban%20Skate%20Park&latitude=3.1606457&longitude=101.7191317",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 371858236,
+    "name": "SKATE Spot #371858236",
+    "slug": "skate_spot_371858236_371858236",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -8.651931,
+    "longitude": 115.223285,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "access": "yes",
+      "leisure": "pitch",
+      "lit": "no",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23371858236&latitude=-8.6519307&longitude=115.2232852",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 382702503,
+    "name": "SKATE Spot #382702503",
+    "slug": "skate_spot_382702503_382702503",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -6.292288,
+    "longitude": 106.701552,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "park",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23382702503&latitude=-6.2922884&longitude=106.7015516",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 437270428,
+    "name": "Gelanggang Xtreme",
+    "slug": "gelanggang_xtreme_437270428",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.587421,
+    "longitude": 110.358554,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "Gelanggang Xtreme",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Gelanggang%20Xtreme&latitude=1.5874206&longitude=110.3585537",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 471025976,
+    "name": "Beautiful Skater D'Park",
+    "slug": "beautiful_skater_d_park_471025976",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -7.268338,
+    "longitude": 112.774906,
+    "city": "Kota Surabaya",
+    "country": "",
+    "formatted_address": "Jalan Mulyorejo Tengah",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "24/7",
+    "surface_type": "asphalt",
+    "features": [
+      "夜間照明 (Night Lighting)",
+      "地面材質: asphalt"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "access": "yes",
+      "addr:city": "Kota Surabaya",
+      "addr:postcode": "60115",
+      "addr:street": "Jalan Mulyorejo Tengah",
+      "amenity": "parking",
+      "hoops": "10",
+      "indoor": "yes",
+      "landuse": "brownfield",
+      "layer": "5",
+      "leisure": "pitch",
+      "lit": "yes",
+      "name": "Beautiful Skater D'Park",
+      "opening_hours": "24/7",
+      "school": "sport",
+      "shop": "sports",
+      "sport": "skateboard",
+      "surface": "asphalt"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Beautiful%20Skater%20D%27Park%20Kota%20Surabaya&latitude=-7.2683383&longitude=112.7749061",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=Kota%20Surabaya%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 505207059,
+    "name": "SKATE Spot #505207059",
+    "slug": "skate_spot_505207059_505207059",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 4.363874,
+    "longitude": 113.979987,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "concrete",
+    "features": [
+      "夜間照明 (Night Lighting)",
+      "地面材質: concrete"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "access": "yes",
+      "leisure": "pitch",
+      "lit": "yes",
+      "sport": "skateboard",
+      "surface": "concrete"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23505207059&latitude=4.3638739&longitude=113.9799868",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 524575631,
+    "name": "Lapangan Skateboard",
+    "slug": "lapangan_skateboard_524575631",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -6.129372,
+    "longitude": 106.839296,
+    "city": "DKI Jakarta",
+    "country": "",
+    "formatted_address": "Jalan R.E. Martadinata",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "addr:city": "DKI Jakarta",
+      "addr:full": "Jalan R.E. Martadinata",
+      "leisure": "pitch",
+      "name": "Lapangan Skateboard",
+      "source": "HOT_InAWARESurvey_2017",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Lapangan%20Skateboard%20DKI%20Jakarta&latitude=-6.1293725&longitude=106.8392961",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=DKI%20Jakarta%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 544005609,
+    "name": "峇都大都会公园滑板公园",
+    "slug": "峇都大都会公园滑板公园_544005609",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 3.214114,
+    "longitude": 101.681236,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "concrete",
+    "features": [
+      "地面材質: concrete"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "access": "yes",
+      "leisure": "pitch",
+      "name": "Taman Metropolitan Batu Skate Park",
+      "name:en": "Taman Metropolitan Batu Skate Park",
+      "name:zh": "峇都大都会公园滑板公园",
+      "name:zh-Hans": "峇都大都会公园滑板公园",
+      "name:zh-Hant": "峇都大都會公園滑板公園",
+      "operator": "DBKL",
+      "sport": "skateboard",
+      "surface": "concrete"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=%E5%B3%87%E9%83%BD%E5%A4%A7%E9%83%BD%E4%BC%9A%E5%85%AC%E5%9B%AD%E6%BB%91%E6%9D%BF%E5%85%AC%E5%9B%AD&latitude=3.2141136&longitude=101.6812359",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 545292958,
+    "name": "SKATE Spot #545292958",
+    "slug": "skate_spot_545292958_545292958",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 3.24196,
+    "longitude": 101.705548,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "lit": "no",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23545292958&latitude=3.2419595&longitude=101.7055481",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 545292962,
+    "name": "SKATE Spot #545292962",
+    "slug": "skate_spot_545292962_545292962",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 3.241944,
+    "longitude": 101.705376,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "lit": "no",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23545292962&latitude=3.2419445&longitude=101.7053765",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 545292965,
+    "name": "SKATE Spot #545292965",
+    "slug": "skate_spot_545292965_545292965",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 3.241924,
+    "longitude": 101.705254,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23545292965&latitude=3.2419239&longitude=101.7052537",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 551870074,
+    "name": "SKATE Spot #551870074",
+    "slug": "skate_spot_551870074_551870074",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 3.814676,
+    "longitude": 103.327609,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "access": "yes",
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23551870074&latitude=3.8146764&longitude=103.3276086",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 552889428,
+    "name": "SKATE Spot #552889428",
+    "slug": "skate_spot_552889428_552889428",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 2.72656,
+    "longitude": 101.976177,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23552889428&latitude=2.7265595&longitude=101.9761774",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 557465263,
+    "name": "SKATE Spot #557465263",
+    "slug": "skate_spot_557465263_557465263",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 3.201424,
+    "longitude": 101.755554,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23557465263&latitude=3.2014236&longitude=101.7555539",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 572152852,
+    "name": "SKATE Spot #572152852",
+    "slug": "skate_spot_572152852_572152852",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 2.735832,
+    "longitude": 102.225387,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23572152852&latitude=2.7358324&longitude=102.2253868",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 675800369,
+    "name": "SKATE Spot #675800369",
+    "slug": "skate_spot_675800369_675800369",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 2.022569,
+    "longitude": 103.317602,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23675800369&latitude=2.0225693&longitude=103.3176021",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 686518551,
+    "name": "SKATE Spot #686518551",
+    "slug": "skate_spot_686518551_686518551",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -8.651263,
+    "longitude": 115.133114,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "description": "halfpipe",
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23686518551&latitude=-8.6512626&longitude=115.1331138",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 697595567,
+    "name": "SKATE Spot #697595567",
+    "slug": "skate_spot_697595567_697595567",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -6.399149,
+    "longitude": 106.885625,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23697595567&latitude=-6.3991489&longitude=106.8856246",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 703793268,
+    "name": "Skate Park",
+    "slug": "skate_park_703793268",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.382262,
+    "longitude": 103.879325,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "area": "yes",
+      "name": "Skate Park",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Skate%20Park&latitude=1.3822617&longitude=103.8793247",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 708188513,
+    "name": "SKATE Spot #708188513",
+    "slug": "skate_spot_708188513_708188513",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -3.315826,
+    "longitude": 114.592451,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23708188513&latitude=-3.3158264&longitude=114.5924515",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 727622351,
+    "name": "SKATE Spot #727622351",
+    "slug": "skate_spot_727622351_727622351",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 3.553262,
+    "longitude": 116.623361,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23727622351&latitude=3.553262&longitude=116.6233608",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 732247929,
+    "name": "Skateboard Park",
+    "slug": "skateboard_park_732247929",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -6.59179,
+    "longitude": 106.800161,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "Skateboard Park",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Skateboard%20Park&latitude=-6.5917902&longitude=106.8001613",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 738198146,
+    "name": "SKATE Spot #738198146",
+    "slug": "skate_spot_738198146_738198146",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 4.573599,
+    "longitude": 101.139539,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "concrete",
+    "features": [
+      "地面材質: concrete"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard",
+      "surface": "concrete"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23738198146&latitude=4.573599&longitude=101.1395394",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 741247864,
+    "name": "SKATE Spot #741247864",
+    "slug": "skate_spot_741247864_741247864",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -7.813661,
+    "longitude": 112.008205,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "concrete",
+    "features": [
+      "地面材質: concrete"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard",
+      "surface": "concrete"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23741247864&latitude=-7.8136614&longitude=112.0082052",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 754508276,
+    "name": "Mandau Skate Park",
+    "slug": "mandau_skate_park_754508276",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -1.250408,
+    "longitude": 116.886061,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "Mandau Skate Park",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Mandau%20Skate%20Park&latitude=-1.2504081&longitude=116.8860615",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 765289336,
+    "name": "Skating Ring",
+    "slug": "skating_ring_765289336",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 4.856409,
+    "longitude": 100.748826,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "Skating Ring",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Skating%20Ring&latitude=4.8564094&longitude=100.7488264",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 780712786,
+    "name": "Skate Park Taman Sri Pulai",
+    "slug": "skate_park_taman_sri_pulai_780712786",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.567954,
+    "longitude": 103.618469,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "Skate Park Taman Sri Pulai",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Skate%20Park%20Taman%20Sri%20Pulai&latitude=1.5679538&longitude=103.6184689",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 781725272,
+    "name": "SKATE Spot #781725272",
+    "slug": "skate_spot_781725272_781725272",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -3.314868,
+    "longitude": 114.592676,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23781725272&latitude=-3.3148678&longitude=114.5926762",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 787859490,
+    "name": "SKATE Spot #787859490",
+    "slug": "skate_spot_787859490_787859490",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.386717,
+    "longitude": 103.746966,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "area": "yes",
+      "highway": "pedestrian",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23787859490&latitude=1.386717&longitude=103.746966",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 800622646,
+    "name": "Lapangan Wijaya Kusuma",
+    "slug": "lapangan_wijaya_kusuma_800622646",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -7.188484,
+    "longitude": 113.241499,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "Lapangan Wijaya Kusuma",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Lapangan%20Wijaya%20Kusuma&latitude=-7.1884842&longitude=113.2414988",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 876203001,
+    "name": "Arena Skateboard",
+    "slug": "arena_skateboard_876203001",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -7.291694,
+    "longitude": 112.73995,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "skate_park",
+      "name": "Arena Skateboard",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Arena%20Skateboard&latitude=-7.2916936&longitude=112.7399498",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 964266675,
+    "name": "SKATE Spot #964266675",
+    "slug": "skate_spot_964266675_964266675",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 4.768841,
+    "longitude": 103.417871,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23964266675&latitude=4.7688412&longitude=103.4178713",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 973223455,
+    "name": "Taman Skateboard GOR",
+    "slug": "taman_skateboard_gor_973223455",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -6.891249,
+    "longitude": 112.042084,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "Taman Skateboard GOR",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Taman%20Skateboard%20GOR&latitude=-6.8912493&longitude=112.0420844",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 993595858,
+    "name": "SKATE Spot #993595858",
+    "slug": "skate_spot_993595858_993595858",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 4.600154,
+    "longitude": 114.269903,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23993595858&latitude=4.6001535&longitude=114.2699029",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 994856409,
+    "name": "SKATE Spot #994856409",
+    "slug": "skate_spot_994856409_994856409",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -7.963263,
+    "longitude": 110.600821,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%23994856409&latitude=-7.9632633&longitude=110.6008208",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1050226930,
+    "name": "SKATE Spot #1050226930",
+    "slug": "skate_spot_1050226930_1050226930",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 4.490955,
+    "longitude": 97.944087,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231050226930&latitude=4.4909548&longitude=97.944087",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1069977719,
+    "name": "Pecangakan Skate Park",
+    "slug": "pecangakan_skate_park_1069977719",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -8.35479,
+    "longitude": 114.636149,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "capacity": "100",
+      "leisure": "pitch",
+      "name": "Pecangakan Skate Park",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Pecangakan%20Skate%20Park&latitude=-8.3547897&longitude=114.6361493",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1084469073,
+    "name": "SKATE Spot #1084469073",
+    "slug": "skate_spot_1084469073_1084469073",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -7.645165,
+    "longitude": 112.909564,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231084469073&latitude=-7.6451653&longitude=112.9095637",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1086686891,
+    "name": "SKATE Spot #1086686891",
+    "slug": "skate_spot_1086686891_1086686891",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 5.337964,
+    "longitude": 116.155118,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231086686891&latitude=5.3379639&longitude=116.1551178",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1095797436,
+    "name": "Taman Milenial Bantul",
+    "slug": "taman_milenial_bantul_1095797436",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -7.888683,
+    "longitude": 110.327217,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "FREE",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "concrete",
+    "features": [
+      "免費開放 (Free Access)",
+      "地面材質: concrete"
+    ],
+    "photos": [
+      "https://koranbernas.id/asset/foto_berita/taman-milenial-bantul.jpg"
+    ],
+    "tags": {
+      "access": "yes",
+      "fee": "no",
+      "garden:type": "public",
+      "image": "https://koranbernas.id/asset/foto_berita/taman-milenial-bantul.jpg",
+      "leisure": "pitch",
+      "lit": "no",
+      "name": "Taman Milenial Bantul",
+      "operator": "Pemerintah Kabupaten Bantul",
+      "operator:type": "government",
+      "sport": "skateboard",
+      "surface": "concrete"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Taman%20Milenial%20Bantul&latitude=-7.8886826&longitude=110.3272172",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1131535183,
+    "name": "Skate Park TPI",
+    "slug": "skate_park_tpi_1131535183",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -7.451969,
+    "longitude": 112.705072,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "concrete",
+    "features": [
+      "地面材質: concrete"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "lit": "no",
+      "name": "Skate Park TPI",
+      "sport": "skateboard",
+      "surface": "concrete"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Skate%20Park%20TPI&latitude=-7.4519693&longitude=112.7050718",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1159195802,
+    "name": "Learn to Skate Pod",
+    "slug": "learn_to_skate_pod_1159195802",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.343341,
+    "longitude": 103.726619,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "fixme:zh": "-",
+      "leisure": "pitch",
+      "name": "Learn to Skate Pod",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Learn%20to%20Skate%20Pod&latitude=1.3433407&longitude=103.7266185",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1159195811,
+    "name": "Plaza Pod",
+    "slug": "plaza_pod_1159195811",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.343251,
+    "longitude": 103.727185,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "building": "roof",
+      "building:levels": "1",
+      "layer": "1",
+      "leisure": "pitch",
+      "name": "Plaza Pod",
+      "roof:colour": "teal",
+      "roof:material": "glass",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Plaza%20Pod&latitude=1.343251&longitude=103.7271846",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1159195814,
+    "name": "SkatePark @ Lakeside Garden",
+    "slug": "skatepark_lakeside_garden_1159195814",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.343514,
+    "longitude": 103.726922,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "Tu-Fr 08:00-22:00",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "SkatePark @ Lakeside Garden",
+      "name:en": "SkatePark @ Lakeside Garden",
+      "opening_hours": "Tu-Fr 08:00-22:00",
+      "sport": "skateboard",
+      "website": "https://www.nparks.gov.sg/juronglakegardens/explore-our-gardens/attractions/skatepark-@-lakeside-garden",
+      "wikidata": "Q140064528"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SkatePark%20%40%20Lakeside%20Garden&latitude=1.3435143&longitude=103.7269219",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1159195815,
+    "name": "Big Bowl Pod",
+    "slug": "big_bowl_pod_1159195815",
+    "category": "SKATE",
+    "sub_category": "bowl",
+    "latitude": 1.343672,
+    "longitude": 103.726874,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "Big Bowl Pod",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Big%20Bowl%20Pod&latitude=1.3436723&longitude=103.7268745",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1159195816,
+    "name": "Skate Drain Pod",
+    "slug": "skate_drain_pod_1159195816",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.343685,
+    "longitude": 103.727554,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "Skate Drain Pod",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Skate%20Drain%20Pod&latitude=1.3436849&longitude=103.7275538",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1159195818,
+    "name": "Mini Bowl Pod",
+    "slug": "mini_bowl_pod_1159195818",
+    "category": "SKATE",
+    "sub_category": "bowl",
+    "latitude": 1.343731,
+    "longitude": 103.726326,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "Mini Bowl Pod",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Mini%20Bowl%20Pod&latitude=1.3437313&longitude=103.726326",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1214070248,
+    "name": "SKATE Spot #1214070248",
+    "slug": "skate_spot_1214070248_1214070248",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -7.629196,
+    "longitude": 111.530462,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "concrete",
+    "features": [
+      "地面材質: concrete"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "access": "yes",
+      "leisure": "pitch",
+      "sport": "skateboard",
+      "surface": "concrete"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231214070248&latitude=-7.6291964&longitude=111.5304618",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1215790417,
+    "name": "Skate Park",
+    "slug": "skate_park_1215790417",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 3.023781,
+    "longitude": 101.516504,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "Skate Park",
+      "source:name": "Park signboard",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Skate%20Park&latitude=3.0237811&longitude=101.5165044",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1217683587,
+    "name": "Skate Arena",
+    "slug": "skate_arena_1217683587",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.300081,
+    "longitude": 103.839032,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "Skate Arena",
+      "sport": "skateboard",
+      "wheelchair": "yes"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Skate%20Arena&latitude=1.3000811&longitude=103.8390322",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1241631220,
+    "name": "SKATE Spot #1241631220",
+    "slug": "skate_spot_1241631220_1241631220",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -6.137412,
+    "longitude": 106.966795,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "concrete",
+    "features": [
+      "地面材質: concrete"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard",
+      "surface": "concrete"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231241631220&latitude=-6.1374119&longitude=106.9667953",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1242303543,
+    "name": "SKATE Spot #1242303543",
+    "slug": "skate_spot_1242303543_1242303543",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 3.103513,
+    "longitude": 101.624385,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231242303543&latitude=3.1035134&longitude=101.6243849",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1263463186,
+    "name": "SKATE Spot #1263463186",
+    "slug": "skate_spot_1263463186_1263463186",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 4.436761,
+    "longitude": 113.996659,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "asphalt",
+    "features": [
+      "地面材質: asphalt"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "access": "customers",
+      "leisure": "pitch",
+      "lit": "no",
+      "sport": "skateboard",
+      "surface": "asphalt"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231263463186&latitude=4.4367609&longitude=113.9966593",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1272559918,
+    "name": "The Jungle Skatepark",
+    "slug": "the_jungle_skatepark_1272559918",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 5.979894,
+    "longitude": 116.091405,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "The Jungle Skatepark",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=The%20Jungle%20Skatepark&latitude=5.9798944&longitude=116.0914054",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1275557824,
+    "name": "SKATE Spot #1275557824",
+    "slug": "skate_spot_1275557824_1275557824",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -6.921493,
+    "longitude": 107.772409,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231275557824&latitude=-6.9214926&longitude=107.7724094",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1299799467,
+    "name": "Taman Bulatan Skate Park",
+    "slug": "taman_bulatan_skate_park_1299799467",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 4.42285,
+    "longitude": 114.009455,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [
+      "夜間照明 (Night Lighting)"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "access": "yes",
+      "leisure": "pitch",
+      "lit": "yes",
+      "name": "Taman Bulatan Skate Park",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Taman%20Bulatan%20Skate%20Park&latitude=4.4228504&longitude=114.0094546",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1315006807,
+    "name": "SKATE Spot #1315006807",
+    "slug": "skate_spot_1315006807_1315006807",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -7.949073,
+    "longitude": 112.59214,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231315006807&latitude=-7.9490733&longitude=112.5921403",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1324967901,
+    "name": "SKATE Spot #1324967901",
+    "slug": "skate_spot_1324967901_1324967901",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -7.930698,
+    "longitude": 112.575643,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231324967901&latitude=-7.9306977&longitude=112.5756435",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1347308799,
+    "name": "Skate Park, Jln. Tg. Purun",
+    "slug": "skate_park_jln_tg_purun_1347308799",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 5.27556,
+    "longitude": 115.252044,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "Skate Park, Jln. Tg. Purun",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Skate%20Park%2C%20Jln.%20Tg.%20Purun&latitude=5.2755602&longitude=115.2520436",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1353900604,
+    "name": "BMX & SKATE PARK NGAWI",
+    "slug": "bmx_skate_park_ngawi_1353900604",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -7.403446,
+    "longitude": 111.444249,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "BMX & SKATE PARK NGAWI",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=BMX%20%26%20SKATE%20PARK%20NGAWI&latitude=-7.4034464&longitude=111.444249",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1359798985,
+    "name": "Piata Skate Park",
+    "slug": "piata_skate_park_1359798985",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -7.968503,
+    "longitude": 112.61304,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "access": "customers",
+      "leisure": "pitch",
+      "name": "Piata Skate Park",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Piata%20Skate%20Park&latitude=-7.968503&longitude=112.6130405",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1360373763,
+    "name": "SKATE Spot #1360373763",
+    "slug": "skate_spot_1360373763_1360373763",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -6.737934,
+    "longitude": 111.026459,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "concrete",
+    "features": [
+      "地面材質: concrete"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard",
+      "surface": "concrete"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231360373763&latitude=-6.7379344&longitude=111.0264588",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1370050889,
+    "name": "SKATE Spot #1370050889",
+    "slug": "skate_spot_1370050889_1370050889",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -7.981973,
+    "longitude": 112.630618,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "concrete",
+    "features": [
+      "地面材質: concrete"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard",
+      "surface": "concrete"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231370050889&latitude=-7.9819727&longitude=112.6306182",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1381406646,
+    "name": "SKATE Spot #1381406646",
+    "slug": "skate_spot_1381406646_1381406646",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -7.185463,
+    "longitude": 112.652229,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "concrete",
+    "features": [
+      "地面材質: concrete"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard",
+      "surface": "concrete"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231381406646&latitude=-7.1854628&longitude=112.6522286",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1386604301,
+    "name": "SKATE Spot #1386604301",
+    "slug": "skate_spot_1386604301_1386604301",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -6.523787,
+    "longitude": 105.684723,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231386604301&latitude=-6.5237867&longitude=105.6847225",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1388131348,
+    "name": "Bima Loop Skatepark Cirebon",
+    "slug": "bima_loop_skatepark_cirebon_1388131348",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -6.731136,
+    "longitude": 108.535836,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "Bima Loop Skatepark Cirebon",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Bima%20Loop%20Skatepark%20Cirebon&latitude=-6.7311359&longitude=108.535836",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1424918787,
+    "name": "SKATE Spot #1424918787",
+    "slug": "skate_spot_1424918787_1424918787",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -6.356733,
+    "longitude": 106.732045,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "sports",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231424918787&latitude=-6.3567328&longitude=106.7320446",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1425638669,
+    "name": "SKATE Spot #1425638669",
+    "slug": "skate_spot_1425638669_1425638669",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -8.713257,
+    "longitude": 115.167515,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "access": "yes",
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231425638669&latitude=-8.7132569&longitude=115.1675153",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1431541153,
+    "name": "Lapangan Skateboard Taman Bibit Mojolangu",
+    "slug": "lapangan_skateboard_taman_bibit_mojolang_1431541153",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -7.932924,
+    "longitude": 112.628603,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "Lapangan Skateboard Taman Bibit Mojolangu",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Lapangan%20Skateboard%20Taman%20Bibit%20Mojolangu&latitude=-7.9329242&longitude=112.6286034",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1436206900,
+    "name": "SKATE Spot #1436206900",
+    "slug": "skate_spot_1436206900_1436206900",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 1.345439,
+    "longitude": 103.84691,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "paved",
+    "features": [
+      "地面材質: paved"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard",
+      "surface": "paved"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231436206900&latitude=1.3454391&longitude=103.8469099",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1452692036,
+    "name": "Bumi Skatepark",
+    "slug": "bumi_skatepark_1452692036",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -6.867563,
+    "longitude": 107.463612,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "concrete",
+    "features": [
+      "夜間照明 (Night Lighting)",
+      "地面材質: concrete"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "construction": "yes",
+      "leisure": "pitch",
+      "lit": "yes",
+      "name": "Bumi Skatepark",
+      "sport": "skateboard",
+      "surface": "concrete"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Bumi%20Skatepark&latitude=-6.8675632&longitude=107.4636116",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1459987897,
+    "name": "SKATE Spot #1459987897",
+    "slug": "skate_spot_1459987897_1459987897",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -6.43899,
+    "longitude": 106.828523,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231459987897&latitude=-6.4389896&longitude=106.8285227",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1502693892,
+    "name": "SKATE Spot #1502693892",
+    "slug": "skate_spot_1502693892_1502693892",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -8.638469,
+    "longitude": 115.213314,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1564982752979-3f7bc974d29a?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231502693892&latitude=-8.6384694&longitude=115.2133137",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1515350084,
+    "name": "Tunjung Nyaho Skate Park",
+    "slug": "tunjung_nyaho_skate_park_1515350084",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": -2.212521,
+    "longitude": 113.907277,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1547447134-cd3f5c716030?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "access": "yes",
+      "leisure": "pitch",
+      "lit": "no",
+      "name": "Tunjung Nyaho Skate Park",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Tunjung%20Nyaho%20Skate%20Park&latitude=-2.2125212&longitude=113.9072774",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1522239807,
+    "name": "Batu Biah Skate Park",
+    "slug": "batu_biah_skate_park_1522239807",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 4.766887,
+    "longitude": 115.020983,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "Batu Biah Skate Park",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Batu%20Biah%20Skate%20Park&latitude=4.7668873&longitude=115.0209827",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1526658593,
+    "name": "Merdeka Walk Skatepark",
+    "slug": "merdeka_walk_skatepark_1526658593",
+    "category": "SKATE",
+    "sub_category": "skatepark",
+    "latitude": 3.591375,
+    "longitude": 98.679136,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1520045892732-304bc3ac5d8e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "pitch",
+      "name": "Merdeka Walk Skatepark",
+      "sport": "skateboard"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Merdeka%20Walk%20Skatepark&latitude=3.5913751&longitude=98.6791357",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20skate%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1411422107,
+    "name": "Gerupuk Inside",
+    "slug": "gerupuk_inside_1411422107",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.915256,
+    "longitude": 116.365515,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "alt_name": "Inside",
+      "name": "Gerupuk Inside",
+      "sport": "surfing",
+      "tourism": "attraction"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Gerupuk%20Inside&latitude=-8.9152559&longitude=116.3655147",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1411423406,
+    "name": "Don don",
+    "slug": "don_don_1411423406",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.910908,
+    "longitude": 116.354821,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Don Don",
+      "name:en": "Don don",
+      "sport": "surfing",
+      "tourism": "attraction"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Don%20don&latitude=-8.9109076&longitude=116.3548215",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1412916674,
+    "name": "Mawi",
+    "slug": "mawi_1412916674",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.876845,
+    "longitude": 116.156902,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Mawi",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Mawi&latitude=-8.8768448&longitude=116.1569015",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 2391555935,
+    "name": "Gili Watersports",
+    "slug": "gili_watersports_2391555935",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.362643,
+    "longitude": 116.087448,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "amenity": "surf_school",
+      "description": "Kite Surf school and watersport rental",
+      "education": "surf_school",
+      "name": "Gili Watersports",
+      "rental": "yes",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Gili%20Watersports&latitude=-8.3626426&longitude=116.0874484",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 2490688543,
+    "name": "Gili T Surfspot",
+    "slug": "gili_t_surfspot_2490688543",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.361763,
+    "longitude": 116.040426,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Gili T Surfspot",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Gili%20T%20Surfspot&latitude=-8.3617626&longitude=116.0404257",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 2678338969,
+    "name": "Mangsit",
+    "slug": "mangsit_2678338969",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.477601,
+    "longitude": 116.036168,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Mangsit",
+      "source": "survey",
+      "source:date": "2013-12-20",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Mangsit&latitude=-8.4776013&longitude=116.0361676",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 2678339185,
+    "name": "Montong",
+    "slug": "montong_2678339185",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.551783,
+    "longitude": 116.067748,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Montong",
+      "source": "survey",
+      "source:date": "2013-12-20",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Montong&latitude=-8.5517834&longitude=116.0677478",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 5211326522,
+    "name": "Kidspoint",
+    "slug": "kidspoint_5211326522",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.917439,
+    "longitude": 116.351009,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Kid's Point",
+      "name:en": "Kidspoint",
+      "sport": "surfing",
+      "tourism": "attraction"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Kidspoint&latitude=-8.917439&longitude=116.3510094",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 5412519121,
+    "name": "Hary Surf School",
+    "slug": "hary_surf_school_5412519121",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.873328,
+    "longitude": 116.162096,
+    "city": "",
+    "country": "",
+    "formatted_address": "Selong Belanak",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "Mo-Su 08:00-17:00",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "addr:street": "Selong Belanak",
+      "leisure": "sports_centre",
+      "name": "Hary Surf School",
+      "opening_hours": "Mo-Su 08:00-17:00",
+      "operator": "Hary",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Hary%20Surf%20School&latitude=-8.8733279&longitude=116.1620962",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 5532824422,
+    "name": "Pancer Door (surf spot)",
+    "slug": "pancer_door_surf_spot_5532824422",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.234261,
+    "longitude": 111.102038,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Pancer Door (surf spot)",
+      "sport": "surfing",
+      "tourism": "attraction"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Pancer%20Door%20%28surf%20spot%29&latitude=-8.2342608&longitude=111.1020379",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 6440094842,
+    "name": "SURF Spot #6440094842",
+    "slug": "surf_spot_6440094842_6440094842",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.50294,
+    "longitude": 116.045031,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SURF%20Spot%20%236440094842&latitude=-8.5029403&longitude=116.0450306",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 6457335881,
+    "name": "Papa Surf School",
+    "slug": "papa_surf_school_6457335881",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.872825,
+    "longitude": 116.162057,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "leisure": "sports_centre",
+      "name": "Papa Surf School",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Papa%20Surf%20School&latitude=-8.8728245&longitude=116.1620569",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 7087064002,
+    "name": "The Reef",
+    "slug": "the_reef_7087064002",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -7.742213,
+    "longitude": 108.498508,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "The Reef",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=The%20Reef&latitude=-7.7422131&longitude=108.4985079",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 7143631439,
+    "name": "Outside Left",
+    "slug": "outside_left_7143631439",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.950454,
+    "longitude": 116.363228,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Outside Left",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Outside%20Left&latitude=-8.9504539&longitude=116.3632282",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 7157533373,
+    "name": "Yo Yo's",
+    "slug": "yo_yo_s_7157533373",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.974552,
+    "longitude": 116.731657,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Yo Yo's",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Yo%20Yo%27s&latitude=-8.9745517&longitude=116.7316572",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 7157543331,
+    "name": "Hook",
+    "slug": "hook_7157543331",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.976108,
+    "longitude": 116.722974,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Hook",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Hook&latitude=-8.9761084&longitude=116.7229738",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 7157545030,
+    "name": "Tropical Right",
+    "slug": "tropical_right_7157545030",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -9.000766,
+    "longitude": 116.737071,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Tropical Right",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Tropical%20Right&latitude=-9.000766&longitude=116.7370715",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 7157558904,
+    "name": "Supersuck",
+    "slug": "supersuck_7157558904",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.930799,
+    "longitude": 116.736909,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Supersuck",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Supersuck&latitude=-8.9307989&longitude=116.7369095",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 7157559113,
+    "name": "Playground",
+    "slug": "playground_7157559113",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.926189,
+    "longitude": 116.744999,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Playground",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Playground&latitude=-8.9261894&longitude=116.7449992",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 7157560010,
+    "name": "Supershit",
+    "slug": "supershit_7157560010",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.983596,
+    "longitude": 116.735084,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Supershit",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Supershit&latitude=-8.9835956&longitude=116.7350838",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 7157561946,
+    "name": "Tropical Left",
+    "slug": "tropical_left_7157561946",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -9.002279,
+    "longitude": 116.739516,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Tropical Left",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Tropical%20Left&latitude=-9.0022787&longitude=116.7395164",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 7165325850,
+    "name": "Periscopes",
+    "slug": "periscopes_7165325850",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.78422,
+    "longitude": 118.375067,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Periscopes",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Periscopes&latitude=-8.7842205&longitude=118.3750674",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 7165342284,
+    "name": "Lakey Peak",
+    "slug": "lakey_peak_7165342284",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.804934,
+    "longitude": 118.378861,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Lakey Peak",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Lakey%20Peak&latitude=-8.8049337&longitude=118.3788615",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 7165351746,
+    "name": "Lakey Pipe",
+    "slug": "lakey_pipe_7165351746",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.808712,
+    "longitude": 118.377438,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Lakey Pipe",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Lakey%20Pipe&latitude=-8.8087116&longitude=118.3774376",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 7165363873,
+    "name": "Nungas",
+    "slug": "nungas_7165363873",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.794531,
+    "longitude": 118.375344,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Nungas",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Nungas&latitude=-8.7945306&longitude=118.3753442",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9604633490,
+    "name": "FlowRider",
+    "slug": "flowrider_9604633490",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": 3.149305,
+    "longitude": 101.617016,
+    "city": "",
+    "country": "",
+    "formatted_address": "Lebuh Bandar Utama",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "addr:housenumber": "Lot G601 (Ground Floor)",
+      "addr:street": "Lebuh Bandar Utama",
+      "check_date": "2026-07-10",
+      "contact:facebook": "https://www.facebook.com/Flowrider1Utama/",
+      "contact:instagram": "https://www.instagram.com/flowrider_1utama",
+      "fee": "yes",
+      "leisure": "fitness_centre",
+      "level": "0",
+      "name": "FlowRider",
+      "phone": "+60377100833",
+      "sport": "surfing",
+      "website": "https://flowrider1utama.com.my/"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=FlowRider&latitude=3.1493049&longitude=101.617016",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9954821532,
+    "name": "Rip Curl Kayu Aya",
+    "slug": "rip_curl_kayu_aya_9954821532",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.68422,
+    "longitude": 115.158492,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Rip Curl Kayu Aya",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Rip%20Curl%20Kayu%20Aya&latitude=-8.68422&longitude=115.158492",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 12949436257,
+    "name": "Quicksilver",
+    "slug": "quicksilver_12949436257",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -6.958591,
+    "longitude": 106.488966,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Quicksilver",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Quicksilver&latitude=-6.9585907&longitude=106.4889664",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 13105416220,
+    "name": "SURF Spot #13105416220",
+    "slug": "surf_spot_13105416220_13105416220",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.798919,
+    "longitude": 115.118026,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "check_date": "2025-08-29",
+      "shop": "rental",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=SURF%20Spot%20%2313105416220&latitude=-8.7989194&longitude=115.1180255",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 13200036469,
+    "name": "Dirty Hippies",
+    "slug": "dirty_hippies_13200036469",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.675054,
+    "longitude": 116.772356,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Dirty Hippies",
+      "sport": "surfing",
+      "tourism": "attraction"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Dirty%20Hippies&latitude=-8.675054&longitude=116.7723562",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 13200036470,
+    "name": "Northern Rights",
+    "slug": "northern_rights_13200036470",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.675448,
+    "longitude": 116.767579,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Northern Rights",
+      "sport": "surfing",
+      "tourism": "attraction"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Northern%20Rights&latitude=-8.6754476&longitude=116.7675795",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 13200036471,
+    "name": "Middle Reef",
+    "slug": "middle_reef_13200036471",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": -8.674975,
+    "longitude": 116.769906,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "name": "Middle Reef",
+      "sport": "surfing",
+      "tourism": "attraction"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Middle%20Reef&latitude=-8.6749746&longitude=116.7699062",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 1217683585,
+    "name": "Surf Arena",
+    "slug": "surf_arena_1217683585",
+    "category": "SURF",
+    "sub_category": "surf_break",
+    "latitude": 1.299762,
+    "longitude": 103.83918,
+    "city": "",
+    "country": "",
+    "formatted_address": "",
+    "difficulty": "All Levels",
+    "fee_type": "OPEN",
+    "fee_details": "",
+    "opening_hours": "依現場公告",
+    "surface_type": "Standard",
+    "features": [],
+    "photos": [
+      "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "tags": {
+      "building": "yes",
+      "building:levels": "2",
+      "building:material": "glass",
+      "leisure": "sports_hall",
+      "name": "Surf Arena",
+      "sport": "surfing"
+    },
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Surf%20Arena&latitude=1.2997624&longitude=103.83918",
+    "affiliate_ticket_url": "https://www.klook.com/zh-HK/search/result/?query=%20surf%20experience",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=surfboard%20leash%20wetsuit%20traction%20pad&tag=kait02bc-20"
   }
 ]
