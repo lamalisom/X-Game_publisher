@@ -1,7 +1,8 @@
 ---
-import Layout from '../../../layouts/Layout.astro';
+import Layout from '../../layouts/Layout.astro';
 import fs from 'node:fs';
 import path from 'node:path';
+import rawSpotsStatic from '../../../../public/data/global_spots.json';
 
 interface SpotItem {
   id: string;
@@ -29,55 +30,55 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
   const c = (countryRaw || '').trim().toUpperCase();
   const cityLower = (cityName || '').toLowerCase();
 
-  // 1. 🇨🇭 瑞士 (CH) - 最優先判定瑞士滑雪與極限場地
+  // 1. 🇨🇭 瑞士 (CH)
   if (c === 'CH' || c === 'SWITZERLAND' || c === 'SUI' || c === '瑞士' || 
       name.includes('zermatt') || name.includes('laax') || name.includes('verbier') || name.includes('titlis') || 
       name.includes('jungfrau') || name.includes('saas-fee') || name.includes('moritz') || name.includes('davos') || 
       name.includes('zürich') || name.includes('geneva') || cityLower.includes('zermatt') || cityLower.includes('laax') || 
       (lat >= 45.8 && lat <= 47.9 && lng >= 5.9 && lng <= 10.5)) {
-    let city = cityName || (is_en ? 'Alps' : '阿爾卑斯 Alps');
-    if (name.includes('zermatt') || cityLower.includes('zermatt')) city = is_en ? 'Zermatt' : '策馬特 Zermatt';
-    else if (name.includes('laax') || cityLower.includes('laax')) city = is_en ? 'Laax' : '拉克斯 Laax';
-    else if (name.includes('verbier') || cityLower.includes('verbier')) city = is_en ? 'Verbier' : '韋爾比耶 Verbier';
-    else if (name.includes('titlis')) city = is_en ? 'Engelberg-Titlis' : '鐵力士山 Engelberg-Titlis';
-    else if (name.includes('jungfrau') || name.includes('grindelwald')) city = is_en ? 'Jungfrau' : '少女峰 Jungfrau';
-    else if (name.includes('saas-fee')) city = is_en ? 'Saas-Fee' : '薩斯斐 Saas-Fee';
-    else if (name.includes('moritz')) city = is_en ? 'St. Moritz' : '聖莫里茨 St. Moritz';
-    else if (name.includes('davos')) city = is_en ? 'Davos' : '達沃斯 Davos';
-    else if (name.includes('zürich') || name.includes('zurich')) city = is_en ? 'Zurich' : '蘇黎世 Zurich';
-    else if (name.includes('geneva') || name.includes('genève')) city = is_en ? 'Geneva' : '日內瓦 Geneva';
+    let city = cityName || '阿爾卑斯 Alps';
+    if (name.includes('zermatt') || cityLower.includes('zermatt')) city = '策馬特 Zermatt';
+    else if (name.includes('laax') || cityLower.includes('laax')) city = '拉克斯 Laax';
+    else if (name.includes('verbier') || cityLower.includes('verbier')) city = '韋爾比耶 Verbier';
+    else if (name.includes('titlis')) city = '鐵力士山 Engelberg-Titlis';
+    else if (name.includes('jungfrau') || name.includes('grindelwald')) city = '少女峰 Jungfrau';
+    else if (name.includes('saas-fee')) city = '薩斯斐 Saas-Fee';
+    else if (name.includes('moritz')) city = '聖莫里茨 St. Moritz';
+    else if (name.includes('davos')) city = '達沃斯 Davos';
+    else if (name.includes('zürich') || name.includes('zurich')) city = '蘇黎世 Zurich';
+    else if (name.includes('geneva') || name.includes('genève')) city = '日內瓦 Geneva';
     return { flag: '🇨🇭', countryZH: '瑞士', countryEN: 'Switzerland', cityZH: city, cityEN: city, code: 'CH' };
   }
 
-  // 2. 🇫🇷 法國 (FR) - 判定法國雪場與各滑板公園
+  // 2. 🇫🇷 法國 (FR)
   if (c === 'FR' || c === 'FRANCE' || c === '法國' || 
       name.includes('france') || name.includes('paris') || name.includes('chamonix') || name.includes('avoriaz') || 
       name.includes('tignes') || name.includes('val thorens') || name.includes('les arcs') || name.includes('courchevel') || 
       name.includes('morzine') || name.includes('meribel') || name.includes('marseille') || name.includes('lyon') || 
       (lat >= 41.0 && lat <= 51.5 && lng >= -5.5 && lng <= 9.6)) {
-    let city = cityName || (is_en ? 'Paris' : '巴黎 Paris');
-    if (name.includes('chamonix')) city = is_en ? 'Chamonix' : '夏慕尼 Chamonix';
-    else if (name.includes('avoriaz')) city = is_en ? 'Avoriaz' : '阿沃里亞茲 Avoriaz';
-    else if (name.includes('tignes')) city = is_en ? 'Tignes' : '蒂涅 Tignes';
-    else if (name.includes('val thorens')) city = is_en ? 'Val Thorens' : '蔥仁谷 Val Thorens';
-    else if (name.includes('les arcs')) city = is_en ? 'Les Arcs' : '萊薩爾克 Les Arcs';
-    else if (name.includes('courchevel')) city = is_en ? 'Courchevel' : '高雪維爾 Courchevel';
+    let city = cityName || '巴黎 Paris';
+    if (name.includes('chamonix')) city = '夏慕尼 Chamonix';
+    else if (name.includes('avoriaz')) city = '阿沃里亞茲 Avoriaz';
+    else if (name.includes('tignes')) city = '蒂涅 Tignes';
+    else if (name.includes('val thorens')) city = '蔥仁谷 Val Thorens';
+    else if (name.includes('les arcs')) city = '萊薩爾克 Les Arcs';
+    else if (name.includes('courchevel')) city = '高雪維爾 Courchevel';
     return { flag: '🇫🇷', countryZH: '法國', countryEN: 'France', cityZH: city, cityEN: city, code: 'FR' };
   }
 
-  // 3. 🇸🇪 瑞典 (SE) - 優先判定瑞典四大雪場與城市
+  // 3. 🇸🇪 瑞典 (SE)
   if (c === 'SE' || c === 'SWEDEN' || c === 'SWE' || c === 'SVERIGE' || c === '瑞典' || 
       name.includes('stockholm') || name.includes('hammarby') || name.includes('malmö') || name.includes('malmo') || 
       name.includes('gothenburg') || name.includes('göteborg') || name.includes('åre') || name.includes('sälen') || 
       name.includes('riksgränsen') || cityLower.includes('stockholm') || cityLower.includes('malmö') || cityLower.includes('gothenburg') || 
       (lat >= 55.3 && lat <= 69.1 && lng >= 11.0 && lng <= 24.2 && !(lat >= 58.0 && lat <= 64.0 && lng < 11.0))) {
-    let city = cityName || (is_en ? 'Stockholm' : '斯德哥爾摩 Stockholm');
-    if (name.includes('malmö') || name.includes('malmo') || cityLower.includes('malmö') || cityLower.includes('malmo') || (lat >= 55.5 && lat <= 55.7 && lng >= 12.9 && lng <= 13.1)) city = is_en ? 'Malmö' : '馬爾默 Malmö';
-    else if (name.includes('gothenburg') || name.includes('göteborg') || cityLower.includes('gothenburg') || (lat >= 57.6 && lat <= 57.8 && lng >= 11.8 && lng <= 12.1)) city = is_en ? 'Gothenburg' : '哥德堡 Gothenburg';
-    else if (name.includes('hammarby') || name.includes('stockholm') || cityLower.includes('stockholm') || (lat >= 59.2 && lat <= 59.45 && lng >= 17.8 && lng <= 18.2)) city = is_en ? 'Stockholm' : '斯德哥爾摩 Stockholm';
-    else if (name.includes('åre') || name.includes('are') || cityLower.includes('åre')) city = is_en ? 'Åre' : '奧勒 Åre';
-    else if (name.includes('sälen') || name.includes('salen') || cityLower.includes('sälen')) city = is_en ? 'Sälen' : '薩倫 Sälen';
-    else if (name.includes('riksgränsen') || name.includes('riksgransen')) city = is_en ? 'Riksgränsen' : '國家邊界 Riksgränsen';
+    let city = cityName || '斯德哥爾摩 Stockholm';
+    if (name.includes('malmö') || name.includes('malmo') || cityLower.includes('malmö') || cityLower.includes('malmo') || (lat >= 55.5 && lat <= 55.7 && lng >= 12.9 && lng <= 13.1)) city = '馬爾默 Malmö';
+    else if (name.includes('gothenburg') || name.includes('göteborg') || cityLower.includes('gothenburg') || (lat >= 57.6 && lat <= 57.8 && lng >= 11.8 && lng <= 12.1)) city = '哥德堡 Gothenburg';
+    else if (name.includes('hammarby') || name.includes('stockholm') || cityLower.includes('stockholm') || (lat >= 59.2 && lat <= 59.45 && lng >= 17.8 && lng <= 18.2)) city = '斯德哥爾摩 Stockholm';
+    else if (name.includes('åre') || name.includes('are') || cityLower.includes('åre')) city = '奧勒 Åre';
+    else if (name.includes('sälen') || name.includes('salen') || cityLower.includes('sälen')) city = '薩倫 Sälen';
+    else if (name.includes('riksgränsen') || name.includes('riksgransen')) city = '國家邊界 Riksgränsen';
     return { flag: '🇸🇪', countryZH: '瑞典', countryEN: 'Sweden', cityZH: city, cityEN: city, code: 'SE' };
   }
 
@@ -92,264 +93,278 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
     else if (name.includes('birmingham')) { cityZH = '伯明罕 Birmingham'; cityEN = 'Birmingham'; }
     else if (name.includes('edinburgh')) { cityZH = '愛丁堡 Edinburgh'; cityEN = 'Edinburgh'; }
     else if (name.includes('bristol')) { cityZH = '布里斯托 Bristol'; cityEN = 'Bristol'; }
-    return { flag: '🇬🇧', countryZH: '英國', countryEN: 'UK', cityZH: is_en ? cityEN : cityZH, cityEN, code: 'GB' };
+    return { flag: '🇬🇧', countryZH: '英國', countryEN: 'UK', cityZH, cityEN, code: 'GB' };
   }
 
   // 5. 🇨🇦 加拿大 (CA)
   if (c === 'CA' || c === 'CANADA' || c === '加拿大' || (lat >= 41.7 && lat <= 83.1 && lng >= -141.0 && lng <= -52.6) || name.includes('canada') || name.includes('vancouver') || name.includes('whistler') || name.includes('toronto')) {
-    let city = cityName || (is_en ? 'Vancouver' : '溫哥華 Vancouver');
-    if (name.includes('vancouver')) city = is_en ? 'Vancouver' : '溫哥華 Vancouver';
-    else if (name.includes('whistler')) city = is_en ? 'Whistler' : '惠斯勒 Whistler';
-    else if (name.includes('toronto')) city = is_en ? 'Toronto' : '多倫多 Toronto';
-    else if (name.includes('montreal')) city = is_en ? 'Montreal' : '蒙特婁 Montreal';
+    let city = cityName || '溫哥華 Vancouver';
+    if (name.includes('vancouver')) city = '溫哥華 Vancouver';
+    else if (name.includes('whistler')) city = '惠斯勒 Whistler';
+    else if (name.includes('toronto')) city = '多倫多 Toronto';
+    else if (name.includes('montreal')) city = '蒙特婁 Montreal';
     return { flag: '🇨🇦', countryZH: '加拿大', countryEN: 'Canada', cityZH: city, cityEN: city, code: 'CA' };
   }
 
   // 6. 🇫🇮 芬蘭 (FI)
   if (c === 'FI' || c === 'FINLAND' || c === '芬蘭' || (lat >= 59.8 && lat <= 70.1 && lng >= 20.5 && lng <= 31.6) || name.includes('finland') || name.includes('helsinki')) {
-    let city = cityName || (is_en ? 'Helsinki' : '赫爾辛基 Helsinki');
-    if (name.includes('levi')) city = is_en ? 'Levi' : '列維 Levi';
-    else if (name.includes('ruka')) city = is_en ? 'Ruka' : '魯卡 Ruka';
+    let city = cityName || '赫爾辛基 Helsinki';
+    if (name.includes('levi')) city = '列維 Levi';
+    else if (name.includes('ruka')) city = '魯卡 Ruka';
     return { flag: '🇫🇮', countryZH: '芬蘭', countryEN: 'Finland', cityZH: city, cityEN: city, code: 'FI' };
   }
 
   // 7. 🇳🇴 挪威 (NO)
   if (c === 'NO' || c === 'NORWAY' || c === '挪威' || (lat >= 57.9 && lat <= 71.2 && lng >= 4.5 && lng <= 11.0) || name.includes('norway') || name.includes('oslo') || name.includes('bergen')) {
-    let city = cityName || (is_en ? 'Oslo' : '奧斯陸 Oslo');
-    if (name.includes('bergen')) city = is_en ? 'Bergen' : '卑爾根 Bergen';
-    else if (name.includes('hemsedal')) city = is_en ? 'Hemsedal' : '海姆瑟達爾 Hemsedal';
+    let city = cityName || '奧斯陸 Oslo';
+    if (name.includes('bergen')) city = '卑爾根 Bergen';
+    else if (name.includes('hemsedal')) city = '海姆瑟達爾 Hemsedal';
     return { flag: '🇳🇴', countryZH: '挪威', countryEN: 'Norway', cityZH: city, cityEN: city, code: 'NO' };
   }
 
   // 8. 🇯🇵 日本 (JP)
   if (c === 'JP' || c === 'JAPAN' || c === '日本' || (lat >= 24.0 && lat <= 46.0 && lng >= 122.0 && lng <= 154.0) || name.includes('japan') || name.includes('日本') || name.includes('tokyo') || name.includes('osaka')) {
-    let city = cityName || (is_en ? 'Tokyo' : '東京 Tokyo');
-    if (name.includes('tokyo') || name.includes('東京')) city = is_en ? 'Tokyo' : '東京 Tokyo';
-    else if (name.includes('osaka') || name.includes('大阪')) city = is_en ? 'Osaka' : '大阪 Osaka';
-    else if (name.includes('hokkaido') || name.includes('北海道') || name.includes('niseko')) city = is_en ? 'Hokkaido' : '北海道 Hokkaido';
-    else if (name.includes('hakuba') || name.includes('nagano') || name.includes('白馬')) city = is_en ? 'Nagano Hakuba' : '長野 白馬 Hakuba';
+    let city = cityName || '東京 Tokyo';
+    if (name.includes('tokyo') || name.includes('東京')) city = '東京 Tokyo';
+    else if (name.includes('osaka') || name.includes('大阪')) city = '大阪 Osaka';
+    else if (name.includes('hokkaido') || name.includes('北海道') || name.includes('niseko')) city = '北海道 Hokkaido';
+    else if (name.includes('hakuba') || name.includes('nagano') || name.includes('白馬')) city = '長野 白馬 Hakuba';
     return { flag: '🇯🇵', countryZH: '日本', countryEN: 'Japan', cityZH: city, cityEN: city, code: 'JP' };
   }
 
   // 9. 🇰🇷 韓國 (KR)
   if (c === 'KR' || c === 'KOREA' || c === 'SOUTH KOREA' || c === '韓國' || c === '韩国' || (lat >= 33.0 && lat <= 38.6 && lng >= 125.5 && lng <= 129.8) || name.includes('korea') || name.includes('seoul') || name.includes('busan') || name.includes('jeju')) {
-    let city = cityName || (is_en ? 'Seoul' : '首爾 Seoul');
-    if (name.includes('busan') || (lat >= 35.05 && lat <= 35.35 && lng >= 128.95 && lng <= 129.30)) city = is_en ? 'Busan' : '釜山 Busan';
-    else if (name.includes('jeju') || (lat >= 33.15 && lat <= 33.60 && lng >= 126.15 && lng <= 126.95)) city = is_en ? 'Jeju' : '濟州 Jeju';
+    let city = cityName || '首爾 Seoul';
+    if (name.includes('busan') || (lat >= 35.05 && lat <= 35.35 && lng >= 128.95 && lng <= 129.30)) city = '釜山 Busan';
+    else if (name.includes('jeju') || (lat >= 33.15 && lat <= 33.60 && lng >= 126.15 && lng <= 126.95)) city = '濟州 Jeju';
     return { flag: '🇰🇷', countryZH: '韓國', countryEN: 'Korea', cityZH: city, cityEN: city, code: 'KR' };
   }
 
   // 10. 🇭🇰 香港 (HK)
   if (c === 'HK' || c === 'HONG KONG' || c === 'HONGKONG' || c === '香港' || (lat >= 22.15 && lat <= 22.58 && lng >= 113.80 && lng <= 114.45) || name.includes('hong kong') || name.includes('香港')) {
-    return { flag: '🇭🇰', countryZH: '香港', countryEN: 'Hong Kong', cityZH: cityName || (is_en ? 'Hong Kong' : '香港 Hong Kong'), cityEN: cityName || 'Hong Kong', code: 'HK' };
+    return { flag: '🇭🇰', countryZH: '香港', countryEN: 'Hong Kong', cityZH: cityName || '香港 Hong Kong', cityEN: cityName || 'Hong Kong', code: 'HK' };
   }
 
   // 11. 🇹🇼 台灣 (TW)
   if (c === 'TW' || c === 'TAIWAN' || c === '台灣' || c === '台湾' || (lat >= 21.8 && lat <= 25.4 && lng >= 119.9 && lng <= 122.1) || name.includes('taiwan') || name.includes('台灣')) {
-    let city = cityName || (is_en ? 'Taiwan' : '台灣 Taiwan');
-    if (name.includes('taipei') || name.includes('台北')) city = is_en ? 'Taipei' : '台北 Taipei';
-    else if (name.includes('kaohsiung') || name.includes('高雄')) city = is_en ? 'Kaohsiung' : '高雄 Kaohsiung';
+    let city = cityName || '台灣 Taiwan';
+    if (name.includes('taipei') || name.includes('台北')) city = '台北 Taipei';
+    else if (name.includes('kaohsiung') || name.includes('高雄')) city = '高雄 Kaohsiung';
     return { flag: '🇹🇼', countryZH: '台灣', countryEN: 'Taiwan', cityZH: city, cityEN: city, code: 'TW' };
   }
 
   // 12. 🇺🇸 美國 (US)
   if (c === 'US' || c === 'USA' || c === 'UNITED STATES' || c === '美國' || (lat >= 18.0 && lat <= 72.0 && lng >= -170.0 && lng <= -65.0)) {
-    let city = cityName || (is_en ? 'California' : '加州 California');
-    if (name.includes('california') || name.includes('加州')) city = is_en ? 'California' : '加州 California';
-    else if (name.includes('hawaii') || name.includes('夏威夷')) city = is_en ? 'Hawaii' : '夏威夷 Hawaii';
-    else if (name.includes('new york') || name.includes('紐約')) city = is_en ? 'New York' : '紐約 New York';
+    let city = cityName || '加州 California';
+    if (name.includes('california') || name.includes('加州')) city = '加州 California';
+    else if (name.includes('hawaii') || name.includes('夏威夷')) city = '夏威夷 Hawaii';
+    else if (name.includes('new york') || name.includes('紐約')) city = '紐約 New York';
     return { flag: '🇺🇸', countryZH: '美國', countryEN: 'USA', cityZH: city, cityEN: city, code: 'US' };
   }
 
   // 13. 🇹🇭 泰國 (TH)
   if (c === 'TH' || c === 'THAILAND' || c === '泰國' || (lat >= 5.5 && lat <= 20.5 && lng >= 97.0 && lng <= 106.0) || name.includes('thailand') || name.includes('泰國') || name.includes('bangkok') || name.includes('phuket')) {
-    let city = cityName || (is_en ? 'Bangkok' : '曼谷 Bangkok');
-    if (name.includes('phuket') || name.includes('普吉')) city = is_en ? 'Phuket' : '普吉島 Phuket';
-    else if (name.includes('chiang mai') || name.includes('清邁')) city = is_en ? 'Chiang Mai' : '清邁 Chiang Mai';
+    let city = cityName || '曼谷 Bangkok';
+    if (name.includes('phuket') || name.includes('普吉')) city = '普吉島 Phuket';
+    else if (name.includes('chiang mai') || name.includes('清邁')) city = '清邁 Chiang Mai';
     return { flag: '🇹🇭', countryZH: '泰國', countryEN: 'Thailand', cityZH: city, cityEN: city, code: 'TH' };
   }
 
   // 14. 🇮🇩 印尼 (ID)
   if (c === 'ID' || c === 'INDONESIA' || c === '印尼' || (lat >= -11.0 && lat <= 6.0 && lng >= 95.0 && lng <= 141.0) || name.includes('bali') || name.includes('canggu') || name.includes('uluwatu') || name.includes('峇里島')) {
-    let city = cityName || (is_en ? 'Bali' : '峇里島 Bali');
+    let city = cityName || '峇里島 Bali';
     return { flag: '🇮🇩', countryZH: '印尼', countryEN: 'Indonesia', cityZH: city, cityEN: city, code: 'ID' };
   }
 
   return { flag: '🌐', countryZH: countryRaw || '全球', countryEN: countryRaw || 'Global', cityZH: cityName || '熱點 Spot', cityEN: cityName || 'Spot', code: c || 'OTHER' };
 }
 
-let spots: SpotItem[] = [];
+let rawSpots: any[] = [];
+if (Array.isArray(rawSpotsStatic) && rawSpotsStatic.length > 0) {
+  rawSpots = rawSpotsStatic;
+} else {
+  try {
+    const p = path.resolve(process.cwd(), 'public/data/global_spots.json');
+    if (fs.existsSync(p)) rawSpots = JSON.parse(fs.readFileSync(p, 'utf-8'));
+  } catch (e) {
+    console.error('Fallback load error:', e);
+  }
+}
+
 const hotelAffiliateCid = '1959779';
 
-try {
-  const jsonPath = path.resolve(process.cwd(), 'public/data/global_spots.json');
-  if (fs.existsSync(jsonPath)) {
-    const rawData = fs.readFileSync(jsonPath, 'utf-8');
-    const rawSpots = JSON.parse(rawData);
-    spots = rawSpots.map((s: any) => {
-      const spotLat = s.latitude ?? s.lat ?? 0;
-      const spotLng = s.longitude ?? s.lng ?? 0;
-      const geo = resolveLocation(spotLat, spotLng, s.country || '', s.city || '', s.name || '');
-      const regionTag = `${geo.flag} ${geo.countryEN} · ${geo.cityEN}`;
-      
-      const navUrl = (spotLat && spotLng)
-        ? ('https://www.google.com/maps/dir/?api=1&destination=' + spotLat + ',' + spotLng)
-        : ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((s.name || '') + ' ' + (s.city || '')));
+const spots: SpotItem[] = rawSpots.map((s: any) => {
+  const spotLat = s.latitude ?? s.lat ?? 0;
+  const spotLng = s.longitude ?? s.lng ?? 0;
+  const geo = resolveLocation(spotLat, spotLng, s.country || '', s.city || '', s.name || '');
+  const regionTag = ;
+  
+  const navUrl = (spotLat && spotLng)
+    ? ('https://www.google.com/maps/dir/?api=1&destination=' + spotLat + ',' + spotLng)
+    : ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent((s.name || '') + ' ' + (s.city || '')));
 
-      const hotelUrl = (spotLat && spotLng)
-        ? ('https://www.agoda.com/partners/partnersearch.aspx?cid=' + hotelAffiliateCid + '&latitude=' + spotLat + '&longitude=' + spotLng + '&text=' + encodeURIComponent((s.name || '')) + '&pcs=1')
-        : ('https://www.agoda.com/partners/partnersearch.aspx?cid=' + hotelAffiliateCid + '&city=' + encodeURIComponent((s.city || s.name || '')));
+  const hotelUrl = (spotLat && spotLng)
+    ? ('https://www.agoda.com/partners/partnersearch.aspx?cid=' + hotelAffiliateCid + '&latitude=' + spotLat + '&longitude=' + spotLng + '&text=' + encodeURIComponent((s.name || '')) + '&pcs=1')
+    : ('https://www.agoda.com/partners/partnersearch.aspx?cid=' + hotelAffiliateCid + '&city=' + encodeURIComponent((s.city || s.name || '')));
 
-      // 難度標準化 (ZH)
-      const diffRaw = (s.difficulty || s.level || '').toLowerCase();
-      let difficultyCn = '⚪ All Levels';
-      if (diffRaw.includes('begin') || diffRaw.includes('easy') || diffRaw.includes('初')) difficultyCn = '🟢 Beginner';
-      else if (diffRaw.includes('pro') || diffRaw.includes('adv') || diffRaw.includes('hard') || diffRaw.includes('高') || diffRaw.includes('專')) difficultyCn = '🔴 Advanced / Pro';
-      else if (diffRaw.includes('inter') || diffRaw.includes('med') || diffRaw.includes('中')) difficultyCn = '🟡 Intermediate';
+  // 難度標準化 (ZH)
+  const diffRaw = (s.difficulty || s.level || '').toLowerCase();
+  let difficultyCn = '⚪ 全級別適用';
+  if (diffRaw.includes('begin') || diffRaw.includes('easy') || diffRaw.includes('初')) difficultyCn = '🟢 初級新手';
+  else if (diffRaw.includes('pro') || diffRaw.includes('adv') || diffRaw.includes('hard') || diffRaw.includes('高') || diffRaw.includes('專')) difficultyCn = '🔴 進階專業';
+  else if (diffRaw.includes('inter') || diffRaw.includes('med') || diffRaw.includes('中')) difficultyCn = '🟡 中級玩家';
 
-      // 費用標準化 (ZH)
-      const feeRaw = (s.fee || s.charge || '').toLowerCase();
-      let feeCn = '🆓 Free Entry';
-      if (feeRaw.includes('pay') || feeRaw.includes('paid') || feeRaw.includes('fee') || feeRaw.includes('ticket') || feeRaw.includes('費') || feeRaw.includes('票') || feeRaw.includes('收費')) {
-        feeCn = '🎟️ Paid / Ticket';
-      }
-
-      // 環境標準化 (ZH)
-      const environment = s.indoor ? '🏢 Indoor' : '☀️ Outdoor';
-
-      // 類別標準化 (ZH)
-      const catLower = (s.category || '').toLowerCase();
-      let category = '⚡ 極限運動';
-      let gearQuery = 'skateboarding+gear';
-      let badgeClass = 'bg-orange-500/20 text-orange-400 border-orange-500/30';
-
-      if (catLower.includes('surf') || catLower.includes('浪')) {
-        category = '🏄 SURF';
-        gearQuery = 'surfing+wetsuit+board';
-        badgeClass = 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30';
-      } else if (catLower.includes('skate') || catLower.includes('板')) {
-        category = '🛹 SKATE';
-        gearQuery = 'skateboarding+gear';
-        badgeClass = 'bg-orange-500/20 text-orange-400 border-orange-500/30';
-      } else if (catLower.includes('climb') || catLower.includes('岩')) {
-        category = '🧗 CLIMB';
-        gearQuery = 'climbing+shoes+chalk';
-        badgeClass = 'bg-amber-500/20 text-amber-400 border-amber-500/30';
-      } else if (catLower.includes('bmx') || catLower.includes('車')) {
-        category = '🚲 BMX';
-        gearQuery = 'bmx+bike+helmet';
-        badgeClass = 'bg-purple-500/20 text-purple-400 border-purple-500/30';
-      } else if (catLower.includes('snow') || catLower.includes('雪')) {
-        category = '🏂 SNOW';
-        gearQuery = 'snowboard+goggles+jacket';
-        badgeClass = 'bg-blue-500/20 text-blue-400 border-blue-500/30';
-      }
-
-      const gearUrl = 'https://www.amazon.com/s?k=' + gearQuery + '&tag=xgame-20';
-      const officialUrl = s.website || ('https://www.google.com/search?q=' + encodeURIComponent((s.name || '') + ' official site'));
-      const searchStr = ((s.name || '') + ' ' + geo.countryZH + ' ' + geo.countryEN + ' ' + geo.cityZH + ' ' + geo.cityEN + ' ' + regionTag + ' ' + category + ' ' + (s.category || '')).toLowerCase();
-
-      return {
-        id: s.id || String(Math.random()),
-        name: s.name || '極限運動熱點',
-        category,
-        countryCode: geo.code,
-        city: geo.cityEN,
-        environment,
-        difficultyCn,
-        feeCn,
-        badgeClass,
-        navUrl,
-        hotelUrl,
-        gearUrl,
-        officialUrl,
-        regionTag,
-        searchStr,
-        features: s.features || [],
-        latitude: spotLat,
-        longitude: spotLng,
-      };
-    });
+  // 費用標準化 (ZH)
+  const feeRaw = (s.fee || s.charge || '').toLowerCase();
+  let feeCn = '🆓 免費開放';
+  if (feeRaw.includes('pay') || feeRaw.includes('paid') || feeRaw.includes('fee') || feeRaw.includes('ticket') || feeRaw.includes('費') || feeRaw.includes('票') || feeRaw.includes('收費')) {
+    feeCn = '🎟️ 付費入場';
   }
-} catch (e) {
-  console.error('Error loading spots:', e);
-}
+
+  // 環境標準化 (ZH)
+  const environment = s.indoor ? '🏢 室內' : '☀️ 室外';
+
+  // 類別標準化 (ZH)
+  const catLower = (s.category || '').toLowerCase();
+  let category = '⚡ 極限運動';
+  let gearQuery = 'skateboarding+gear';
+  let badgeClass = 'bg-orange-500/20 text-orange-400 border-orange-500/30';
+
+  if (catLower.includes('surf') || catLower.includes('浪')) {
+    category = '🏄 滑浪 SURF';
+    gearQuery = 'surfing+wetsuit+board';
+    badgeClass = 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30';
+  } else if (catLower.includes('skate') || catLower.includes('板')) {
+    category = '🛹 滑板 SKATE';
+    gearQuery = 'skateboarding+gear';
+    badgeClass = 'bg-orange-500/20 text-orange-400 border-orange-500/30';
+  } else if (catLower.includes('climb') || catLower.includes('岩')) {
+    category = '🧗 攀岩 CLIMB';
+    gearQuery = 'climbing+shoes+chalk';
+    badgeClass = 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+  } else if (catLower.includes('bmx') || catLower.includes('車')) {
+    category = '🚲 BMX 極限單車';
+    gearQuery = 'bmx+bike+helmet';
+    badgeClass = 'bg-purple-500/20 text-purple-400 border-purple-500/30';
+  } else if (catLower.includes('snow') || catLower.includes('雪')) {
+    category = '🏂 滑雪 SNOW';
+    gearQuery = 'snowboard+goggles+jacket';
+    badgeClass = 'bg-blue-500/20 text-blue-400 border-blue-500/30';
+  }
+
+  const gearUrl = 'https://www.amazon.com/s?k=' + gearQuery + '&tag=xgame-20';
+  const officialUrl = s.website || ('https://www.google.com/search?q=' + encodeURIComponent((s.name || '') + ' official site'));
+  const searchStr = ((s.name || '') + ' ' + geo.countryZH + ' ' + geo.countryEN + ' ' + geo.cityZH + ' ' + geo.cityEN + ' ' + regionTag + ' ' + category + ' ' + (s.category || '')).toLowerCase();
+
+  return {
+    id: s.id || String(Math.random()),
+    name: s.name || '極限運動熱點',
+    category,
+    countryCode: geo.code,
+    city: geo.cityZH,
+    environment,
+    difficultyCn,
+    feeCn,
+    badgeClass,
+    navUrl,
+    hotelUrl,
+    gearUrl,
+    officialUrl,
+    regionTag,
+    searchStr,
+    features: s.features || [],
+    latitude: spotLat,
+    longitude: spotLng,
+  };
+});
 
 const totalSpots = spots.length;
 ---
 
-<Layout title="Global Action Sports Spots Radar | Navigation & Directory">
+<Layout title="全球極限運動雷達 | 極限探索地圖">
   <main class="min-h-screen bg-[#0a0a0c] text-gray-100 px-4 py-8 max-w-7xl mx-auto">
-    <!-- 頂部標題區 -->
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 pb-6 border-b border-xborder">
       <div>
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-xorange/10 border border-xorange/30 text-xorange text-xs font-bold uppercase tracking-wider mb-2">
-          <span>⚡ GLOBAL ACTION SPORTS RADAR</span>
-          <span class="w-1.5 h-1.5 rounded-full bg-xorange animate-ping"></span>
+        <div class="flex items-center gap-3 mb-2">
+          <span class="px-3 py-1 bg-xorange/10 border border-xorange/30 text-xorange text-xs font-bold rounded-full uppercase tracking-wider">
+            GLOBAL RADAR
+          </span>
+          <span class="text-xs text-gray-400">即時同步全球 {totalSpots} 個極限熱點</span>
         </div>
-        <h1 class="text-3xl md:text-4xl font-black text-white tracking-tight">
-          Global Action Sports Spots & Map
+        <h1 class="text-3xl sm:text-4xl font-black tracking-tight text-white flex items-center gap-3">
+          極限探索地圖 <span class="text-xorange">SPOTS RADAR</span>
         </h1>
         <p class="text-gray-400 text-sm mt-1">
-          Search over <span id="spots-count-badge" class="font-bold text-xorange">{totalSpots}</span> action sports spots worldwide
+          收錄滑雪度假村、滑板公園、滑浪浪點與攀岩勝地，一鍵取得路線導航與周邊推薦
         </p>
       </div>
-      <div class="flex items-center gap-3">
-        <a href="/spots/map" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-xcard border border-xborder text-xs font-mono text-gray-300 hover:text-white hover:border-cyan-500 transition">
-          <span>🌐 中文版 Chinese</span>
-        </a>
+
+      <div class="flex items-center gap-2 self-start md:self-auto bg-xdark border border-xborder p-1.5 rounded-xl text-xs font-bold">
+        <span class="px-3 py-1.5 rounded-lg bg-xorange text-white shadow">繁體中文</span>
+        <a href="/spots/map/en/" class="px-3 py-1.5 rounded-lg text-gray-400 hover:text-white transition">English</a>
       </div>
     </div>
 
-    <!-- 國家快捷鍵 -->
-    <div class="flex items-center gap-2 overflow-x-auto pb-3 mb-4 scrollbar-none">
-      <button data-country="ALL" class="country-filter-btn active px-3.5 py-1.5 rounded-full text-xs font-bold bg-xorange text-white shadow-lg shadow-xorange/20 transition">🔥 All Countries</button>
-      <button data-country="JP" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇯🇵 Japan</button>
-      <button data-country="KR" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇰🇷 Korea</button>
-      <button data-country="HK" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇭🇰 Hong Kong</button>
-      <button data-country="TW" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇹🇼 Taiwan</button>
-      <button data-country="GB" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇬🇧 UK</button>
-      <button data-country="CA" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇨🇦 Canada</button>
-      <button data-country="US" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇺🇸 USA</button>
-      <button data-country="TH" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇹🇭 Thailand</button>
-      <button data-country="ID" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇮🇩 Indonesia</button>
-      <button data-country="FI" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇫🇮 Finland</button>
-      <button data-country="NO" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇳🇴 Norway</button>
-      <button data-country="SE" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇸🇪 Sweden</button>
-      <button data-country="FR" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇫🇷 France</button>
-      <button data-country="CH" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇨🇭 Switzerland</button>
+    <div class="bg-xcard border border-xborder rounded-2xl p-4 sm:p-6 mb-8 shadow-xl space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="md:col-span-2 relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-gray-400">
+            🔍
+          </span>
+          <input
+            type="text"
+            id="spot-search-input"
+            placeholder="搜尋地點名稱、城市、國家（如：瑞士 Laax、東京、Cornwall、夏慕尼...）"
+            class="w-full pl-10 pr-4 py-2.5 bg-xdark border border-xborder rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-xorange transition"
+          />
+        </div>
+
+        <div>
+          <select
+            id="spot-cat-select"
+            class="w-full px-4 py-2.5 bg-xdark border border-xborder rounded-xl text-sm text-white focus:outline-none focus:border-xorange transition"
+          >
+            <option value="ALL">⚡ 全部運動類別 (All Categories)</option>
+            <option value="SKATE">🛹 滑板 SKATE</option>
+            <option value="SNOW">🏂 滑雪 SNOW</option>
+            <option value="SURF">🏄 滑浪 SURF</option>
+            <option value="CLIMB">🧗 攀岩 CLIMB</option>
+            <option value="BMX">🚲 BMX 極限單車</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-thin text-xs">
+        <span class="text-gray-400 font-bold whitespace-nowrap mr-1">熱門地區：</span>
+        <button data-country="ALL" class="country-filter-btn active px-3.5 py-1.5 rounded-full text-xs font-bold bg-xorange text-white shadow-lg shadow-xorange/20 transition">🔥 全部國家</button>
+        <button data-country="CH" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇨🇭 瑞士</button>
+        <button data-country="FR" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇫🇷 法國</button>
+        <button data-country="SE" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇸🇪 瑞典</button>
+        <button data-country="GB" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇬🇧 英國</button>
+        <button data-country="JP" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇯🇵 日本</button>
+        <button data-country="KR" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇰🇷 韓國</button>
+        <button data-country="HK" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇭🇰 香港</button>
+        <button data-country="TW" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇹🇼 台灣</button>
+        <button data-country="US" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇺🇸 美國</button>
+        <button data-country="CA" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇨🇦 加拿大</button>
+        <button data-country="NO" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇳🇴 挪威</button>
+        <button data-country="FI" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇫🇮 芬蘭</button>
+        <button data-country="TH" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇹🇭 泰國</button>
+        <button data-country="ID" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇮🇩 印尼</button>
+      </div>
     </div>
 
-    <!-- 搜尋與運動分類篩選列 -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-6">
-      <div class="md:col-span-3 relative">
-        <input
-          type="text"
-          id="spot-search-input"
-          placeholder="Search spots, cities, regions (e.g. Bangkok, Phuket, Canggu, Bali, Malmo, Stockholm)..."
-          class="w-full bg-xcard border border-xborder rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-xorange transition shadow-inner"
-        />
-      </div>
-      <div>
-        <select id="spot-cat-select" class="w-full bg-xcard border border-xborder rounded-2xl px-4 py-3 text-sm text-gray-300 focus:outline-none focus:border-xorange transition">
-          <option value="ALL">All Sport Types</option>
-          <option value="skate">🛹 Skatepark</option>
-          <option value="surf">🏄 Surf Spot</option>
-          <option value="climb">🧗 Climbing Gym</option>
-          <option value="bmx">🚲 BMX Track</option>
-          <option value="snow">🏂 Snow Resort</option>
-        </select>
-      </div>
+    <div class="flex items-center justify-between text-xs text-gray-400 mb-4 px-1">
+      <div>顯示場地：<span id="spots-count-badge" class="font-bold text-white">{totalSpots}</span> 處</div>
     </div>
 
-    <!-- 卡片網格列表 -->
     <div id="spots-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {spots.map((spot) => (
         <div class="spot-card flex flex-col justify-between bg-xcard border border-xborder rounded-2xl p-5 hover:border-gray-500 transition shadow-lg" data-search={spot.searchStr} data-country={spot.countryCode}>
           <div>
             <div class="flex items-center justify-between gap-2 mb-3">
               <div class="flex items-center gap-1.5 flex-wrap">
-                <span class={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase border ${spot.badgeClass}`}>
+                <span class={}>
                   {spot.category}
                 </span>
                 <span class="px-2 py-0.5 rounded-full text-[10px] bg-gray-800 text-gray-300 border border-gray-700">
@@ -373,9 +388,9 @@ const totalSpots = spots.length;
             </div>
 
             {spot.features && spot.features.length > 0 && (
-              <div class="flex flex-wrap gap-1 mb-4">
-                {spot.features.slice(0, 3).map((f) => (
-                  <span class="px-2 py-0.5 rounded-md bg-gray-900/60 text-[11px] text-gray-400 border border-xborder/50">
+              <div class="flex flex-wrap gap-1.5 mb-4">
+                {spot.features.slice(0, 3).map((f: string) => (
+                  <span class="text-[10px] text-gray-400 bg-xdark px-2 py-0.5 rounded-md border border-xborder/60">
                     #{f}
                   </span>
                 ))}
@@ -384,28 +399,31 @@ const totalSpots = spots.length;
           </div>
 
           <div class="grid grid-cols-2 gap-2 pt-3 border-t border-xborder/60 text-xs">
-            <a href={spot.navUrl} target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-1 py-2 px-2 rounded-xl bg-xdark hover:bg-xcard border border-xborder text-white font-bold transition text-center shadow-sm">
-              📍 Directions
+            <a
+              href={spot.navUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center justify-center gap-1 py-2 px-2 rounded-xl bg-xdark hover:bg-xcard border border-xborder text-white font-bold transition hover:border-xorange"
+            >
+              🗺️ 路線導航
             </a>
-            <a href={spot.hotelUrl} target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-1 py-2 px-2 rounded-xl bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30 text-blue-300 font-bold transition text-center">
-              🏨 Hotels
-            </a>
-            <a href={spot.gearUrl} target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-1 py-2 px-2 rounded-xl bg-xorange hover:bg-orange-600 text-white font-bold transition text-center shadow-glow-orange">
-              🛒 Gear
-            </a>
-            <a href={spot.officialUrl} target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-1 py-2 px-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/40 border border-emerald-500/30 text-emerald-300 font-bold transition text-center">
-              🌐 Site
+            <a
+              href={spot.hotelUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center justify-center gap-1 py-2 px-2 rounded-xl bg-xdark hover:bg-xcard border border-xborder text-gray-300 font-bold transition hover:text-white hover:border-gray-500"
+            >
+              🏨 周邊住宿
             </a>
           </div>
         </div>
       ))}
     </div>
 
-    <!-- 查無資料提示 -->
     <div id="no-results" class="hidden text-center py-16 bg-xcard border border-xborder rounded-2xl mt-6">
       <div class="text-4xl mb-3">🔍</div>
-      <h3 class="text-lg font-bold text-white mb-1">No spots found</h3>
-      <p class="text-gray-400 text-xs">Try different keywords or reset filters</p>
+      <h3 class="text-lg font-bold text-white mb-1">暫無符合條件的地點</h3>
+      <p class="text-gray-400 text-xs">請嘗試更換關鍵字或重設運動分類與國家篩選</p>
     </div>
   </main>
 
@@ -414,7 +432,7 @@ const totalSpots = spots.length;
       const searchInput = document.getElementById('spot-search-input') as HTMLInputElement;
       const catSelect = document.getElementById('spot-cat-select') as HTMLSelectElement;
       const countryBtns = document.querySelectorAll('.country-filter-btn');
-      const cards = document.querySelectorAll('.spot-card') as NodeListOf<HTMLElement>;
+      const spotCards = document.querySelectorAll('.spot-card') as NodeListOf<HTMLElement>;
       const noResults = document.getElementById('no-results');
       const countBadge = document.getElementById('spots-count-badge');
 
@@ -423,17 +441,17 @@ const totalSpots = spots.length;
       function filterSpots() {
         const query = (searchInput?.value || '').toLowerCase().trim();
         const cat = (catSelect?.value || 'ALL').toLowerCase();
+
         let visibleCount = 0;
 
-        cards.forEach((card) => {
-          const searchData = (card.getAttribute('data-search') || '').toLowerCase();
+        spotCards.forEach((card) => {
+          const searchStr = (card.getAttribute('data-search') || '').toLowerCase();
           const cardCountry = (card.getAttribute('data-country') || '').toUpperCase();
 
-          const matchQuery = !query || searchData.includes(query);
-          const matchCat = cat === 'all' || searchData.includes(cat);
-          const matchCountry = (currentCountry === 'ALL') || (cardCountry === currentCountry);
+          const matchesCat = cat === 'all' || searchStr.includes(cat);
+          const matchesCountry = currentCountry === 'ALL' || cardCountry === currentCountry;
 
-          if (matchQuery && matchCat && matchCountry) {
+          if (matchesQuery && matchesCat && matchesCountry) {
             card.style.display = 'flex';
             visibleCount++;
           } else {
