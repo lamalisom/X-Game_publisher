@@ -7,7 +7,7 @@ interface SpotItem {
   id: string;
   name: string;
   category: string;
-  countryCode: string;
+  countryCode: loc.countryCode
   city: string;
   environment: string;
   difficultyCn: string;
@@ -29,248 +29,128 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
   const c = (countryRaw || '').trim().toUpperCase();
   const cityLower = (cityName || '').toLowerCase();
 
-  // 1. 🇨🇭 瑞士 (CH) - 必須最優先判定（涵蓋 Laax, Zermatt, Verbier, Titlis, Jungfrau, Saas-Fee, St. Moritz, Davos 等）
-  if (c === 'CH' || c === 'SWITZERLAND' || c === 'SUI' || c === '瑞士' || 
-      name.includes('zermatt') || name.includes('laax') || name.includes('verbier') || name.includes('titlis') || 
-      name.includes('jungfrau') || name.includes('saas-fee') || name.includes('moritz') || name.includes('davos') || 
-      name.includes('zürich') || name.includes('geneva') || cityLower.includes('zermatt') || cityLower.includes('laax') || 
-      (lat >= 45.8 && lat <= 47.9 && lng >= 5.9 && lng <= 10.5)) {
-    let city = cityName || '阿爾卑斯 Alps';
-    if (name.includes('zermatt') || cityLower.includes('zermatt')) city = '策馬特 Zermatt';
-    else if (name.includes('laax') || cityLower.includes('laax')) city = '拉克斯 Laax';
-    else if (name.includes('verbier') || cityLower.includes('verbier')) city = '韋爾比耶 Verbier';
-    else if (name.includes('titlis')) city = '鐵力士山 Engelberg-Titlis';
-    else if (name.includes('jungfrau') || name.includes('grindelwald')) city = '少女峰 Jungfrau';
-    else if (name.includes('saas-fee')) city = '薩斯斐 Saas-Fee';
-    else if (name.includes('moritz')) city = '聖莫里茨 St. Moritz';
-    else if (name.includes('davos')) city = '達沃斯 Davos';
-    else if (name.includes('zürich') || name.includes('zurich')) city = '蘇黎世 Zurich';
-    else if (name.includes('geneva') || name.includes('genève')) city = '日內瓦 Geneva';
-    return { flag: '🇨🇭', countryCode: 'CH', countryZH: '瑞士', countryEN: 'Switzerland', cityZH: city, cityEN: city };
+  // 🇨🇭 瑞士 (CH) - 必須優先於法國判定
+  if (c === 'CH' || c === 'SWITZERLAND' || c === 'SUI' || c === '瑞士' || (lat >= 45.8 && lat <= 47.9 && lng >= 5.9 && lng <= 10.5) || name.includes('laax') || name.includes('zermatt') || name.includes('verbier') || name.includes('saas-fee') || name.includes('titlis') || name.includes('davos') || name.includes('st. moritz') || name.includes('jungfrau') || name.includes('grindelwald') || name.includes('matterhorn') || name.includes('switzerland') || name.includes('swiss') || name.includes('zurich') || name.includes('geneva')) {
+    let city = cityName || (is_en ? 'Alps' : '阿爾卑斯 Alps');
+    if (name.includes('laax')) city = 'Laax';
+    else if (name.includes('zermatt')) city = 'Zermatt';
+    else if (name.includes('verbier')) city = 'Verbier';
+    else if (name.includes('saas-fee')) city = 'Saas-Fee';
+    else if (name.includes('titlis') || name.includes('engelberg')) city = 'Engelberg / Titlis';
+    else if (name.includes('davos')) city = 'Davos';
+    else if (name.includes('st. moritz') || name.includes('moritz')) city = 'St. Moritz';
+    else if (name.includes('jungfrau') || name.includes('grindelwald')) city = 'Jungfrau';
+    return { flag: '🇨🇭', countryCode: loc.countryCode, countryZH: '瑞士', countryEN: 'Switzerland', cityZH: city, cityEN: city };
   }
 
-  // 2. 🇸🇪 瑞典 (SE) - 優先判定瑞典四大雪場與城市（Åre, Sälen, Riksgränsen, Hammarbybacken, Stockholm, Malmö, Gothenburg）
-  if (c === 'SE' || c === 'SWEDEN' || c === 'SVERIGE' || c === '瑞典' || 
-      name.includes('stockholm') || name.includes('hammarby') || name.includes('malmö') || name.includes('malmo') || 
-      name.includes('gothenburg') || name.includes('göteborg') || name.includes('åre') || name.includes('sälen') || 
-      name.includes('riksgränsen') || cityLower.includes('stockholm') || cityLower.includes('malmö') || cityLower.includes('gothenburg') || 
-      (lat >= 55.3 && lat <= 69.1 && lng >= 11.0 && lng <= 24.2 && !(lat >= 58.0 && lat <= 64.0 && lng < 11.0))) {
-    let city = cityName || '斯德哥爾摩 Stockholm';
-    if (name.includes('malmö') || name.includes('malmo') || cityLower.includes('malmö') || cityLower.includes('malmo') || (lat >= 55.5 && lat <= 55.7 && lng >= 12.9 && lng <= 13.1)) city = '馬爾默 Malmö';
-    else if (name.includes('gothenburg') || name.includes('göteborg') || cityLower.includes('gothenburg') || (lat >= 57.6 && lat <= 57.8 && lng >= 11.8 && lng <= 12.1)) city = '哥德堡 Gothenburg';
-    else if (name.includes('åre') || name.includes('are')) city = '奧勒 Åre';
-    else if (name.includes('sälen')) city = '塞倫 Sälen';
-    else if (name.includes('riksgränsen')) city = '國家界 Riksgränsen';
-    else if (name.includes('stockholm') || name.includes('hammarby') || cityLower.includes('stockholm') || (lat >= 59.2 && lat <= 59.4 && lng >= 17.9 && lng <= 18.2)) city = '斯德哥爾摩 Stockholm';
-    return { flag: '🇸🇪', countryCode: 'SE', countryZH: '瑞典', countryEN: 'Sweden', cityZH: city, cityEN: city };
+  // 🇫🇷 法國 (FR)
+  if (c === 'FR' || c === 'FRANCE' || c === '法國' || (lat >= 41.0 && lat <= 51.5 && lng >= -5.5 && lng <= 9.6) || name.includes('france') || name.includes('paris') || name.includes('chamonix') || name.includes('avoriaz') || name.includes('tignes') || name.includes('val thorens') || name.includes('les arcs') || name.includes('courchevel') || name.includes('morzine') || name.includes('meribel') || name.includes('marseille') || name.includes('lyon') || name.includes('bordeaux')) {
+    let city = cityName || (is_en ? 'Paris' : '巴黎 Paris');
+    if (name.includes('chamonix')) city = 'Chamonix';
+    else if (name.includes('avoriaz')) city = 'Avoriaz';
+    else if (name.includes('tignes')) city = 'Tignes';
+    else if (name.includes('val thorens')) city = 'Val Thorens';
+    else if (name.includes('les arcs')) city = 'Les Arcs';
+    else if (name.includes('courchevel')) city = 'Courchevel';
+    else if (name.includes('morzine')) city = 'Morzine';
+    else if (name.includes('meribel') || name.includes('méribel')) city = 'Méribel';
+    return { flag: '🇫🇷', countryCode: loc.countryCode, countryZH: '法國', countryEN: 'France', cityZH: city, cityEN: city };
   }
 
-  // 3. 🇫🇷 法國 (FR) - 包含 Chamonix, Avoriaz, Tignes, Val Thorens, Paris, Marseille
-  if (c === 'FR' || c === 'FRANCE' || c === '法國' || 
-      name.includes('paris') || name.includes('marseille') || name.includes('lyon') || name.includes('chamonix') || 
-      name.includes('tignes') || name.includes('val thorens') || name.includes('avoriaz') || (lat >= 41.0 && lat <= 51.5 && lng >= -5.5 && lng <= 9.6)) {
-    let city = cityName || '巴黎 Paris';
-    if (name.includes('chamonix')) city = '霞慕尼 Chamonix';
-    else if (name.includes('avoriaz') || name.includes('stash')) city = '阿沃里亞茲 Avoriaz';
-    else if (name.includes('tignes')) city = '蒂涅 Tignes';
-    else if (name.includes('val thorens') || name.includes('thorens')) city = '托倫斯谷 Val Thorens';
-    else if (name.includes('marseille')) city = '馬賽 Marseille';
-    else if (name.includes('lyon')) city = '里昂 Lyon';
-    return { flag: '🇫🇷', countryCode: 'FR', countryZH: '法國', countryEN: 'France', cityZH: city, cityEN: city };
-  }
-
-  // 4. 🇳🇴 挪威 (NO)
-  if (c === 'NO' || c === 'NORWAY' || c === 'NORGE' || c === '挪威' || 
-      name.includes('oslo') || name.includes('bergen') || name.includes('trondheim') || name.includes('stavanger') || 
-      name.includes('tromsø') || cityLower.includes('oslo') || cityLower.includes('bergen') || (lat >= 57.9 && lat <= 71.2 && lng >= 4.5 && lng <= 11.5)) {
-    let city = cityName || '奧斯陸 Oslo';
-    if (name.includes('bergen') || cityLower.includes('bergen')) city = '卑爾根 Bergen';
-    else if (name.includes('trondheim') || cityLower.includes('trondheim')) city = '特隆赫姆 Trondheim';
-    else if (name.includes('stavanger') || cityLower.includes('stavanger')) city = '斯塔萬格 Stavanger';
-    else if (name.includes('tromsø') || name.includes('tromso')) city = '特羅姆瑟 Tromsø';
-    else if (name.includes('oslo') || cityLower.includes('oslo')) city = '奧斯陸 Oslo';
-    return { flag: '🇳🇴', countryCode: 'NO', countryZH: '挪威', countryEN: 'Norway', cityZH: city, cityEN: city };
-  }
-
-  // 🇰🇷 韓國 (KR)
-  if (c === 'KR' || c === 'KOREA' || c === 'SOUTH KOREA' || c === '韓國' || c === '韩国' || (lat >= 33.0 && lat <= 38.6 && lng >= 125.5 && lng <= 129.8) || name.includes('korea') || name.includes('seoul') || name.includes('busan') || name.includes('jeju') || name.includes('首爾') || name.includes('釜山')) {
-    let city = cityName || '首爾 Seoul';
-    if ((lat >= 37.40 && lat <= 37.70 && lng >= 126.75 && lng <= 127.20) || name.includes('seoul') || name.includes('首爾')) city = '首爾 Seoul';
-    else if ((lat >= 35.05 && lat <= 35.35 && lng >= 128.95 && lng <= 129.30) || name.includes('busan') || name.includes('釜山')) city = '釜山 Busan';
-    else if ((lat >= 33.15 && lat <= 33.60 && lng >= 126.15 && lng <= 126.95) || name.includes('jeju') || name.includes('濟州')) city = '濟州島 Jeju';
-    else if ((lat >= 37.95 && lat <= 38.15 && lng >= 128.60 && lng <= 128.80) || name.includes('yangyang') || name.includes('襄陽')) city = '襄陽 Yangyang';
-    return { flag: '🇰🇷', countryZH: '韓國', countryEN: 'Korea', cityZH: city, cityEN: city, code: 'KR' };
-  }
-
-  // 🇬🇧 英國 (UK / Great Britain) - 12 大極限運動專屬分區
-  if (c === 'GB' || c === 'UK' || c === 'UNITED KINGDOM' || c === 'ENGLAND' || c === 'SCOTLAND' || c === 'WALES' || c === '英國' || (lat >= 49.8 && lat <= 60.9 && lng >= -8.6 && lng <= 1.8) || name.includes('london') || name.includes('cornwall') || name.includes('manchester') || name.includes('scotland') || name.includes('wales')) {
-    let cityZH = '英國 UK';
-    let cityEN = 'UK';
-
-    // 1. 蘇格蘭高地、愛丁堡、格拉斯哥 (Scotland: 55.5N ~ 60.5N)
-    if (lat >= 55.50 || name.includes('scotland') || name.includes('edinburgh') || name.includes('glasgow') || name.includes('cairngorm') || name.includes('glencoe')) {
-      if (name.includes('edinburgh') || (lat >= 55.85 && lat <= 56.05 && lng >= -3.40 && lng <= -3.10)) {
-        cityZH = '蘇格蘭 · 愛丁堡 Edinburgh'; cityEN = 'Scotland · Edinburgh';
-      } else if (name.includes('glasgow') || (lat >= 55.75 && lat <= 55.95 && lng >= -4.40 && lng <= -4.15)) {
-        cityZH = '蘇格蘭 · 格拉斯哥 Glasgow'; cityEN = 'Scotland · Glasgow';
-      } else {
-        cityZH = '蘇格蘭 Scotland'; cityEN = 'Scotland';
-      }
-    }
-    // 2. 康沃爾 & 德文郡 (Cornwall & Devon 滑浪之都: 50.0N ~ 51.3N, -5.8E ~ -2.9E)
-    else if ((lat >= 50.00 && lat <= 51.30 && lng >= -5.80 && lng <= -3.00) || name.includes('cornwall') || name.includes('newquay') || name.includes('fistral') || name.includes('devon') || name.includes('croyde')) {
-      cityZH = '康沃爾/德文 (滑浪聖地) Cornwall'; cityEN = 'Cornwall & Devon (Surf Hub)';
-    }
-    // 3. 布里斯托 & 巴斯 (Bristol / The Wave: 51.30N ~ 51.65N, -2.9E ~ -2.3E)
-    else if ((lat >= 51.30 && lat <= 51.65 && lng >= -2.90 && lng <= -2.30) || name.includes('bristol') || name.includes('the wave')) {
-      cityZH = '布里斯托 Bristol'; cityEN = 'Bristol';
-    }
-    // 4. 大曼徹斯特 & 利物浦 (Manchester & Liverpool: 53.2N ~ 53.7N, -3.1E ~ -2.0E)
-    else if ((lat >= 53.20 && lat <= 53.75 && lng >= -3.15 && lng <= -2.00) || name.includes('manchester') || name.includes('liverpool') || name.includes('graystone') || name.includes('chill factore')) {
-      if (name.includes('liverpool')) { cityZH = '利物浦 Liverpool'; cityEN = 'Liverpool'; }
-      else { cityZH = '曼徹斯特 Manchester'; cityEN = 'Manchester'; }
-    }
-    // 5. 威爾斯 (Wales: 51.3N ~ 53.5N, -5.5E ~ -2.6E)
-    else if ((lng <= -2.70 && lat >= 51.30 && lat <= 53.50) || name.includes('wales') || name.includes('cardiff') || name.includes('swansea') || name.includes('snowdonia')) {
-      cityZH = '威爾斯 Wales'; cityEN = 'Wales';
-    }
-    // 6. 伯明罕 & 西密德蘭 (Birmingham: 52.2N ~ 52.8N, -2.2E ~ -1.4E)
-    else if ((lat >= 52.20 && lat <= 52.80 && lng >= -2.20 && lng <= -1.40) || name.includes('birmingham')) {
-      cityZH = '伯明罕 Birmingham'; cityEN = 'Birmingham';
-    }
-    // 7. 約克郡 / 里茲 & 雪菲爾 (Leeds & Sheffield: 53.3N ~ 54.2N, -2.0E ~ -0.8E)
-    else if ((lat >= 53.30 && lat <= 54.20 && lng >= -2.00 && lng <= -0.80) || name.includes('leeds') || name.includes('sheffield')) {
-      cityZH = '里茲/雪菲爾 Leeds & Sheffield'; cityEN = 'Leeds & Sheffield';
-    }
-    // 8. 布萊頓 & 南海岸 (Brighton: 50.7N ~ 51.2N, -1.6E ~ 0.2E)
-    else if ((lat >= 50.70 && lat <= 51.20 && lng >= -1.60 && lng <= 0.20) || name.includes('brighton') || name.includes('southampton') || name.includes('portsmouth')) {
-      cityZH = '布萊頓/南海岸 Brighton'; cityEN = 'Brighton & South Coast';
-    }
-    // 9. 紐卡索 & 東北大區 (Newcastle: 54.5N ~ 55.8N, -2.2E ~ -1.0E)
-    else if ((lat >= 54.50 && lat <= 55.80 && lng >= -2.20 && lng <= -1.00) || name.includes('newcastle')) {
-      cityZH = '紐卡索 Newcastle'; cityEN = 'Newcastle';
-    }
-    // 10. 諾丁漢 & 東密德蘭 (Nottingham: 52.8N ~ 53.2N, -1.4E ~ -0.5E)
-    else if ((lat >= 52.80 && lat <= 53.20 && lng >= -1.40 && lng <= -0.50) || name.includes('nottingham')) {
-      cityZH = '諾丁漢 Nottingham'; cityEN = 'Nottingham';
-    }
-    // 11. 大倫敦地區 (Greater London: 51.28N ~ 51.70N, -0.52E ~ 0.33E)
-    else if ((lat >= 51.25 && lat <= 51.72 && lng >= -0.55 && lng <= 0.35) || name.includes('london') || name.includes('倫敦') || name.includes('southbank') || name.includes('baysixty6') || name.includes('stockwell')) {
-      cityZH = '倫敦 London'; cityEN = 'London';
-    }
-
-    return { flag: '🇬🇧', countryZH: '英國', countryEN: 'UK', cityZH, cityEN, code: 'GB' };
-  }
-
-  // 🇨🇦 加拿大 (CA)
-  if (c === 'CA' || c === 'CANADA' || c === '加拿大' || (lat >= 41.7 && lat <= 83.1 && lng >= -141.0 && lng <= -52.6) || name.includes('canada') || name.includes('vancouver') || name.includes('whistler') || name.includes('toronto')) {
-    let city = cityName || '溫哥華 Vancouver';
-    if ((lat >= 49.15 && lat <= 49.35 && lng >= -123.30 && lng <= -122.95) || name.includes('vancouver') || name.includes('溫哥華')) city = '溫哥華 Vancouver';
-    else if ((lat >= 50.05 && lat <= 50.20 && lng >= -123.05 && lng <= -122.85) || name.includes('whistler') || name.includes('惠斯勒')) city = '惠斯勒 Whistler';
-    else if ((lat >= 49.05 && lat <= 49.25 && lng >= -125.95 && lng <= -125.70) || name.includes('tofino') || name.includes('托菲諾')) city = '托菲諾 Tofino';
-    else if ((lat >= 43.55 && lat <= 43.85 && lng >= -79.60 && lng <= -79.20) || name.includes('toronto') || name.includes('多倫多')) city = '多倫多 Toronto';
-    else if ((lat >= 45.40 && lat <= 45.70 && lng >= -73.95 && lng <= -73.45) || name.includes('montreal') || name.includes('蒙特婁')) city = '蒙特婁 Montreal';
-    else if ((lat >= 51.10 && lat <= 51.25 && lng >= -115.65 && lng <= -115.50) || name.includes('banff') || name.includes('班夫')) city = '班夫 Banff';
-    return { flag: '🇨🇦', countryZH: '加拿大', countryEN: 'Canada', cityZH: city, cityEN: city, code: 'CA' };
-  }
-
-  // 🇫🇮 芬蘭 (FI)
-  if (c === 'FI' || c === 'FINLAND' || c === '芬蘭' || (lat >= 59.8 && lat <= 70.1 && lng >= 20.5 && lng <= 31.6) || name.includes('finland') || name.includes('helsinki') || name.includes('芬蘭')) {
-    let city = cityName || '赫爾辛基 Helsinki';
-    if ((lat >= 60.10 && lat <= 60.30 && lng >= 24.80 && lng <= 25.15) || name.includes('helsinki') || name.includes('赫爾辛基')) city = '赫爾辛基 Helsinki';
-    else if ((lat >= 61.45 && lat <= 61.55 && lng >= 23.70 && lng <= 23.90) || name.includes('tampere') || name.includes('坦佩雷')) city = '坦佩雷 Tampere';
-    else if ((lat >= 66.45 && lat <= 66.55 && lng >= 25.65 && lng <= 25.85) || name.includes('rovaniemi')) city = '羅瓦涅米 Rovaniemi';
-    return { flag: '🇫🇮', countryZH: '芬蘭', countryEN: 'Finland', cityZH: city, cityEN: city, code: 'FI' };
+  // 🇸🇪 瑞典 (SE) - 必須優先於挪威判定
+  if (c === 'SE' || c === 'SWEDEN' || c === 'SWE' || c === '瑞典' || (lat >= 55.3 && lat <= 69.1 && lng >= 11.0 && lng <= 24.2) || name.includes('sweden') || name.includes('stockholm') || name.includes('gothenburg') || name.includes('göteborg') || name.includes('malmö') || name.includes('malmo') || name.includes('åre') || name.includes('sälen') || name.includes('riksgränsen') || name.includes('hammarbybacken') || name.includes('uppsala') || name.includes('umeå')) {
+    let city = cityName || (is_en ? 'Stockholm' : '斯德哥爾摩 Stockholm');
+    if (name.includes('hammarbybacken') || name.includes('stockholm') || cityLower.includes('stockholm') || (lat >= 59.2 && lat <= 59.45 && lng >= 17.8 && lng <= 18.2)) city = is_en ? 'Stockholm' : '斯德哥爾摩 Stockholm';
+    else if (name.includes('åre') || name.includes('are') || cityLower.includes('åre')) city = 'Åre';
+    else if (name.includes('sälen') || name.includes('salen') || cityLower.includes('sälen')) city = 'Sälen';
+    else if (name.includes('riksgränsen') || name.includes('riksgransen')) city = 'Riksgränsen';
+    else if (name.includes('gothenburg') || name.includes('göteborg') || cityLower.includes('gothenburg') || (lat >= 57.6 && lat <= 57.8 && lng >= 11.8 && lng <= 12.1)) city = is_en ? 'Gothenburg' : '哥德堡 Gothenburg';
+    else if (name.includes('malmö') || name.includes('malmo') || cityLower.includes('malmo') || (lat >= 55.5 && lat <= 55.7 && lng >= 12.9 && lng <= 13.1)) city = is_en ? 'Malmö' : '馬爾默 Malmö';
+    return { flag: '🇸🇪', countryCode: loc.countryCode, countryZH: '瑞典', countryEN: 'Sweden', cityZH: city, cityEN: city };
   }
 
   // 🇳🇴 挪威 (NO)
-  if (c === 'NO' || c === 'NORWAY' || c === '挪威' || (lat >= 57.9 && lat <= 71.2 && lng >= 4.6 && lng <= 31.1) || name.includes('norway') || name.includes('oslo') || name.includes('bergen') || name.includes('lofoten')) {
-    let city = cityName || '奧斯陸 Oslo';
-    if ((lat >= 59.85 && lat <= 60.05 && lng >= 10.60 && lng <= 10.90) || name.includes('oslo') || name.includes('奧斯陸')) city = '奧斯陸 Oslo';
-    else if ((lat >= 60.35 && lat <= 60.45 && lng >= 5.25 && lng <= 5.40) || name.includes('bergen') || name.includes('卑爾根')) city = '卑爾根 Bergen';
-    else if ((lat >= 67.80 && lat <= 68.60 && lng >= 12.80 && lng <= 15.20) || name.includes('lofoten') || name.includes('羅弗敦')) city = '羅弗敦 Lofoten';
-    else if ((lat >= 58.90 && lat <= 59.05 && lng >= 5.60 && lng <= 5.80) || name.includes('stavanger')) city = '斯塔萬格 Stavanger';
-    return { flag: '🇳🇴', countryZH: '挪威', countryEN: 'Norway', cityZH: city, cityEN: city, code: 'NO' };
+  if (c === 'NO' || c === 'NORWAY' || c === 'NOR' || c === '挪威' || (lat >= 57.9 && lat <= 71.2 && lng >= 4.5 && lng <= 11.0) || name.includes('norway') || name.includes('oslo') || name.includes('bergen') || name.includes('trondheim') || name.includes('stavanger') || name.includes('tromsø') || name.includes('hemsedal') || name.includes('trysil') || name.includes('hafjell')) {
+    let city = cityName || (is_en ? 'Oslo' : '奧斯陸 Oslo');
+    if (name.includes('hemsedal')) city = 'Hemsedal';
+    else if (name.includes('trysil')) city = 'Trysil';
+    else if (name.includes('hafjell')) city = 'Hafjell';
+    return { flag: '🇳🇴', countryCode: loc.countryCode, countryZH: '挪威', countryEN: 'Norway', cityZH: city, cityEN: city };
   }
 
-  // 🇯🇵 日本
-  if (c === 'JP' || c === 'JAPAN' || c === '日本' || (lat >= 24.0 && lat <= 46.0 && lng >= 122.0 && lng <= 154.0) || name.includes('japan') || name.includes('日本') || name.includes('tokyo') || name.includes('osaka')) {
-    let city = cityName || '東京 Tokyo';
-    if (name.includes('tokyo') || name.includes('東京')) city = '東京 Tokyo';
-    else if (name.includes('osaka') || name.includes('大阪')) city = '大阪 Osaka';
-    else if (name.includes('kanagawa') || name.includes('神奈川') || name.includes('shonan')) city = '神奈川/湘南 Shonan';
-    else if (name.includes('okinawa') || name.includes('沖繩')) city = '沖繩 Okinawa';
-    else if (name.includes('hokkaido') || name.includes('北海道') || name.includes('niseko')) city = '北海道 Hokkaido';
-    return { flag: '🇯🇵', countryZH: '日本', countryEN: 'Japan', cityZH: city, cityEN: city, code: 'JP' };
+  // 🇫🇮 芬蘭 (FI)
+  if (c === 'FI' || c === 'FINLAND' || c === 'FIN' || c === '芬蘭' || (lat >= 59.7 && lat <= 70.1 && lng >= 20.6 && lng <= 31.6) || name.includes('finland') || name.includes('helsinki') || name.includes('levi') || name.includes('ruka')) {
+    let city = cityName || (is_en ? 'Helsinki' : '赫爾辛基 Helsinki');
+    if (name.includes('levi')) city = 'Levi';
+    else if (name.includes('ruka')) city = 'Ruka';
+    return { flag: '🇫🇮', countryCode: loc.countryCode, countryZH: '芬蘭', countryEN: 'Finland', cityZH: city, cityEN: city };
   }
 
-  // 🇭🇰 香港
-  if (c === 'HK' || c === 'HONG KONG' || c === 'HONGKONG' || c === '香港' || (lat >= 22.15 && lat <= 22.58 && lng >= 113.80 && lng <= 114.45) || name.includes('hong kong') || name.includes('香港')) {
-    return { flag: '🇭🇰', countryZH: '香港', countryEN: 'Hong Kong', cityZH: cityName || '香港 Hong Kong', cityEN: cityName || 'Hong Kong', code: 'HK' };
+  // 🇯🇵 日本 (JP)
+  if (c === 'JP' || c === 'JAPAN' || c === '日本' || (lat >= 24.0 && lat <= 46.0 && lng >= 122.5 && lng <= 154.0) || name.includes('japan') || name.includes('tokyo') || name.includes('osaka') || name.includes('hokkaido') || name.includes('niseko') || name.includes('hakuba') || name.includes('nagano')) {
+    let city = cityName || (is_en ? 'Tokyo' : '東京 Tokyo');
+    if (name.includes('niseko') || name.includes('hokkaido')) city = is_en ? 'Hokkaido' : '北海道 Hokkaido';
+    else if (name.includes('hakuba') || name.includes('nagano')) city = is_en ? 'Nagano / Hakuba' : '長野 白馬 Hakuba';
+    return { flag: '🇯🇵', countryCode: loc.countryCode, countryZH: '日本', countryEN: 'Japan', cityZH: city, cityEN: city };
   }
 
-  // 🇹🇼 台灣
-  if (c === 'TW' || c === 'TAIWAN' || c === '台灣' || c === '台湾' || (lat >= 21.8 && lat <= 25.4 && lng >= 119.9 && lng <= 122.1) || name.includes('taiwan') || name.includes('台灣')) {
-    let city = cityName || '台灣 Taiwan';
-    if (name.includes('taipei') || name.includes('台北')) city = '台北 Taipei';
-    else if (name.includes('yilan') || name.includes('宜蘭')) city = '宜蘭 Yilan';
-    else if (name.includes('taitung') || name.includes('台東')) city = '台東 Taitung';
-    else if (name.includes('kenting') || name.includes('墾丁')) city = '墾丁 Kenting';
-    return { flag: '🇹🇼', countryZH: '台灣', countryEN: 'Taiwan', cityZH: city, cityEN: city, code: 'TW' };
+  // 🇰🇷 韓國 (KR)
+  if (c === 'KR' || c === 'KOREA' || c === 'SOUTH KOREA' || c === '韓國' || (lat >= 33.0 && lat <= 38.6 && lng >= 125.5 && lng <= 129.8) || name.includes('korea') || name.includes('seoul') || name.includes('busan') || name.includes('jeju')) {
+    let city = cityName || (is_en ? 'Seoul' : '首爾 Seoul');
+    if (name.includes('busan') || (lat >= 35.05 && lat <= 35.35 && lng >= 128.95 && lng <= 129.30)) city = is_en ? 'Busan' : '釜山 Busan';
+    else if (name.includes('jeju') || (lat >= 33.15 && lat <= 33.60 && lng >= 126.15 && lng <= 126.95)) city = is_en ? 'Jeju' : '濟州 Jeju';
+    return { flag: '🇰🇷', countryCode: loc.countryCode, countryZH: '韓國', countryEN: 'Korea', cityZH: city, cityEN: city };
   }
 
-  // 🇺🇸 美國
-  if (c === 'US' || c === 'USA' || c === 'UNITED STATES' || c === '美國' || (lat >= 18.0 && lat <= 72.0 && lng >= -170.0 && lng <= -65.0)) {
-    let city = cityName || '加州 California';
-    if (name.includes('california') || name.includes('加州')) city = '加州 California';
-    else if (name.includes('hawaii') || name.includes('夏威夷')) city = '夏威夷 Hawaii';
-    else if (name.includes('new york') || name.includes('紐約')) city = '紐約 New York';
-    return { flag: '🇺🇸', countryZH: '美國', countryEN: 'USA', cityZH: city, cityEN: city, code: 'US' };
+  // 🇭🇰 香港 (HK)
+  if (c === 'HK' || c === 'HONG KONG' || c === '香港' || (lat >= 22.15 && lat <= 22.60 && lng >= 113.80 && lng <= 114.45) || name.includes('hong kong') || name.includes('hongkong') || name.includes('香港')) {
+    return { flag: '🇭🇰', countryCode: loc.countryCode, countryZH: '香港', countryEN: 'Hong Kong', cityZH: is_en ? 'Hong Kong' : '香港 Hong Kong', cityEN: 'Hong Kong' };
   }
 
-  // 🇹🇭 泰國
-  if (c === 'TH' || c === 'THAILAND' || c === '泰國' || (lat >= 5.5 && lat <= 20.5 && lng >= 97.0 && lng <= 106.0) || name.includes('thailand') || name.includes('泰國') || name.includes('bangkok') || name.includes('phuket')) {
-    let city = cityName || '曼谷 Bangkok';
-    if ((lat >= 7.70 && lat <= 8.35 && lng >= 98.20 && lng <= 98.50) || name.includes('phuket') || name.includes('普吉')) city = '普吉島 Phuket';
-    else if ((lat >= 18.50 && lat <= 19.15 && lng >= 98.70 && lng <= 99.30) || name.includes('chiang mai') || name.includes('清邁')) city = '清邁 Chiang Mai';
-    else if ((lat >= 13.50 && lat <= 14.15 && lng >= 100.20 && lng <= 100.95) || name.includes('bangkok') || name.includes('曼谷')) city = '曼谷 Bangkok';
-    else if ((lat >= 12.60 && lat <= 13.15 && lng >= 100.75 && lng <= 101.40) || name.includes('pattaya') || name.includes('芭達雅')) city = '芭達雅 Pattaya';
-    else if ((lat >= 9.30 && lat <= 9.90 && lng >= 99.80 && lng <= 100.25) || name.includes('samui') || name.includes('蘇梅')) city = '蘇梅島 Koh Samui';
-    return { flag: '🇹🇭', countryZH: '泰國', countryEN: 'Thailand', cityZH: city, cityEN: city, code: 'TH' };
+  // 🇹🇼 台灣 (TW)
+  if (c === 'TW' || c === 'TAIWAN' || c === '台灣' || (lat >= 21.8 && lat <= 25.4 && lng >= 119.9 && lng <= 122.1) || name.includes('taiwan') || name.includes('taipei') || name.includes('kaohsiung') || name.includes('台灣')) {
+    let city = cityName || (is_en ? 'Taipei' : '台北 Taipei');
+    if (name.includes('kaohsiung') || name.includes('高雄')) city = is_en ? 'Kaohsiung' : '高雄 Kaohsiung';
+    return { flag: '🇹🇼', countryCode: loc.countryCode, countryZH: '台灣', countryEN: 'Taiwan', cityZH: city, cityEN: city };
   }
 
-  // 🇮🇩 印尼
-  if (c === 'ID' || c === 'INDONESIA' || c === '印尼' || (lat >= -11.0 && lat <= 6.0 && lng >= 95.0 && lng <= 141.0) || name.includes('bali') || name.includes('canggu') || name.includes('uluwatu') || name.includes('峇里島')) {
-    let city = cityName || '峇里島 Bali';
-    if (lat >= -8.95 && lat <= -8.00 && lng >= 114.40 && lng <= 115.80) {
-      if ((lat >= -8.75 && lat <= -8.55 && lng >= 115.10 && lng <= 115.25) || name.includes('canggu') || name.includes('kuta') || name.includes('蒼古')) city = '峇里島 · 蒼古/庫塔 Canggu';
-      else if ((lat >= -8.89 && lat <= -8.76 && lng >= 115.05 && lng <= 115.20) || name.includes('uluwatu') || name.includes('烏魯瓦圖')) city = '峇里島 · 烏魯瓦圖 Uluwatu';
-    } else if (name.includes('lombok') || name.includes('龍目')) city = '龍目島 Lombok';
-    else if (name.includes('mentawai') || name.includes('明打威')) city = '明打威 Mentawai';
-    return { flag: '🇮🇩', countryZH: '印尼', countryEN: 'Indonesia', cityZH: city, cityEN: city, code: 'ID' };
+  // 🇬🇧 英國 (GB)
+  if (c === 'GB' || c === 'UK' || c === 'UNITED KINGDOM' || c === '英國' || (lat >= 49.8 && lat <= 60.9 && lng >= -8.6 && lng <= 1.8) || name.includes('london') || name.includes('manchester') || name.includes('uk')) {
+    let city = cityName || (is_en ? 'London' : '倫敦 London');
+    return { flag: '🇬🇧', countryCode: loc.countryCode, countryZH: '英國', countryEN: 'UK', cityZH: city, cityEN: city };
   }
 
-  // 🇸🇪 瑞典
-  if (c === 'SE' || c === 'SWEDEN' || c === '瑞典' || (lat >= 55.0 && lat <= 69.5 && lng >= 11.0 && lng <= 24.5) || name.includes('sweden') || name.includes('瑞典') || name.includes('stockholm')) {
-    let city = cityName || '斯德哥爾摩 Stockholm';
-    if ((lat >= 55.40 && lat <= 55.80 && lng >= 12.70 && lng <= 13.40) || name.includes('malmö') || name.includes('malmo') || name.includes('stapelbädd')) city = '馬爾默 Malmö';
-    else if ((lat >= 57.50 && lat <= 57.90 && lng >= 11.70 && lng <= 12.35) || name.includes('gothenburg') || name.includes('göteborg')) city = '哥德堡 Gothenburg';
-    else if ((lat >= 59.05 && lat <= 59.65 && lng >= 17.60 && lng <= 18.50) || name.includes('stockholm') || name.includes('斯德哥爾摩')) city = '斯德哥爾摩 Stockholm';
-    return { flag: '🇸🇪', countryZH: '瑞典', countryEN: 'Sweden', cityZH: city, cityEN: city, code: 'SE' };
+  // 🇺🇸 美國 (US)
+  if (c === 'US' || c === 'USA' || c === 'UNITED STATES' || c === '美國' || (lat >= 24.0 && lat <= 50.0 && lng >= -125.0 && lng <= -66.0) || name.includes('california') || name.includes('colorado') || name.includes('usa')) {
+    let city = cityName || (is_en ? 'California' : '加州 California');
+    return { flag: '🇺🇸', countryCode: loc.countryCode, countryZH: '美國', countryEN: 'USA', cityZH: city, cityEN: city };
   }
 
-  // 🇨🇭 瑞士
-  if (c === 'CH' || c === 'SWITZERLAND' || c === '瑞士' || (lat >= 45.8 && lat <= 47.9 && lng >= 5.9 && lng <= 10.5)) {
-    return { flag: '🇨🇭', countryZH: '瑞士', countryEN: 'Switzerland', cityZH: cityName || '阿爾卑斯 Alps', cityEN: cityName || 'Alps', code: 'CH' }
-  // 🇫🇷 法國
-  if (c === 'FR' || c === 'FRANCE' || c === '法國' || (lat >= 41.0 && lat <= 51.5 && lng >= -5.5 && lng <= 10.0) || name.includes('france')) {
-    return { flag: '🇫🇷', countryZH: '法國', countryEN: 'France', cityZH: cityName || '巴黎 Paris', cityEN: cityName || 'Paris', code: 'FR' };
+  // 🇦🇺 澳洲 (AU)
+  if (c === 'AU' || c === 'AUSTRALIA' || c === '澳洲' || (lat >= -44.0 && lat <= -10.0 && lng >= 113.0 && lng <= 154.0) || name.includes('sydney') || name.includes('melbourne') || name.includes('australia')) {
+    let city = cityName || (is_en ? 'Sydney' : '雪梨 Sydney');
+    return { flag: '🇦🇺', countryCode: loc.countryCode, countryZH: '澳洲', countryEN: 'Australia', cityZH: city, cityEN: city };
   }
 
-  ;
+  // 🇮🇩 印尼 (ID)
+  if (c === 'ID' || c === 'INDONESIA' || c === '印尼' || (lat >= -11.0 && lat <= 6.0 && lng >= 95.0 && lng <= 141.0) || name.includes('bali') || name.includes('canggu') || name.includes('indonesia')) {
+    let city = cityName || (is_en ? 'Bali' : '峇里島 Bali');
+    return { flag: '🇮🇩', countryCode: loc.countryCode, countryZH: '印尼', countryEN: 'Indonesia', cityZH: city, cityEN: city };
   }
 
-  return { flag: '🌐', countryZH: countryRaw || '全球', countryEN: countryRaw || 'Global', cityZH: cityName || '熱點 Spot', cityEN: cityName || 'Spot', code: c || 'OTHER' };
+  // 🇹🇭 泰國 (TH)
+  if (c === 'TH' || c === 'THAILAND' || c === '泰國' || (lat >= 5.6 && lat <= 20.5 && lng >= 97.3 && lng <= 105.7) || name.includes('thailand') || name.includes('bangkok') || name.includes('phuket')) {
+    let city = cityName || (is_en ? 'Bangkok' : '曼谷 Bangkok');
+    return { flag: '🇹🇭', countryCode: loc.countryCode, countryZH: '泰國', countryEN: 'Thailand', cityZH: city, cityEN: city };
+  }
+
+  // 🇨🇦 加拿大 (CA)
+  if (c === 'CA' || c === 'CANADA' || c === '加拿大' || (lat >= 41.7 && lat <= 83.1 && lng >= -141.0 && lng <= -52.6) || name.includes('canada') || name.includes('whistler') || name.includes('vancouver')) {
+    let city = cityName || (is_en ? 'Vancouver' : '溫哥華 Vancouver');
+    return { flag: '🇨🇦', countryCode: loc.countryCode, countryZH: '加拿大', countryEN: 'Canada', cityZH: city, cityEN: city };
+  }
+
+  return { flag: '🌍', countryCode: loc.countryCode, countryZH: cityName || c || '全球', countryEN: cityName || c || 'Global', cityZH: cityName || '全球', cityEN: cityName || 'Global' };
 }
 
 let spots: SpotItem[] = [];
@@ -348,7 +228,7 @@ try {
         id: s.id || String(Math.random()),
         name: s.name || '極限運動熱點',
         category,
-        countryCode: geo.code,
+        countryCode: loc.countryCode,
         city: geo.cityEN,
         environment,
         difficultyCn,
@@ -440,7 +320,7 @@ const totalSpots = spots.length;
     <!-- 卡片網格列表 -->
     <div id="spots-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {spots.map((spot) => (
-        <div class="spot-card flex flex-col justify-between bg-xcard border border-xborder rounded-2xl p-5 hover:border-gray-500 transition shadow-lg" data-search={spot.searchStr} data-country={spot.countryCode}>
+        <div class="spot-card flex flex-col justify-between bg-xcard border border-xborder rounded-2xl p-5 hover:border-gray-500 transition shadow-lg" data-search={spot.searchStr} data-country={item.countryCode}>
           <div>
             <div class="flex items-center justify-between gap-2 mb-3">
               <div class="flex items-center gap-1.5 flex-wrap">
