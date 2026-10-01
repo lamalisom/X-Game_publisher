@@ -28,7 +28,7 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
   const c = (countryRaw || '').trim().toUpperCase();
   const cityLower = (cityName || '').toLowerCase();
 
-  // 1. 🇨🇭 瑞士 (CH)
+  // 1. 🇨🇭 Switzerland (CH)
   if (c === 'CH' || c === 'SWITZERLAND' || c === 'SUI' || c === '瑞士' || 
       name.includes('zermatt') || name.includes('laax') || name.includes('verbier') || name.includes('titlis') || 
       name.includes('jungfrau') || name.includes('saas-fee') || name.includes('moritz') || name.includes('davos') || 
@@ -48,7 +48,7 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
     return { flag: '🇨🇭', countryZH: '瑞士', countryEN: 'Switzerland', cityZH: city, cityEN: city, code: 'CH' };
   }
 
-  // 2. 🇫🇷 法國 (FR)
+  // 2. 🇫🇷 France (FR)
   if (c === 'FR' || c === 'FRANCE' || c === '法國' || 
       name.includes('france') || name.includes('paris') || name.includes('chamonix') || name.includes('avoriaz') || 
       name.includes('tignes') || name.includes('val thorens') || name.includes('les arcs') || name.includes('courchevel') || 
@@ -64,7 +64,7 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
     return { flag: '🇫🇷', countryZH: '法國', countryEN: 'France', cityZH: city, cityEN: city, code: 'FR' };
   }
 
-  // 3. 🇸🇪 瑞典 (SE)
+  // 3. 🇸🇪 Sweden (SE)
   if (c === 'SE' || c === 'SWEDEN' || c === 'SWE' || c === 'SVERIGE' || c === '瑞典' || 
       name.includes('stockholm') || name.includes('hammarby') || name.includes('malmö') || name.includes('malmo') || 
       name.includes('gothenburg') || name.includes('göteborg') || name.includes('åre') || name.includes('sälen') || 
@@ -80,7 +80,7 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
     return { flag: '🇸🇪', countryZH: '瑞典', countryEN: 'Sweden', cityZH: city, cityEN: city, code: 'SE' };
   }
 
-  // 4. 🇬🇧 英國 (GB)
+  // 4. 🇬🇧 UK (GB)
   if (c === 'GB' || c === 'UK' || c === 'UNITED KINGDOM' || c === '英國' || 
       (lat >= 49.8 && lat <= 60.9 && lng >= -8.6 && lng <= 1.8) || 
       name.includes('london') || name.includes('manchester') || name.includes('birmingham') || name.includes('edinburgh') || name.includes('uk')) {
@@ -94,7 +94,7 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
     return { flag: '🇬🇧', countryZH: '英國', countryEN: 'UK', cityZH, cityEN, code: 'GB' };
   }
 
-  // 5. 🇨🇦 加拿大 (CA)
+  // 5. 🇨🇦 Canada (CA)
   if (c === 'CA' || c === 'CANADA' || c === '加拿大' || (lat >= 41.7 && lat <= 83.1 && lng >= -141.0 && lng <= -52.6) || name.includes('canada') || name.includes('vancouver') || name.includes('whistler') || name.includes('toronto')) {
     let city = cityName || '溫哥華 Vancouver';
     if (name.includes('vancouver')) city = '溫哥華 Vancouver';
@@ -104,7 +104,7 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
     return { flag: '🇨🇦', countryZH: '加拿大', countryEN: 'Canada', cityZH: city, cityEN: city, code: 'CA' };
   }
 
-  // 6. 🇫🇮 芬蘭 (FI)
+  // 6. 🇫🇮 Finland (FI)
   if (c === 'FI' || c === 'FINLAND' || c === '芬蘭' || (lat >= 59.8 && lat <= 70.1 && lng >= 20.5 && lng <= 31.6) || name.includes('finland') || name.includes('helsinki')) {
     let city = cityName || '赫爾辛基 Helsinki';
     if (name.includes('levi')) city = '列維 Levi';
@@ -112,7 +112,7 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
     return { flag: '🇫🇮', countryZH: '芬蘭', countryEN: 'Finland', cityZH: city, cityEN: city, code: 'FI' };
   }
 
-  // 7. 🇳🇴 挪威 (NO)
+  // 7. 🇳🇴 Norway (NO)
   if (c === 'NO' || c === 'NORWAY' || c === '挪威' || (lat >= 57.9 && lat <= 71.2 && lng >= 4.5 && lng <= 11.0) || name.includes('norway') || name.includes('oslo') || name.includes('bergen')) {
     let city = cityName || '奧斯陸 Oslo';
     if (name.includes('bergen')) city = '卑爾根 Bergen';
@@ -120,7 +120,7 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
     return { flag: '🇳🇴', countryZH: '挪威', countryEN: 'Norway', cityZH: city, cityEN: city, code: 'NO' };
   }
 
-  // 8. 🇯🇵 日本 (JP)
+  // 8. 🇯🇵 Japan (JP)
   if (c === 'JP' || c === 'JAPAN' || c === '日本' || (lat >= 24.0 && lat <= 46.0 && lng >= 122.0 && lng <= 154.0) || name.includes('japan') || name.includes('日本') || name.includes('tokyo') || name.includes('osaka')) {
     let city = cityName || '東京 Tokyo';
     if (name.includes('tokyo') || name.includes('東京')) city = '東京 Tokyo';
@@ -130,7 +130,7 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
     return { flag: '🇯🇵', countryZH: '日本', countryEN: 'Japan', cityZH: city, cityEN: city, code: 'JP' };
   }
 
-  // 9. 🇰🇷 韓國 (KR)
+  // 9. 🇰🇷 Korea (KR)
   if (c === 'KR' || c === 'KOREA' || c === 'SOUTH KOREA' || c === '韓國' || c === '韩国' || (lat >= 33.0 && lat <= 38.6 && lng >= 125.5 && lng <= 129.8) || name.includes('korea') || name.includes('seoul') || name.includes('busan') || name.includes('jeju')) {
     let city = cityName || '首爾 Seoul';
     if (name.includes('busan') || (lat >= 35.05 && lat <= 35.35 && lng >= 128.95 && lng <= 129.30)) city = '釜山 Busan';
@@ -138,12 +138,12 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
     return { flag: '🇰🇷', countryZH: '韓國', countryEN: 'Korea', cityZH: city, cityEN: city, code: 'KR' };
   }
 
-  // 10. 🇭🇰 香港 (HK)
+  // 10. 🇭🇰 Hong Kong (HK)
   if (c === 'HK' || c === 'HONG KONG' || c === 'HONGKONG' || c === '香港' || (lat >= 22.15 && lat <= 22.58 && lng >= 113.80 && lng <= 114.45) || name.includes('hong kong') || name.includes('香港')) {
     return { flag: '🇭🇰', countryZH: '香港', countryEN: 'Hong Kong', cityZH: cityName || '香港 Hong Kong', cityEN: 'Hong Kong', code: 'HK' };
   }
 
-  // 11. 🇹🇼 台灣 (TW)
+  // 11. 🇹🇼 Taiwan (TW)
   if (c === 'TW' || c === 'TAIWAN' || c === '台灣' || c === '台湾' || (lat >= 21.8 && lat <= 25.4 && lng >= 119.9 && lng <= 122.1) || name.includes('taiwan') || name.includes('台灣')) {
     let city = cityName || '台灣 Taiwan';
     if (name.includes('taipei') || name.includes('台北')) city = '台北 Taipei';
@@ -151,7 +151,7 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
     return { flag: '🇹🇼', countryZH: '台灣', countryEN: 'Taiwan', cityZH: city, cityEN: city, code: 'TW' };
   }
 
-  // 12. 🇺🇸 美國 (US)
+  // 12. 🇺🇸 USA (US)
   if (c === 'US' || c === 'USA' || c === 'UNITED STATES' || c === '美國' || (lat >= 18.0 && lat <= 72.0 && lng >= -170.0 && lng <= -65.0)) {
     let city = cityName || '加州 California';
     if (name.includes('california') || name.includes('加州')) city = '加州 California';
@@ -160,7 +160,7 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
     return { flag: '🇺🇸', countryZH: '美國', countryEN: 'USA', cityZH: city, cityEN: city, code: 'US' };
   }
 
-  // 13. 🇹🇭 泰國 (TH)
+  // 13. 🇹🇭 Thailand (TH)
   if (c === 'TH' || c === 'THAILAND' || c === '泰國' || (lat >= 5.5 && lat <= 20.5 && lng >= 97.0 && lng <= 106.0) || name.includes('thailand') || name.includes('泰國') || name.includes('bangkok') || name.includes('phuket')) {
     let city = cityName || '曼谷 Bangkok';
     if (name.includes('phuket') || name.includes('普吉')) city = '普吉島 Phuket';
@@ -168,7 +168,7 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
     return { flag: '🇹🇭', countryZH: '泰國', countryEN: 'Thailand', cityZH: city, cityEN: city, code: 'TH' };
   }
 
-  // 14. 🇮🇩 印尼 (ID)
+  // 14. 🇮🇩 Indonesia (ID)
   if (c === 'ID' || c === 'INDONESIA' || c === '印尼' || (lat >= -11.0 && lat <= 6.0 && lng >= 95.0 && lng <= 141.0) || name.includes('bali') || name.includes('canggu') || name.includes('uluwatu') || name.includes('峇里島')) {
     let city = cityName || '峇里島 Bali';
     return { flag: '🇮🇩', countryZH: '印尼', countryEN: 'Indonesia', cityZH: city, cityEN: city, code: 'ID' };
@@ -316,23 +316,26 @@ const totalSpots = spots.length;
         </div>
       </div>
 
-      <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-thin text-xs">
-        <span class="text-gray-400 font-bold whitespace-nowrap mr-1">熱門地區：</span>
-        <button data-country="ALL" class="country-filter-btn active px-3.5 py-1.5 rounded-full text-xs font-bold bg-xorange text-white shadow-lg shadow-xorange/20 transition">🔥 全部國家</button>
-        <button data-country="CH" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇨🇭 瑞士</button>
-        <button data-country="FR" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇫🇷 法國</button>
-        <button data-country="SE" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇸🇪 瑞典</button>
-        <button data-country="GB" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇬🇧 英國</button>
-        <button data-country="JP" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇯🇵 日本</button>
-        <button data-country="KR" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇰🇷 韓國</button>
-        <button data-country="HK" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇭🇰 香港</button>
-        <button data-country="TW" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇹🇼 台灣</button>
-        <button data-country="US" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇺🇸 美國</button>
-        <button data-country="CA" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇨🇦 加拿大</button>
-        <button data-country="NO" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇳🇴 挪威</button>
-        <button data-country="FI" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇫🇮 芬蘭</button>
-        <button data-country="TH" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇹🇭 泰國</button>
-        <button data-country="ID" class="country-filter-btn px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition">🇮🇩 印尼</button>
+      <!-- 國家標籤切換 -->
+      <div class="flex flex-wrap items-center gap-2 pt-1 text-xs">
+        <span class="text-gray-400 font-bold whitespace-nowrap mr-1 flex items-center gap-1">
+          <span>🌐</span> Popular Regions:
+        </span>
+        <button data-country="ALL" class="country-filter-btn active whitespace-nowrap shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold bg-xorange text-white shadow-lg shadow-xorange/20 transition cursor-pointer">🔥 All Countries</button>
+        <button data-country="CH" class="country-filter-btn whitespace-nowrap shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition hover:border-gray-500 cursor-pointer">🇨🇭 Switzerland</button>
+        <button data-country="FR" class="country-filter-btn whitespace-nowrap shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition hover:border-gray-500 cursor-pointer">🇫🇷 France</button>
+        <button data-country="SE" class="country-filter-btn whitespace-nowrap shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition hover:border-gray-500 cursor-pointer">🇸🇪 Sweden</button>
+        <button data-country="GB" class="country-filter-btn whitespace-nowrap shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition hover:border-gray-500 cursor-pointer">🇬🇧 UK</button>
+        <button data-country="JP" class="country-filter-btn whitespace-nowrap shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition hover:border-gray-500 cursor-pointer">🇯🇵 Japan</button>
+        <button data-country="KR" class="country-filter-btn whitespace-nowrap shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition hover:border-gray-500 cursor-pointer">🇰🇷 Korea</button>
+        <button data-country="HK" class="country-filter-btn whitespace-nowrap shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition hover:border-gray-500 cursor-pointer">🇭🇰 Hong Kong</button>
+        <button data-country="TW" class="country-filter-btn whitespace-nowrap shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition hover:border-gray-500 cursor-pointer">🇹🇼 Taiwan</button>
+        <button data-country="US" class="country-filter-btn whitespace-nowrap shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition hover:border-gray-500 cursor-pointer">🇺🇸 USA</button>
+        <button data-country="CA" class="country-filter-btn whitespace-nowrap shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition hover:border-gray-500 cursor-pointer">🇨🇦 Canada</button>
+        <button data-country="NO" class="country-filter-btn whitespace-nowrap shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition hover:border-gray-500 cursor-pointer">🇳🇴 Norway</button>
+        <button data-country="FI" class="country-filter-btn whitespace-nowrap shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition hover:border-gray-500 cursor-pointer">🇫🇮 Finland</button>
+        <button data-country="TH" class="country-filter-btn whitespace-nowrap shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition hover:border-gray-500 cursor-pointer">🇹🇭 Thailand</button>
+        <button data-country="ID" class="country-filter-btn whitespace-nowrap shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-gray-900/80 text-gray-300 hover:text-white border border-xborder transition hover:border-gray-500 cursor-pointer">🇮🇩 Indonesia</button>
       </div>
     </div>
 
