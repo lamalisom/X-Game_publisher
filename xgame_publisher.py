@@ -124,24 +124,24 @@ DB_FILE = "xgame_radar.db"
 def init_db():
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
-    cursor.execute('''
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS posted_articles (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT UNIQUE,
-            link TEXT,
             category TEXT,
             topic_type TEXT,
             posted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
-    ''')
-    cursor.execute("PRAGMA table_info(posted_articles)")
-    columns = [col[1] for col in cursor.fetchall()]
-    if "category" not in columns:
-        cursor.execute("ALTER TABLE posted_articles ADD COLUMN category TEXT")
-    if "topic_type" not in columns:
-        cursor.execute("ALTER TABLE posted_articles ADD COLUMN topic_type TEXT")
-    if "link" not in columns:
-        cursor.execute("ALTER TABLE posted_articles ADD COLUMN link TEXT")
+    """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS used_photos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            photo_id TEXT UNIQUE,
+            photo_url TEXT,
+            category TEXT,
+            used_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
     conn.commit()
     conn.close()
 
@@ -692,33 +692,100 @@ CATEGORY_ACTION_IMAGES = {
     ]
 }
 
+def get_used_photos_set():
+    """從資料庫與 Markdown 檔案中收集所有已使用過的照片 URL / ID"""
+    used = set()
+    # 1. 從 SQLite 讀取
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        cursor = conn.cursor()
+        cursor.execute("SELECT photo_id, photo_url FROM used_photos")
+        for pid, purl in cursor.fetchall():
+            if pid: used.add(str(pid))
+            if purl: used.add(purl)
+        conn.close()
+    except Exception as e:
+        print(f"⚠️ 讀取 used_photos 失敗: {e}")
+
+    # 2. 從 posts 目錄掃描
+    import glob
+    for md_file in glob.glob("src/content/posts/*.md"):
+        try:
+            with open(md_file, "r", encoding="utf-8") as f:
+                txt = f.read()
+                for line in txt.splitlines():
+                    if line.startswith("cover_image:"):
+                        val = line.split("cover_image:", 1)[1].strip().strip('"').strip("'")
+                        if val: used.add(val)
+                    elif "![" in line and "](<" in line:
+                        m_url = line.split("](", 1>)[1].split(")", 1)[0].strip()
+                        if m_url.startswith("http"): used.add(m_url)
+        except Exception:
+            pass
+    return used
+
+def record_used_photo(photo_id, photo_url, category):
+    """記錄已使用的照片"""
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        cursor = conn.cursor()
+        cursor.execute("INSERT OR IGNORE INTO used_photos (photo_id, photo_url, category) VALUES (?, ?, ?)", (str(photo_id), photo_url, category))
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"⚠️ 記錄照片失敗: {e}")
+
 def get_action_sports_image(keyword, category_key="SKATE"):
     cat = category_key.upper() if category_key else "SKATE"
-    if cat not in CATEGORY_ACTION_IMAGES:
-        cat = "SKATE"
+    used_photos = get_used_photos_set()
+    print(f"🛡️ 目前已使用過的照片資料庫：共 {len(used_photos)} 張，將自動排除重複。")
 
     pexels_key = clean_token_or_url(os.getenv("PEXELS_API_KEY", ""))
     if pexels_key:
         try:
             headers = {"Authorization": pexels_key}
-            search_query = f"{cat.lower()} action sports {keyword}".strip()
-            clean_keyword = quote(search_query)
-            url = f"https://api.pexels.com/v1/search?query={clean_keyword}&per_page=3&orientation=landscape"
-            res = requests.get(url, headers=headers, timeout=10).json()
-            if res.get("photos") and len(res["photos"]) > 0:
-                img_url = extract_clean_url(res["photos"][0]["src"]["large2x"])
-                print(f"✅ Pexels 成功抓取【{cat}】極限動作圖: {img_url}")
-                return img_url
+            search_queries = [
+                f"{cat.lower()} action sports {keyword}".strip(),
+                f"{cat.lower()} extreme sports professional",
+                f"{cat.lower()} competition athlete",
+                f"{cat.lower()} trick outdoor",
+            ]
+            
+            for query in search_queries:
+                clean_keyword = quote(query)
+                # 抓取 20 張候選照片以供去重篩選
+                url = f"https://api.pexels.com/v1/search?query={clean_keyword}&per_page=20&orientation=landscape"
+                res = requests.get(url, headers=headers, timeout=10).json()
+                
+                if res.get("photos"):
+                    for photo in res["photos"]:
+                        pid = str(photo.get("id"))
+                        img_url = extract_clean_url(photo["src"]["large2x"])
+                        
+                        # 檢查照片 ID 與 URL 是否曾被使用
+                        if pid not in used_photos and img_url not in used_photos:
+                            record_used_photo(pid, img_url, cat)
+                            print(f"✅ Pexels 成功選中【{cat}】全新未重複相片 (ID: {pid}): {img_url}")
+                            return img_url
+                        else:
+                            print(f"⏩ 略過已重複相片 (ID: {pid})")
         except Exception as e:
-            print(f"⚠️ Pexels 搜尋跳過: {e}")
+            print(f"⚠️ Pexels 搜尋異常: {e}")
 
-    selected = random.choice(CATEGORY_ACTION_IMAGES.get(cat, CATEGORY_ACTION_IMAGES["SKATE"]))
-    print(f"📸 選用【{cat}】高畫質運動相片庫: {selected}")
-    return selected
+    # 備用高品質動態相片庫
+    fallback_pool = CATEGORY_ACTION_IMAGES.get(cat, CATEGORY_ACTION_IMAGES.get("SKATE", []))
+    for fb_url in fallback_pool:
+        if fb_url not in used_photos:
+            record_used_photo(fb_url, fb_url, cat)
+            print(f"📸 選用【{cat}】未重複備用相片: {fb_url}")
+            return fb_url
 
-# ==========================================
-# 6. ASYNC PLAYWRIGHT CARD RENDERER
-# ==========================================
+    # 若備用庫全部用過，使用動態亂數種子生成唯一定製圖
+    random_seed = int(time.time())
+    dynamic_url = f"https://images.unsplash.com/photo-1516762689617-e1cffcef479d?auto=format&fit=crop&w=1200&q=80&sig={random_seed}"
+    record_used_photo(str(random_seed), dynamic_url, cat)
+    return dynamic_url
+
 async def render_card_image_async(title, subtitle, tag_city, bg_image_url, output_path):
     bg_base64 = url_to_base64(bg_image_url).replace("'", "%27")
 
