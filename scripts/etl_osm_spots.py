@@ -26,8 +26,11 @@ except ImportError:
 
 OVERPASS_SERVERS = [
     "https://overpass-api.de/api/interpreter",
+    "https://lz4.overpass-api.de/api/interpreter",
+    "https://z.overpass-api.de/api/interpreter",
     "https://overpass.kumi.systems/api/interpreter",
-    "https://maps.mail.ru/osm/tools/overpass/api/interpreter"
+    "https://overpass.private.coffee/api/interpreter",
+    "https://overpass.osm.ch/api/interpreter"
 ]
 
 CATEGORY_TAG_QUERIES = {
@@ -35,26 +38,33 @@ CATEGORY_TAG_QUERIES = {
         'node["leisure"="skatepark"]',
         'way["leisure"="skatepark"]',
         'node["sport"="skateboard"]',
-        'way["sport"="skateboard"]'
+        'way["sport"="skateboard"]',
+        'node["sport"="skate"]',
+        'node["leisure"="pitch"]["sport"="skateboard"]',
+        'node["name"~"Skate|X-Game|스케이트|보드",i]'
     ],
     "CLIMB": [
         'node["sport"="climbing"]',
         'way["sport"="climbing"]',
         'node["climbing"="crag"]',
         'node["climbing"="boulder"]',
-        'node["climbing"="gym"]'
+        'node["climbing"="gym"]',
+        'node["leisure"="sports_centre"]["sport"="climbing"]',
+        'node["name"~"Climb|Bouldering|클라이밍|볼더링",i]'
     ],
     "SURF": [
         'node["sport"="surfing"]',
         'way["sport"="surfing"]',
         'node["natural"="beach"]["surf"="yes"]',
-        'node["leisure"="surf_spot"]'
+        'node["leisure"="surf_spot"]',
+        'node["name"~"Surf|서프|서핑",i]'
     ],
     "BMX": [
         'node["sport"="bmx"]',
         'way["sport"="bmx"]',
         'node["leisure"="pumptrack"]',
-        'way["leisure"="pumptrack"]'
+        'way["leisure"="pumptrack"]',
+        'node["name"~"BMX|Pumptrack|펌프트랙",i]'
     ]
 }
 
@@ -313,22 +323,28 @@ out center tags 300;
     return query
 
 def fetch_overpass_data(query: str) -> List[Dict[str, Any]]:
-    """Executes query with server rotation and retry backoff."""
+    """Executes query with proper User-Agent header, server rotation, and retry backoff."""
+    headers = {
+        "User-Agent": "xGameRadar-ETL/2.0 (https://unanext.fans; support@unanext.fans)",
+        "Accept": "application/json",
+        "Accept-Encoding": "gzip, deflate"
+    }
     for server in OVERPASS_SERVERS:
-        try:
-            print(f"📡 查詢 Overpass API 伺服器 [{server}]...")
-            resp = requests.post(server, data={"data": query}, timeout=45)
-            if resp.status_code == 200:
-                data = resp.json()
-                elements = data.get("elements", [])
-                print(f"✅ 成功抓取 {len(elements)} 筆原始空間點位數據！")
-                return elements
-            elif resp.status_code == 429:
-                print("⏳ 遭遇請求頻率限制 (429)，自動切換備用伺服器...")
+        for attempt in range(2):
+            try:
+                print(f"📡 查詢 Overpass API 伺服器 [{server}] (嘗試 {attempt+1}/2)...")
+                resp = requests.post(server, data={"data": query}, headers=headers, timeout=30)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    elements = data.get("elements", [])
+                    print(f"✅ 成功抓取 {len(elements)} 筆原始空間點位數據！")
+                    return elements
+                elif resp.status_code in [429, 504]:
+                    print(f"⏳ 遭遇請求頻率限制 ({resp.status_code})，冷卻 6 秒後切換...")
+                    time.sleep(6)
+            except Exception as e:
+                print(f"⚠️ 伺服器連線異常 ({server}): {e}")
                 time.sleep(2)
-        except Exception as e:
-            print(f"⚠️ 伺服器連線略過 ({server}): {e}")
-            time.sleep(1)
     return []
 
 def generate_slug(name: str, osm_id: int) -> str:
