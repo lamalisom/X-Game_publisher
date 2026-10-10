@@ -718,7 +718,7 @@ def get_used_photos_set():
                         val = line.split("cover_image:", 1)[1].strip().strip('"').strip("'")
                         if val: used.add(val)
                     elif "![" in line and "](<" in line:
-                        m_url = line.split("](", 1>)[1].split(")", 1)[0].strip()
+                        m_url = line.split("](", 1)[1].split(")", 1)[0].strip()
                         if m_url.startswith("http"): used.add(m_url)
         except Exception:
             pass
