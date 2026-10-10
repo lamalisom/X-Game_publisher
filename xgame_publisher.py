@@ -142,6 +142,16 @@ def init_db():
             used_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS featured_spots (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            spot_name TEXT UNIQUE,
+            city TEXT,
+            country TEXT,
+            category TEXT,
+            featured_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
     conn.commit()
     conn.close()
 
@@ -289,187 +299,323 @@ def fetch_latest_rss_news(category_key):
 
     return "", None, None
 
+
+# ==========================================
+# 2.5 GLOBAL SPOTS & HOTELS INTELLIGENCE ENGINE
+# ==========================================
+TOP_PRESET_SPOTS = {
+    "SKATE": [
+        {
+            "name": "Bondi Skate Park", "city": "Sydney", "country": "Australia", "lat": -33.891, "lng": 151.277,
+            "facilities": "3.5 米傳奇深碗池、標準街式階梯扶手、海濱平地滑行訓練區",
+            "difficulty": "初階平地至職業碗池全級別",
+            "hotels": [{"name": "QT Bondi", "distance": "步行 3 分鐘", "features": "直通沙灘海岸線、專屬滑板與衝浪板存放室、極簡精品設計"}]
+        },
+        {
+            "name": "Venice Beach Skatepark", "city": "Los Angeles", "country": "USA", "lat": 33.987, "lng": -118.473,
+            "facilities": "傳奇街頭雙碗池、Snake Run 蛇行起伏道、街式大階梯與 Hubba 大理石滑台",
+            "difficulty": "中階至職業選手挑戰級",
+            "hotels": [{"name": "Hotel Erwin Venice Beach", "distance": "步行 4 分鐘", "features": "頂樓無敵海景夕陽露台、街頭潮流藝術客房、滑手專屬置物服務"}]
+        },
+        {
+            "name": "Tampa Skatepark (SPoT)", "city": "Tampa", "country": "USA", "lat": 27.979, "lng": -82.428,
+            "facilities": "世界級木質室內街式賽道、Pro 級迷你坡道、戶外高難度水泥碗池",
+            "difficulty": "全年齡友善至世界巡迴賽高難度",
+            "hotels": [{"name": "Hotel Haya", "distance": "車程 8 分鐘", "features": "歷史文化街區精品酒店、寬敞裝備空間、戶外恆溫泳池"}]
+        },
+        {
+            "name": "Komazawa Olympic Skate Park", "city": "Tokyo", "country": "Japan", "lat": 35.626, "lng": 139.661,
+            "facilities": "超平整全混凝土路面、金字塔斜台、平桿磨桿、階梯滑台組合",
+            "difficulty": "新手練習友善至進階技術流",
+            "hotels": [{"name": "Cerulean Tower Tokyu Hotel", "distance": "澀谷站車程 15 分鐘", "features": "俯瞰東京天際線、頂級水療放鬆中心、交通極為便利"}]
+        }
+    ],
+    "CLIMB": [
+        {
+            "name": "Kletterzentrum Innsbruck", "city": "Innsbruck", "country": "Austria", "lat": 47.269, "lng": 11.404,
+            "facilities": "奧運規格攀岩中心、17 米戶外懸挑岩壁、難度賽/速度賽/抱石三項全能牆、600+ 條定線",
+            "difficulty": "新手入門至奧運國手極限挑戰",
+            "hotels": [{"name": "Hotel Schwarzer Adler", "distance": "車程 5 分鐘", "features": "阿爾卑斯頂級水療 SPA、頂樓三溫暖舒緩肌群、專業設備烘乾存放室"}]
+        },
+        {
+            "name": "Squamish Smoke Bluffs", "city": "Squamish", "country": "Canada", "lat": 49.701, "lng": -123.142,
+            "facilities": "花崗岩天然裂隙攀登、經典抱石森林、400+ 條天然傳統攀與運動攀線路",
+            "difficulty": "5.7 入門級至 5.14 極限傳統攀",
+            "hotels": [{"name": "Executive Suites Hotel & Resort", "distance": "車程 6 分鐘", "features": "壯麗雪山景觀套房、私人陽台、附設戶外運動裝備儲藏室"}]
+        },
+        {
+            "name": "Fontainebleau Forest", "city": "Fontainebleau", "country": "France", "lat": 48.404, "lng": 2.701,
+            "facilities": "全球抱石發源地與最高殿堂、天然白砂岩塊、經典黃/藍/紅/黑難度循環標註",
+            "difficulty": "全難度覆蓋（Fb 2 至 8C+）",
+            "hotels": [{"name": "Aigle Noir Fontainebleau Mgallery", "distance": "車程 10 分鐘", "features": "18 世紀拿破崙時代法式莊園、抱石墊租借諮詢、頂級法式早餐"}]
+        }
+    ],
+    "SURF": [
+        {
+            "name": "Bells Beach", "city": "Torquay", "country": "Australia", "lat": -38.371, "lng": 144.281,
+            "facilities": "傳奇右手礁石定點浪（Right-hand Point Break）、大落差長浪壁、Rip Curl Pro 永久賽場",
+            "difficulty": "中高階至職業選手（浪高 4-15 呎）",
+            "hotels": [{"name": "RACV Torquay Resort", "distance": "車程 7 分鐘", "features": "俯瞰衝浪海岸線高爾夫度假村、衝浪後恆溫水療按摩池、專屬衝浪板清洗區"}]
+        },
+        {
+            "name": "Supertubos", "city": "Peniche", "country": "Portugal", "lat": 39.345, "lng": -9.362,
+            "facilities": "歐洲管浪之都、厚重高速圓管沙灘浪（Beach Break Barrel）、左右雙向開口",
+            "difficulty": "進階管浪獵手與世界巡迴賽標準",
+            "hotels": [{"name": "MH Peniche", "distance": "步行 8 分鐘", "features": "全海景陽台客房、衝浪學院專業合作、室內溫水泳池與修復桑拿"}]
+        },
+        {
+            "name": "Uluwatu", "city": "Bali", "country": "Indonesia", "lat": -8.814, "lng": 115.088,
+            "facilities": "懸崖洞穴天然出海口、多段長浪壁（Temples, The Peak, Racetrack 長管浪）",
+            "difficulty": "中高階與管浪狂熱者",
+            "hotels": [{"name": "Suarga Padang Padang", "distance": "車程 8 分鐘", "features": "可持續全竹奢華別墅、懸崖海景餐廳、私密無人沙灘通道"}]
+        }
+    ],
+    "BMX": [
+        {
+            "name": "Adrenaline Alley", "city": "Corby", "country": "UK", "lat": 52.493, "lng": -0.686,
+            "facilities": "歐洲最大室內極限運動公園、海綿安全池、木質高拋台、Resi 安全落地軟墊",
+            "difficulty": "全等級入門練習至奧運選手備戰",
+            "hotels": [{"name": "The Raven Hotel Corby", "distance": "車程 6 分鐘", "features": "英式經典莊園、大型免費停車場、充裕極限單車存放空間"}]
+        },
+        {
+            "name": "Woodward West", "city": "Tehachapi", "country": "USA", "lat": 35.132, "lng": -118.448,
+            "facilities": "全球極限運動訓練聖地、MegaRamp 巨型拋台、多座室內外極限街區與土坡場",
+            "difficulty": "各階段技巧晉升與職業選手集訓",
+            "hotels": [{"name": "Best Western Plus Tehachapi", "distance": "車程 15 分鐘", "features": "山景度假酒店、戶外熱水浴池、充裕高蛋白運動早餐"}]
+        }
+    ],
+    "SNOW": [
+        {
+            "name": "Whistler Blackcomb", "city": "Whistler", "country": "Canada", "lat": 50.116, "lng": -122.957,
+            "facilities": "北美最大地形公園（Highest Level Park）、超大 U 型槽、野雪粉雪樹林區",
+            "difficulty": "初學綠道至雙黑鑽職業地形",
+            "hotels": [{"name": "Fairmont Chateau Whistler", "distance": "直通滑雪纜車（Ski-in/Ski-out）", "features": "奢華滑雪門房、戶外加熱按摩池、雪具專業保養中心"}]
+        },
+        {
+            "name": "Niseko United (Grand Hirafu)", "city": "Niseko", "country": "Japan", "lat": 42.862, "lng": 140.704,
+            "facilities": "全球頂級頂級粉雪（Japow）、夜間夜滑照明、天然野雪樹林區",
+            "difficulty": "粉雪愛好者與進階玩家",
+            "hotels": [{"name": "Aya Niseko", "distance": "直通雪道（Ski-in/Ski-out）", "features": "天然露天溫泉、專屬雪具儲藏室、全景羊蹄山景觀"}]
+        }
+    ]
+}
+
+def get_daily_featured_spot(category_key="SKATE"):
+    cat = category_key.upper() if category_key else "SKATE"
+    candidates = []
+    
+    json_paths = ["src/data/global_spots.json", "data/global_spots.json"]
+    for jp in json_paths:
+        if os.path.exists(jp):
+            try:
+                with open(jp, "r", encoding="utf-8") as f:
+                    spots = json.load(f)
+                    for s in spots:
+                        if s.get("category", "").upper() == cat and s.get("name"):
+                            candidates.append(s)
+                if candidates:
+                    print(f"🗺️ 成功從 {jp} 讀取到 {len(candidates)} 個【{cat}】場地資料！")
+                    break
+            except Exception as e:
+                print(f"⚠️ 讀取 {jp} 失敗: {e}")
+
+    featured_history = set()
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        cursor = conn.cursor()
+        cursor.execute("SELECT spot_name FROM featured_spots")
+        for row in cursor.fetchall():
+            if row[0]: featured_history.add(row[0])
+        conn.close()
+    except Exception:
+        pass
+
+    unfeatured_candidates = [s for s in candidates if s.get("name") not in featured_history]
+    if unfeatured_candidates:
+        chosen = random.choice(unfeatured_candidates)
+        s_name = chosen.get("name")
+        s_city = chosen.get("city") or chosen.get("country") or "Global"
+        s_country = chosen.get("country") or ""
+        s_lat = chosen.get("lat") or 0.0
+        s_lng = chosen.get("lng") or 0.0
+        photos = chosen.get("photos") or []
+        spot_img = photos[0] if photos and photos[0].startswith("http") else None
+        
+        preset_hotels = [{"name": f"{s_city} Boutique Resort", "distance": "車程 5 分鐘", "features": "極限運動裝備存放空間、運動後舒緩泳池、交通便利"}]
+        return {
+            "name": s_name,
+            "city": s_city,
+            "country": s_country,
+            "lat": s_lat,
+            "lng": s_lng,
+            "category": cat,
+            "spot_photo": spot_img,
+            "facilities": "專業滑行道、標準規格坡道與障礙地形、夜間照明與休息維護區",
+            "difficulty": "初階入門至進階技術流皆宜",
+            "hotels": preset_hotels
+        }
+
+    presets = TOP_PRESET_SPOTS.get(cat, TOP_PRESET_SPOTS["SKATE"])
+    unfeatured_presets = [p for p in presets if p["name"] not in featured_history]
+    chosen = random.choice(unfeatured_presets) if unfeatured_presets else random.choice(presets)
+    return {
+        "name": chosen["name"],
+        "city": chosen["city"],
+        "country": chosen["country"],
+        "lat": chosen.get("lat", 0.0),
+        "lng": chosen.get("lng", 0.0),
+        "category": cat,
+        "spot_photo": None,
+        "facilities": chosen.get("facilities", "世界級標準全規格競技場地"),
+        "difficulty": chosen.get("difficulty", "全難度適用"),
+        "hotels": chosen.get("hotels", [])
+    }
+
+HOTEL_FALLBACK_IMAGES = [
+    "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80",
+    "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1200&q=80"
+]
+
+def get_hotel_image(city="Global", hotel_name="Boutique Resort"):
+    used_photos = get_used_photos_set()
+    pexels_key = clean_token_or_url(os.getenv("PEXELS_API_KEY", ""))
+    
+    if pexels_key:
+        try:
+            headers = {"Authorization": pexels_key}
+            search_queries = [
+                f"luxury boutique hotel room {city}".strip(),
+                f"resort hotel interior {city}".strip(),
+                f"hotel swimming pool resort {city}".strip(),
+                "luxury boutique resort suite interior"
+            ]
+            for query in search_queries:
+                clean_kw = quote(query)
+                url = f"https://api.pexels.com/v1/search?query={clean_kw}&per_page=20&orientation=landscape"
+                res = requests.get(url, headers=headers, timeout=10).json()
+                if res.get("photos"):
+                    for photo in res["photos"]:
+                        pid = str(photo.get("id"))
+                        img_url = extract_clean_url(photo["src"]["large2x"])
+                        if pid not in used_photos and img_url not in used_photos:
+                            record_used_photo(pid, img_url, "HOTEL")
+                            print(f"🏨 Pexels 成功選中【{hotel_name} / {city}】全新未重複酒店相片 (ID: {pid}): {img_url}")
+                            return img_url
+                        else:
+                            print(f"⏩ 略過已重複酒店相片 (ID: {pid})")
+        except Exception as e:
+            print(f"⚠️ Pexels 酒店相片搜尋異常: {e}")
+
+    for fb in HOTEL_FALLBACK_IMAGES:
+        if fb not in used_photos:
+            record_used_photo(fb, fb, "HOTEL")
+            print(f"🏨 選用未重複備用酒店相片: {fb}")
+            return fb
+
+    random_seed = int(time.time()) + 999
+    dynamic_url = f"https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80&sig={random_seed}"
+    record_used_photo(str(random_seed), dynamic_url, "HOTEL")
+    return dynamic_url
+
 # ==========================================
 # 3. GEMINI AI CONTENT ENGINE (RICH PILLARS)
 # ==========================================
 def generate_rich_autonomous_post(category, topic_type, official_img=None, official_yt=None):
     cat = category.upper()
+    spot = get_daily_featured_spot(cat)
+    s_name = spot["name"]
+    s_city = spot["city"]
+    s_country = spot["country"]
+    s_fac = spot["facilities"]
+    s_diff = spot["difficulty"]
+    s_hotels = spot.get("hotels", [])
+    hotel = s_hotels[0] if s_hotels else {"name": f"{s_city} Boutique Resort", "distance": "車程 5 分鐘", "features": "極限運動裝備存放空間、運動後舒緩泳池、交通便利"}
+    h_name = hotel["name"]
+    h_dist = hotel["distance"]
+    h_feat = hotel["features"]
 
-    autonomous_db = {
-        "CLIMB": {
-            "title": "🏆 IFSC 運動攀登世界巡迴焦點戰報：解析 8b+ 極限抱石與雙料路線密碼",
-            "subtitle": "直擊世界頂級攀岩大賽！全球頂尖選手齊聚，難度賽 45 度仰角牆與極限 Dyno 動態跳躍深度剖析",
-            "city_tag": "INNSBRUCK",
-            "gear_keyword": "climbing shoes chalk bag petzl harness",
-            "recommended_gear_title": "La Sportiva Solution Comp 頂級抱石攀岩鞋",
-            "recommended_gear_reason": "奧運金牌選手御用鞋款，極致下彎鞋弓與足跟包裹力，提供微小晶體岩點強大踩踏支撐",
-            "telegram_caption": "⚡ 各位極限攀爬迷！IFSC 運動攀登世界巡迴賽焦點戰報速遞！\n\n🧗 3大核心看點：\n1️⃣ 決賽牆高達 15 米、仰角超過 45 度，考驗極致指力！\n2️⃣ 第 32 個微型手點過渡 + 終點超遠距 Dyno 動態跳躍\n3️⃣ 頂級選手選用不對稱弓形鞋與高純度碳酸鎂粉精準發力\n\n💬 你覺得邊個動作最震撼？留言話我知！",
-            "website_full_content": """### 🏆 賽況復盤與頂級岩壁挑戰
-
-本站 IFSC 國際運動攀登世界盃在奧地利因斯布魯克盛大開賽。作為巴黎奧運後的首場頂級大賽，主辦方在路線設計上展現了極高的難度與觀賞性。決賽難度牆高達 15 米，整體岩壁向外傾斜超過 45 度，極大考驗選手的核心抗疲勞能力與瞬間爆發力。
-
-關鍵計分點集中在第 32 個手點的微型捏點（Micro-Crimp）過渡區。選手必須在 6 分鐘規定時間內完成路線判讀，並在高空進行一次超過 1.8 米的超遠距離動態跳躍（Dyno）。
-
-### ⚡ 關鍵技術亮點與動作分解
-
-1. **屋頂天花板掛腳（Heel/Toe Hook）**：在倒掛屋頂地形中，選手利用腳跟與腳尖鎖死岩點，減輕手臂 40% 以上的負重。
-2. **微小晶體邊緣踩踏（Micro-Edge Smearing）**：鞋尖橡膠必須精準嵌入 3 毫米以下的微小岩縫，產生強大的摩擦抓地力。
-
-### ⚙️ 職業選手專用裝備配置深度解析
-
-面對高摩擦係數的現代競技岩壁，頂級攀爬者普遍選用高不對稱、下彎鞋弓設計的專業抱石鞋（如 La Sportiva Solution Comp）。搭配高透氣輕量安全帶與超細顆粒高純度碳酸鎂粉，確保手指在極限出汗狀態下依然具備頂級乾爽抓握力。""",
-            "video_id": "jTVcRSq8IYk",
-            "video_title": "Janja Garnbret: The Lioness | Climbing Gold Highlights",
-            "expert_info": {
-                "name": "Janja Garnbret",
-                "country": "斯洛維尼亞 (Slovenia)",
-                "stance_or_style": "抱石與難度雙料統治級選手",
-                "signature_tricks": ["Dyno to Heel Hook", "Campus on Micro-Edges", "Flash on 8b Boulder"],
-                "setup_breakdown": "La Sportiva Solution Comp + Petzl Sitta 安全帶 + FrictionLabs 頂級攀岩粉"
-            }
-        },
-        "SKATE": {
-            "title": "🏆 SLS 街式滑板超級王冠總決賽倒數：全球頂級滑手終極陣容與招牌大招前瞻",
-            "subtitle": "直擊 SLS Super Crown 街式滑板最高殿堂！Nyjah Huston 與堀米雄斗的極限技術對決",
-            "city_tag": "LOS ANGELES",
-            "gear_keyword": "skateboarding shoes helmet protective gear",
-            "recommended_gear_title": "Pro-Tec 經典款雙認證極限滑板安全頭盔",
-            "recommended_gear_reason": "CPSC & ASTM 雙重安全認證，高抗衝擊 EPS 核心泡沫，大落差台階失誤防護首選",
-            "telegram_caption": "⚡ 各位滑板迷！SLS Super Crown 街式滑板總決賽前瞻火熱登場！\n\n🛹 3大焦點搶先睇：\n1️⃣ 12 階大扶手 + 雙層 Hubba 階梯頂級訂製賽道\n2️⃣ Nyjah Huston 對決 堀米雄斗，爭奪最高積分王座\n3️⃣ 8.25 吋高彈性加拿大楓木板身 + 99A-101A 耐磨輪組解析\n\n💬 你今屆撐邊個？即刻留言！",
-            "website_full_content": """### 🏆 賽事背景與 SLS 頂級街式殿堂
-
-SLS (Street League Skateboarding) Super Crown 總決賽作為全球最具含金量的街式滑板職業賽事，匯聚了全球排名前八位的頂級職業滑手。本屆大會特別打造了融合街頭真實地形與賽事標準的頂級場地，包含 12 階大落差樓梯、金字塔斜台與超長雙層 Hubba 大理石滑台。
-
-賽事分為 Line Section（連續動作線路）與 Best Trick Section（單一大招評分），每一輪動作均由 5 位國際裁判以精確至 0.1 分進行極限評分。
-
-### ⚡ 關鍵技術拆解：冠軍級殺手鐧
-
-- **Caballerial Backside Lipslide**：在 12 階大扶手上完成 360 度倒板轉體並順勢鎖定板身中段滑行，對起跳高度與滯空平衡要求極高。
-- **Switch Frontside Crooked Grind**：非慣用腳（Switch）起跳並以斜角輪架鎖死金屬邊緣，展現毫釐不差的磨桿控制力。
-
-### ⚙️ 職業滑手裝備配置深度評測
-
-面對連續高衝擊落地，職業選手選用 8.25 吋高壓 7 層加拿大硬楓木板身，搭配輕量化鈦合金輪架（Titanium Trucks）與 99A-101A 軟硬度的高回彈聚氨酯滑板輪，確保高速滑行不平點，落地兼具極致吸震與回彈回饋。""",
-            "video_id": "-Lra51BUgEs",
-            "video_title": "NYJAH’S BACK ON TOP! Top Moments from his SLS Super Crown Win",
-            "expert_info": {
-                "name": "Nyjah Huston",
-                "country": "美國 (USA)",
-                "stance_or_style": "Goofy / 頂尖街式大扶手與高難度翻板磨桿 (Big Rail & Technical)",
-                "signature_tricks": ["Cab Backside Lipslide", "Switch Frontside Crooked Grind", "Nollie Heel Backside Tailslide"],
-                "setup_breakdown": "Disorder 8.125 板身 + Thunder Titanium Lights 支架 + Bones STF 52mm 輪組"
-            }
-        },
-        "BMX": {
-            "title": "🏆 UCI BMX Freestyle 極限自由式世界巡迴賽：空中 720 空翻與連續神技解析",
-            "subtitle": "極限空中美學！解析全球頂尖 BMX 選手如何以超大滯空時間鎖定分站金牌與 Hyper 戰車配置",
-            "city_tag": "GOLD COAST",
-            "gear_keyword": "bmx helmet gloves fox racing",
-            "recommended_gear_title": "Fox Racing Proframe 全罩式輕量極限頭盔",
-            "recommended_gear_reason": "DH / BMX 賽事指定標準，高透氣整合下巴防護與 MIPS 衝擊系統",
-            "telegram_caption": "⚡ 各位 BMX 車迷！UCI BMX Freestyle 極限自由式戰報來襲！\n\n🚲 3大空中神技速報：\n1️⃣ 滯空時間突破 3.5 秒，垂直躍升超過 5 米！\n2️⃣ Backflip Double Tailwhip 空翻雙甩尾神級連招\n3️⃣ 360 度旋轉 Gyro 雙抽油壓剎車系統極限配置\n\n💬 邊個大招最誇張？留言話我知！",
-            "website_full_content": """### 🏆 賽事精華與空中滯空極限
-
-UCI BMX Freestyle 自由式世界盃黃金海岸站展開激烈廝殺。本站木質碗池與拋台（MegaRamp）高度超過 6 米，頂尖選手在空中能獲得超過 3.5 秒的純粹滯空時間，為複雜的多重轉體動作提供了完美的發揮空間。
-
-### ⚡ 焦點神技分解
-
-1. **720 Barspin to Barspin**：在空中完成兩周 720 度水平旋轉的同時，雙手連續完成兩次車把 360 度凌空轉把。
-2. **Backflip Triple Tailwhip**：後空翻狀態下連續完成三次車身 360 度水平甩尾，對核心爆發力與接車精準度要求達到極致。
-
-### ⚙️ 冠軍級戰車配置與安全建議
-
-極限自由式戰車採用 20.4 吋短後叉鉻鉬鋼（4130 Cr-Mo）車架，搭配 360 度旋轉 Gyro 雙抽剎車系統，確保連續空中甩把甩尾線管不打結。頭部防護首選配備 MIPS 衝擊防護系統的全罩式碳纖維安全頭盔。""",
-            "video_id": "E-VClAvTgSU",
-            "video_title": "Best of Logan Martin | Men BMX Freestyle Paris 2024 Highlights",
-            "expert_info": {
-                "name": "Logan Martin",
-                "country": "澳洲 (Australia)",
-                "stance_or_style": "Park / 頂尖超大滯空花式 (Huge Air & Technical Flips)",
-                "signature_tricks": ["Triple Tailwhip", "720 Barspin to Barspin", "Backflip Double Whip"],
-                "setup_breakdown": "Hyper Wizard Jet Fuel 車架 + Snafu Maelstrom 零件組 + Maxxis Grifter 輪胎"
-            }
-        },
-        "SURF": {
-            "title": "🏆 WSL 世界衝浪巡迴賽夏威夷 Pipeline 站：直擊致命巨浪管與王者對決",
-            "subtitle": "衝浪界的終極殿堂！解析冬季北太平洋超強湧浪下的管浪深度切入與計分關鍵",
-            "city_tag": "OAHU HAWAII",
-            "gear_keyword": "surfing wetsuit rip curl fcs fins",
-            "recommended_gear_title": "Rip Curl Flashbomb 專業保暖防寒衣與 FCS II 碳纖維衝浪尾舵",
-            "recommended_gear_reason": "頂級輕量彈性氯丁橡膠，提供大浪管高速下切時完美的抓水與控板性能",
-            "telegram_caption": "⚡ 各位浪人！WSL 衝浪巡迴賽夏威夷 Pipeline 站戰報直擊！\n\n🏄 3大管浪看點：\n1️⃣ 冬季北太平洋 12-18 呎巨型猛烈管浪\n2️⃣ 致命淺礁區 Drop-in 垂直下切極限考驗\n3️⃣ 6'8\" 槍板 + 碳纖維蜂巢尾舵極限軌跡控制\n\n💬 咁大個浪你敢唔敢落？留言傾下！",
-            "website_full_content": """### 🏆 賽事焦點：衝浪運動的終極聖殿
-
-夏威夷北岸的 Banzai Pipeline 被公認為全球最致命但也最具觀賞性的巨浪管點。冬季強烈的北太平洋低壓系統帶來高達 12 至 18 英尺的超重型管浪，浪壁在極淺的火山珊瑚礁上瞬間崩塌，形成完美的圓柱形水下真空巨管。
-
-裁判評分的最高標準在於「Deep Barrel（深層鑽管）」的切入深度與在極度浪花崩塌壓迫下能否完整出浪（Make the Wave）。
-
-### ⚡ 關鍵技術剖析
-
-- **Late Drop-in（極限晚下切）**：在浪頭即將合攏的垂直浪壁上起乘，雙腳必須精準卡緊防滑墊，利用浪板內側邊緣（Rail）死死咬住水面。
-- **Stall & Speed Control（管內控速）**：用手掌拖拽浪壁進行微幅減速以深入管心，隨後壓低重心全速衝出浪口。
-
-### ⚙️ 浪板配置與防護選購
-
-面對 Pipeline 級別的巨浪，選手多採用 6'6\" 至 7'2\" 的 Step-up 槍板（Gun），搭配碳纖維強化蜂巢結構尾舵（FCS II Fins）與高抗拉力大浪腳繩，確保高速切入浪壁時具備絕對的軌跡穩定性。""",
-            "video_id": "OcAH2xXfVhA",
-            "video_title": "Kelly Slater Monumental Road To Victory - Billabong Pro Pipeline",
-            "expert_info": {
-                "name": "Kelly Slater",
-                "country": "美國 (USA)",
-                "stance_or_style": "Regular / 史上最偉大衝浪王者 (11座世界冠軍傳奇)",
-                "signature_tricks": ["Deep Barrel Ride", "Air Reverse", "Roundhouse Cutback"],
-                "setup_breakdown": "Slater Designs / Firewire FRK 板型 + Endorfins KS 碳纖維尾舵"
-            }
-        },
-        "SNOW": {
-            "title": "🏆 X Games 冬季極限單板 SuperPipe 總決賽：空中三周轉體 1440 終極震撼",
-            "subtitle": "直擊 22 尺巨型 U 型槽之戰！全球頂級單板滑雪選手的極限騰空與抓板美學",
-            "city_tag": "ASPEN COLORADO",
-            "gear_keyword": "snowboard goggles anon burton helmet",
-            "recommended_gear_title": "Anon M4 磁吸快拆防霧雪鏡 & Burton 碳纖維固定器",
-            "recommended_gear_reason": "ZEISS 光學增對比鏡片，在高速 SuperPipe 陰影與強光切換時提供清晰雪道視野",
-            "telegram_caption": "⚡ 各位雪友！X Games 冬季極限單板 SuperPipe 決賽焦點！\n\n🏂 3大高空震撼看點：\n1️⃣ 22 尺垂直冰切雪槽，騰空高度突破 6 米！\n2️⃣ Frontside Double Cork 1440 空中三周轉體大招\n3️⃣ Camber 正拱高硬度單板 + 碳纖維固定器極限抓雪\n\n💬 邊個動作最令你起雞皮？即刻留言！",
-            "website_full_content": """### 🏆 賽事亮點：22 尺垂直巨型 U 槽巔峰之戰
-
-美國阿斯本（Aspen）X Games 冬季極限運動會單板 SuperPipe 總決賽聚集了全世界最頂尖的 U 槽滑手。高達 22 英尺的冰切垂直牆壁中，滑手以超過 40km/h 的高速衝出槽頂，滯空高度突破 6 米，在空中展現極致轉體與優雅抓板。
-
-### ⚡ 焦點神技拆解
-
-1. **Frontside Double Cork 1440**：在正向起跳中完成兩次偏軸空翻與整整四周（1440度）轉體，並在落地前緊緊抓牢板刃（Mute Grab）。
-2. **Switch Backside 1260**：倒滑起跳並以背向盲區完成三周半旋轉，對空間感知與空中落點預判要求極為苛刻。
-
-### ⚙️ 頂級單板滑雪裝備配置
-
-面對極速刻滑與高空衝擊，選手首選 Camber 正拱硬度 8/10 以上的專業競技板身，搭配碳纖維高反應固定器與 ZEISS 增對比磁吸快拆防霧雪鏡，確保在高速陰影與烈日轉換間保持清晰雪面視野。""",
-            "video_id": "he03dVkhLTM",
-            "video_title": "Shaun White grabs Snowboard Halfpipe Gold | PyeongChang 2018",
-            "expert_info": {
-                "name": "Shaun White",
-                "country": "美國 (USA)",
-                "stance_or_style": "Regular / 傳奇飛天番茄 (3屆奧運單板U型槽金牌)",
-                "signature_tricks": ["Double McTwist 1260", "Frontside Double Cork 1440", "Tomahawk"],
-                "setup_breakdown": "WHITESPACE Freestyle 156 板身 + Burton Custom X 固定器"
-            }
-        }
+    gear_map = {
+        "SKATE": ("skate shoes pro helmet", "Pro-Tec 經典款雙認證極限滑板安全頭盔", "CPSC & ASTM 雙重安全認證，高抗衝擊 EPS 核心泡沫"),
+        "CLIMB": ("climbing shoes chalk bag harness", "La Sportiva Solution Comp 頂級抱石攀岩鞋", "極致下彎鞋弓與足跟包裹力，提供微小晶體岩點強大踩踏支撐"),
+        "SURF": ("surfing wetsuit leash traction pad", "Rip Curl Flashbomb 4/3mm 頂級防寒衣", "無縫貼合技術，頂級速乾保暖材質，大浪防護首選"),
+        "BMX": ("bmx helmet gloves pads", "Fox Racing Proframe 全罩式輕量極限頭盔", "DH / BMX 賽事指定標準，高透氣整合下巴防護"),
+        "SNOW": ("snowboard goggles gloves helmet", "Oakley Flight Deck M 頂級無框滑雪鏡", "Prizm 鏡片技術增強雪道地形對比度，全天候防霧")
     }
+    gear_kw, gear_title, gear_reason = gear_map.get(cat, gear_map["SKATE"])
 
-    base = autonomous_db.get(cat, autonomous_db["SKATE"])
+    title = f"🛹 全球極限巡禮：直擊 {s_city} {s_name}！設施全拆解、難度評測與周邊住宿指南"
+    subtitle = f"探索全球頂尖 {cat} 朝聖聖地！深入解析核心設施地形、適合難度級別與旅者首選旅宿"
+
+    tg_caption = f"""⚡ 各位 {cat} 極限玩家！今日精選據點速報來襲！
+
+📍 朝聖地標：{s_name} ({s_city}, {s_country})
+1️⃣ 🏟️ 核心設施：{s_fac}
+2️⃣ 🎯 適合難度：{s_diff}
+3️⃣ 🏨 周邊精選住宿：{h_name} ({h_dist})，{h_feat}
+4️⃣ 🗺️ 全球地圖直達：https://unanext.fans/spots/map/
+
+💬 你想唔想去朝聖挑戰？即刻話我知！"""
+
+    web_content = f"""### 📍 今日精選極限據點：{s_name}
+
+位於 **{s_country} {s_city}** 的 **{s_name}**，是全球與在地 {cat} 愛好者公認的標誌性極限運動聖地。無論是獨特的地形結構、優質的氣候條件，還是深厚的極限運動文化氛圍，都吸引著無數運動員與旅行者前往朝聖與突破極限。
+
+### 🏟️ 核心設施規格與地形亮點全拆解
+
+本場地在規劃與施工上達到極高標準，能全面滿足技術練習與高難度挑戰需求：
+- **主要設施配置**：{s_fac}。
+- **地形流暢度**：動線設計兼顧速度維持與安全緩衝，起伏道與障礙銜接極具連貫性，讓玩家能輕鬆串聯連續高難度動作（Lines）。
+- **配套設施**：具備良好的周邊視野、休息整備區與安全護欄，為極限愛好者提供舒適專注的訓練空間。
+
+### 🎯 適合技術難度與新手實戰建議
+
+- **難度等級評定**：**{s_diff}**。
+- **新手進階指引**：初學者建議避開尖峰時段，在平緩緩衝區熟悉地面反饋；練習高難度動作前請務必佩戴安全頭盔與護具。
+- **在地玩家貼士**：早晨與傍晚通常具備最佳溫度與風向條件，是挑戰個人最佳技巧的最佳時機。
+
+### 🏨 周邊精選住宿推薦（極限旅者首選）
+
+出門朝聖頂級運動場地，舒適且便利的休憩之所至關重要：
+- **推薦旅宿**：**{h_name}**
+- **距離場地**：**{h_dist}**
+- **住宿亮點**：{h_feat}。房間環境舒適寬敞，讓你在高強度訓練後能徹底放鬆恢復體力。
+
+### 🗺️ 即刻探索 xGame Radar 全球極限運動地圖
+
+想發掘更多散佈於全球的秘密滑板場、野外岩場、世界級浪點與周邊住宿？
+立即點擊進入 👉 **[xGame Radar 全球運動地圖 (https://unanext.fans/spots/map/)](https://unanext.fans/spots/map/)**，探索超過 3,400+ 個經過驗證的專業據點，開啟你的下一場極限冒險！"""
+
     return {
-        "title": sanitize_single_line_text(base["title"]),
-        "subtitle": sanitize_single_line_text(base["subtitle"]),
-        "city_tag": sanitize_single_line_text(base["city_tag"]),
-        "gear_keyword": base["gear_keyword"],
-        "telegram_caption": base["telegram_caption"],
-        "website_full_content": base["website_full_content"],
-        "content": base["website_full_content"],
-        "topic_type": topic_type if topic_type else "EVENT",
-        "recommended_gear_title": base["recommended_gear_title"],
-        "recommended_gear_reason": base["recommended_gear_reason"],
-        "youtube_video_id": official_yt if official_yt else base["video_id"],
-        "youtube_video_title": base["video_title"],
-        "expert_info": base.get("expert_info"),
-        "official_cover_image": official_img
+        "title": title,
+        "subtitle": subtitle,
+        "city_tag": s_city.upper(),
+        "gear_keyword": gear_kw,
+        "recommended_gear_title": gear_title,
+        "recommended_gear_reason": gear_reason,
+        "telegram_caption": tg_caption,
+        "website_full_content": web_content,
+        "content": tg_caption,
+        "topic_type": "SPOT",
+        "featured_spot": spot,
+        "spot_info": {
+            "name": s_name,
+            "location": f"{s_city}, {s_country}",
+            "difficulty": s_diff,
+            "facilities": [s_fac],
+            "map_url": "https://unanext.fans/spots/map/"
+        },
+        "hotel_info": {
+            "hotel_name": h_name,
+            "distance": h_dist,
+            "features": h_feat
+        },
+        "youtube_video_id": official_yt or "jTVcRSq8IYk",
+        "youtube_video_title": f"{s_name} Action Highlights",
+        "official_cover_image": official_img or spot.get("spot_photo")
     }
 
 def generate_xgame_content(category_key="", topic_type="", topic_desc="", target_lang="zh-hk"):
@@ -486,20 +632,9 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 
     rss_context, official_img, official_yt = fetch_latest_rss_news(display_category)
 
-    weekday = datetime.now().weekday()
-    SCHEDULE_MAP = {
-        0: {"type": "EVENT", "title": "🗓️ 未來3-12個月賽事雷達與近期戰報"},
-        1: {"type": "SPOT", "title": "🛹 全球與亞洲頂級場地導覽"},
-        2: {"type": "ATHLETE", "title": "🏆 焦點專家與選手檔案 (PRO PROFILE)"},
-        3: {"type": "SAFETY", "title": "🛡️ 安全裝備評測與護具選購指南"},
-        4: {"type": "EVENT", "title": "⚡ 賽事精華與頒獎台名次速報"},
-        5: {"type": "TIPS", "title": "🎯 花式招式分解與技巧心法庫"},
-        6: {"type": "RECORD", "title": "🔥 極限歷史紀錄與經典重溫"}
-    }
-
-    current_schedule = SCHEDULE_MAP.get(weekday, SCHEDULE_MAP[0])
-    active_topic = topic_type if topic_type else current_schedule["type"]
-    active_title = current_schedule["title"]
+    featured_spot = get_daily_featured_spot(display_category)
+    active_topic = "SPOT"
+    active_title = f"🛹 全球頂級極限場地與住宿巡禮: {featured_spot['name']}"
 
     if api_key:
         lang_map = {
@@ -511,53 +646,46 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
         selected_lang_desc = lang_map.get(target_lang, lang_map["zh-hk"])
 
         prompt = f"""
-你是一位專注於全球極限運動的專業主編 Una (@Una_next)。
-今日專欄主題：【{active_title}】（項目類別：{display_category}，主題類型：{active_topic}）
+你是一位專注於全球極限運動與戶外旅行地圖的專業主編 Una (@Una_next)。
+今日核心專欄任務：【全球極限運動場地巡禮與周邊住宿全攻略 (Daily Spot & Nearby Hotels Guide)】
+全力宣傳與推廣官方全球極限運動地圖：https://unanext.fans/spots/map/
+
+【今日精選運動場地資訊】:
+- 場地名稱：{featured_spot['name']}
+- 所在城市與國家：{featured_spot['city']}, {featured_spot['country']}
+- 運動項目類別：{display_category}
+- 場地核心設施：{featured_spot['facilities']}
+- 難度等級參考：{featured_spot['difficulty']}
 {rss_context}
 
 【任務要求】:
-請生成一篇具備深度專業度、高社群傳播力與極限運動熱血感的文章資料，語言格式：完全使用 **{selected_lang_desc}**。
-必須以嚴格的 JSON 格式回傳（請勿輸出 Markdown 區塊或多餘文字），包含以下欄位：
+請生成一篇具備深度專業度、極限運動熱血感、同時極具旅行指南實用價值的文章資料，語言格式：完全使用 **{selected_lang_desc}**。
+必須以嚴格的 JSON 格式回傳（請勿輸出額外 Markdown 區塊或多餘文字），包含以下欄位：
 
 {{
-  "title": "精煉且具震撼力的封面主標題（嚴禁換行與【】符號，約 20-35 字）",
-  "subtitle": "副標題或一句話亮點總結（嚴禁換行，約 30-50 字）",
-  "city_tag": "舉辦城市英文或主題城市（例如: TOKYO, SYDNEY, CALIFORNIA, GLOBAL）",
-  "gear_keyword": "純英文推薦裝備搜尋關鍵字（例如: skate shoes pro / bmx helmet / surfing wetsuit，嚴禁中文）",
-  "telegram_caption": "【📱 Telegram 社群專用速報短文】：約 100-150 字，極致精練，熱血 Emoji 列點總結 3 大賽事/動作/場地核心亮點，並帶有強烈社群互動號召！",
-  "website_full_content": "【🌐 官方網站長篇深度專題】：約 450-650 字，嚴格使用 Markdown 結構化排版，包含多個章節副標題（例如：### 🏆 賽況復盤與焦點直擊、### ⚡ 關鍵技術亮點與動作分解、### ⚙️ 職業裝備深度評測與選購建議），段落分明，具備極高資訊密度與專業深度！",
-  "content": "保留備用字段（填入 telegram_caption）",
-  "topic_type": "{active_topic}",
-  "expert_info": {{
-    "name": "選手或專家姓名（若為 ATHLETE 主題請填寫，否則可留空）",
-    "country": "代表國家",
-    "stance_or_style": "風格或站姿",
-    "signature_tricks": ["招牌動作1", "招牌動作2"],
-    "setup_breakdown": "專用裝備配置說明"
-  }},
+  "title": "精煉且具震撼力的封面主標題（嚴禁換行與【】符號，包含場地名稱與城市，約 22-38 字，例如：🛹 澳洲雪梨 Bondi Skate Park 極限朝聖：碗池設施全拆解、難度評測與海景酒店精選）",
+  "subtitle": "副標題或一句話亮點總結（嚴禁換行，約 30-55 字，涵蓋設施特色、技術挑戰與周邊住宿推薦）",
+  "city_tag": "{featured_spot['city'].upper() if featured_spot['city'] else 'GLOBAL'}",
+  "gear_keyword": "純英文推薦裝備搜尋關鍵字（例如: skate shoes pro / climbing shoes / surfing wetsuit，嚴禁中文）",
   "spot_info": {{
-    "name": "場地名稱（若為 SPOT 主題請填寫）",
-    "location": "場地地理位置",
-    "difficulty": "All Levels / Beginner / Intermediate / Advanced / Pro",
-    "features": ["特點1", "特點2"],
-    "fee": "收費方式"
+    "name": "{featured_spot['name']}",
+    "location": "{featured_spot['city']}, {featured_spot['country']}",
+    "difficulty": "初階入門 / 中階進階 / 職業挑戰級（詳細分析適合哪類滑手/攀爬者/衝浪者）",
+    "facilities": ["核心設施1（如深碗池/大階梯/抱石牆規格）", "核心設施2（如夜間照明/器材租借）", "核心設施3"],
+    "features": ["亮點特色1", "亮點特色2"],
+    "insider_tips": "在地玩家私房貼士（如最佳練習時段、防護建議等）",
+    "map_url": "https://unanext.fans/spots/map/"
   }},
-  "event_info": {{
-    "event_name": "賽事名稱（若為 EVENT 主題請填寫）",
-    "dates": "賽事日期（未來3-12個月或近期）",
-    "event_status": "UPCOMING",
-    "location": "賽事地點",
-    "tier": "World Championship / X-Games Tier"
+  "hotel_info": {{
+    "hotel_name": "真實推薦的附近高品質/特色酒店名稱（1間最具代表性酒店）",
+    "distance": "距離場地步行或車程（例如：步行 3 分鐘 / 車程 5 分鐘）",
+    "features": "住宿亮點（例如：極限裝備存放專區、運動後放鬆按摩水療 SPA、無敵景觀客房）",
+    "price_range": "中高性價比 / 輕奢精品 / 度假村"
   }},
-  "trick_info": {{
-    "trick_name": "花式招式名稱（若為 TIPS/TRICKS 主題請填寫）",
-    "difficulty_rating": 3,
-    "prerequisites": ["先修基礎動作1", "先修基礎動作2"]
-  }},
-  "safety_gear_info": {{
-    "gear_type": "裝備品類（若為 SAFETY 主題請填寫）",
-    "certification": "ASTM F1492 / CPSC / CE EN1078"
-  }},
+  "telegram_caption": "【📱 Telegram 社群專用速報短文】：約 120-180 字，極致精練熱血！以 Emoji 列點總結：\\n1️⃣ 🏟️ 場地設施規格\\n2️⃣ 🎯 適合技術難度\\n3️⃣ 🏨 附近精選住宿\\n4️⃣ 🗺️ 官方地圖直達 https://unanext.fans/spots/map/\\n帶有強烈社群互動號召！",
+  "website_full_content": "【🌐 官方網站長篇深度專題】：約 550-800 字，結構化 Markdown 排版，包含以下章節：\\n### 📍 今日精選極限據點：{featured_spot['name']}\\n### 🏟️ 核心設施規格與地形亮點全拆解\\n### 🎯 適合技術難度與新手實戰建議\\n### 🏨 周邊精選住宿推薦（極限旅者首選）\\n### 🗺️ 即刻探索 xGame Radar 全球極限運動地圖\\n（在文末熱情號召讀者點擊 https://unanext.fans/spots/map/ 探索全球 3,400+ 個經過驗證的極限運動據點！）",
+  "content": "保留備用字段（填入 telegram_caption）",
+  "topic_type": "SPOT",
   "recommended_gear_title": "Amazon 推薦商品中文標題",
   "recommended_gear_reason": "推薦理由"
 }}
@@ -574,30 +702,18 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
                         m_name = m["name"].replace("models/", "")
                         if "gemini" in m_name:
                             available_models.append(m_name)
-                print(f"📡 自動偵測到可用模型清單: {available_models[:6]}")
-        except Exception as e:
-            print(f"⚠️ 模型清單自動查詢跳過: {e}")
+        except Exception:
+            pass
 
         if not available_models:
-            available_models = [
-                "gemini-1.5-flash-latest",
-                "gemini-1.5-flash-001",
-                "gemini-1.5-flash-002",
-                "gemini-1.5-pro-latest",
-                "gemini-1.5-pro-001",
-                "gemini-2.0-flash-exp",
-                "gemini-2.5-flash",
-                "gemini-1.5-flash"
-            ]
+            available_models = ["gemini-1.5-flash", "gemini-1.5-flash-latest", "gemini-2.0-flash-exp", "gemini-1.5-pro"]
 
         for model_name in available_models:
             for api_ver in ["v1beta", "v1"]:
                 url = f"https://generativelanguage.googleapis.com/{api_ver}/models/{model_name}:generateContent?key={api_key}"
                 payload = {
                     "contents": [{"parts": [{"text": prompt}]}],
-                    "generationConfig": {
-                        "temperature": 0.4
-                    }
+                    "generationConfig": {"temperature": 0.4}
                 }
                 try:
                     res = requests.post(url, json=payload, headers={"Content-Type": "application/json"}, timeout=15)
@@ -616,24 +732,22 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
                         if parsed and isinstance(parsed, dict) and parsed.get("title"):
                             parsed["title"] = sanitize_single_line_text(parsed.get("title", ""))
                             parsed["subtitle"] = sanitize_single_line_text(parsed.get("subtitle", ""))
-                            parsed["city_tag"] = sanitize_single_line_text(parsed.get("city_tag", "GLOBAL"))
+                            parsed["city_tag"] = sanitize_single_line_text(parsed.get("city_tag", featured_spot["city"].upper()))
+                            parsed["featured_spot"] = featured_spot
                             if official_img:
                                 parsed["official_cover_image"] = official_img
                             if official_yt:
                                 parsed["youtube_video_id"] = official_yt
-                            print(f"✅ Google API [{model_name} / {api_ver}] 成功生成高品質深度專案: {parsed.get('title')}")
+                            print(f"✅ Google API [{model_name}] 成功生成高質量專題: {parsed.get('title')}")
                             return parsed
-                    elif res.status_code != 404:
-                        print(f"⚠️ [{model_name}/{api_ver}] 回應 ({res.status_code}): {res.text[:100]}")
-                except Exception as e:
+                except Exception:
                     pass
 
     print(f"⚡ 啟用極限運動精選知識庫生成【{display_category}】深度專題...")
-    return generate_rich_autonomous_post(display_category, active_topic, official_img, official_yt)
+    offline_post = generate_rich_autonomous_post(display_category, active_topic, official_img, official_yt)
+    offline_post["featured_spot"] = featured_spot
+    return offline_post
 
-# ==========================================
-# 4. AFFILIATE LINK BUILDER
-# ==========================================
 def attach_affiliate_link(content_text, gear_keyword, category_key):
     clean_kw = re.sub(r'[^a-zA-Z0-9\s]', '', gear_keyword).strip()
     if not clean_kw or len(clean_kw) < 2:
@@ -920,6 +1034,9 @@ def save_post_as_markdown(post_data, image_url, source_label="Official / Editori
     if post_data.get("spot_info") and isinstance(post_data["spot_info"], dict) and post_data["spot_info"].get("name"):
         frontmatter_dict["spot_info"] = post_data["spot_info"]
 
+    if post_data.get("hotel_info") and isinstance(post_data["hotel_info"], dict) and post_data["hotel_info"].get("hotel_name"):
+        frontmatter_dict["hotel_info"] = post_data["hotel_info"]
+
     if post_data.get("event_info") and isinstance(post_data["event_info"], dict) and post_data["event_info"].get("event_name"):
         frontmatter_dict["event_info"] = post_data["event_info"]
 
@@ -1028,26 +1145,31 @@ async def main_async():
 
     category = category_arg.strip().upper() if category_arg and category_arg.upper() != "AUTO" else random.choice(list(XGAME_CATEGORIES.keys()))
 
-    # 1. AI 內容與結構化資料生成
+    # 1. AI 內容與結構化資料生成 (場地 + 附近住宿 + 難度設施)
     post_data = generate_xgame_content(category_key=category, topic_type=topic_arg, target_lang=lang_arg)
-    title = post_data.get("title", f"{category} 極限特刊")
+    featured_spot = post_data.get("featured_spot") or get_daily_featured_spot(category)
+    spot_info = post_data.get("spot_info", {})
+    hotel_info = post_data.get("hotel_info", {})
+
+    spot_name = spot_info.get("name") or featured_spot.get("name", "極限運動場地")
+    hotel_name = hotel_info.get("hotel_name") or (featured_spot.get("hotels", [{}])[0].get("name") if featured_spot.get("hotels") else "周邊推薦旅宿")
+
+    title = post_data.get("title", f"{category} 極限場地巡禮")
     subtitle = post_data.get("subtitle", "")
     content = post_data.get("content", "")
-    city_tag = post_data.get("city_tag", "GLOBAL")
+    city_tag = post_data.get("city_tag", featured_spot.get("city", "GLOBAL").upper())
     gear_kw = post_data.get("gear_keyword", "extreme sports gear")
-    topic_type = post_data.get("topic_type", "GENERAL")
+    topic_type = post_data.get("topic_type", "SPOT")
 
     if is_already_posted(title):
         now_time = datetime.now().strftime("%H:%M")
-        print(f"ℹ️ 偵測到文章 [{title}] 今日已存在於資料庫，自動為新專題附加獨立刊號以確保發布...")
         title = f"{title} (Vol. {now_time})"
         post_data["title"] = title
 
-    # 2. 分流處理：提取 Telegram 短訊精華與網站長篇深度內容
+    # 2. 提取文案
     tg_caption = post_data.get("telegram_caption") or post_data.get("content", "")
     web_content = post_data.get("website_full_content") or post_data.get("content", "")
 
-    # 計算網站文章專屬 URL
     today_date_str = datetime.now().strftime("%Y-%m-%d")
     clean_slug = re.sub(r'[^a-zA-Z0-9]', '_', city_tag.lower())[:15]
     if not clean_slug or clean_slug == "_":
@@ -1056,33 +1178,50 @@ async def main_async():
     post_web_url = f"https://unanext.fans/posts/{post_slug}/"
     amazon_search_url = f"https://www.amazon.com/s?k={quote(gear_kw)}&tag={AMAZON_AFFILIATE_ID}"
 
-    # 網站文章內容：注入 Amazon Affiliate
+    # 3. 獲取場地與酒店相片 (防重複過濾)
+    official_img = post_data.get("official_cover_image") or featured_spot.get("spot_photo")
+    source_label = "Official Spot / OSM" if official_img else "Editorial / Action Sports"
+    bg_image = official_img if official_img else get_action_sports_image(f"{spot_name} {city_tag}", category)
+    hotel_image = get_hotel_image(city_tag, hotel_name)
+
+    # 4. 在文章中注入酒店相片與全球地圖推廣 Banner
+    if hotel_image:
+        hotel_embed = f"\n\n![{hotel_name}]({hotel_image})\n*▲ 周邊精選住宿推薦：{hotel_name}*\n"
+        if "### 🏨 周邊精選住宿推薦" in web_content:
+            web_content = web_content.replace("### 🏨 周邊精選住宿推薦", f"### 🏨 周邊精選住宿推薦{hotel_embed}")
+        else:
+            web_content += f"\n\n{hotel_embed}"
+
+    map_promo_banner = """
+
+---
+
+> 🗺️ **探索更多全球極限運動場地與周邊住宿**  
+> 想發掘更多身邊的滑板場、攀岩館、衝浪點與旅宿？立即前往 [xGame Radar 全球運動地圖 (https://unanext.fans/spots/map/)](https://unanext.fans/spots/map/)，一鍵探索全球超過 3,400+ 個經過官方驗證的專業極限運動據點！
+"""
+    if "https://unanext.fans/spots/map/" not in web_content:
+        web_content += map_promo_banner
+
     monetized_web_content = attach_affiliate_link(web_content, gear_kw, category)
     post_data["category"] = category
     post_data["content"] = monetized_web_content
 
-    # 確保每篇文章都擁有 100% 官方可外嵌播放的 YouTube 精華
     if not post_data.get("youtube_video_id"):
         yt_id, yt_title = search_embeddable_youtube_video(title, category)
         post_data["youtube_video_id"] = yt_id
         post_data["youtube_video_title"] = yt_title
 
-    # 3. 官方圖片或精準運動項目高解析度相片（杜絕披薩與植物）
-    official_img = post_data.get("official_cover_image")
-    source_label = "Official Source" if official_img else "Editorial / Action Sports"
-    bg_image = official_img if official_img else get_action_sports_image(f"{category.lower()} action sports", category)
-    
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     card_filename = f"xgame_{timestamp}.png"
 
-    # 4. Playwright 生成 1080x1080 社群卡片
+    # 5. Playwright 生成 1080x1080 社群卡片
     await render_card_image_async(title, subtitle, city_tag, bg_image, card_filename)
 
-    # 5. 上傳卡片圖片至 Cloudflare R2
+    # 6. 上傳至 Cloudflare R2
     r2_img_url = upload_to_r2(card_filename, f"cards/{card_filename}")
     img_link_for_record = r2_img_url if r2_img_url else bg_image
 
-    # 6. 生成並上傳 JSON 備份至 Cloudflare R2
+    # 7. JSON 備份
     json_filename = f"{timestamp}_{category}.json"
     backup_payload = {
         "id": timestamp,
@@ -1092,7 +1231,10 @@ async def main_async():
         "topic_type": topic_type,
         "content": monetized_web_content,
         "telegram_caption": tg_caption,
+        "spot_info": spot_info,
+        "hotel_info": hotel_info,
         "image_url": img_link_for_record,
+        "hotel_image_url": hotel_image,
         "created_at": datetime.now().isoformat(),
         "author": "Una (@Una_next)"
     }
@@ -1100,24 +1242,36 @@ async def main_async():
         json.dump(backup_payload, f, ensure_ascii=False, indent=2)
     upload_to_r2(json_filename, f"posts/{json_filename}")
 
-    # 7. 儲存至 Astro 靜態網站 (src/content/posts/) -> 存入長篇深度完整專題
+    # 8. 儲存至 Astro 靜態網站
     save_post_as_markdown(post_data, img_link_for_record, source_label)
 
-    # 8. 推送至 Telegram 頻道 -> 發布簡明熱血重點 + 裝備直送 + 直達網站全文連結
+    # 9. 推送至 Telegram 頻道 (帶地圖直達連結)
     tg_message = (
         f"🏆 *{title}*\n"
         f"⚡ _{subtitle}_\n\n"
         f"{tg_caption}\n\n"
+        f"🗺️ *xGame Radar 全球運動地圖*:\n"
+        f"👉 [點擊直達探索 3,400+ 場地與周邊旅宿](https://unanext.fans/spots/map/)\n\n"
         f"🛒 *Una 裝備推薦*:\n"
         f"👉 [{gear_kw.title()} Amazon 直送門市]({amazon_search_url})\n\n"
-        f"🌐 *閱讀完整深度專題與 4K 影片*:\n"
-        f"👉 [點擊直達 xGame Magazine 官方專題]({post_web_url})\n\n"
-        f"#xGameRadar #{category} #Una_next"
+        f"🌐 *閱讀本期完整深度專題*:\n"
+        f"👉 [點擊進入 xGame Magazine 官方專題]({post_web_url})\n\n"
+        f"#xGameRadar #{category} #SpotsMap #Una_next"
     )
     send_telegram_post(tg_message, image_path=card_filename)
 
-    # 9. 記錄於 SQLite 並清理暫存檔
+    # 10. 記錄於 SQLite 並清理暫存檔
     record_posted_article(title, category, topic_type)
+    try:
+        conn = sqlite3.connect(DB_FILE)
+        cursor = conn.cursor()
+        cursor.execute("INSERT OR IGNORE INTO featured_spots (spot_name, city, country, category) VALUES (?, ?, ?, ?)",
+                       (featured_spot.get('name'), featured_spot.get('city'), featured_spot.get('country'), category))
+        conn.commit()
+        conn.close()
+        print(f"📌 已記錄今日精選場地至資料庫: {featured_spot.get('name')}")
+    except Exception as e:
+        print(f"⚠️ 記錄 featured_spots 失敗: {e}")
 
     if os.path.exists(card_filename):
         os.remove(card_filename)
