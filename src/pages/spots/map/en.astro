@@ -24,6 +24,9 @@ interface SpotItem {
 }
 
 function resolveLocation(lat: number, lng: number, countryRaw: string, cityName: string, spotName: string) {
+  const name = (spotName || '').toLowerCase();
+  const c = (countryRaw || '').trim().toUpperCase();
+  const cityLower = (cityName || '').toLowerCase();
   // 🇰🇷 South Korea (KR) - Must evaluate before Japan
   if (c === 'KR' || c === 'KOREA' || c === 'SOUTH KOREA' || c === '韓國' || (lat >= 33.0 && lat <= 38.8 && lng >= 125.0 && lng <= 129.8) || name.includes('korea') || name.includes('seoul') || name.includes('busan') || name.includes('jeju')) {
     let city = cityName || 'Seoul';
@@ -32,10 +35,6 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
     else if (name.includes('incheon') || (lat >= 37.35 && lat <= 37.60 && lng >= 126.50 && lng <= 126.85)) city = 'Incheon';
     return { flag: '🇰🇷', countryCode: 'KR', countryZH: 'South Korea', countryEN: 'South Korea', cityZH: city, cityEN: city };
   }
-
-  const name = (spotName || '').toLowerCase();
-  const c = (countryRaw || '').trim().toUpperCase();
-  const cityLower = (cityName || '').toLowerCase();
 
   // 1. 🇨🇭 Switzerland (CH)
   if (c === 'CH' || c === 'SWITZERLAND' || c === 'SUI' || c === '瑞士' || 
