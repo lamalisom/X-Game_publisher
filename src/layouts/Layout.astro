@@ -31,6 +31,14 @@ const gaId = import.meta.env.PUBLIC_GA_ID || '';
     <meta name="theme-color" content="#ff4d00" />
     <meta name="generator" content={Astro.generator} />
 
+    <!-- 📢 Google AdSense 驗證與自動廣告代碼 -->
+    <script 
+      is:inline 
+      async 
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4924060793142046" 
+      crossorigin="anonymous">
+    </script>
+
     {gaId && (
       <!-- Google Analytics GA4 -->
       <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
