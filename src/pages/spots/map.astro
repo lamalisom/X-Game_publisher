@@ -33,7 +33,7 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
     if (name.includes('busan') || (lat >= 35.05 && lat <= 35.35 && lng >= 128.95 && lng <= 129.30)) city = '釜山 Busan';
     else if (name.includes('jeju') || (lat >= 33.15 && lat <= 33.60 && lng >= 126.15 && lng <= 126.95)) city = '濟州 Jeju';
     else if (name.includes('incheon') || (lat >= 37.35 && lat <= 37.60 && lng >= 126.50 && lng <= 126.85)) city = '仁川 Incheon';
-    return { flag: '🇰🇷', countryCode: 'KR', countryZH: '韓國', countryEN: 'South Korea', cityZH: city, cityEN: city };
+    return { flag: '🇰🇷', code: 'KR', countryCode: 'KR', countryZH: '韓國', countryEN: 'South Korea', cityZH: city, cityEN: city };
   }
 
   // 1. 🇨🇭 瑞士 (CH)
@@ -250,7 +250,7 @@ const spots: SpotItem[] = (rawSpots as any[]).map((s: any) => {
     id: s.id || String(Math.random()),
     name: s.name || '極限運動熱點',
     category,
-    countryCode: geo.code,
+    countryCode: geo.code || geo.countryCode || 'KR',
     city: geo.cityZH,
     environment,
     difficultyCn,
