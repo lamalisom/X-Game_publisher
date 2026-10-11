@@ -456,6 +456,8 @@ def transform_element(element: Dict[str, Any], default_category: str) -> Optiona
     
     city = tags.get("addr:city") or tags.get("city") or tags.get("is_in:city") or ""
     country = tags.get("addr:country") or tags.get("country") or ""
+    if not country and (33.0 <= lat <= 38.8 and 125.0 <= lng <= 129.8):
+        country = "Korea"
     address = tags.get("addr:full") or tags.get("addr:street") or ""
     
     features = []

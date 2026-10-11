@@ -4368,8 +4368,8 @@
     "sub_category": "skatepark",
     "latitude": 33.082988,
     "longitude": 129.779853,
-    "city": "",
-    "country": "",
+    "city": "Seoul 首爾",
+    "country": "Korea",
     "formatted_address": "",
     "difficulty": "All Levels",
     "fee_type": "OPEN",
@@ -4385,7 +4385,8 @@
     "affiliate_hotel_url": "https://www.agoda.com/search?text=SKATE%20Spot%20%231335248541&latitude=33.0829884&longitude=129.7798528",
     "affiliate_ticket_url": "https://www.google.com/search?q=SKATE%20Spot%20%231335248541%20%20official%20website",
     "affiliate_gear_url": "https://www.amazon.com/s?k=skateboard%20helmet%20pads%20bones%20bearings&tag=kait02bc-20",
-    "website": ""
+    "website": "",
+    "countryCode": "KR"
   },
   {
     "osm_id": 1344506267,
