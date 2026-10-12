@@ -44,18 +44,12 @@ CATEGORY_TAG_QUERIES = {
         'way["sport"="skating"]',
         'node["sport"="inline_skating"]',
         'way["sport"="inline_skating"]',
-        'node["sport"="roller_skating"]',
-        'way["sport"="roller_skating"]',
         'node["leisure"="pumptrack"]',
         'way["leisure"="pumptrack"]',
         'node["leisure"="pitch"]["sport"="skateboard"]',
         'way["leisure"="pitch"]["sport"="skateboard"]',
         'node["leisure"="sports_centre"]["sport"="skateboard"]',
-        'way["leisure"="sports_centre"]["sport"="skateboard"]',
-        'node["leisure"="sports_centre"]["sport"="skating"]',
-        'way["leisure"="sports_centre"]["sport"="skating"]',
-        'node["leisure"]["name"~"Skate|스케이트|보드|X-Game",i]',
-        'way["leisure"]["name"~"Skate|스케이트|보드|X-Game",i]'
+        'way["leisure"="sports_centre"]["sport"="skateboard"]'
     ],
     "CLIMB": [
         'node["sport"="climbing"]',
@@ -70,12 +64,7 @@ CATEGORY_TAG_QUERIES = {
         'way["climbing"="boulder"]',
         'way["climbing"="gym"]',
         'node["leisure"="sports_centre"]["sport"="climbing"]',
-        'way["leisure"="sports_centre"]["sport"="climbing"]',
-        'node["leisure"="fitness_centre"]["sport"="climbing"]',
-        'way["leisure"="fitness_centre"]["sport"="climbing"]',
-        'node["leisure"]["name"~"Climb|Bouldering|클라이밍|볼더링|암벽",i]',
-        'way["leisure"]["name"~"Climb|Bouldering|클라이밍|볼더링|암벽",i]',
-        'node["sport"]["name"~"Climb|클라이밍|볼더링|암벽",i]'
+        'way["leisure"="sports_centre"]["sport"="climbing"]'
     ],
     "SURF": [
         'node["sport"="surfing"]',
@@ -84,9 +73,7 @@ CATEGORY_TAG_QUERIES = {
         'node["natural"="beach"]["surf"="yes"]',
         'way["natural"="beach"]["surf"="yes"]',
         'node["leisure"="surf_spot"]',
-        'way["leisure"="surf_spot"]',
-        'node["leisure"]["name"~"Surf|서프|서핑",i]',
-        'node["sport"]["name"~"Surf|서프|서핑",i]'
+        'way["leisure"="surf_spot"]'
     ],
     "BMX": [
         'node["sport"="bmx"]',
@@ -97,9 +84,7 @@ CATEGORY_TAG_QUERIES = {
         'node["leisure"="pitch"]["sport"="bmx"]',
         'way["leisure"="pitch"]["sport"="bmx"]',
         'node["leisure"="pumptrack"]',
-        'way["leisure"="pumptrack"]',
-        'node["leisure"]["name"~"BMX|펌프트랙",i]',
-        'node["sport"]["name"~"BMX",i]'
+        'way["leisure"="pumptrack"]'
     ]
 }
 
@@ -415,7 +400,7 @@ def build_affiliate_links(name: str, city: str, country: str, category: str, lat
         "affiliate_gear_url": gear_url
     }
 
-def transform_element(element: Dict[str, Any], default_category: str) -> Optional[Dict[str, Any]]:
+def transform_element(element: Dict[str, Any], default_category: str, default_country: str = "") -> Optional[Dict[str, Any]]:
     """Transforms raw OSM node/way into unanext.fans spot record."""
     tags = element.get("tags", {})
     osm_id = element.get("id")
@@ -456,7 +441,9 @@ def transform_element(element: Dict[str, Any], default_category: str) -> Optiona
     
     city = tags.get("addr:city") or tags.get("city") or tags.get("is_in:city") or ""
     country = tags.get("addr:country") or tags.get("country") or ""
-    if not country and (33.0 <= lat <= 38.8 and 125.0 <= lng <= 129.8):
+    if not country and default_country:
+        country = default_country
+    elif not country and (33.0 <= lat <= 38.8 and 125.0 <= lng <= 129.8):
         country = "Korea"
     address = tags.get("addr:full") or tags.get("addr:street") or ""
     
@@ -570,7 +557,7 @@ def main():
         
         cat_transformed = []
         for elem in raw_elements:
-            transformed = transform_element(elem, cat)
+            transformed = transform_element(elem, cat, args.country or "")
             if transformed:
                 cat_transformed.append(transformed)
                 
