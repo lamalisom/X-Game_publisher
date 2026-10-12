@@ -1,5 +1,649 @@
 [
   {
+    "osm_id": 9901005,
+    "name": "Tahko Ski Resort (塔赫科湖畔滑雪場)",
+    "slug": "tahko_ski_resort_finland",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 63.2981,
+    "longitude": 28.0253,
+    "city": "Tahko 塔赫科",
+    "country": "Finland",
+    "countryCode": "FI",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "24 條多樣雪道",
+      "芬蘭中部最大度假村",
+      "湖景夜滑",
+      "完整住宿溫泉配套"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1565992441121-4367c2967103?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Tahko+Ski+Resort&latitude=63.2981&longitude=28.0253",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+jacket+pants&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9901006,
+    "name": "Vuokatti Ski Resort (沃卡蒂四季滑雪隧道度假村)",
+    "slug": "vuokatti_ski_resort_finland",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 64.1333,
+    "longitude": 28.2667,
+    "city": "Vuokatti 沃卡蒂",
+    "country": "Finland",
+    "countryCode": "FI",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "世界首座全年室內滑雪隧道",
+      "13 條戶外雪道",
+      "奧運級特技單板公園",
+      "家庭友善"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Vuokatti+Ski+Resort&latitude=64.1333&longitude=28.2667",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+bindings+boots&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9901007,
+    "name": "Himos Ski Resort (希莫斯滑雪度假村)",
+    "slug": "himos_ski_resort_finland",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 61.8833,
+    "longitude": 25.2833,
+    "city": "Himos 希莫斯",
+    "country": "Finland",
+    "countryCode": "FI",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "芬蘭南部最大雪場",
+      "26 條雪道",
+      "3 座大型特技單板公園",
+      "赫爾辛基兩小時直達"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Himos+Ski+Resort&latitude=61.8833&longitude=25.2833",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+jacket+pants&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9901008,
+    "name": "Saariselkä Ski Resort (薩利色爾卡歐洲最北滑雪場)",
+    "slug": "saariselka_ski_resort_finland",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 68.4167,
+    "longitude": 27.4167,
+    "city": "Saariselkä 薩利色爾卡",
+    "country": "Finland",
+    "countryCode": "FI",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "歐洲最北雪場",
+      "跨越兩座山峰 15 條雪道",
+      "芬蘭最長雪橇滑道 (1.8km)",
+      "極光夜滑"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Saariselka+Ski+Resort&latitude=68.4167&longitude=27.4167",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=thermal+ski+underwear+gloves&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9901009,
+    "name": "Iso-Syöte Ski Resort (伊索-修特厚雪滑雪場)",
+    "slug": "iso_syote_ski_resort_finland",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 65.6267,
+    "longitude": 27.6067,
+    "city": "Iso-Syöte 伊索-修特",
+    "country": "Finland",
+    "countryCode": "FI",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "芬蘭降雪量冠軍地區",
+      "17 條雪道",
+      "Iso-Syöte SnowPark 著名跳台",
+      "樹冰雪景"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1565992441121-4367c2967103?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Iso+Syote+Ski+Resort&latitude=65.6267&longitude=27.6067",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+goggles+helmet&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9901010,
+    "name": "Serena Ski (塞雷納滑雪場 - 赫爾辛基近郊)",
+    "slug": "serena_ski_resort_finland",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 60.3167,
+    "longitude": 24.7,
+    "city": "Helsinki 赫爾辛基",
+    "country": "Finland",
+    "countryCode": "FI",
+    "difficulty": "Beginner",
+    "fee_type": "PAID",
+    "features": [
+      "首都圈唯一雪場",
+      "夜間照明全開",
+      "熱門單板 Terrain Park",
+      "水上樂園水療中心"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Serena+Ski+Espoo&latitude=60.3167&longitude=24.7000",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+helmet+gloves&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9902001,
+    "name": "Niseko Grand Hirafu (二世谷格蘭比羅夫滑雪場)",
+    "slug": "niseko_grand_hirafu_japan",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 42.8617,
+    "longitude": 140.7,
+    "city": "北海道 Hokkaido",
+    "country": "Japan",
+    "countryCode": "JP",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "世界第一香檳粉雪 (Japow)",
+      "30 條雪道",
+      "亞洲頂級夜滑",
+      "全山通票直通4大雪場"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Niseko+Grand+Hirafu&latitude=42.8617&longitude=140.7000",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=japow+powder+snowboard&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9902002,
+    "name": "Niseko Hanazono Resort (二世谷花園滑雪度假村)",
+    "slug": "niseko_hanazono_resort_japan",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 42.875,
+    "longitude": 140.718,
+    "city": "北海道 Hokkaido",
+    "country": "Japan",
+    "countryCode": "JP",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "頂級野雪樹林區",
+      "頂級單板 Terrain Park",
+      "五星級 Park Hyatt 直接 Ski-in/Ski-out"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1565992441121-4367c2967103?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Niseko+Hanazono+Resort&latitude=42.8750&longitude=140.7180",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=powder+snowboard+bindings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9902003,
+    "name": "Rusutsu Resort (留壽都滑雪度假村)",
+    "slug": "rusutsu_resort_japan",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 42.75,
+    "longitude": 140.9,
+    "city": "北海道 Hokkaido",
+    "country": "Japan",
+    "countryCode": "JP",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "連續獲評日本最佳滑雪場",
+      "跨越3座山峰 37 條雪道",
+      "極致 Sidecountry 樹林野雪"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Rusutsu+Resort&latitude=42.7500&longitude=140.9000",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+goggles+helmet&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9902004,
+    "name": "Hakuba Happo-One (白馬八方尾根滑雪場)",
+    "slug": "hakuba_happo_one_japan",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 36.7028,
+    "longitude": 137.8611,
+    "city": "長野 白馬 Hakuba",
+    "country": "Japan",
+    "countryCode": "JP",
+    "difficulty": "Advanced",
+    "fee_type": "PAID",
+    "features": [
+      "1998 長野冬奧競速主場地",
+      "日本最大規模單一雪場",
+      "落差超過 1000 米長坡",
+      "北阿爾卑斯壯麗群峰"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Hakuba+Happo+One&latitude=36.7028&longitude=137.8611",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=freeride+snowboard+boots&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9902005,
+    "name": "Hakuba Goryu & 47 (白馬五龍與 Hakuba47 滑雪場)",
+    "slug": "hakuba_goryu_47_japan",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 36.678,
+    "longitude": 137.848,
+    "city": "長野 白馬 Hakuba",
+    "country": "Japan",
+    "countryCode": "JP",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "全日本第一特技單板 Park (47Park)",
+      "U型池 Halfpipe",
+      "夜滑與五龍山頂絕景"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1565992441121-4367c2967103?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Hakuba+Goryu&latitude=36.6780&longitude=137.8480",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=freestyle+snowboard+park&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9902006,
+    "name": "Nozawa Onsen (野澤溫泉滑雪場)",
+    "slug": "nozawa_onsen_snow_resort_japan",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 36.92,
+    "longitude": 138.44,
+    "city": "長野 Nagano",
+    "country": "Japan",
+    "countryCode": "JP",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "44 條多樣雪道",
+      "毛無山 10 公里超長滑道",
+      "13 座傳統外湯溫泉街",
+      "濃郁日本傳統風情"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Nozawa+Onsen+Ski+Resort&latitude=36.9200&longitude=138.4400",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+jacket+pants&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9902007,
+    "name": "Naeba Ski Resort (苗場滑雪場)",
+    "slug": "naeba_ski_resort_japan",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 36.79,
+    "longitude": 138.78,
+    "city": "新潟 湯澤 Yuzawa",
+    "country": "Japan",
+    "countryCode": "JP",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "日本最大規模滑雪度假勝地",
+      "龍之纜車 (Dragondola) 連接神樂",
+      "王子大飯店直通雪道"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Naeba+Ski+Resort&latitude=36.7900&longitude=138.7800",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+goggles+helmet&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9902008,
+    "name": "GALA Yuzawa (GALA 湯澤滑雪場)",
+    "slug": "gala_yuzawa_snow_resort_japan",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 36.95,
+    "longitude": 138.8,
+    "city": "新潟 湯澤 Yuzawa",
+    "country": "Japan",
+    "countryCode": "JP",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "全世界唯一新幹線車站直通雪場",
+      "東京出發 75 分鐘直達",
+      "連通湯澤高原與石打丸山"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1565992441121-4367c2967103?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Gala+Yuzawa&latitude=36.9500&longitude=138.8000",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+rental+jacket&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9902009,
+    "name": "Zao Onsen Ski Resort (藏王溫泉滑雪場 - 樹冰勝地)",
+    "slug": "zao_onsen_ski_resort_japan",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 38.1667,
+    "longitude": 140.4,
+    "city": "山形 藏王 Zao",
+    "country": "Japan",
+    "countryCode": "JP",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "世界著名「雪怪」樹冰奇景",
+      "藏王溫泉古街",
+      "26 條多樣雪道",
+      "夜間樹冰點燈燈光秀"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Zao+Onsen+Ski+Resort&latitude=38.1667&longitude=140.4000",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=thermal+snowboard+jacket&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9902010,
+    "name": "Hoshino Resorts Tomamu (星野度假村 Tomamu 滑雪場)",
+    "slug": "tomamu_snow_resort_japan",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 43.06,
+    "longitude": 142.63,
+    "city": "北海道 Hokkaido",
+    "country": "Japan",
+    "countryCode": "JP",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "高級星野奢華度假村",
+      "29 條優質粉雪雪道",
+      "開放野雪進階 Freeride 區域",
+      "愛絲冰城與水之教堂"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Hoshino+Resorts+Tomamu&latitude=43.0600&longitude=142.6300",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+goggles+helmet&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903001,
+    "name": "Mona Yongpyong (龍平度假村 - 韓國滑雪發源地)",
+    "slug": "yongpyong_ski_resort_korea",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 37.6444,
+    "longitude": 128.68,
+    "city": "江原道 平昌 Gangwon",
+    "country": "Korea",
+    "countryCode": "KR",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "2018 平昌冬奧大迴轉比賽場地",
+      "28 條雪道",
+      "發旺山觀光纜車",
+      "彩虹頂級黑道 Rainbow Course"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Yongpyong+Resort&latitude=37.6444&longitude=128.6800",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+goggles+helmet&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903002,
+    "name": "High1 Ski Resort (High1 頂級滑雪度假村)",
+    "slug": "high1_ski_resort_korea",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 37.2083,
+    "longitude": 128.825,
+    "city": "江原道 平昌 Gangwon",
+    "country": "Korea",
+    "countryCode": "KR",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "韓國雪質第一純天然粉雪",
+      "18 條寬敞長雪道 (單趟 4.2km)",
+      "無障礙旋轉纜車",
+      "設施現代豪華"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1565992441121-4367c2967103?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=High1+Resort&latitude=37.2083&longitude=128.8250",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+jacket+pants&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903003,
+    "name": "Vivaldi Park Ski World (百玩地公園維瓦爾第滑雪場)",
+    "slug": "vivaldi_park_ski_world_korea",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 37.6475,
+    "longitude": 127.6842,
+    "city": "江原道 平昌 Gangwon",
+    "country": "Korea",
+    "countryCode": "KR",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "連續多年韓國訪客人次冠軍",
+      "12 條雪道",
+      "首爾免費直達接駁車",
+      "通宵夜滑 (到凌晨4點)"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Vivaldi+Park&latitude=37.6475&longitude=127.6842",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+helmet+gloves&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903004,
+    "name": "Alpensia Ski Resort (阿爾卑西亞冬奧滑雪度假村)",
+    "slug": "alpensia_ski_resort_korea",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 37.6539,
+    "longitude": 128.6722,
+    "city": "江原道 平昌 Gangwon",
+    "country": "Korea",
+    "countryCode": "KR",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "2018 平昌冬奧跳台滑雪中心",
+      "6 條多功能雪道",
+      "歐洲阿爾卑斯小鎮風情",
+      "洲際酒店直通雪場"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Alpensia+Resort&latitude=37.6539&longitude=128.6722",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+goggles+helmet&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903005,
+    "name": "Phoenix Pyeongchang (鳳凰平昌滑雪場 - 單板聖地)",
+    "slug": "phoenix_pyeongchang_korea",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 37.5817,
+    "longitude": 128.3247,
+    "city": "江原道 平昌 Gangwon",
+    "country": "Korea",
+    "countryCode": "KR",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "冬奧單板障礙技巧與空中技巧場地",
+      "21 條雪道",
+      "Extreme Park 頂級特技單板跳台",
+      "高手雲集"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1565992441121-4367c2967103?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Phoenix+Pyeongchang&latitude=37.5817&longitude=128.3247",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=freestyle+snowboard+bindings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903006,
+    "name": "Elysian Gangchon (伊利希安江村滑雪場 - 地鐵直達)",
+    "slug": "elysian_gangchon_ski_resort_korea",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 37.8183,
+    "longitude": 127.5889,
+    "city": "江原道 平昌 Gangwon",
+    "country": "Korea",
+    "countryCode": "KR",
+    "difficulty": "Beginner",
+    "fee_type": "PAID",
+    "features": [
+      "首爾地鐵京春線百陽里站直接抵達",
+      "10 條雪道 (初中級佔80%)",
+      "坡度平緩新年初學首選"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Elysian+Gangchon&latitude=37.8183&longitude=127.5889",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+helmet+pads&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903007,
+    "name": "Jisan Forest Resort (芝山森林滑雪度假村 - 首爾近郊40分)",
+    "slug": "jisan_forest_resort_korea",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 37.2167,
+    "longitude": 127.35,
+    "city": "京畿道 Gyeonggi",
+    "country": "Korea",
+    "countryCode": "KR",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "首爾江南出發 40 分鐘即達",
+      "7 條主雪道 + 3 條輔助雪道",
+      "特快 6 人吊椅纜車",
+      "熱門通宵夜滑"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Jisan+Forest+Resort&latitude=37.2167&longitude=127.3500",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+gloves+goggles&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903008,
+    "name": "Konjiam Resort (昆池岩滑雪度假村 - 人流控管頂級雪質)",
+    "slug": "konjiam_resort_korea",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 37.338,
+    "longitude": 127.2917,
+    "city": "京畿道 Gyeonggi",
+    "country": "Korea",
+    "countryCode": "KR",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "首都圈最大滑雪場",
+      "首創預約制限制入園人數確保滑行品質",
+      "雪道寬達 100 米",
+      "LG 旗下高端度假村"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1565992441121-4367c2967103?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Konjiam+Resort&latitude=37.3380&longitude=127.2917",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+jacket+pants&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903009,
+    "name": "Deogyusan Resort (德裕山茂朱滑雪度假村)",
+    "slug": "deogyusan_resort_korea",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 35.9,
+    "longitude": 127.75,
+    "city": "全羅北道 茂朱 Muju",
+    "country": "Korea",
+    "countryCode": "KR",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "韓國落差最大雪道 (810m)",
+      "全國最長 6.1km 絲路雪道 (Silk Road)",
+      "德裕山霧淞雪景",
+      "34 條雪道"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Deogyusan+Resort+Muju&latitude=35.9000&longitude=127.7500",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+goggles+helmet&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903010,
+    "name": "Eden Valley Resort (伊甸園山谷滑雪場 - 嶺南唯一)",
+    "slug": "eden_valley_resort_korea",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 35.43,
+    "longitude": 128.98,
+    "city": "慶尚南道 梁山 Yangsan",
+    "country": "Korea",
+    "countryCode": "KR",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "韓國嶺南地區、釜山周邊唯一滑雪場",
+      "釜山出發 1 小時車程",
+      "7 條依山而建雪道",
+      "南部滑雪首選"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Eden+Valley+Resort+Yangsan&latitude=35.4300&longitude=128.9800",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+gloves+pants&tag=kait02bc-20"
+  },
+  {
     "osm_id": 9901004,
     "name": "Pyhä Ski Resort (皮哈國家公園滑雪場)",
     "slug": "pyha_ski_resort_finland",

@@ -142,13 +142,22 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
     else if (name.includes('osaka') || name.includes('大阪')) city = '大阪 Osaka';
     else if (name.includes('hokkaido') || name.includes('北海道') || name.includes('niseko')) city = '北海道 Hokkaido';
     else if (name.includes('hakuba') || name.includes('nagano') || name.includes('白馬')) city = '長野 白馬 Hakuba';
+    else if (name.includes('niseko') || name.includes('rusutsu') || name.includes('furano') || name.includes('kiroro') || name.includes('tomamu') || name.includes('二世谷') || name.includes('留壽都') || name.includes('富良野')) city = '北海道 Hokkaido';
+    else if (name.includes('naeba') || name.includes('yuzawa') || name.includes('gala') || name.includes('kagura') || name.includes('苗場') || name.includes('湯澤')) city = '新潟 湯澤 Yuzawa';
+    else if (name.includes('nozawa') || name.includes('shiga') || name.includes('野澤') || name.includes('志賀高原')) city = '長野 Nagano';
+    else if (name.includes('zao') || name.includes('藏王')) city = '山形 藏王 Zao';
+    else if (name.includes('appi') || name.includes('安比')) city = '岩手 安比高原 Appi';
     return { flag: '🇯🇵', countryZH: '日本', countryEN: 'Japan', cityZH: city, cityEN: city, code: 'JP' };
   }
 
   // 9. 🇰🇷 Korea (KR)
   if (c === 'KR' || c === 'KOREA' || c === 'SOUTH KOREA' || c === '韓國' || c === '韩国' || (lat >= 33.0 && lat <= 38.6 && lng >= 125.5 && lng <= 129.8) || name.includes('korea') || name.includes('seoul') || name.includes('busan') || name.includes('jeju')) {
     let city = cityName || '首爾 Seoul';
-    if (name.includes('busan') || (lat >= 35.05 && lat <= 35.35 && lng >= 128.95 && lng <= 129.30)) city = '釜山 Busan';
+    if (name.includes('pyeongchang') || name.includes('yongpyong') || name.includes('high1') || name.includes('alpensia') || name.includes('vivaldi') || name.includes('phoenix') || name.includes('elysian') || name.includes('wellington') || name.includes('平昌') || name.includes('龍平') || name.includes('江原')) city = '江原道 平昌 Gangwon';
+    else if (name.includes('jisan') || name.includes('konjiam') || name.includes('bears town') || name.includes('芝山') || name.includes('昆池岩') || name.includes('京畿')) city = '京畿道 Gyeonggi';
+    else if (name.includes('deogyusan') || name.includes('muju') || name.includes('茂朱')) city = '全羅北道 茂朱 Muju';
+    else if (name.includes('eden valley') || name.includes('伊甸園')) city = '慶尚南道 梁山 Yangsan';
+    else if (name.includes('busan') || (lat >= 35.05 && lat <= 35.35 && lng >= 128.95 && lng <= 129.30)) city = '釜山 Busan';
     else if (name.includes('jeju') || (lat >= 33.15 && lat <= 33.60 && lng >= 126.15 && lng <= 126.95)) city = '濟州 Jeju';
     return { flag: '🇰🇷', countryZH: '韓國', countryEN: 'Korea', cityZH: city, cityEN: city, code: 'KR' };
   }
