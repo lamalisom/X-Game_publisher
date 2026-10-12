@@ -1,5 +1,106 @@
 [
   {
+    "osm_id": 9901004,
+    "name": "Pyhä Ski Resort (皮哈國家公園滑雪場)",
+    "slug": "pyha_ski_resort_finland",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 67.0167,
+    "longitude": 27.2167,
+    "city": "Pyhä 皮哈",
+    "country": "Finland",
+    "countryCode": "FI",
+    "difficulty": "Advanced",
+    "fee_type": "PAID",
+    "features": [
+      "野雪 Freeride 勝地",
+      "15 條高陡度坡道",
+      "毗鄰國家公園絕景",
+      "專業高手首選"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Pyha+Ski+Resort&latitude=67.0167&longitude=27.2167",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=freeride+snowboard+backpack&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9901003,
+    "name": "Ylläs Ski Resort (于萊斯滑雪度假村)",
+    "slug": "yllas_ski_resort_finland",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 67.55,
+    "longitude": 24.2333,
+    "city": "Ylläs 于萊斯",
+    "country": "Finland",
+    "countryCode": "FI",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "芬蘭最高落差雪道",
+      "63 條雪道",
+      "長達 3 公里單趟長滑道",
+      "越野滑雪勝地"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Yllas+Ski+Resort&latitude=67.5500&longitude=24.2333",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+helmet+gloves&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9901002,
+    "name": "Ruka Ski Resort (魯卡滑雪度假村)",
+    "slug": "ruka_ski_resort_finland",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 66.1667,
+    "longitude": 29.15,
+    "city": "Ruka 魯卡",
+    "country": "Finland",
+    "countryCode": "FI",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "39 條多樣雪道",
+      "Ruka BatteryPark 特技場",
+      "每年超過 200 天雪期",
+      "高速纜車"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1565992441121-4367c2967103?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Ruka+Ski+Resort&latitude=66.1667&longitude=29.1500",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+goggles+jacket&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9901001,
+    "name": "Levi Ski Resort (列維世界盃滑雪場)",
+    "slug": "levi_ski_resort_finland",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 67.8044,
+    "longitude": 24.8082,
+    "city": "Levi 列維",
+    "country": "Finland",
+    "countryCode": "FI",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "44 條雪道",
+      "FIS 世界盃專用賽道",
+      "大型 Snowpark",
+      "夜滑照明設備",
+      "極光雪景"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Levi+Ski+Resort&latitude=67.8044&longitude=24.8082",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+goggles+helmet+gloves&tag=kait02bc-20"
+  },
+  {
     "osm_id": 1751974991,
     "name": "Duffy's SK8 RAMP",
     "slug": "duffy_s_sk8_ramp_1751974991",

@@ -117,6 +117,13 @@ function resolveLocation(lat: number, lng: number, countryRaw: string, cityName:
     let city = cityName || '赫爾辛基 Helsinki';
     if (name.includes('levi')) city = '列維 Levi';
     else if (name.includes('ruka')) city = '魯卡 Ruka';
+    else if (name.includes('ylläs') || name.includes('yllas')) city = '于萊斯 Ylläs';
+    else if (name.includes('pyhä') || name.includes('pyha')) city = '皮哈 Pyhä';
+    else if (name.includes('tahko')) city = '塔赫科 Tahko';
+    else if (name.includes('vuokatti')) city = '沃卡蒂 Vuokatti';
+    else if (name.includes('himos')) city = '希莫斯 Himos';
+    else if (name.includes('saariselkä') || name.includes('saariselka')) city = '薩利色爾卡 Saariselkä';
+    else if (name.includes('tampere')) city = '坦佩雷 Tampere';
     return { flag: '🇫🇮', countryZH: '芬蘭', countryEN: 'Finland', cityZH: city, cityEN: city, code: 'FI' };
   }
 

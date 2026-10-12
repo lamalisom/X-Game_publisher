@@ -76,15 +76,14 @@ CATEGORY_TAG_QUERIES = {
         'way["leisure"="surf_spot"]'
     ],
     "BMX": [
-        'node["sport"="bmx"]',
-        'way["sport"="bmx"]',
-        'relation["sport"="bmx"]',
-        'node["leisure"="track"]["sport"="bmx"]',
-        'way["leisure"="track"]["sport"="bmx"]',
-        'node["leisure"="pitch"]["sport"="bmx"]',
-        'way["leisure"="pitch"]["sport"="bmx"]',
-        'node["leisure"="pumptrack"]',
-        'way["leisure"="pumptrack"]'
+        "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1571068316344-75bc76f77890?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "SNOW": [
+        "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1565992441121-4367c2967103?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1000&q=80"
     ]
 }
 
@@ -226,6 +225,11 @@ CATEGORY_FALLBACK_IMAGES = {
         "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=1000&q=80",
         "https://images.unsplash.com/photo-1571068316344-75bc76f77890?auto=format&fit=crop&w=1000&q=80",
         "https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "SNOW": [
+        "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1565992441121-4367c2967103?auto=format&fit=crop&w=1000&q=80",
+        "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1000&q=80"
     ]
 }
 
@@ -438,6 +442,8 @@ def transform_element(element: Dict[str, Any], default_category: str, default_co
         sub_category = "surf_break"
     elif default_category == "BMX":
         sub_category = "pumptrack" if "pumptrack" in tags.get("leisure", "") else "bmx_track"
+    elif default_category == "SNOW":
+        sub_category = "snowpark" if "park" in name.lower() or "terrain" in name.lower() else "ski_resort"
     
     city = tags.get("addr:city") or tags.get("city") or tags.get("is_in:city") or ""
     country = tags.get("addr:country") or tags.get("country") or ""
@@ -538,14 +544,14 @@ def merge_with_existing_dataset(new_records: List[Dict[str, Any]], json_path: st
 
 def main():
     parser = argparse.ArgumentParser(description="unanext.fans Global Spots ETL Engine")
-    parser.add_argument("--category", choices=["SKATE", "CLIMB", "SURF", "BMX", "ALL"], default="ALL")
+    parser.add_argument("--category", choices=["SKATE", "CLIMB", "SURF", "BMX", "SNOW", "ALL"], default="ALL")
     parser.add_argument("--country", type=str, help="Target country or city (e.g., 'Hong Kong', 'Tokyo', 'Japan')")
     parser.add_argument("--bbox", type=str, help="Bounding box minLat,minLng,maxLat,maxLng")
     parser.add_argument("--export-json", type=str, default="public/data/global_spots.json", help="Export path")
     
     args = parser.parse_args()
     
-    categories = ["SKATE", "CLIMB", "SURF", "BMX"] if args.category == "ALL" else [args.category]
+    categories = ["SKATE", "CLIMB", "SURF", "BMX", "SNOW"] if args.category == "ALL" else [args.category]
     bbox_coords = [float(x.strip()) for x in args.bbox.split(",")] if args.bbox else None
     
     all_transformed = []
