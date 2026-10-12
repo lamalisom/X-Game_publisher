@@ -1,5 +1,505 @@
 [
   {
+    "osm_id": 9903030,
+    "name": "Romme Alpin (隆彭高山滑雪度假村)",
+    "slug": "romme_alpin_sweden",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 60.3917,
+    "longitude": 15.35,
+    "city": "Romme 隆彭",
+    "country": "Sweden",
+    "countryCode": "SE",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "斯德哥爾摩首都圈 2.5 小時直達滑雪勝地",
+      "33 條多樣雪道與兩座大山頭連通",
+      "多條 6 人快速纜車幾乎零等待",
+      "特技公園 Romme Snowpark 與家庭樂園"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Romme+Alpin&latitude=60.3917&longitude=15.3500",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=ski+carrying+strap+shoulder&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903029,
+    "name": "Duved Ski Resort (杜夫德粉雪深雪雪場)",
+    "slug": "duved_sweden",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 63.3917,
+    "longitude": 12.9333,
+    "city": "Duved 杜夫德",
+    "country": "Sweden",
+    "countryCode": "SE",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "Åre 姐妹度假村中更寧靜的粉雪天堂",
+      "寬闊平緩的頂級卡賓 Carving 雪道",
+      "極佳落葉松林間無痕野雪",
+      "與 Åre 滑雪通票全面互通"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Duved+Ski&latitude=63.3917&longitude=12.9333",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=carving+skis+all+mountain&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903028,
+    "name": "Idre Fjäll (伊德勒菲耶爾 360 度全景滑雪場)",
+    "slug": "idre_fjall_sweden",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 61.8667,
+    "longitude": 12.8333,
+    "city": "Idre Fjäll 伊德勒菲耶爾",
+    "country": "Sweden",
+    "countryCode": "SE",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "山峰四個朝向 360 度都有雪道",
+      "Chocken 46度北歐最陡黑道之一",
+      "速度滑雪 Speed Skiing 世界盃指定賽道",
+      "高標準越野滑雪與單板公園設施"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1502784444187-359ac186c5bb?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Idre+Fjall&latitude=61.8667&longitude=12.8333",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=speed+skiing+goggles&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903027,
+    "name": "Branäs Ski Resort (布拉納斯最佳家庭與特技雪場)",
+    "slug": "branas_sweden",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 60.65,
+    "longitude": 12.95,
+    "city": "Branäs 布拉納斯",
+    "country": "Sweden",
+    "countryCode": "SE",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "多次獲選全瑞典最佳滑雪度假村",
+      "415 米落差縱貫克拉爾河谷",
+      "Nintendo Land 兒童與青年特技雪道",
+      "夜間照明全開超長夜滑雪道"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1546548970-71785318a17b?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Branas+Ski&latitude=60.6500&longitude=12.9500",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=ski+helmet+mips+protection&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903026,
+    "name": "Vemdalen Ski Resort (韋姆達倫粉雪森林滑雪場)",
+    "slug": "vemdalen_sweden",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 62.45,
+    "longitude": 13.9333,
+    "city": "Vemdalen 韋姆達倫",
+    "country": "Sweden",
+    "countryCode": "SE",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "瑞典降雪最早且雪質最穩定地區",
+      "跨越三座山峰 58 條平整雪道",
+      "頂級現代化 6 人高速防風暖心纜車",
+      "Klövsjö 著名陡峭黑道黑鑽考驗"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Vemdalen+Ski&latitude=62.4500&longitude=13.9333",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=ski+socks+merino+wool&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903025,
+    "name": "Björkliden Arctic Mountain Resort (比約克利登極光高山雪場)",
+    "slug": "bjorkliden_arctic_sweden",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 68.4078,
+    "longitude": 18.6833,
+    "city": "Björkliden 比約克利登",
+    "country": "Sweden",
+    "countryCode": "SE",
+    "difficulty": "Advanced",
+    "fee_type": "PAID",
+    "features": [
+      "阿比斯庫北極圈極光背景下夜滑",
+      "Torneträsk 冰湖壯闊無垠全景",
+      "Kappas 傳奇陡坡與林道越野",
+      "瑞典最高山屋 Låktatjåkko 野雪起點"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Bjorkliden+Arctic&latitude=68.4078&longitude=18.6833",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=thermal+balaclava+ski+mask&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903024,
+    "name": "Hemavan Tärnaby (海馬萬-泰納比傳奇滑雪場)",
+    "slug": "hemavan_tarnaby_sweden",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 65.8167,
+    "longitude": 15.0833,
+    "city": "Hemavan 海馬萬",
+    "country": "Sweden",
+    "countryCode": "SE",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "滑雪世界冠軍 Ingemar Stenmark 傳奇搖籃",
+      "瑞典最著名直升機滑雪 Heliskiing 大本營",
+      "拉普蘭壯麗真高山無林區粉雪",
+      "Hemavan Snowpark 自由式障礙場地"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Hemavan+Tarnaby&latitude=65.8167&longitude=15.0833",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=ski+poles+carbon+fiber&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903023,
+    "name": "Riksgränsen (里克斯格倫森北極圈午夜野雪勝地)",
+    "slug": "riksgransen_arctic_sweden",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 68.4289,
+    "longitude": 18.1217,
+    "city": "Riksgränsen 里克斯格倫森",
+    "country": "Sweden",
+    "countryCode": "SE",
+    "difficulty": "Expert",
+    "fee_type": "PAID",
+    "features": [
+      "北極圈以北 200km 傳奇極限滑雪天堂",
+      "五至六月午夜陽光 24 小時晝夜野雪",
+      "斯堪地那維亞大山自由滑雪賽 NM 主場",
+      "純天然野生跳台與無邊際粉雪地形"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Riksgransen&latitude=68.4289&longitude=18.1217",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=backcountry+freeride+snowboard&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903022,
+    "name": "Sälen SkiStar (賽倫北歐最大特技與家庭滑雪場)",
+    "slug": "salen_skistar_sweden",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 61.1617,
+    "longitude": 13.195,
+    "city": "Sälen 賽倫",
+    "country": "Sweden",
+    "countryCode": "SE",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "北歐最大滑雪勝地聚落",
+      "Hundfjället 與 Tandådalen 頂級單板跳台",
+      "Väggen 45度雪牆極限陡坡",
+      "家庭友善與豐富北歐夜滑設施"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Salen+SkiStar&latitude=61.1617&longitude=13.1950",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=youth+snowboard+bindings&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903021,
+    "name": "Åre Ski Resort (奧勒瑞典國寶級滑雪勝地)",
+    "slug": "are_ski_resort_sweden",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 63.3989,
+    "longitude": 13.0817,
+    "city": "Åre 奧勒",
+    "country": "Sweden",
+    "countryCode": "SE",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "斯堪地那維亞半島最大滑雪勝地",
+      "三屆高山滑雪世錦賽官方舉辦地",
+      "落差 890 米北歐頂級高山雪道",
+      "Åre Snowpark 國際特技單板公園"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1565992441121-4367c2967103?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Are+Ski+Resort&latitude=63.3989&longitude=13.0817",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+jacket+mens+waterproof&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903020,
+    "name": "Serre Chevalier Vallée (塞爾舍瓦利耶落葉松林滑雪場)",
+    "slug": "serre_chevalier_france",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 44.9389,
+    "longitude": 6.5567,
+    "city": "Serre Chevalier 塞爾舍瓦利耶",
+    "country": "France",
+    "countryCode": "FR",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "250 公里南阿爾卑斯落葉松林雪道",
+      "大山樹林粉雪穿梭滑行首選",
+      "法國最多晴朗日照高山滑雪場",
+      "頂級古城溫泉天然水療放鬆配套"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Serre+Chevalier&latitude=44.9389&longitude=6.5567",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=ski+jacket+breathable&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903019,
+    "name": "Avoriaz 1800 Portes du Soleil (阿沃里亞茲太陽門環保雪場)",
+    "slug": "avoriaz_portes_du_soleil_france",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 46.1925,
+    "longitude": 6.7744,
+    "city": "Avoriaz 阿沃里亞茲",
+    "country": "France",
+    "countryCode": "FR",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "太陽門跨越法瑞兩國 650 公里雪道",
+      "The Stash 全天然木質生態單板公園",
+      "全村禁止汽車通行的純雪橇度假村",
+      "Pas de Chavanette 著名瑞士之牆黑道挑戰"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1502784444187-359ac186c5bb?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Avoriaz+1800&latitude=46.1925&longitude=6.7744",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+all+mountain+rocker&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903018,
+    "name": "Paradiski La Plagne & Les Arcs (帕拉迪斯基連通滑雪大區)",
+    "slug": "paradiski_la_plagne_les_arcs_france",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 45.5083,
+    "longitude": 6.675,
+    "city": "Paradiski 帕拉迪斯基",
+    "country": "France",
+    "countryCode": "FR",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "425 公里超大規模連通雪道",
+      "雙層 Vanoise Express 跨峽谷高空纜車",
+      "Aiguille Rouge 海拔 3226m 長降雪道",
+      "全法國最多元雪道與特技公園"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Paradiski+La+Plagne&latitude=45.5083&longitude=6.6750",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=ski+wax+tuning+kit&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903017,
+    "name": "Alpe d'Huez Grand Domaine (阿爾普迪埃陽光之島滑雪場)",
+    "slug": "alpe_dhuez_france",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 45.0917,
+    "longitude": 6.0694,
+    "city": "Alpe d'Huez 阿爾普迪埃",
+    "country": "France",
+    "countryCode": "FR",
+    "difficulty": "Advanced",
+    "fee_type": "PAID",
+    "features": [
+      "歐洲最長 16 公里 Sarenne 傳奇黑道",
+      "懸崖隧道 Tunnel 陡峭黑道挑戰",
+      "每年 300 天陽光普照",
+      "海拔 3330 米 Pic Blanc 頂峰 360 度觀景"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1546548970-71785318a17b?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Alpe+d+Huez&latitude=45.0917&longitude=6.0694",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=ski+boot+dryer+portable&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903016,
+    "name": "Les Deux Alpes (萊德薩爾普冰川跳台天堂)",
+    "slug": "les_deux_alpes_france",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 45.0167,
+    "longitude": 6.1222,
+    "city": "Les Deux Alpes 萊德薩爾普",
+    "country": "France",
+    "countryCode": "FR",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "海拔 3600 米歐洲最大可滑雪冰川",
+      "全球著名 Freestyle 自由式跳台公園 2 Alpes Snowpark",
+      "落差 2300 米無間斷下坡",
+      "夏冬兩季世界頂級單板賽事舉辦地"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1565992441121-4367c2967103?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Les+Deux+Alpes&latitude=45.0167&longitude=6.1222",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+park+impact+shorts&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903015,
+    "name": "Méribel Heart of 3 Valleys (梅里貝爾三峽谷心臟)",
+    "slug": "meribel_3_valleys_france",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 45.3967,
+    "longitude": 6.5658,
+    "city": "Méribel 梅里貝爾",
+    "country": "France",
+    "countryCode": "FR",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "2023 世界高山滑雪錦標賽賽場",
+      "經典木屋風格阿爾卑斯建築群",
+      "極佳單板公園 Plattieres Park",
+      "通達蔥仁谷與庫爾舍韋勒核心樞紐"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Meribel+3+Valleys&latitude=45.3967&longitude=6.5658",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=thermal+base+layer+merino+wool&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903014,
+    "name": "Courchevel 1850 (庫爾舍韋勒 1850 奢華雪場)",
+    "slug": "courchevel_1850_france",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 45.415,
+    "longitude": 6.6342,
+    "city": "Courchevel 庫爾舍韋勒",
+    "country": "France",
+    "countryCode": "FR",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "全球奢華滑雪代名詞",
+      "頂級平整道與無懈可擊壓雪品質",
+      "極限陡坡 Grand Couloir 野雪",
+      "三峽谷無縫高速纜車換乘"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Courchevel+1850&latitude=45.4150&longitude=6.6342",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=designer+ski+apparel&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903013,
+    "name": "Val Thorens Les 3 Vallées (蔥仁谷三峽谷最高雪場)",
+    "slug": "val_thorens_3_vallees_france",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 45.2975,
+    "longitude": 6.58,
+    "city": "Val Thorens 蔥仁谷",
+    "country": "France",
+    "countryCode": "FR",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "海拔 2300 米歐洲最高滑雪度假村",
+      "全球最大滑雪區 600 公里雪道",
+      "連續多年榮獲世界最佳滑雪勝地",
+      "全村 Ski-in / Ski-out 奢華體驗"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Val+Thorens+3+Vallees&latitude=45.2975&longitude=6.5800",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=ski+jacket+gore+tex+men&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903012,
+    "name": "Val d'Isère & Tignes Espace Killy (瓦勒迪澤爾與蒂涅基利空間)",
+    "slug": "val_disere_tignes_france",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 45.4481,
+    "longitude": 6.9803,
+    "city": "Val d'Isère 瓦勒迪澤爾",
+    "country": "France",
+    "countryCode": "FR",
+    "difficulty": "All Levels",
+    "fee_type": "PAID",
+    "features": [
+      "300 公里世界頂級連通雪道",
+      "Face de Bellevarde 奧運陡峭黑道",
+      "Grande Motte 冰川全年滑雪",
+      "兩座世界級雪地單板公園"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Val+d+Isere+Tignes&latitude=45.4481&longitude=6.9803",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=snowboard+boots+boa&tag=kait02bc-20"
+  },
+  {
+    "osm_id": 9903011,
+    "name": "Chamonix Grands Montets (霞慕尼大蒙特白朗峰滑雪場)",
+    "slug": "chamonix_grands_montets_france",
+    "category": "SNOW",
+    "sub_category": "ski_resort",
+    "latitude": 45.9817,
+    "longitude": 6.9533,
+    "city": "Chamonix 霞慕尼",
+    "country": "France",
+    "countryCode": "FR",
+    "difficulty": "Expert",
+    "fee_type": "PAID",
+    "features": [
+      "極限登山滑雪世界大首都",
+      "傳奇 20km 白色山谷 Vallée Blanche 冰川野雪",
+      "歐洲最高峰白朗峰震撼近景",
+      "陡峭深粉雪與高難度冰川裂隙挑戰"
+    ],
+    "photos": [
+      "https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=1000&q=80"
+    ],
+    "affiliate_hotel_url": "https://www.agoda.com/search?text=Chamonix+Grands+Montets&latitude=45.9817&longitude=6.9533",
+    "affiliate_gear_url": "https://www.amazon.com/s?k=backcountry+ski+harness+carabiner&tag=kait02bc-20"
+  },
+  {
     "osm_id": 9901005,
     "name": "Tahko Ski Resort (塔赫科湖畔滑雪場)",
     "slug": "tahko_ski_resort_finland",
