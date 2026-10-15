@@ -272,7 +272,8 @@ def fetch_latest_rss_news(category_key):
                 elif 'media_thumbnail' in entry and len(entry['media_thumbnail']) > 0:
                     official_img = entry['media_thumbnail'][0].get('url')
                 elif 'enclosures' in entry and len(entry['enclosures']) > 0:
-                    official_img = entry['enclosures'][0].get('href')
+                    enc = entry['enclosures'][0]
+                    official_img = enc.get('href') or enc.get('url')
                 
                 if not official_img and link:
                     scraped_img, scraped_yt = scrape_official_media(link)
@@ -498,8 +499,16 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
     }
 
     current_schedule = SCHEDULE_MAP.get(weekday, SCHEDULE_MAP[0])
-    active_topic = topic_type if topic_type else current_schedule["type"]
-    active_title = current_schedule["title"]
+    
+    # 若外部明確傳入 NEWS 或 EVENT，強制設定為即時新聞主題，嚴禁被星期幾排程覆蓋！
+    if topic_type and str(topic_type).upper() in ["NEWS", "EVENT", "HEADLINE"]:
+        active_topic = "EVENT"
+        active_title = f"🏆 {display_category} 國際最新賽事戰報與即時新聞焦點速遞"
+        is_pure_news = True
+    else:
+        active_topic = topic_type if topic_type else current_schedule["type"]
+        active_title = current_schedule["title"]
+        is_pure_news = False
 
     if api_key:
         lang_map = {
@@ -510,12 +519,40 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
         }
         selected_lang_desc = lang_map.get(target_lang, lang_map["zh-hk"])
 
-        prompt = f"""
+        if is_pure_news:
+            prompt = f"""
+你是一位專注於全球極限運動賽事實況與國際頭條的新聞主編 Una (@Una_next)。
+今日專欄核心任務：【{active_title}】（項目：{display_category}）
+
+【必讀：最新國際官方 RSS 新聞與賽況】:
+{rss_context}
+
+【任務嚴格要求】:
+1. 必須以讀取到的最新官方新聞/賽事為「唯一核心主題」進行報導！
+2. 嚴禁寫成「安全裝備選購指南」或「新手入門教學」，這是一篇專業、熱血且具時效性的【即時新聞專題戰報】！
+3. 嚴禁推薦酒店住宿！
+4. 語言格式：完全使用 **{selected_lang_desc}**。
+5. 必須以嚴格的 JSON 格式回傳，包含以下欄位：
+{{
+  "title": "精煉且具震撼力的新聞頭條大標題（約 20-35 字，嚴禁換行與【】符號，包含選手名或賽事名）",
+  "subtitle": "一句話新聞副標題或勝負關鍵亮點（約 28-50 字）",
+  "city_tag": "{display_category}_NEWS",
+  "gear_keyword": "純英文裝備關鍵字（如: surf leash wetsuit / skate shoes pro）",
+  "telegram_caption": "【📱 Telegram 即時快訊】：約 100-150 字，熱血 Emoji 列點總結 3 大賽況/事件焦點，帶有強烈社群討論號召！",
+  "website_full_content": """### 🏆 賽況復盤與焦點戰報直擊\n\n(針對新聞事件深入分析)\n\n### ⚡ 關鍵技術亮點與動作分解\n\n(詳細拆解動作技術、難度與關鍵動作)\n\n### ⚙️ 頂級選手賽事專用裝備配置點評\n\n(點評選手在重大賽事中使用的專業裝備)""",
+  "content": "填入 telegram_caption 備用",
+  "topic_type": "EVENT",
+  "recommended_gear_title": "該賽事專業裝備名稱",
+  "recommended_gear_reason": "推薦理由"
+}}
+"""
+        else:
+            prompt = f"""
 你是一位專注於全球極限運動的專業主編 Una (@Una_next)。
 今日專欄主題：【{active_title}】（項目類別：{display_category}，主題類型：{active_topic}）
 {rss_context}
 
-【任務要求】:
+【任務要求】:"""
 請生成一篇具備深度專業度、高社群傳播力與極限運動熱血感的文章資料，語言格式：完全使用 **{selected_lang_desc}**。
 必須以嚴格的 JSON 格式回傳（請勿輸出 Markdown 區塊或多餘文字），包含以下欄位：
 
