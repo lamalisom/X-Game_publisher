@@ -2,7 +2,7 @@ name: 🏆 xGame News & Events Radar (純新聞賽況)
 
 on:
   schedule:
-    # 每日香港時間 08:30 發布 (UTC 00:30) - 晨間賽事戰報通勤時段
+    # 每日香港時間 08:30 發布 (UTC 00:30) - 晨間通勤刷賽事戰報時段
     - cron: '30 0 * * *'
 
   workflow_dispatch:
@@ -53,7 +53,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install google-genai requests pillow pydantic boto3 feedparser
 
-      - name: 🚀 執行國際極限新聞與戰報生成 (Run News Publisher)
+      - name: 🚀 執行純賽事新聞戰報生成 (Run News Publisher)
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
@@ -68,8 +68,8 @@ jobs:
           CAT_INPUT: ${{ github.event.inputs.category || 'AUTO' }}
           LANG_INPUT: ${{ github.event.inputs.lang || 'zh-hk' }}
         run: |
-          echo "🔥 啟動【純即時賽事與選手新聞】自動發布引擎..."
-          # 明確傳入第三個參數 "NEWS"，保證 100% 產出賽事戰報，不夾帶任何飯店
+          echo "🔥 啟動【純即時賽事與選手新聞】發布引擎..."
+          # 明確帶入 "NEWS"，保證 100% 賽事戰報，不含任何住宿廣告
           python xgame_publisher.py "$CAT_INPUT" "$LANG_INPUT" "NEWS"
 
       - name: 💾 自動提交並推播至 GitHub (Commit & Push)
