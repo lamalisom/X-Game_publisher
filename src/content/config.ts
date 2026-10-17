@@ -5,15 +5,19 @@ const postsCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     subtitle: z.string().optional().default(''),
-    date: z.coerce.date(),
+    description: z.string().optional(),
+    date: z.coerce.date().optional().default(() => new Date()),
+    pubDate: z.any().optional(),
     category: z.enum(['SKATE', 'BMX', 'SURF', 'CLIMB', 'SNOW', 'EVENT', 'SPOT', 'ATHLETE', 'SAFETY', 'TRICKS']).default('SKATE'),
     topic_type: z.enum(['EVENT', 'SPOT', 'ATHLETE', 'SAFETY', 'RECORD', 'TIPS', 'GEAR', 'GENERAL']).default('GENERAL'),
-    cover_image: z.string(),
+    cover_image: z.string().optional().default('https://pub-a1dfaa7bc52a4b1187e528bd4b2da12b.r2.dev/cards/default.png'),
+    heroImage: z.string().optional(),
     cover_image_source: z.string().optional().default('Official / Pexels'),
     author: z.string().default('Una (@Una_next)'),
     lang: z.string().optional().default('zh-hk'),
     city_tag: z.string().optional().default('GLOBAL'),
     featured: z.boolean().optional().default(false),
+    slug: z.string().optional(),
     
     // Official Video & Social Embeds
     youtube_video_id: z.string().optional(),
@@ -42,13 +46,13 @@ const postsCollection = defineCollection({
       google_map_query: z.string().optional()
     }).optional(),
 
-    // Pillar 3 & 4: Upcoming Events (3-12 mos) & Results
+    // Pillar 3 & 4: Upcoming Events & Results
     event_info: z.object({
       event_name: z.string(),
       dates: z.string(),
       event_status: z.enum(['UPCOMING', 'LIVE', 'COMPLETED']).default('UPCOMING'),
       location: z.string(),
-      tier: z.string().optional(), // e.g. "World Championship / X Games Tier"
+      tier: z.string().optional(),
       official_site_url: z.string().optional(),
       livestream_url: z.string().optional(),
       podium_results: z.array(z.object({
@@ -60,8 +64,8 @@ const postsCollection = defineCollection({
 
     // Pillar 5: Safety Gear & Tricks
     safety_gear_info: z.object({
-      gear_type: z.string(), // Helmet, Knee Pads, etc.
-      certification: z.string().optional(), // ASTM F1492 / CPSC / CE EN1078
+      gear_type: z.string(),
+      certification: z.string().optional(),
       key_protection_points: z.array(z.string()).optional(),
       pros: z.array(z.string()).optional(),
       cons: z.array(z.string()).optional()
@@ -69,13 +73,12 @@ const postsCollection = defineCollection({
 
     trick_info: z.object({
       trick_name: z.string(),
-      difficulty_rating: z.number().min(1).max(5).default(3), // 1 to 5 stars
+      difficulty_rating: z.number().min(1).max(5).default(3),
       prerequisites: z.array(z.string()).optional(),
       key_mechanics: z.array(z.string()).optional(),
       common_mistakes: z.array(z.string()).optional()
     }).optional(),
 
-    // Amazon Affiliate & Monetization
     gear_keyword: z.string().optional(),
     affiliate_products: z.array(z.object({
       title: z.string(),
