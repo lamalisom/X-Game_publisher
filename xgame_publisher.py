@@ -505,6 +505,10 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
         active_topic = "EVENT"
         active_title = f"🏆 {display_category} 國際最新賽事戰報與即時新聞焦點速遞"
         is_pure_news = True
+    elif topic_type and str(topic_type).upper() in ["SPOT", "VENUE"]:
+        active_topic = "SPOT"
+        active_title = f"🛹 全球與亞洲頂級 {display_category} 極限場地導覽與巡禮"
+        is_pure_news = False
     else:
         active_topic = topic_type if topic_type else current_schedule["type"]
         active_title = current_schedule["title"]
@@ -552,7 +556,7 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 今日專欄主題：【{active_title}】（項目類別：{display_category}，主題類型：{active_topic}）
 {rss_context}
 
-【任務要求】:"""
+【任務要求】:
 請生成一篇具備深度專業度、高社群傳播力與極限運動熱血感的文章資料，語言格式：完全使用 **{selected_lang_desc}**。
 必須以嚴格的 JSON 格式回傳（請勿輸出 Markdown 區塊或多餘文字），包含以下欄位：
 
