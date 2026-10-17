@@ -2,7 +2,7 @@ name: 🏆 xGame News & Events Radar (純新聞賽況)
 
 on:
   schedule:
-    # 每日香港時間 08:30 發布 (UTC 00:30) - 晨間通勤刷賽事戰報時段
+    # 每日香港時間 08:30 發布 (UTC 00:30) - 晨間賽事戰報通勤時段
     - cron: '30 0 * * *'
 
   workflow_dispatch:
@@ -47,11 +47,12 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: 安裝 CJK 中文字體與依賴 (Install Dependencies)
+      - name: 安裝 CJK 中文字體、Python 依賴與 Playwright (Install Dependencies)
         run: |
           sudo apt-get update && sudo apt-get install -y fonts-noto-cjk fonts-noto-color-emoji
           python -m pip install --upgrade pip
-          pip install google-genai requests pillow pydantic boto3 feedparser
+          pip install google-genai requests pillow pydantic boto3 feedparser playwright
+          playwright install --with-deps chromium
 
       - name: 🚀 執行純賽事新聞戰報生成 (Run News Publisher)
         env:
@@ -69,7 +70,6 @@ jobs:
           LANG_INPUT: ${{ github.event.inputs.lang || 'zh-hk' }}
         run: |
           echo "🔥 啟動【純即時賽事與選手新聞】發布引擎..."
-          # 明確帶入 "NEWS"，保證 100% 賽事戰報，不含任何住宿廣告
           python xgame_publisher.py "$CAT_INPUT" "$LANG_INPUT" "NEWS"
 
       - name: 💾 自動提交並推播至 GitHub (Commit & Push)
