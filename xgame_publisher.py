@@ -11,6 +11,7 @@ import base64
 import requests
 import asyncio
 import time
+import html
 from datetime import datetime
 from urllib.parse import quote, urlparse
 
@@ -654,30 +655,38 @@ def upload_to_r2(local_file_path, r2_object_name):
         print(f"⚠️ Cloudflare R2 上傳失敗: {e}")
         return None
 
-def save_post_as_markdown(post_data, image_url, category, date_str, post_slug):
-    posts_dir = "src/content/posts"
-    if not os.path.exists(posts_dir):
-        posts_dir = "posts"
-    os.makedirs(posts_dir, exist_ok=True)
+def save_post_as_markdown(post_data, image_url, source_label="Official / Editorial"):
+    timestamp = datetime.now().strftime("%Y-%m-%d")
+    category_key = post_data.get("category", "SKATE").upper()
+    topic_type = post_data.get("topic_type", "GENERAL").upper()
 
-    title = sanitize_single_line_text(post_data.get("title", ""))
-    filename = f"{post_slug}.md"
+    title = sanitize_single_line_text(post_data.get("title", f"{category_key} 特刊"))
+    subtitle = sanitize_single_line_text(post_data.get("subtitle", ""))
+    city_tag = sanitize_single_line_text(post_data.get("city_tag", "GLOBAL"))
+
+    clean_slug = re.sub(r'[^a-zA-Z0-9]', '_', city_tag.lower())[:15]
+    if not clean_slug or clean_slug == "_":
+        clean_slug = "global"
+
+    posts_dir = os.path.join("src", "content", "posts")
+    os.makedirs(posts_dir, exist_ok=True)
+    filename = f"{timestamp}_{category_key.lower()}_{clean_slug}.md"
     filepath = os.path.join(posts_dir, filename)
 
-    frontmatter = {
+    frontmatter_dict = {
         "title": title,
-        "description": sanitize_single_line_text(post_data.get("subtitle", "")),
-        "pubDate": date_str,
-        "heroImage": image_url,
-        "category": category.upper(),
-        "tags": [category.upper(), post_data.get("city_tag", "GLOBAL"), "XGAME", "RADAR"],
-        "city_tag": post_data.get("city_tag", "GLOBAL"),
+        "subtitle": subtitle,
+        "date": datetime.now().isoformat(),
+        "category": category_key if category_key in ["SKATE", "BMX", "SURF", "CLIMB", "SNOW", "EVENT", "SPOT", "ATHLETE", "SAFETY", "TRICKS"] else "SKATE",
+        "topic_type": topic_type if topic_type in ["EVENT", "SPOT", "ATHLETE", "SAFETY", "RECORD", "TIPS", "GEAR", "GENERAL"] else "GENERAL",
+        "cover_image": image_url,
+        "cover_image_source": source_label,
         "author": "Una (@Una_next)",
-        "slug": post_slug
+        "slug": f"{timestamp}_{category_key.lower()}_{clean_slug}"
     }
 
     yaml_lines = ["---"]
-    for k, v in frontmatter.items():
+    for k, v in frontmatter_dict.items():
         if isinstance(v, list):
             yaml_lines.append(f"{k}: {json.dumps(v, ensure_ascii=False)}")
         elif isinstance(v, bool):
@@ -698,43 +707,66 @@ def save_post_as_markdown(post_data, image_url, category, date_str, post_slug):
     return filepath
 
 # ==========================================
-# 7. TELEGRAM 推播模組
+# 7. TELEGRAM 強化推播模組 (HTML + 純文字雙重容錯)
 # ==========================================
-def clean_markdown_for_telegram(text):
-    parts = re.split(r'(https?://[^\s\)]+)', text)
-    for i in range(0, len(parts), 2):
-        chunk = parts[i]
-        chunk = chunk.replace('[', '【').replace(']', '】')
-        chunk = chunk.replace('(', '（').replace(')', '）')
-        chunk = chunk.replace('~', '～')
-        parts[i] = chunk
-    return "".join(parts)
-
-def send_telegram_post(caption_text, image_path=None):
+def send_telegram_post(title, subtitle, caption_text, website_url, affiliate_url, category, image_path=None):
     bot_token = clean_token_or_url(os.getenv("TELEGRAM_BOT_TOKEN", ""))
     chat_id = clean_token_or_url(os.getenv("TELEGRAM_CHAT_ID", ""))
 
     if not bot_token or not chat_id:
-        print("⚠️ 未檢測到 Telegram 配置 (TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID)，略過社群發布。")
+        print("⚠️ 未設定 TELEGRAM_BOT_TOKEN 或 TELEGRAM_CHAT_ID，略過社群推播。")
         return
 
-    safe_caption = clean_markdown_for_telegram(caption_text)
-    api_url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
+    safe_title = html.escape(str(title).strip())
+    safe_subtitle = html.escape(str(subtitle).strip())
+    clean_cap = re.sub(r"[*_`]", "", str(caption_text).strip())
+    safe_caption = html.escape(clean_cap)
+
+    msg_html = f"🔥 <b>{safe_title}</b>\n"
+    if safe_subtitle:
+        msg_html += f"<i>{safe_subtitle}</i>\n\n"
+    else:
+        msg_html += "\n"
+
+    msg_html += f"{safe_caption}\n\n"
+    if website_url:
+        msg_html += f'🌐 <a href="{website_url}">閱讀官網完整戰報</a>\n'
+    if affiliate_url:
+        msg_html += f'⚙️ <a href="{affiliate_url}">專業裝備選購</a>\n'
+
+    msg_html += f"\n#xGameRadar #{category.upper()} #極限運動 #ActionSports"
+
+    if len(msg_html) > 1000:
+        msg_html = msg_html[:990] + "..."
+
+    def post_tg(content, parse_mode="HTML"):
+        if image_path and os.path.exists(image_path):
+            url = f"https://api.telegram.org/bot{bot_token}/sendPhoto"
+            data = {"chat_id": chat_id, "caption": content}
+            if parse_mode:
+                data["parse_mode"] = parse_mode
+            with open(image_path, "rb") as photo:
+                return requests.post(url, data=data, files={"photo": photo}, timeout=20)
+        else:
+            url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+            data = {"chat_id": chat_id, "text": content}
+            if parse_mode:
+                data["parse_mode"] = parse_mode
+            return requests.post(url, json=data, timeout=15)
 
     try:
-        if image_path and os.path.exists(image_path):
-            with open(image_path, "rb") as img_file:
-                files = {"photo": img_file}
-                data = {"chat_id": chat_id, "caption": safe_caption, "parse_mode": "Markdown"}
-                r = requests.post(api_url, data=data, files=files, timeout=20)
-        else:
-            text_api_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-            r = requests.post(text_api_url, json={"chat_id": chat_id, "text": safe_caption, "parse_mode": "Markdown"}, timeout=15)
-
+        r = post_tg(msg_html, parse_mode="HTML")
         if r.status_code == 200:
             print("🚀 Telegram 極限專欄推播發送成功！")
+            return
+        
+        print(f"⚠️ Telegram HTML 發送回應 ({r.status_code})，自動啟用純文字備用模式重發...")
+        plain_text = re.sub(r"<[^<]+?>", "", msg_html)[:1000]
+        r_plain = post_tg(plain_text, parse_mode=None)
+        if r_plain.status_code == 200:
+            print("🚀 Telegram (純文字備用模式) 發送成功！")
         else:
-            print(f"⚠️ Telegram 發布回應 ({r.status_code}): {r.text[:120]}")
+            print(f"⚠️ Telegram 發布回應 ({r_plain.status_code}): {r_plain.text[:120]}")
     except Exception as e:
         print(f"⚠️ Telegram 發布異常: {e}")
 
@@ -774,7 +806,6 @@ async def main_async():
     post_slug = f"{today_date_str}_{category.lower()}_{clean_slug}"
 
     website_article_url = f"https://unanext.fans/posts/{post_slug}/"
-
     affiliate_url = attach_affiliate_link(gear_kw, AMAZON_AFFILIATE_ID)
 
     official_img = post_data.get("official_image")
@@ -824,7 +855,8 @@ async def main_async():
     formatted_web_article += f"👉 [點此前往 Amazon 查看推薦裝備: {gear_kw}]({affiliate_url}) *(含聯盟連結 #ad)*\n"
 
     post_data["content"] = formatted_web_article
-    save_post_as_markdown(post_data, final_image_url, category, today_date_str, post_slug)
+    post_data["category"] = category
+    save_post_as_markdown(post_data, final_image_url, "Official / Editorial")
 
     json_filename = f"{post_slug}.json"
     r2_json_payload = {
@@ -843,12 +875,16 @@ async def main_async():
 
     upload_to_r2(json_filename, f"posts/{json_filename}")
 
-    tg_message = f"🔥 *{title}*\n_{subtitle}_\n\n{tg_caption}\n\n"
-    tg_message += f"🌐 [閱讀官網完整戰報]({website_article_url})\n"
-    tg_message += f"⚙️ [裝備選購]({affiliate_url})\n"
-    tg_message += f"\n#xGameRadar #{category.upper()} #極限運動 #ActionSports"
-
-    send_telegram_post(tg_message, image_path=card_filename)
+    # 8. 推送至 Telegram 頻道 (使用抗底線 HTML 模式發布)
+    send_telegram_post(
+        title=title,
+        subtitle=subtitle,
+        caption_text=tg_caption,
+        website_url=website_article_url,
+        affiliate_url=affiliate_url,
+        category=category,
+        image_path=card_filename
+    )
 
     record_posted_article(title, category, topic_type)
 
