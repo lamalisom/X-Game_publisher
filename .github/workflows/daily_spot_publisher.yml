@@ -2,7 +2,7 @@ name: 🗺️ Daily Spot & Hotels Guide (極限探索地圖)
 
 on:
   schedule:
-    # 每日香港時間 18:30 發布 (UTC 10:30) - 晚間旅遊規劃時段
+    # 每日香港時間 18:30 發布 (UTC 10:30)
     - cron: '30 10 * * *'
 
   workflow_dispatch:
@@ -47,7 +47,7 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: 安裝 CJK 中文字體、Python 依賴與 Playwright (Install Dependencies)
+      - name: 安裝依賴 (Install Dependencies)
         run: |
           sudo apt-get update && sudo apt-get install -y fonts-noto-cjk fonts-noto-color-emoji
           python -m pip install --upgrade pip
@@ -72,7 +72,7 @@ jobs:
           echo "📍 啟動【極限探索地圖 5,178 熱點】發布引擎..."
           python spot_publisher.py "$CAT_INPUT" "$LANG_INPUT"
 
-      - name: 💾 自動提交並推播至 GitHub (Commit & Push)
+      - name: 💾 自動提交並觸發 Cloudflare Pages 部署 (Commit & Push)
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -81,6 +81,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "ℹ️ 今日無新的場地內容需要提交"
           else
-            git commit -m "chore(spot): 🗺️ auto-publish global spot guide [skip ci]"
+            # 💡 關鍵修復：改為 [auto]，確保 Cloudflare Pages 觸發自動編譯上線
+            git commit -m "feat(spot): 🗺️ auto-publish global spot guide [auto]"
             git push origin main
           fi
