@@ -2,7 +2,7 @@ name: 🗺️ Daily Spot & Hotels Guide (極限探索地圖)
 
 on:
   schedule:
-    # 每日香港時間 18:30 發布 (UTC 10:30) - 下班規劃旅遊熱點時段
+    # 每日香港時間 18:30 發布 (UTC 10:30) - 晚間安排旅行、查地圖高峰
     - cron: '30 10 * * *'
 
   workflow_dispatch:
@@ -53,7 +53,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install google-genai requests pillow pydantic boto3
 
-      - name: 🚀 執行全球場地與住宿指南生成 (Run Spot Publisher)
+      - name: 🚀 執行 5,178 熱點地圖與住宿指南生成 (Run Spot Publisher)
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
@@ -68,7 +68,7 @@ jobs:
           CAT_INPUT: ${{ github.event.inputs.category || 'AUTO' }}
           LANG_INPUT: ${{ github.event.inputs.lang || 'zh-hk' }}
         run: |
-          echo "📍 啟動【全球極限場地與飯店】自動發布引擎..."
+          echo "📍 啟動【極限探索地圖 5,178 熱點】發布引擎..."
           python spot_publisher.py "$CAT_INPUT" "$LANG_INPUT"
 
       - name: 💾 自動提交並推播至 GitHub (Commit & Push)
