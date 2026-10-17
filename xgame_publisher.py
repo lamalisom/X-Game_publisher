@@ -543,7 +543,7 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
   "city_tag": "{display_category}_NEWS",
   "gear_keyword": "純英文裝備關鍵字（如: surf leash wetsuit / skate shoes pro）",
   "telegram_caption": "【📱 Telegram 即時快訊】：約 100-150 字，熱血 Emoji 列點總結 3 大賽況/事件焦點，帶有強烈社群討論號召！",
-  "website_full_content": """### 🏆 賽況復盤與焦點戰報直擊\n\n(針對新聞事件深入分析)\n\n### ⚡ 關鍵技術亮點與動作分解\n\n(詳細拆解動作技術、難度與關鍵動作)\n\n### ⚙️ 頂級選手賽事專用裝備配置點評\n\n(點評選手在重大賽事中使用的專業裝備)""",
+  "website_full_content": "### 🏆 賽況復盤與焦點戰報直擊\n\n(針對新聞事件深入分析)\n\n### ⚡ 關鍵技術亮點與動作分解\n\n(詳細拆解動作技術、難度與關鍵動作)\n\n### ⚙️ 頂級選手賽事專用裝備配置點評\n\n(點評選手在重大賽事中使用的專業裝備)",
   "content": "填入 telegram_caption 備用",
   "topic_type": "EVENT",
   "recommended_gear_title": "該賽事專業裝備名稱",
