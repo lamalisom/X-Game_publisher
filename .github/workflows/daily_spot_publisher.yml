@@ -2,7 +2,7 @@ name: 🗺️ Daily Spot & Hotels Guide (極限探索地圖)
 
 on:
   schedule:
-    # 每日香港時間 18:30 發布 (UTC 10:30) - 晚間安排旅行、查地圖高峰
+    # 每日香港時間 18:30 發布 (UTC 10:30) - 晚間旅遊規劃時段
     - cron: '30 10 * * *'
 
   workflow_dispatch:
@@ -47,11 +47,12 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: 安裝 CJK 中文字體與依賴 (Install Dependencies)
+      - name: 安裝 CJK 中文字體、Python 依賴與 Playwright (Install Dependencies)
         run: |
           sudo apt-get update && sudo apt-get install -y fonts-noto-cjk fonts-noto-color-emoji
           python -m pip install --upgrade pip
-          pip install google-genai requests pillow pydantic boto3
+          pip install google-genai requests pillow pydantic boto3 playwright
+          playwright install --with-deps chromium
 
       - name: 🚀 執行 5,178 熱點地圖與住宿指南生成 (Run Spot Publisher)
         env:
