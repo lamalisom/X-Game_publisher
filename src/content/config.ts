@@ -17,7 +17,6 @@ const postsCollection = defineCollection({
     lang: z.string().optional().default('zh-hk'),
     city_tag: z.string().optional().default('GLOBAL'),
     featured: z.boolean().optional().default(false),
-    slug: z.string().optional(),
     
     // Official Video & Social Embeds
     youtube_video_id: z.string().optional(),
