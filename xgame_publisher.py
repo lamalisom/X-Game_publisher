@@ -356,6 +356,15 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 今日專欄主題：【{active_title}】（項目類別：{display_category}，主題類型：{active_topic}）
 {rss_context}
 
+
+【運動項目術語硬性規範】：
+- 若類別為 CLIMB（攀岩）：核心環境必須為「天然岩壁 (Crag) / 抱石 (Bouldering) / 先鋒運動攀 (Sport Climbing)」，抓點多為微小岩點 (Crimps) 或石縫。嚴禁出現「滑行道」、「坡道 (Ramps)」、「障礙地形」等滑板術語！
+- 若類別為 SURF（衝浪）：必須為浪點、礁石浪或沙灘浪，嚴禁陸地坡道。
+
+【地理與周邊住宿防幻覺規範】：
+- 嚴禁捏造「車程只需 10 分鐘」等虛假距離！
+- 若推薦周邊住宿，必須是該場地所在的同一城鎮或車程 30 分鐘內的地區；若是野外天然場地，請客觀建議下榻「鄰近主要城鎮之湖區木屋營地或 B&B」，嚴禁跨區推薦數百公里外的極光奢華酒店！
+
 【任務要求】:
 請生成一篇具備深度專業度、高社群傳播力與極限運動熱血感的文章資料，語言格式：完全使用 **{selected_lang_desc}**。
 必須以嚴格的 JSON 格式回傳，包含以下欄位：
