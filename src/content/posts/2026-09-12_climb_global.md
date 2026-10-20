@@ -28,6 +28,6 @@ affiliate_products: [{"title": "Mammut Infinity Dry 9.5mm 動態攀岩繩", "sub
 ### ⚙️ 職業裝備深度評測與選購建議
 市面上咁多攀岩繩，點樣先揀到一條「後悔點解唔早買」嘅神物？我哋綜合咗專業攀岩者嘅意見，整理出 10 個買繩前必須自問嘅問題：例如你嘅主打係運動攀登（Sport Climbing）定傳統攀登（Trad）？直徑應該揀 9.4mm 定 9.8mm？外皮處理（Dry Treatment）係咪必須？唔好怕麻煩，清清楚楚了解自己嘅需求，先至可以買到最匹配嘅命運之繩！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Climbing Dynamic Rope Amazon 直送門市](https://www.amazon.com/s?k=climbing%20dynamic%20rope&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

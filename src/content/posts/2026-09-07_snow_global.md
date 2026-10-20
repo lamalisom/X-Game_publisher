@@ -26,6 +26,6 @@ affiliate_products: [{"title": "專業級滑雪頭盔", "subtitle": "Amazon 官�
 
 安全至上呀兄弟姊妹！無論你係去滑雪場定係睇比賽，頭盔、護具同埋雪崩探測器都係必需品！千祈唔好為咗型而忽略安全！下次再同大家深入探討更多極限雪地資訊！Stay Wild！🤘
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Snowboard Bindings Pro Amazon 直送門市](https://www.amazon.com/s?k=snowboard%20bindings%20pro&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

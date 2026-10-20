@@ -21,7 +21,7 @@ affiliate_products: [{"title": "Black Diamond Mondo Crash Pad 專業攀岩緩衝
 
 ### 🏆 焦點專家與選手檔案：真實與謊言嘅極限交鋒
 
-Hello 各位極限運動狂迷！我是 Una (@Una_next)。今日我哋唔講邊條路線有幾難，亦唔講邊個場地有幾岩巉，反而要同大家深度剖析一宗震撼全球攀岩界嘅真實事件——關於「Squamish黑馬」Gabe Lawson 嘅攀登謊言。
+Hello 各位極限運動狂迷！今日我哋唔講邊條路線有幾難，亦唔講邊個場地有幾岩巉，反而要同大家深度剖析一宗震撼全球攀岩界嘅真實事件——關於「Squamish黑馬」Gabe Lawson 嘅攀登謊言。
 
 ### ⚡ 攀岩界嘅誠信崩塌與心理博弈
 
@@ -35,6 +35,6 @@ Hello 各位極限運動狂迷！我是 Una (@Una_next)。今日我哋唔講邊�
 
 極限運動嘅魅力在於佢嘅純粹。無論係挑戰美國各州最難嘅繩索攀登，定係面對未知嘅岩壁，最重要嘅永遠唔係世俗嘅眼光，而係你企喺岩石面前嗰刻，個心係咪坦蕩。一齊守護我哋熱愛嘅攀岩文化，繼續 Keep Climbing，Keep Real！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Climbing Crash Pad Pro Amazon 直送門市](https://www.amazon.com/s?k=climbing%20crash%20pad%20pro&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

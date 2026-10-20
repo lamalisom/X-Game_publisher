@@ -46,6 +46,6 @@ Hello 各位熱血嘅滑手同極限運動發燒友！我係 Una (@Una_next)。�
 
 想發掘更多隱世或頂級嘅極限運動場地？即刻點擊 [xGame Radar 全球極限運動地圖](https://unanext.fans/spots/map/)，探索全球超過 3,400+ 個經過驗證嘅極限運動據點，一齊將足跡踩遍全世界啦！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Bmx Full Face Helmet Pro Amazon 直送門市](https://www.amazon.com/s?k=bmx%20full%20face%20helmet%20pro&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

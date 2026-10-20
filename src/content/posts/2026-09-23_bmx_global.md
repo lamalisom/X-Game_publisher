@@ -36,6 +36,6 @@ affiliate_products: [{"title": "專業BMX頭盔與護具套裝", "subtitle": "Am
 
 今次嘅BMX PRO PROFILE就到呢度！記得繼續留意Una嘅專欄，我哋下次再見！一齊為極限運動瘋狂！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Bmx Freestyle Bike  Bmx Helmet Pro Amazon 直送門市](https://www.amazon.com/s?k=bmx%20freestyle%20bike%20%20bmx%20helmet%20pro&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

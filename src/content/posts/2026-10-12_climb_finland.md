@@ -54,6 +54,6 @@ affiliate_products: [{"title": "La Sportiva Solution Comp 專業攀岩鞋", "sub
 👉 **即刻點擊進入官方地圖**：[https://unanext.fans/spots/map/](https://unanext.fans/spots/map/)
 發掘全球超過 **3,400+ 個經過硬核玩家驗證嘅極限運動據點**，下一站，帶埋裝備一齊向世界出發！🔥
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Climbing Shoes Pro Amazon 直送門市](https://www.amazon.com/s?k=climbing%20shoes%20pro&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

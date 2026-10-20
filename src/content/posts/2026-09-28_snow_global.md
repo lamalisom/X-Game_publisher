@@ -21,7 +21,7 @@ affiliate_products: [{"title": "Oakley Line Miner Pro 雪鏡與 Anon Merak WaveC
 
 【🌐 官方網站長篇深度專題】：
 
-大家好，我是Una (@Una_next)。今次同大家聚焦全球SNOW極限運動的最前線，為各位雪友盤點未來3到12個月內絕對不能錯過的頂級賽事，順便復盤近期幾場震撼業界的神級戰報！
+大家好，今次同大家聚焦全球SNOW極限運動的最前線，為各位雪友盤點未來3到12個月內絕對不能錯過的頂級賽事，順便復盤近期幾場震撼業界的神級戰報！
 
 ### 🏆 賽況復盤與焦點直擊
 回顧剛落幕的幾場積分賽，選手們在Big Air（大跳台）項目簡態瘋狂。無論是女子組還是男子組，1800度甚至2160度的轉體已經變成基本盤。裁判們對於落地穩定度（Landing Stance）的要求越來越嚴格，稍有瑕疵就會與頒獎台擦身而過。這不單是體能的對決，更是心理質素與科技裝備的極致碰撞。
@@ -32,6 +32,6 @@ affiliate_products: [{"title": "Oakley Line Miner Pro 雪鏡與 Anon Merak WaveC
 ### ⚙️ 職業裝備深度評測與選購建議
 面對即將到來的密集賽程，裝備升級刻不容緩。專業選手在雪板選擇上更傾向於具有碳纖維補強、反應速度極快的Camber板型；而安全方面，配備MIPS技術的頭盔與高對比度磁吸式雪鏡則是標配，確保在極速滑行與高空墜落時提供全方位保護。記得選購時要根據個人的滑行風格（Freestyle定係Freeride）嚟挑選對應的Flex硬度，先至可以發揮出最強戰鬥力！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Snowboard Helmet Goggles Pro Amazon 直送門市](https://www.amazon.com/s?k=snowboard%20helmet%20goggles%20pro&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

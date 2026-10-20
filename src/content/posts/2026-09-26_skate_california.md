@@ -20,7 +20,7 @@ affiliate_products: [{"title": "DC Men's Crisis Low-Top Skateboarding Shoe", "su
 
 ### 🏆 滑板靈魂招式解構與突破
 
-Hey 各位滑板狂熱者！我是 Una (@Una_next)。今日要同大家深入拆解嘅，絕對係每一個滑板人都避唔開、又愛又恨嘅經典大招——Kickflip（踢翻板）。呢個招式唔單止係街頭滑板（Street Skateboarding）嘅核心，仲係進階各種 Flip 招式嘅基石。好多新手練咗幾個月都仲係「鞋爛板唔反」，其實係因為忽略咗幾個極為關鍵嘅發力細節。今日就由我帶大家逐一擊破！
+Hey 各位滑板狂熱者！今日要同大家深入拆解嘅，絕對係每一個滑板人都避唔開、又愛又恨嘅經典大招——Kickflip（踢翻板）。呢個招式唔單止係街頭滑板（Street Skateboarding）嘅核心，仲係進階各種 Flip 招式嘅基石。好多新手練咗幾個月都仲係「鞋爛板唔反」，其實係因為忽略咗幾個極為關鍵嘅發力細節。今日就由我帶大家逐一擊破！
 
 ### ⚡ 關鍵技術亮點與動作分解
 
@@ -36,6 +36,6 @@ Hey 各位滑板狂熱者！我是 Una (@Una_next)。今日要同大家深入拆
 
 練 Kickflip 嘅過程中，鞋嘅磨損速度絕對係天文數字！因為前腳需要不斷同砂紙（Grip Tape）摩擦，一對專業嘅滑板鞋（Skate Shoes）係不可或缺嘅。建議選擇採用耐磨橡膠大底、鞋面帶有麂皮（Suede）加固或者橡膠防磨層嘅款式。呢類鞋款唔單止包覆性強，仲可以提供極佳嘅板感（Board Feel），幫你更精準地感知板身嘅翻轉角度，大大提高成功率！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Skate Shoes Pro Amazon 直送門市](https://www.amazon.com/s?k=skate%20shoes%20pro&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

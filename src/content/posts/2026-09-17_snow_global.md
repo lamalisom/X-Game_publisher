@@ -20,7 +20,7 @@ affiliate_products: [{"title": "MIPS Snowboard Helmet with Impact Protection", "
 
 ### 🏔️ 雪季狂熱背後嘅隱形殺手
 
-各位板友好，我是 Una！每年雪季一到，大家最期待就係去粉雪場大顯身手，但係極限運動嘅代價往往就係果幾下「震撼教育」。喺雪道上高速飛馳、玩 Park 飛 Kick 嘅時候，速度同地心吸力絕對唔係講笑。今日呢篇專題，我哋就同大家深入淺出咁拆解點樣挑選真正救到你一命嘅安全裝備！
+各位板友好，！每年雪季一到，大家最期待就係去粉雪場大顯身手，但係極限運動嘅代價往往就係果幾下「震撼教育」。喺雪道上高速飛馳、玩 Park 飛 Kick 嘅時候，速度同地心吸力絕對唔係講笑。今日呢篇專題，我哋就同大家深入淺出咁拆解點樣挑選真正救到你一命嘅安全裝備！
 
 ### ⚙️ 職業裝備深度評測與選購建議
 
@@ -32,6 +32,6 @@ affiliate_products: [{"title": "MIPS Snowboard Helmet with Impact Protection", "
 
 極限運動嘅精髓在於挑戰極限，但前提係你有命去玩下一次。立即檢查你個頭盔有冇裂痕，執好裝備，我哋下個雪場見！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Snow Helmet Impact Protection Gear Amazon 直送門市](https://www.amazon.com/s?k=snow%20helmet%20impact%20protection%20gear&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

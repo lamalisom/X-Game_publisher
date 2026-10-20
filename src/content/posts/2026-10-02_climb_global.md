@@ -25,7 +25,7 @@ affiliate_products: [{"title": "UIAA Certified Dynamic Climbing Rope and Anchor 
 【🌐 官方網站長篇深度專題】：
 
 ### 🏆 賽況復盤與焦點直擊
-各位攀登瘋子，我是 Una (@Una_next)。今期專欄我地聚焦全球極限攀登界嘅最新震撼彈！近期攀登界最大話題莫過於 Apple TV+ 熱播嘅全新紀錄片《The Last First: Winter K2》。導演 Amir Bar-Lev 透過鏡頭，深入剖析以 Nims Purja 為首嘅攀登團隊在征服「殺人峰」K2 冬季登頂背後嘅複雜人性、同埋大眾對英雄主義嘅盲目迷思。這場攀登唔單止係高度嘅對決，更係一場關於同理心與極限生存嘅靈魂拷問，絕對值得所有攀登愛好者反思。
+各位攀登瘋子，今期專欄我地聚焦全球極限攀登界嘅最新震撼彈！近期攀登界最大話題莫過於 Apple TV+ 熱播嘅全新紀錄片《The Last First: Winter K2》。導演 Amir Bar-Lev 透過鏡頭，深入剖析以 Nims Purja 為首嘅攀登團隊在征服「殺人峰」K2 冬季登頂背後嘅複雜人性、同埋大眾對英雄主義嘅盲目迷思。這場攀登唔單止係高度嘅對決，更係一場關於同理心與極限生存嘅靈魂拷問，絕對值得所有攀登愛好者反思。
 
 ### ⚡ 關鍵技術亮點與動作分解
 除了高海拔遠征的心理博弈，攀登社群近期亦面臨實質的技術安全挑戰。許多攀登者喜歡挑戰跨年度的「巨型攀登專案」（Mega-Project），這類長期消耗心力的目標往往伴隨極高風險。在面對未知且漫長的攀登路線時，如何維持心理韌性、精準分配體能，並在關鍵時刻果斷做出撤退或推進的決定，正是衡量頂尖攀登者與普通愛好者的分水嶺。
@@ -33,6 +33,6 @@ affiliate_products: [{"title": "UIAA Certified Dynamic Climbing Rope and Anchor 
 ### ⚙️ 職業裝備深度評測與選購建議
 安全永遠是極限運動的最高準則。近期攀登界傳出令人心驚的意外：一名經驗豐富的攀登者在 Moab 發生55呎墜落，罪魁禍首竟然是看似普通的「帶狀織帶與接合膠帶」（Bulk webbing with taped splices）。許多攀登者往往忽略了市面上部分織帶在拼接或受力時的隱藏風險。Una 在此強烈建議大家，切勿貪圖方便使用不明規格或老舊受損的織帶作重要支點。選購裝備時必須認明國際 UIAA 或 CE 認證，並定期檢查裝備磨損狀況，別讓細節成為壓垮生命的最後一根稻草！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Climbing Winter Gear Dynamic Rope Amazon 直送門市](https://www.amazon.com/s?k=climbing%20winter%20gear%20dynamic%20rope&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

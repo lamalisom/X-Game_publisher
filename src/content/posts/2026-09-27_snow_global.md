@@ -26,6 +26,6 @@ affiliate_products: [{"title": "Pro Freeride Snowboard Jacket with Gore-Tex", "s
 ### ⚙️ 職業裝備深度評測與選購建議
 想挑戰極限，神裝係不可或缺嘅戰友。專業級嘅雪板講求彈性與剛性嘅完美平衡，而應付極端天氣嘅雪衣雪褲更加係防水透氣嘅頂級科技結晶。Una 強烈建議各位滑雪狂熱分子，千祈唔好慳裝備嘅錢。一副啱你風格嘅 Rocker 雪板，配上一件高防風防水嘅 Freeride 雪褸，先至係你喺雪道上盡情放肆、安全返屋企嘅最強後盾！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Freeride Snow Jacket Pro Amazon 直送門市](https://www.amazon.com/s?k=freeride%20snow%20jacket%20pro&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

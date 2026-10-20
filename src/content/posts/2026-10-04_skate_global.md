@@ -19,7 +19,7 @@ affiliate_products: [{"title": "專業耐磨滑板鞋 Pro Skate Shoes", "subtitl
 
 ### 🏆 賽況復盤與焦點直擊
 
-各位熱愛極限運動嘅朋友，我是 Una (@Una_next)。今日我地要將時間倒流，一齊重溫滑板界果啲令全世界 Skater 起雞皮疙瘩嘅歷史性時刻。由早期嘅水泥碗池（Bowl）瘋狂轉體，到後黎 Mega Ramp 嘅超高空飛躍，每一個紀錄嘅誕生，都係無數次跌倒、擦傷同血汗換返黎嘅。果種對地心引力嘅挑戰，絕對係極限運動最迷人嘅地方。
+各位熱愛極限運動嘅朋友，今日我地要將時間倒流，一齊重溫滑板界果啲令全世界 Skater 起雞皮疙瘩嘅歷史性時刻。由早期嘅水泥碗池（Bowl）瘋狂轉體，到後黎 Mega Ramp 嘅超高空飛躍，每一個紀錄嘅誕生，都係無數次跌倒、擦傷同血汗換返黎嘅。果種對地心引力嘅挑戰，絕對係極限運動最迷人嘅地方。
 
 ### ⚡ 關鍵技術亮點與動作分解
 
@@ -29,6 +29,6 @@ affiliate_products: [{"title": "專業耐磨滑板鞋 Pro Skate Shoes", "subtitl
 
 想喺街頭或者 Skatepark 玩得盡興，甚至挑戰自己嘅極限，一套 Pro 級嘅裝備絕對少唔到。鞋款方面，必須選擇具備高耐磨麂皮（Suede）同強效緩震鞋墊嘅 Professional Skate Shoes，先可以承受高強度落台嘅衝擊。同時，合適嘅板面弧度（Concave）同埋高回彈車輪（Wheels）亦都係確保動作流暢度嘅核心武器。立即裝備好自己，一齊喺板上創造屬於你嘅歷史！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Skate Shoes Pro Amazon 直送門市](https://www.amazon.com/s?k=skate%20shoes%20pro&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

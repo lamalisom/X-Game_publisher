@@ -45,6 +45,6 @@ affiliate_products: [{"title": "Pro-Tec 專業級極限運動耐衝擊護膝與�
 ### 🗺️ 即刻探索 xGame Radar 全球極限運動地圖
 想發掘世界各地仲有咩隱世滑板場、BMX 據點同攀岩秘境？立即點擊解鎖 [xGame Radar 全球極限運動地圖](https://unanext.fans/spots/map/)，超過 3,400+ 個經專業玩家驗證嘅熱血場地等你親身去征服，即刻出發去踩啦！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Bmx Protection Knee Shin Pads Amazon 直送門市](https://www.amazon.com/s?k=bmx%20protection%20knee%20shin%20pads&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

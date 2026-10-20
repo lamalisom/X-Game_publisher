@@ -32,6 +32,6 @@ affiliate_products: [{"title": "Pro Skateboard Complete Set & High-Durability Sk
 ### ⚙️ 專業裝備深度評測與選購建議
 去呢啲世界級場地踩板，裝備絕對唔可以馬虎。板面 (Deck) 建議選擇 7 層加拿大楓木以確保彈力；輪子硬度方面，去水泥場地建議選用 99A 至 101A 嘅硬輪，確保甩尾 (Power Slide) 夠爽快。鞋款方面，高筒抓地力強嘅 Skate Shoes 係保護腳踝嘅不二之選，即刻入手開板啦！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Skateboard Deck Pro  Skate Shoes High Top  Abec 7 Bearings Amazon 直送門市](https://www.amazon.com/s?k=skateboard%20deck%20pro%20%20skate%20shoes%20high%20top%20%20abec%207%20bearings&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

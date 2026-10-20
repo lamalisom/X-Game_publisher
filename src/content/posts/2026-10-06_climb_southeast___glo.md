@@ -21,7 +21,7 @@ affiliate_products: [{"title": "Scarpa Blackbird High-Performance Climbing Shoe"
 【🌐 官方網站長篇深度專題】：
 
 ### 🌊 航行二千海里的攀岩狂熱：東南亞隱世艇居聖地解密
-Hello 各位極限狂迷！我是 Una (@Una_next)。今期專欄我地要帶大家玩轉全球頂級攀岩場地（SPOT）。經過長達四年的海上漂泊與不斷探索，攀岩界終於在東南亞海域尋獲一處令 Boat-Dwelling Climbers（艇居攀岩者）瘋狂的絕佳據點。呢個地方完美結合左海上流動生活同頂級天然岩壁，隨時落船就係高難度 Overhang 同 Technical Face，絕對係今季必朝聖嘅極限烏托邦！
+今期專欄我地要帶大家玩轉全球頂級攀岩場地（SPOT）。經過長達四年的海上漂泊與不斷探索，攀岩界終於在東南亞海域尋獲一處令 Boat-Dwelling Climbers（艇居攀岩者）瘋狂的絕佳據點。呢個地方完美結合左海上流動生活同頂級天然岩壁，隨時落船就係高難度 Overhang 同 Technical Face，絕對係今季必朝聖嘅極限烏托邦！
 
 ### ⚡ 關鍵技術亮點與傳統攀登（Trad Climbing）的軟實力革命
 講到攀岩，除左場地夠硬，夥伴嘅選擇同樣生死攸關。近期攀岩圈掀起一股熱話：點解女性往往係最強嘅 Trad Climbing 夥伴？從精準嘅風險管理（Risk Management）到無可比擬嘅同理心，女性攀岩者往往能喺高壓、高風險嘅多繩距攀登中保持絕對冷靜。呢種結合心理韌性與細膩判斷嘅「軟實力」，正正是征服大岩壁（Big Wall）不可或缺嘅關鍵。
@@ -29,6 +29,6 @@ Hello 各位極限狂迷！我是 Una (@Una_next)。今期專欄我地要帶大�
 ### ⚙️ 職業裝備深度評測：Scarpa Blackbird 硬派岩鞋殺到
 面對各種極端戶外岩場，腳下功夫絕對唔可以馬虎。今期特別為大家深度評測最新推出的 Scarpa Blackbird。呢對被譽為史上最強支撐力的岩鞋，即使你未有挑戰 Dawn Wall 咁癲嘅目標，其極致硬挺嘅鞋頭設計（Stiffest Rock Shoe for Edging）喺微小岩點上嘅踩踏表現簡直堪稱完美，絕對係技術型攀岩者嘅神級戰靴！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Stiff Climbing Shoes For Edging Amazon 直送門市](https://www.amazon.com/s?k=stiff%20climbing%20shoes%20for%20edging&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

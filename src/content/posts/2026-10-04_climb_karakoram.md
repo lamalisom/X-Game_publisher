@@ -31,6 +31,6 @@ affiliate_products: [{"title": "Scarpa Blackbird Stiff Rock Climbing Shoe", "sub
 ### ⚙️ 職業裝備深度評測：解鎖極限地形的終極支撐
 面對咁嚴苛嘅戶外地形，腳下嘅裝備絕對唔可以馬虎。近期備受矚目嘅 Scarpa Blackbird 岩鞋，被譽為試過最硬淨嘅岩鞋之一。無論你係咪準備征服 Dawn Wall 呢類史詩級路線，呢對鞋喺微小腳點上嘅極致支撐力，都能夠為攀登者提供前所未有嘅信心。揀啱裝備，先至可以喺極限邊緣走得更遠、更穩！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Stiff Rock Climbing Shoes Amazon 直送門市](https://www.amazon.com/s?k=stiff%20rock%20climbing%20shoes&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

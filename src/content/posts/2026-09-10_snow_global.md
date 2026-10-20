@@ -38,6 +38,6 @@ affiliate_products: [{"title": "D3O 緩衝技術滑雪防撞褲與 MIPS 專業�
 
 一套專業護具嘅價錢，比起你去醫院睇骨科平得多。投資喺裝備上，係你對自己熱愛嘅運動最基本嘅尊重。記住，喺雪場上面，安全返屋企先係最大嘅贏家！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Snowboard Impact Shorts  Back Protector  Mips Helmet Amazon 直送門市](https://www.amazon.com/s?k=snowboard%20impact%20shorts%20%20back%20protector%20%20MIPS%20helmet&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

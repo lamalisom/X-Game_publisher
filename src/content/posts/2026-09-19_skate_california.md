@@ -28,6 +28,6 @@ affiliate_products: [{"title": "MOB Grip 高抓力專業滑板砂紙 (9x33 吋)"
 ### ⚙️ 裝備調校：砂紙抓力與輪架鬆緊度
 想練好 Tre Flip，裝備細節絕對有影響。如果板砂（Grip Tape）磨損過度，後腳兜板會極易跣腳；建議選用抓力強嘅專業級砂紙（例如 Mob 或 Grizzly）。另外，中橋（Trucks）千祈咪調得過死過硬，保持微鬆中等彈性，先可以喺起跳瞬間畀你利用板身傾斜角精準借力。
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Pro Skateboard Grip Tape Amazon 直送門市](https://www.amazon.com/s?k=pro%20skateboard%20grip%20tape&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

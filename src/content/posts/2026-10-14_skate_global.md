@@ -20,7 +20,7 @@ affiliate_products: [{"title": "Pro Skate Shoes & Heavy Duty Helmet Combo", "sub
 ![🛹 全球極限街頭朝聖：SKATE Spot #8227525108 極限滑板場全拆解、專業地形評測與頂級住宿精選](https://pub-a1dfaa7bc52a4b1187e528bd4b2da12b.r2.dev/cards/xgame_20261014_093142.png)
 
 ### 📍 今日精選極限據點：SKATE Spot #8227525108
-各位極限運動發燒友，我是 Una (@Una_next)！今天為大家帶來全球滑板界熱話不斷的頂級據點——SKATE Spot #8227525108。無論你是剛踏上板的新手，還是追求高難度技巧的職業滑手，這裡絕對能滿足你對速度與街頭文化的渴望！
+各位極限運動發燒友，！今天為大家帶來全球滑板界熱話不斷的頂級據點——SKATE Spot #8227525108。無論你是剛踏上板的新手，還是追求高難度技巧的職業滑手，這裡絕對能滿足你對速度與街頭文化的渴望！
 
 ### 🏟️ 核心設施規格與地形亮點全拆解
 這個場地絕對是匠心之作！場內配備了極高品質的「專業滑行道」，表面摩擦力經過精密計算，推板時流暢度極高。此外，核心區域更設有「標準規格坡道與障礙地形」，無論是 Ollie、Kickflip 還是 Grind 動作都能完美發揮。場地更貼心配置了「夜間照明與休息維護區」，讓熱血的滑手們即使在入夜後也能盡情揮灑汗水，安全又舒適。
@@ -38,6 +38,6 @@ affiliate_products: [{"title": "Pro Skate Shoes & Heavy Duty Helmet Combo", "sub
 ### 🗺️ 即刻探索 xGame Radar 全球極限運動地圖
 不想錯過全球每一個隱藏的極限天堂？即刻點擊 https://unanext.fans/spots/map/ 探索全球 3,400+ 個經過驗證的極限運動據點，加入我們的極限社群，一齊解鎖更多街頭傳奇！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Skate Shoes Pro  Durable Deck  Heavy Duty Helmet Amazon 直送門市](https://www.amazon.com/s?k=skate%20shoes%20pro%20%20durable%20deck%20%20heavy%20duty%20helmet&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

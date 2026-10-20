@@ -33,6 +33,6 @@ Hey guys！我係Una (@Una_next)。喺滑板世界入面，如果Ollie係所有�
 ### ⚙️ 職業裝備深度評測與選購建議
 想練好Flip招？你嘅裝備絕對唔可以馬虎！一副彈性夠好嘅楓木板身（Maple Deck）、咬腳夠強嘅Grip Tape，以及最緊要嘅——一對具備高耐磨同良好包覆感嘅硫化鞋底滑板鞋（Vulcanized Skate Shoes），先至係你征服街頭嘅最佳戰友！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Skate Shoes Vulcanized Grip Tape Amazon 直送門市](https://www.amazon.com/s?k=skate%20shoes%20vulcanized%20grip%20tape&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

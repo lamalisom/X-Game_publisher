@@ -39,6 +39,6 @@ Phoenix Pyeongchang 最令人熱血沸騰嘅地方，莫過於佢嗰個符合國
 ### 🗺️ 即刻探索 xGame Radar 全球極限運動地圖
 想搵更多全球隱世滑雪場？或者想搵埋攀岩、衝浪據點？即刻點擊 https://unanext.fans/spots/map/ 探索全球 3,400+ 個經過驗證的極限運動據點！Una 喺地圖入面等你，一齊去探索呢個世界！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Snowboard Boots  Snowboard Bindings  Protective Gear Set  Thermal Base Layer Amazon 直送門市](https://www.amazon.com/s?k=snowboard%20boots%20%20snowboard%20bindings%20%20protective%20gear%20set%20%20thermal%20base%20layer&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

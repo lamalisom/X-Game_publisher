@@ -20,7 +20,7 @@ affiliate_products: [{"title": "Burton Process Snowboard & Cartel X Bindings Pro
 
 ### 🏆 選手傳奇與風格剖析
 
-各位極限狂迷大家好，我是 Una (@Una_next)。今日專欄要同大家深度剖析嘅，係全球雪壇無人不曉嘅自由式滑雪怪才——Marcus Kleveland。來自挪威嘅佢，自細已經喺雪地上展現出無與倫比嘅天賦。唔同於一般選手單純追求高度，Kleveland 將街頭滑板（Skateboarding）嘅流暢感同創造力完美移植到雪板之上，每一次起跳都充滿藝術感，成為無數新世代滑雪手嘅絕對偶像。
+各位極限狂迷大家好，今日專欄要同大家深度剖析嘅，係全球雪壇無人不曉嘅自由式滑雪怪才——Marcus Kleveland。來自挪威嘅佢，自細已經喺雪地上展現出無與倫比嘅天賦。唔同於一般選手單純追求高度，Kleveland 將街頭滑板（Skateboarding）嘅流暢感同創造力完美移植到雪板之上，每一次起跳都充滿藝術感，成為無數新世代滑雪手嘅絕對偶像。
 
 ### ⚡ 關鍵技術亮點與動作分解
 
@@ -30,6 +30,6 @@ affiliate_products: [{"title": "Burton Process Snowboard & Cartel X Bindings Pro
 
 對於追求極致表現嘅滑雪發燒友嚟講，Kleveland 嘅 Set-up 絕對係教科書級別。佢採用偏向硬身（Stiff）嘅 Freestyle 雪板，確保喺高速衝刺同巨型跳台（Big Air）起跳時有足夠嘅穩定性。搭配高反應力嘅 Step-on 或傳統綁帶固定器，能夠將雙腳微小嘅動作瞬間傳導至板刃。如果你都想喺雪地展現大師級身手，揀選一套具備高彈性與抗震能力嘅 Pro 級裝備，絕對係解鎖高難度動作嘅不二之法！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Snowboard Pro Setup Amazon 直送門市](https://www.amazon.com/s?k=snowboard%20pro%20setup&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

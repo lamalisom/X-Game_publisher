@@ -40,6 +40,6 @@ affiliate_products: [{"title": "Burton Malavita Re:Flex 滑雪固定器", "subti
 
 想玩 Freestyle 玩得好，一對 Flex 偏中等（Medium Flex）嘅 Bindings 係必須嘅。太硬會令你無咗微調嘅空間，太軟又會令起跳嗰下唔夠反應。建議揀一啲有良好緩震系統（Cushioning）嘅款式，保護你對腳喺大跳台落地嗰陣唔會受傷。另外，一塊 True Twin 嘅板會令你喺 Switch 落地嗰陣更加得心應手。記住，安全第一，頭盔同護具絕對唔可以慳！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Snowboard Freestyle Bindings Burton Custom Amazon 直送門市](https://www.amazon.com/s?k=snowboard%20freestyle%20bindings%20burton%20custom&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

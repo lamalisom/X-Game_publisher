@@ -38,6 +38,6 @@ Kurikan Pumptrack 擁有頂級嘅**專業滑行道**設計，每一個彎位同�
 ### 🗺️ 即刻探索 xGame Radar 全球極限運動地圖
 全球極限運動熱潮停唔到，近期全球各地嘅BMX活動同賽事（好似黎緊嘅各項國際大賽）氣氛極度火熱！想搵出你附近或者下個旅行目的地嘅隱世場地？即刻點擊官方地圖 👉 https://unanext.fans/spots/map/，探索全球超過 3,400+ 個經過驗證嘅極限運動據點，一齊加入 Una 嘅極限世界啦！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Bmx Pro Bike Helmet Knee Pads Amazon 直送門市](https://www.amazon.com/s?k=BMX%20pro%20bike%20helmet%20knee%20pads&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

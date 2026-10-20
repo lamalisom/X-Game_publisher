@@ -22,7 +22,7 @@ affiliate_products: [{"title": "La Sportiva Solution Comp Climbing Shoes", "subt
 
 ### 🧗‍♂️ 尋找岩壁上的極致震撼：全球頂級攀岩場導覽
 
-Hello 各位極限狂熱者！我是 Una (@Una_next)。今日我哋要將目光聚焦喺攀岩界（CLIMB）嘅朝聖熱點。無論你是鍾意室內抱石嘅爆發力，定係嚮往天然峭壁嘅長距離耐力考驗，呢份全球與亞洲頂級場地導覽絕對會令你即刻想訂機票出發！
+Hello 各位極限狂熱者！今日我哋要將目光聚焦喺攀岩界（CLIMB）嘅朝聖熱點。無論你是鍾意室內抱石嘅爆發力，定係嚮往天然峭壁嘅長距離耐力考驗，呢份全球與亞洲頂級場地導覽絕對會令你即刻想訂機票出發！
 
 ### 🏆 全球焦點場地與抱石聖地解構
 
@@ -36,6 +36,6 @@ Hello 各位極限狂熱者！我是 Una (@Una_next)。今日我哋要將目光�
 
 征服頂級攀岩場，一套專業嘅 Gear 係唔少得嘅。一對包裹性強、鞋底橡膠摩擦力極高嘅專業攀岩鞋（Climbing Shoes Pro）絕對係你嘅最強武器。記住定期檢查你嘅 harness 同 rope，安全永遠係追求極限嘅第一位。準備好未？一齊踩上岩壁，見證自己嘅無限可能！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Climbing Shoes Pro Amazon 直送門市](https://www.amazon.com/s?k=climbing%20shoes%20pro&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

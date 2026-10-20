@@ -20,7 +20,7 @@ affiliate_products: [{"title": "Black Diamond Vector Climbing Helmet & Solution 
 
 ### 🛡️ 攀登安全警號：點解裝備選購唔容有失？
 
-Hello 各位極限狂迷，我是 Una (@Una_next)。近期全球攀登界震動，加拿大BC省嘅高山救援行動接連發生，包括 Edge Peak 嘅三次求救事件，以及 Mount Robson 5,000呎 Emperor Face 嘅歷史性夜間救援。呢啲驚險場面再次敲響警號：大自然面前，人類永遠係渺小嘅。當你挑戰極限、甚至好似 13 歲天才少年 Leo Cea 挑戰 9a+ 咁追求極致表現時，背後支撐你嘅絕對唔止係技術，而係你身上嗰套「救命裝備」。
+Hello 各位極限狂迷，近期全球攀登界震動，加拿大BC省嘅高山救援行動接連發生，包括 Edge Peak 嘅三次求救事件，以及 Mount Robson 5,000呎 Emperor Face 嘅歷史性夜間救援。呢啲驚險場面再次敲響警號：大自然面前，人類永遠係渺小嘅。當你挑戰極限、甚至好似 13 歲天才少年 Leo Cea 挑戰 9a+ 咁追求極致表現時，背後支撐你嘅絕對唔止係技術，而係你身上嗰套「救命裝備」。
 
 ### ⚡ 核心裝備解析：頭盔、安全帶與防護系統點樣揀？
 
@@ -35,6 +35,6 @@ Hello 各位極限狂迷，我是 Una (@Una_next)。近期全球攀登界震動�
 
 記住，裝備係你喺絕境中唯一嘅依靠。裝備做得足，極限先至玩得長久！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Alpine Climbing Helmet Harness Safety Gear Amazon 直送門市](https://www.amazon.com/s?k=alpine%20climbing%20helmet%20harness%20safety%20gear&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

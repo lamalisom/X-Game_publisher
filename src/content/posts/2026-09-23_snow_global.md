@@ -22,7 +22,7 @@ affiliate_products: [{"title": "Pro Series Snowboard Freestyle Deck", "subtitle"
 
 ### 🏆 焦點選手與傳奇背景
 
-Hello 各位極限運動狂迷！我是 Una (@Una_next)。今期我們的【PRO PROFILE】專欄要帶大家深入冰雪世界，聚焦一位在滑雪界（SNOW）無人不曉的怪物級選手——來自挪威的 Marcus Kleveland。年紀輕輕就已經在各大極限賽事中橫掃金牌，他對滑雪板（Snowboard）的熱愛與瘋狂創新，徹底改寫了現代 Freestyle 競技的難度天花板。無論是在 X-Games 還是各大世界巡迴賽，只要有 Marcus 登場，全場的氣氛絕對會被推到最高點！
+Hello 各位極限運動狂迷！今期我們的【PRO PROFILE】專欄要帶大家深入冰雪世界，聚焦一位在滑雪界（SNOW）無人不曉的怪物級選手——來自挪威的 Marcus Kleveland。年紀輕輕就已經在各大極限賽事中橫掃金牌，他對滑雪板（Snowboard）的熱愛與瘋狂創新，徹底改寫了現代 Freestyle 競技的難度天花板。無論是在 X-Games 還是各大世界巡迴賽，只要有 Marcus 登場，全場的氣氛絕對會被推到最高點！
 
 ### ⚡ 關鍵技術亮點與動作分解
 
@@ -36,6 +36,6 @@ Hello 各位極限運動狂迷！我是 Una (@Una_next)。今期我們的【PRO 
 - **Snowboard**：偏向中高硬度的 Freestyle 專用雪板，提供極佳的彈性與高速穩定性。
 - **Bindings & Boots**：搭配反應極快的固定器與支撐力強的雪靴，確保每一次起跳與落地都能完美傳遞力量。想提升滑雪技術的朋友，挑選合適的 Pro Model 裝備絕對是第一步！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Snowboard Pro Model Goggle Binding Amazon 直送門市](https://www.amazon.com/s?k=snowboard%20pro%20model%20goggle%20binding&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

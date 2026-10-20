@@ -20,7 +20,7 @@ affiliate_products: [{"title": "La Sportiva & Black Diamond 專業攀岩鞋與�
 
 ### 📍 今日精選極限據點：芬蘭 Karkaus 天然岩場
 
-Hello 各位極限狂迷！我是 Una (@Una_next)。今日要同大家深入解構位於芬蘭東南部南薩沃尼亞區（Mäntyharju 鄰近）嘅戶外攀岩聖地 —— **Karkaus**！呢度係芬蘭攀岩社群極具代表性嘅天然花崗岩運動攀（Sport Climbing）與抱石秘境，座落於靜謐嘅北歐湖泊旁，絕對係你解鎖北歐硬派攀爬版圖嘅必訪之地！
+今日要同大家深入解構位於芬蘭東南部南薩沃尼亞區（Mäntyharju 鄰近）嘅戶外攀岩聖地 —— **Karkaus**！呢度係芬蘭攀岩社群極具代表性嘅天然花崗岩運動攀（Sport Climbing）與抱石秘境，座落於靜謐嘅北歐湖泊旁，絕對係你解鎖北歐硬派攀爬版圖嘅必訪之地！
 
 ### 🧗 天然岩壁規格與地形亮點全拆解
 
@@ -44,5 +44,5 @@ Karkaus 嘅路線評級主要分佈喺 **French 6b 至 7c** 之間（約 YDS 5.1
 
 ---
 
-### 🛒 Una 裝備選購建議
+### 🛒 專業裝備選購指南
 👉 [前往 Amazon 選購專業攀岩鞋與碳粉袋套裝](https://www.amazon.com/s?k=climbing+shoes+pro+chalk+bag&tag=kait02bc-20) *(含聯盟推薦連結)*

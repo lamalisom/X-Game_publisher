@@ -27,6 +27,6 @@ Hello 各位極限運動狂迷！我係Una (@Una_next)。今日要同大家瘋�
 ### ⚙️ 職業裝備深度評測與選購建議
 面對呢種世界級嘅大浪挑戰，選手們嘅神兵利器絕對居功至偉。今次賽事入面，超過七成嘅頂尖選手都選用咗高剛性嘅碳纖維強化Shortboard（短板），搭配最新科技嘅Performance Thruster（三舵配置），確保喺高速滑浪時嘅靈活性同抓地力。如果你都想喺海灘上展現呢種職業級嘅爆發力，一套頂級嘅高效能衝浪板絕對係你征服大浪嘅不二之選！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Surfboard High Performance Shortboard Amazon 直送門市](https://www.amazon.com/s?k=surfboard%20high%20performance%20shortboard&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

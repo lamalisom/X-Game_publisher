@@ -22,6 +22,6 @@ affiliate_products: [{"title": "專業級高性能衝浪防寒衣", "subtitle": 
 
 講到近期戰報，上個月喺澳洲嘅Gold Coast Quiksilver Pro，嗰場激戰真係睇到我哋眼都凸！Ethan Ewing同埋Caroline Marks嘅表現簡直係神級，佢哋嘅Power Surfing同埋空中動作，完美演繹咗咩叫極限！🏆 當然，安全永遠係第一位，無論你係新手定高手，落水前記得檢查裝備，了解海況，同埋唔好單獨衝浪啊！🤙 未來一年，衝浪界肯定精彩萬分，大家準備好未？一齊期待更多神級表現啦！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Pro Surf Wetsuit Amazon 直送門市](https://www.amazon.com/s?k=pro%20surf%20wetsuit&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

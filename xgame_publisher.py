@@ -365,6 +365,12 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 - 嚴禁捏造「車程只需 10 分鐘」等虛假距離！
 - 若推薦周邊住宿，必須是該場地所在的同一城鎮或車程 30 分鐘內的地區；若是野外天然場地，請客觀建議下榻「鄰近主要城鎮之湖區木屋營地或 B&B」，嚴禁跨區推薦數百公里外的極光奢華酒店！
 
+
+【專題寫作語氣與開頭絕對禁令】：
+- 嚴禁以「我是 Una (@Una_next)」或「Hello 各位極限狂迷！我是 Una」等個人問候語開頭！
+- 文章必須以頂級極限運動雜誌（xGame Radar Magazine）客觀、熱血、權威的編輯部專題視角，直接開門見山切入賽況或場地核心亮點！
+- 內文嚴禁頻繁自我重複「Una 推薦」、「Una 強力建議」等贅詞，改以「編輯部推薦」或「職業選手配置建議」。
+
 【任務要求】:
 請生成一篇具備深度專業度、高社群傳播力與極限運動熱血感的文章資料，語言格式：完全使用 **{selected_lang_desc}**。
 必須以嚴格的 JSON 格式回傳，包含以下欄位：
@@ -664,7 +670,12 @@ def upload_to_r2(local_file_path, r2_object_name):
         print(f"⚠️ Cloudflare R2 上傳失敗: {e}")
         return None
 
-def save_post_as_markdown(post_data, image_url, source_label="Official / Editorial"):
+def     # 自動過濾 AI 偶發的個人自我介紹贅詞
+    if "content" in post_data and isinstance(post_data["content"], str):
+        post_data["content"] = re.sub(r'^(?:Hello|嗨|哈囉)[^。\n]*?我是\s*Una[^\n。！？]*[。！？\n]*', '', post_data["content"], flags=re.IGNORECASE)
+        post_data["content"] = re.sub(r'我是\s*Una\s*(?:\(@Una_next\)|@Una_next)?[，。、\s]*', '', post_data["content"], flags=re.IGNORECASE)
+
+    save_post_as_markdown(post_data, image_url, source_label="Official / Editorial"):
     timestamp = datetime.now().strftime("%Y-%m-%d")
     category_key = post_data.get("category", "SKATE").upper()
     topic_type = post_data.get("topic_type", "GENERAL").upper()
@@ -865,6 +876,11 @@ async def main_async():
 
     post_data["content"] = formatted_web_article
     post_data["category"] = category
+        # 自動過濾 AI 偶發的個人自我介紹贅詞
+    if "content" in post_data and isinstance(post_data["content"], str):
+        post_data["content"] = re.sub(r'^(?:Hello|嗨|哈囉)[^。\n]*?我是\s*Una[^\n。！？]*[。！？\n]*', '', post_data["content"], flags=re.IGNORECASE)
+        post_data["content"] = re.sub(r'我是\s*Una\s*(?:\(@Una_next\)|@Una_next)?[，。、\s]*', '', post_data["content"], flags=re.IGNORECASE)
+
     save_post_as_markdown(post_data, final_image_url, "Official / Editorial")
 
     json_filename = f"{post_slug}.json"

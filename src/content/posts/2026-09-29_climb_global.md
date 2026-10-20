@@ -21,7 +21,7 @@ affiliate_products: [{"title": "Ultralight Alpine Bivy Sack & Emergency Essentia
 
 ### 🧗‍♂️ 挑戰極限：全球頂級攀岩場地與歷史震撼
 
-Hello 各位極限狂熱者！我是 Una (@Una_next)。今日我哋將目光聚焦喺全球最頂尖嘅攀岩場地，並深入探討攀岩者最敬畏嘅大壁挑戰。攀岩唔單止係力量嘅展現，更係心理質素與生存智慧嘅終極考驗。
+Hello 各位極限狂熱者！今日我哋將目光聚焦喺全球最頂尖嘅攀岩場地，並深入探討攀岩者最敬畏嘅大壁挑戰。攀岩唔單止係力量嘅展現，更係心理質素與生存智慧嘅終極考驗。
 
 ### ⚡ 歷史回顧：Yosemite 半圓頂的極限冰風暴
 
@@ -37,6 +37,6 @@ Hello 各位極限狂熱者！我是 Una (@Una_next)。今日我哋將目光聚�
 
 無論你係去世界各地嘅頂級人工岩場定係天然大壁，做好萬全準備，先至可以真正享受征服地心引力嘅快感！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Alpine Climbing Pack And Bivy Gear Amazon 直送門市](https://www.amazon.com/s?k=alpine%20climbing%20pack%20and%20bivy%20gear&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

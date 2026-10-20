@@ -38,6 +38,6 @@ affiliate_products: [{"title": "Burton Photon Step On Snowboard Boots", "subtitl
 ### 🗺️ 即刻探索 xGame Radar 全球極限運動地圖
 熱血的滑雪旅人，世界那麼大，還有無數極限場地等你征服！即刻點擊 https://unanext.fans/spots/map/ 探索全球超過 3,400+ 個經過驗證的極限運動據點，規劃你下一場熱血冒險！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Snowboard Boots Pro Helmet Amazon 直送門市](https://www.amazon.com/s?k=snowboard%20boots%20pro%20helmet&tag=)
 *(透過連結購買可支持本頻道與網站運作)*

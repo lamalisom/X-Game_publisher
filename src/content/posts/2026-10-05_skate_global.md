@@ -27,6 +27,6 @@ affiliate_products: [{"title": "專業滑板耐磨緩震運動鞋", "subtitle": 
 ### ⚙️ 職業裝備深度評測與選購建議
 想喺賽事中發揮到極致？裝備絕對唔可以馬虎。對於街頭滑板嚟講，一塊彈性好、Pop 感強嘅 Pro Model 板身係必須嘅。鞋款方面，建議選擇具備高緩震技術（如 Zoom Air 或 PopCush）嘅款式，因為喺連續落差地形下，腳踭嘅保護至關重要。另外，唔好忽視軸承（Bearings）嘅潤滑度，喺比賽嗰種緊張節奏下，任何一點阻力都可能影響你嘅速度同動作完成度。建議大家定期檢查板面邊緣有無裂痕，確保每一次 Pop 都係最紮實嘅反饋。
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Pro Skate Deck  High Impact Skate Shoes  Lightweight Helmet Amazon 直送門市](https://www.amazon.com/s?k=pro%20skate%20deck%20%20high%20impact%20skate%20shoes%20%20lightweight%20helmet&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

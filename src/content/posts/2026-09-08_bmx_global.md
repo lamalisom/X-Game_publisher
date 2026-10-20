@@ -22,6 +22,6 @@ affiliate_products: [{"title": "專業BMX全罩式頭盔", "subtitle": "Amazon �
 
 全球頂級場地好似美國Woodward Camp固然係聖地，但亞洲都唔輸蝕！上海SMP滑板公園絕對係亞洲BMX嘅地標之一，世界級碗池、巨型U池，堅係挑戰極限！香港、台灣、日本都有唔少高質Park同Street Spot等緊大家發掘！記住，無論去邊度踩，安全永遠行先！頭盔、護具，一樣都唔少得！戴好裝備，一齊衝破極限啦！🤘💥
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Bmx Complete Bike  Bmx Helmet  Bmx Pads Amazon 直送門市](https://www.amazon.com/s?k=bmx%20complete%20bike%20%20bmx%20helmet%20%20bmx%20pads&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

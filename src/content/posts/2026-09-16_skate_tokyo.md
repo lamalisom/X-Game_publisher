@@ -30,6 +30,6 @@ Yuto 嘅滑板風格可以總結為兩個字：「流暢」。當大家仲喺度
 
 想要解鎖好似 Yuto 咁神級嘅滑板表現，一套頂級嘅 Setup 絕對少唔極！首先在 Deck（板身）方面，建議選擇 8.0 吋至 8.25 吋、帶有強烈 Concave（凹度）嘅楓木板，咁樣先可以確保Flip板時嘅抓腳感；Trucks（支架）就要揀轉向靈敏度高嘅輕量化款式，配合硬度 99A 以上嘅 Wheels（輪），先可以喺街頭水泥地同 Skatepark 之間無縫切換，極速飆升！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Pro Skate Deck Bearing Trucks Amazon 直送門市](https://www.amazon.com/s?k=pro%20skate%20deck%20bearing%20trucks&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

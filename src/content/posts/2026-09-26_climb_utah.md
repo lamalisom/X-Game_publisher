@@ -37,6 +37,6 @@ affiliate_products: [{"title": "Arc'teryx 專業級戶外多功能岩場接近�
 
 天然岩場危機四伏，尤其喺野外高空抱石（Highball），心理素質同裝備同樣重要。踩點精準度依賴具備強大下壓包覆感同黏性橡膠嘅攀岩鞋，而進場路程中一對兼具防滑與支撐力嘅頂級 Approach Shoes（接近鞋）能確保體能零虛耗。喺克服石頂盲區時，深呼吸放鬆肩頸，堅信自己嘅腳踭鎖定點，一旦決定壓頂就絕不猶豫，將恐懼化為引爆動作嘅強大專注力！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Climbing Approach Shoes Vibram Amazon 直送門市](https://www.amazon.com/s?k=climbing%20approach%20shoes%20vibram&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

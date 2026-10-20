@@ -30,6 +30,6 @@ affiliate_products: [{"title": "Pro Skateboard Complete Set", "subtitle": "Amazo
 
 想要喺街頭滑板中做出呢種神級動作，專業級嘅裝備絕對唔少得！專家建議選擇 7 層加拿大楓木壓製嘅滑板面板，確保彈性同耐用度；搭配高轉速、低阻力嘅陶瓷軸承，以及硬度適中（101A）嘅街頭輪，先至可以喺水泥地面上完美滑行並精準落板。無論你係新手定資深滑手，投資一套頂級配置，絕對係提升技術突破瓶頸嘅最佳捷徑！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Skateboard Pro Deck Trucks Bearings Amazon 直送門市](https://www.amazon.com/s?k=skateboard%20pro%20deck%20trucks%20bearings&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

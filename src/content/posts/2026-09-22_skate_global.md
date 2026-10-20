@@ -21,7 +21,7 @@ affiliate_products: [{"title": "Professional Grade Skateboard Complete Set", "su
 
 ### 🛹 尋找終極地形：解鎖全球Skater朝聖藍圖
 
-Hello 各位極限狂熱者！我是 Una (@Una_next)。今日我哋唔講比賽，嚟傾下每個 Skater 夢寐以求嘅終極朝聖地（Spot）。無論你鍾意大碗池（Bowl）嘅速度感，定係 Technic 爆棚嘅 Street Plaza，以下呢幾個全球與亞洲頂級滑板場，絕對會令你嘅滑板靈魂瞬間燃燒！
+Hello 各位極限狂熱者！今日我哋唔講比賽，嚟傾下每個 Skater 夢寐以求嘅終極朝聖地（Spot）。無論你鍾意大碗池（Bowl）嘅速度感，定係 Technic 爆棚嘅 Street Plaza，以下呢幾個全球與亞洲頂級滑板場，絕對會令你嘅滑板靈魂瞬間燃燒！
 
 ### 🌊 Venice Beach Skatepark, Los Angeles：街頭文化的絕對殿堂
 
@@ -35,6 +35,6 @@ Hello 各位極限狂熱者！我是 Una (@Una_next)。今日我哋唔講比賽�
 
 面對唔同嘅場地，你嘅 Setup 必須隨機應變。去 Venice Beach 呢類粗糙地面，建議換上輪徑較大（54mm以上）、硬度適中（99A）嘅滑板輪，以保持速度；如果係去 Ariake 呢類室內或極平滑水泥場，硬度高、反應快嘅輪子就係不二之選。記住，保護裝備永遠係挑戰極限嘅底氣，衝大 Bowl 嗰陣，Helmet 同 Pad 絕對唔少得！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Skateboard Complete Pro High Performance Amazon 直送門市](https://www.amazon.com/s?k=skateboard%20complete%20pro%20high%20performance&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*

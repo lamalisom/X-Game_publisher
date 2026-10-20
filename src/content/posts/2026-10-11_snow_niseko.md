@@ -38,6 +38,6 @@ Niseko United 嘅粉雪同陡坡極具挑戰，特別適合中階進階及專業
 ### 🗺️ 即刻探索 xGame Radar 全球極限運動地圖
 想發掘更多世界各地嘅隱藏粉雪天堂同極限場地？立即點擊官方地圖 https://unanext.fans/spots/map/ ，一齊探索全球超過 3,400+ 個經過驗證嘅極限運動據點，加入 Una 嘅極限世界版圖！
 
-🛒 *Una 裝備選購建議*:
+🛒 *專業裝備選購指南*:
 👉 [Powder Snowboard Backcountry Backpack Avalanche Beacon Goggle Pro Amazon 直送門市](https://www.amazon.com/s?k=powder%20snowboard%20backcountry%20backpack%20avalanche%20beacon%20goggle%20pro&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*
