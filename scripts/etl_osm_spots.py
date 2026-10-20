@@ -420,7 +420,10 @@ def transform_element(element: Dict[str, Any], default_category: str, default_co
         tags.get("name:zh") or 
         tags.get("name:en") or 
         tags.get("name") or 
-        f"{default_category} Spot #{osm_id}"
+        (
+        f"{tags.get('addr:district') or tags.get('addr:city') or tags.get('is_in:city') or 'Local'} {default_category} " +
+        ("Pump Track" if "pumptrack" in tags.get("leisure", "") else "Park/Track")
+    )
     )
     
     sub_category = "general"
