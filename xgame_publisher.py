@@ -1,3 +1,34 @@
+
+def generate_rich_hashtags(category_key, topic_type="GENERAL"):
+    """自動依運動項目與內容型態產生專業、精準的中英雙語社群標籤"""
+    cat = category_key.upper() if category_key else "SKATE"
+    
+    SPORT_TAGS = {
+        "SKATE": ["#滑板", "#街式滑板", "#碗池", "#SKATE"],
+        "BMX": ["#BMX", "#極限單車", "#小輪車", "#泵道"],
+        "SURF": ["#衝浪", "#世界浪點", "#大浪征服者", "#SURF"],
+        "CLIMB": ["#攀岩", "#抱石", "#運動攀登", "#天然岩場", "#CLIMB"],
+        "SNOW": ["#單板滑雪", "#大跳台", "#雪場攻略", "#SNOW"]
+    }
+    
+    TOPIC_TAGS = {
+        "EVENT": ["#賽事雷達", "#國際賽況速遞"],
+        "SPOT": ["#場地攻略", "#極限探索地圖"],
+        "ATHLETE": ["#選手專題", "#ProProfile"],
+        "SAFETY": ["#裝備評測", "#安全護具指南"]
+    }
+    
+    selected_sport = SPORT_TAGS.get(cat, ["#極限運動", f"#{cat}"])
+    selected_topic = TOPIC_TAGS.get(topic_type.upper() if topic_type else "", ["#極限運動"])
+    
+    all_tags = ["#xGameRadar"] + selected_sport[:3] + selected_topic[:1] + ["#ActionSports"]
+    # 保持唯一性
+    unique_tags = []
+    for t in all_tags:
+        if t not in unique_tags:
+            unique_tags.append(t)
+    return " ".join(unique_tags)
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -754,7 +785,7 @@ def send_telegram_post(title, subtitle, caption_text, website_url, affiliate_url
     if affiliate_url:
         msg_html += f'⚙️ <a href="{affiliate_url}">專業裝備選購</a>\n'
 
-    msg_html += f"\n#xGameRadar #{category.upper()} #極限運動 #ActionSports"
+    msg_html += f"\n{generate_rich_hashtags(category, topic_type)}"
 
     if len(msg_html) > 1000:
         msg_html = msg_html[:990] + "..."
