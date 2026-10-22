@@ -24,6 +24,7 @@ const gaId = import.meta.env.PUBLIC_GA_ID || '';
 <!doctype html>
 <html lang="zh-HK" class="scroll-smooth bg-xblack text-gray-100 antialiased selection:bg-xorange selection:text-white">
   <head>
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -78,6 +79,21 @@ const gaId = import.meta.env.PUBLIC_GA_ID || '';
     <link rel="preconnect" href="https://images.pexels.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <meta name="google-site-verification" content="googlec0a4221b21562454" />
+  
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SportsOrganization",
+      "name": "xGame Radar Magazine",
+      "url": "https://unanext.fans",
+      "logo": "https://unanext.fans/favicon.svg",
+      "description": "全球極限運動前線雷達：滑板、BMX、衝浪、攀岩與雪上運動賽事戰報、頂級場地導覽與裝備評測。",
+      "sameAs": [
+        "https://t.me/Una_next"
+      ]
+    }
+    </script>
+
   </head>
   <body class="min-h-screen flex flex-col bg-gradient-to-b from-xblack via-[#0d0e12] to-xblack">
     <Header />
