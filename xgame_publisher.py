@@ -701,12 +701,7 @@ def upload_to_r2(local_file_path, r2_object_name):
         print(f"⚠️ Cloudflare R2 上傳失敗: {e}")
         return None
 
-def     # 自動過濾 AI 偶發的個人自我介紹贅詞
-    if "content" in post_data and isinstance(post_data["content"], str):
-        post_data["content"] = re.sub(r'^(?:Hello|嗨|哈囉)[^。\n]*?我是\s*Una[^\n。！？]*[。！？\n]*', '', post_data["content"], flags=re.IGNORECASE)
-        post_data["content"] = re.sub(r'我是\s*Una\s*(?:\(@Una_next\)|@Una_next)?[，。、\s]*', '', post_data["content"], flags=re.IGNORECASE)
-
-    save_post_as_markdown(post_data, image_url, source_label="Official / Editorial"):
+def save_post_as_markdown(post_data, image_url, source_label="Official / Editorial"):
     timestamp = datetime.now().strftime("%Y-%m-%d")
     category_key = post_data.get("category", "SKATE").upper()
     topic_type = post_data.get("topic_type", "GENERAL").upper()
