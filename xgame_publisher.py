@@ -755,7 +755,7 @@ def save_post_as_markdown(post_data, image_url, source_label="Official / Editori
 # ==========================================
 # 7. TELEGRAM 強化推播模組 (HTML + 純文字雙重容錯)
 # ==========================================
-def send_telegram_post(title, subtitle, caption_text, website_url, affiliate_url, category, image_path=None):
+def send_telegram_post(title, subtitle, caption_text, website_url, affiliate_url, category, image_path=None, topic_type='GENERAL'):
     bot_token = clean_token_or_url(os.getenv("TELEGRAM_BOT_TOKEN", ""))
     chat_id = clean_token_or_url(os.getenv("TELEGRAM_CHAT_ID", ""))
 
@@ -780,7 +780,8 @@ def send_telegram_post(title, subtitle, caption_text, website_url, affiliate_url
     if affiliate_url:
         msg_html += f'⚙️ <a href="{affiliate_url}">專業裝備選購</a>\n'
 
-    msg_html += f"\n{generate_rich_hashtags(category, topic_type)}"
+    current_topic = topic_type if 'topic_type' in locals() and topic_type else 'GENERAL'
+    msg_html += f"\n{generate_rich_hashtags(category, current_topic)}"
 
     if len(msg_html) > 1000:
         msg_html = msg_html[:990] + "..."
