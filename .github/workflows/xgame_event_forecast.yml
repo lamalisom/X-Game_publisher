@@ -1,0 +1,68 @@
+name: "Weekly Extreme Sports Event Forecast (每週賽事預報雷達)"
+
+on:
+  schedule:
+    # 每週五上午 09:30 HKT (UTC 01:30) 自動發布週末與未來大賽預報
+    - cron: '30 1 * * 5'
+  workflow_dispatch:
+    inputs:
+      category:
+        description: '選擇運動項目 (SKATE / BMX / SURF / CLIMB / SNOW / AUTO)'
+        required: true
+        default: 'AUTO'
+      target_lang:
+        description: '語言 (zh-hk / zh-cn / en / ja)'
+        required: true
+        default: 'zh-hk'
+
+jobs:
+  publish_forecast:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install requests google-genai feedparser Pillow beautifulsoup4 boto3 playwright python-dateutil
+          playwright install chromium || echo "Playwright optional"
+
+      - name: Run Competition Forecast Publisher
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          AMAZON_AFFILIATE_ID: ${{ secrets.AMAZON_AFFILIATE_ID }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
+          R2_PUBLIC_DOMAIN: ${{ secrets.R2_PUBLIC_DOMAIN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          CAT_INPUT: ${{ github.event.inputs.category || 'AUTO' }}
+          LANG_INPUT: ${{ github.event.inputs.target_lang || 'zh-hk' }}
+        run: |
+          echo "🗓️ 啟動【全球極限賽事預報與日程雷達】發布引擎..."
+          python xgame_publisher.py "$CAT_INPUT" "$LANG_INPUT" "FORECAST"
+
+      - name: Save & Commit Website Posts
+        run: |
+          git config --global user.name "xGame Forecast Bot"
+          git config --global user.email "bot@xgame-radar.com"
+          git add src/content/posts/ public/ xgame_radar.db || true
+          if git diff --staged --quiet; then
+            echo "無新增檔案需提交。"
+          else
+            git commit -m "chore(events): auto-publish weekly competition forecast & event calendar"
+            git pull --rebase --autostash origin main
+            git push origin main
+          fi

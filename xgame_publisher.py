@@ -336,6 +336,10 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
         active_topic = "EVENT"
         active_title = f"🏆 {display_category} 國際最新賽事戰報與即時新聞焦點速遞"
         is_pure_news = True
+        elif topic_type and str(topic_type).upper() in ["FORECAST", "CALENDAR", "SCHEDULE"]:
+        active_topic = "EVENT"
+        active_title = f"🗓️ {display_category} 未來重大賽事預報與焦點賽程雷達"
+        is_pure_news = False
     elif topic_type and str(topic_type).upper() in ["SPOT", "VENUE"]:
         active_topic = "SPOT"
         active_title = f"🛹 全球頂級 {display_category} 極限場地導覽與巡禮"
@@ -401,6 +405,12 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 - 嚴禁以「我是 Una (@Una_next)」或「Hello 各位極限狂迷！我是 Una」等個人問候語開頭！
 - 文章必須以頂級極限運動雜誌（xGame Radar Magazine）客觀、熱血、權威的編輯部專題視角，直接開門見山切入賽況或場地核心亮點！
 - 內文嚴禁頻繁自我重複「Una 推薦」、「Una 強力建議」等贅詞，改以「編輯部推薦」或「職業選手配置建議」。
+
+
+【若為賽事預報 (EVENT/FORECAST) 核心要求】：
+- 盤點未來 1-3 個月內即將開打的世界頂級賽事（如 SLS、X Games、WSL CT、IFSC 世界盃、UCI BMX 等）。
+- 必須包含具體賽事名稱、開賽日期、主辦場館/城市、3 大奪冠熱門焦點選手，以及官方免費直播平台（如 Red Bull TV / YouTube / 大會官網）。
+- 必須完整填寫 event_info 結構化欄位（event_name, dates, location, tier）。
 
 【任務要求】:
 請生成一篇具備深度專業度、高社群傳播力與極限運動熱血感的文章資料，語言格式：完全使用 **{selected_lang_desc}**。
