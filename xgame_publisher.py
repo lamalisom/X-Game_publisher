@@ -336,7 +336,7 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
         active_topic = "EVENT"
         active_title = f"🏆 {display_category} 國際最新賽事戰報與即時新聞焦點速遞"
         is_pure_news = True
-        elif topic_type and str(topic_type).upper() in ["FORECAST", "CALENDAR", "SCHEDULE"]:
+    elif topic_type and str(topic_type).upper() in ["FORECAST", "CALENDAR", "SCHEDULE"]:
         active_topic = "EVENT"
         active_title = f"🗓️ {display_category} 未來重大賽事預報與焦點賽程雷達"
         is_pure_news = False
@@ -711,6 +711,29 @@ def upload_to_r2(local_file_path, r2_object_name):
         print(f"⚠️ Cloudflare R2 上傳失敗: {e}")
         return None
 
+def backfill_results_to_forecast(new_title, new_slug, category):
+    import glob
+    posts_dir = os.path.join('src', 'content', 'posts')
+    if not os.path.exists(posts_dir):
+        return False
+    forecast_files = glob.glob(os.path.join(posts_dir, f'*_{category.lower()}_*.md'))
+    for fpath in forecast_files:
+        if new_slug in fpath:
+            continue
+        try:
+            with open(fpath, 'r', encoding='utf-8') as pf:
+                txt = pf.read()
+            if ('EVENT' in txt or 'FORECAST' in txt) and '賽事最新結果' not in txt:
+                block = chr(10) * 2 + '---' + chr(10) * 2 + '### 🏆 賽事最新結果速報' + chr(10) + f'👉 最新戰況直擊：[{new_title}](/posts/{new_slug}/)' + chr(10)
+                txt += block
+                txt = txt.replace('UPCOMING', 'COMPLETED')
+                with open(fpath, 'w', encoding='utf-8') as pf:
+                    pf.write(txt)
+                print(f'🔗 成功回填賽果至預報文章: {os.path.basename(fpath)}')
+        except Exception as e:
+            print(f'⚠️ 回填略過: {e}')
+    return True
+
 def save_post_as_markdown(post_data, image_url, source_label="Official / Editorial"):
     timestamp = datetime.now().strftime("%Y-%m-%d")
     category_key = post_data.get("category", "SKATE").upper()
@@ -919,6 +942,10 @@ async def main_async():
         post_data["content"] = re.sub(r'我是\s*Una\s*(?:\(@Una_next\)|@Una_next)?[，。、\s]*', '', post_data["content"], flags=re.IGNORECASE)
 
     save_post_as_markdown(post_data, final_image_url, "Official / Editorial")
+    # 若發布的是賽事新聞或預報，自動關聯並更新歷史預報文章
+    if str(topic_type).upper() in ["EVENT", "NEWS", "FORECAST"]:
+        backfill_results_to_forecast(title, post_slug, category)
+
 
     json_filename = f"{post_slug}.json"
     r2_json_payload = {
