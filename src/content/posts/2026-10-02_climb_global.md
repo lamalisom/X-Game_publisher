@@ -14,7 +14,7 @@ youtube_video_id: "zgGpyr5MFK8"
 youtube_video_title: "官方精彩精華"
 expert_info: {"name": "Nims Purja", "country": "Nepal", "stance_or_style": "Alpine Style & Expedition Leader", "signature_tricks": ["Oxygen-managed Winter Ascent", "Speed Climbing 8000ers"], "setup_breakdown": "High-altitude down suits, 8000m double boots, lightweight carbon trekking poles"}
 spot_info: {"name": "K2 Base Camp & Moab", "location": "Karakoram / Utah, USA", "difficulty": "Pro", "features": ["Extreme Altitude", "Technical Sandstone & Ice"], "fee": "Permit Required"}
-event_info: {"event_name": "Winter K2 Documentary & Alpine Safety Review", "dates": "2024-2025 Season", "event_status": "UPCOMING", "location": "Global / Apple TV+", "tier": "World Championship"}
+event_info: {"event_name": "Winter K2 Documentary & Alpine Safety Review", "dates": "2024-2025 Season", "event_status": "COMPLETED", "location": "Global / Apple TV+", "tier": "World Championship"}
 trick_info: {"trick_name": "Winter High Altitude Navigation", "difficulty_rating": 5, "prerequisites": ["Advanced Mountaineering Experience", "Extreme Cold Weather Survival"]}
 safety_gear_info: {"gear_type": "Climbing Webbing and Anchor Systems", "certification": "UIAA / CE Certified"}
 affiliate_products: [{"title": "UIAA Certified Dynamic Climbing Rope and Anchor Slings", "subtitle": "Amazon 官方直送・全球職業選手信賴", "search_term": "climbing winter gear dynamic rope", "amazon_url": "https://www.amazon.com/s?k=climbing%20winter%20gear%20dynamic%20rope&tag=kait02bc-20", "recommended_for": "確保每一次攀登與架設支點的安全，符合國際認證的高強度動態繩與防磨損扁帶，是極限攀登者不可妥協的生命防線。", "badge_text": "Una 編輯推薦"}]
@@ -36,3 +36,8 @@ affiliate_products: [{"title": "UIAA Certified Dynamic Climbing Rope and Anchor 
 🛒 *專業裝備選購指南*:
 👉 [Climbing Winter Gear Dynamic Rope Amazon 直送門市](https://www.amazon.com/s?k=climbing%20winter%20gear%20dynamic%20rope&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*
+
+---
+
+### 🏆 賽事最新結果速報
+👉 最新戰況直擊：[攀岩界顛覆極限既歷史時刻：締造難度新紀錄同岩壁保育爭議點](/posts/2026-10-25_climb_global/)

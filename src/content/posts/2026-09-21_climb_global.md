@@ -14,7 +14,7 @@ youtube_video_id: "KnzcAmoVGgA"
 youtube_video_title: "他是徒手攀岩界的王者，26岁不幸遇难，打破多条最难路线，致敬最强勇者！"
 expert_info: {"name": "Tom Randall", "country": "United Kingdom", "stance_or_style": "Technical & Endurance Bouldering", "signature_tricks": ["First Move Variation Drill", "Crack Climbing Mastery"], "setup_breakdown": "High-density foam crash pad, aggressive downturned climbing shoes, liquid chalk."}
 spot_info: {"name": "Squamish Bouldering Areas", "location": "British Columbia, Canada", "difficulty": "Advanced", "features": ["Granite cliffs", "Technical crack climbing"], "fee": "Free"}
-event_info: {"event_name": "Global Climbing & Film Highlights 2024-2025", "dates": "2024-2025 Season", "event_status": "UPCOMING", "location": "Worldwide & Global Streaming", "tier": "World Championship / X-Games Tier"}
+event_info: {"event_name": "Global Climbing & Film Highlights 2024-2025", "dates": "2024-2025 Season", "event_status": "COMPLETED", "location": "Worldwide & Global Streaming", "tier": "World Championship / X-Games Tier"}
 trick_info: {"trick_name": "Multi-Way First Move Bouldering", "difficulty_rating": 4, "prerequisites": ["Basic Footwork", "Core Tension Control"]}
 safety_gear_info: {"gear_type": "Climbing Crash Pad & Helmet", "certification": "CE EN 1177 / UIAA Certified"}
 affiliate_products: [{"title": "Black Diamond Mondo Crash Pad", "subtitle": "Amazon 官方直送・全球職業選手信賴", "search_term": "climbing crash pad pro", "amazon_url": "https://www.amazon.com/s?k=climbing%20crash%20pad%20pro&tag=kait02bc-20", "recommended_for": "採用超高密度泡棉分層設計，能有效吸收高空墜落衝擊，係戶外抱石訓練與極限挑戰不可或缺的終極防護裝備。", "badge_text": "Una 編輯推薦"}]
@@ -37,3 +37,8 @@ Hello 各位極限狂迷，！今期攀岩專題為大家帶來未來3至12個�
 🛒 *專業裝備選購指南*:
 👉 [Climbing Crash Pad Pro Amazon 直送門市](https://www.amazon.com/s?k=climbing%20crash%20pad%20pro&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*
+
+---
+
+### 🏆 賽事最新結果速報
+👉 最新戰況直擊：[攀岩界顛覆極限既歷史時刻：締造難度新紀錄同岩壁保育爭議點](/posts/2026-10-25_climb_global/)

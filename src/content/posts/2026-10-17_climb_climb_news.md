@@ -31,3 +31,9 @@ slug: "2026-10-17_climb_climb_news"
 ### 🛒 裝備焦點推薦
 
 👉 [點此前往 Amazon 查看推薦裝備: climbing harness quickdraws chalk bag](https://www.amazon.com/s?k=climbing%20harness%20quickdraws%20chalk%20bag&tag=) *(含聯盟連結 #ad)*
+
+
+---
+
+### 🏆 賽事最新結果速報
+👉 最新戰況直擊：[攀岩界顛覆極限既歷史時刻：締造難度新紀錄同岩壁保育爭議點](/posts/2026-10-25_climb_global/)
