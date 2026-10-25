@@ -4,13 +4,13 @@ subtitle: "Jonathan Siegrist 達成 100 條 9a 路線成就，盲人選手 Justi
 date: "2026-10-25T02:57:34.694012"
 category: "CLIMB"
 topic_type: "EVENT"
-cover_image: "https://pub-a1dfaa7bc52a4b1187e528bd4b2da12b.r2.dev/cards/card_20261025_025731.png"
+cover_image: "https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&w=1200&q=80"
 cover_image_source: "Official / Editorial"
 author: "Una (@Una_next)"
 slug: "2026-10-25_climb_global"
 ---
 
-![攀岩界顛覆極限既歷史時刻：締造難度新紀錄同岩壁保育爭議點](https://pub-a1dfaa7bc52a4b1187e528bd4b2da12b.r2.dev/cards/card_20261025_025731.png)
+![攀岩界顛覆極限既歷史時刻：締造難度新紀錄同岩壁保育爭議點](https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&w=1200&q=80)
 
 ### 🏆 賽況焦點
 今期全球攀岩界迎黎前所未有嘅震撼突破！首先係美國頂尖先鋒運動攀選手 Jonathan Siegrist，喺拉斯維加斯完成左佢攀岩生涯嘅重大里程碑——成功征服個人第 100 条 9a/5.14d 或以上難度嘅路線。呢個成就唔單止展現左佢極致嘅力量同意志力，仲再次證明左人類對垂直極限嘅追求係永无止境。另一方面，身處殘奧會項目調整爭議中嘅視障攀岩選手 Justin Salas，用實力反擊質疑，成功完成左盲人運動員史上最高難度嘅 5.13c 天然岩壁挑戰，向全世界證明視障絕對唔係探索大自然嘅障礙！
