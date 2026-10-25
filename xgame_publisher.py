@@ -351,7 +351,7 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 
     if api_key:
         lang_map = {
-            "zh-hk": "繁體中文（廣東話/香港口語，語氣熱血且極具社群吸引力）",
+            "zh-hk": "繁體中文（香港正體字與道地廣東話/口語，100% 嚴禁任何簡體殘體字如 条/條、无/無、动/動、态/態、点/點 等，語氣熱血且極具社群吸引力）",
             "zh-cn": "簡體中文（專業熱血的極限運動社群口吻）",
             "ja": "日文（專業且地道的極限運動風格）",
             "en": "英文（Authentic Action Sports Community Style）"
@@ -735,6 +735,27 @@ def backfill_results_to_forecast(new_title, new_slug, category):
             print(f'⚠️ 回填略過: {e}')
     return True
 
+def ensure_traditional_chinese(text):
+    """確保 100% 繁體中文與香港正字，自動過濾常見簡體字"""
+    if not text or not isinstance(text, str):
+        return text
+    sc_tc_pairs = {
+        '条': '條', '无': '無', '动': '動', '态': '態', '点': '點',
+        '发': '發', '实': '實', '线': '線', '标': '標', '准': '準',
+        '极': '極', '头': '頭', '体': '體', '关': '關', '后': '後',
+        '里': '裏', '获': '獲', '胜': '勝', '场': '場', '团': '團',
+        '队': '隊', '员': '員', '赛': '賽', '经': '經', '历': '歷',
+        '险': '險', '飞': '飛', '跃': '躍', '轮': '輪', '节': '節',
+        '总': '總', '结': '結', '军': '軍', '亚': '亞', '录': '錄',
+        '纪': '紀', '难': '難', '装': '裝', '备': '備', '评': '評',
+        '测': '測', '导': '導', '览': '覽', '区': '區', '馆': '館',
+        '网': '網', '链': '鏈', '购': '購', '买': '買', '选': '選',
+        '择': '擇', '荐': '薦', '专': '專', '栏': '欄', '题': '題',
+        '访': '訪', '谈': '談', '说': '說', '华': '華', '视': '視',
+        '频': '頻', '图': '圖'
+    }
+    return text.translate(str.maketrans(sc_tc_pairs))
+
 def save_post_as_markdown(post_data, image_url, source_label="Official / Editorial"):
     timestamp = datetime.now().strftime("%Y-%m-%d")
     category_key = post_data.get("category", "SKATE").upper()
@@ -938,6 +959,14 @@ async def main_async():
     post_data["content"] = formatted_web_article
     post_data["category"] = category
         # 自動過濾 AI 偶發的個人自我介紹贅詞
+        # 自動將簡體殘體字轉換為香港正體字
+    if lang_arg == "zh-hk":
+        for k in ["title", "subtitle", "content"]:
+            if k in post_data and isinstance(post_data[k], str):
+                post_data[k] = ensure_traditional_chinese(post_data[k])
+        title = ensure_traditional_chinese(title)
+        subtitle = ensure_traditional_chinese(subtitle)
+
     if "content" in post_data and isinstance(post_data["content"], str):
         post_data["content"] = re.sub(r'^(?:Hello|嗨|哈囉)[^。\n]*?我是\s*Una[^\n。！？]*[。！？\n]*', '', post_data["content"], flags=re.IGNORECASE)
         post_data["content"] = re.sub(r'我是\s*Una\s*(?:\(@Una_next\)|@Una_next)?[，。、\s]*', '', post_data["content"], flags=re.IGNORECASE)
