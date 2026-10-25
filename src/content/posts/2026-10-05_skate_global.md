@@ -12,7 +12,7 @@ featured: true
 gear_keyword: "pro skate deck / high impact skate shoes / lightweight helmet"
 youtube_video_id: "aQACezdzz-Q"
 youtube_video_title: "時速100公里！滑板狂飆阿爾卑斯雪山 #阿尔卑斯山 #长板速降 #极限运动 #100公里"
-event_info: {"event_name": "SLS Championship Tour & X-Games", "dates": "2024-2025", "event_status": "UPCOMING", "location": "Global", "tier": "World Championship / X-Games Tier"}
+event_info: {"event_name": "SLS Championship Tour & X-Games", "dates": "2024-2025", "event_status": "COMPLETED", "location": "Global", "tier": "World Championship / X-Games Tier"}
 affiliate_products: [{"title": "專業滑板耐磨緩震運動鞋", "subtitle": "Amazon 官方直送・全球職業選手信賴", "search_term": "pro skate deck / high impact skate shoes / lightweight helmet", "amazon_url": "https://www.amazon.com/s?k=pro%20skate%20deck%20/%20high%20impact%20skate%20shoes%20/%20lightweight%20helmet&tag=kait02bc-20", "recommended_for": "具備頂級緩震科技，能有效吸收高難度動作落地時的衝擊力，保護腳踝並提升板感。", "badge_text": "Una 編輯推薦"}]
 ---
 
@@ -30,3 +30,8 @@ affiliate_products: [{"title": "專業滑板耐磨緩震運動鞋", "subtitle": 
 🛒 *專業裝備選購指南*:
 👉 [Pro Skate Deck  High Impact Skate Shoes  Lightweight Helmet Amazon 直送門市](https://www.amazon.com/s?k=pro%20skate%20deck%20%20high%20impact%20skate%20shoes%20%20lightweight%20helmet&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*
+
+---
+
+### 🏆 賽事最新結果速報
+👉 最新戰況直擊：[極限滑板世界大賽震撼落幕！頂尖好手解鎖全新高難度動作點燃全場](/posts/2026-10-25_skate_skate_news/)

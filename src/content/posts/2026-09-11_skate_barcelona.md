@@ -12,7 +12,7 @@ featured: true
 gear_keyword: "skateboard pro deck trucks bearings"
 youtube_video_id: "JqflfjrcKjo"
 youtube_video_title: "Biggest Skate Ramp EVER (world record)"
-event_info: {"event_name": "Global Skateboarding Championship Finals", "dates": "2024-11-20", "event_status": "UPCOMING", "location": "Barcelona, Spain", "tier": "World Championship"}
+event_info: {"event_name": "Global Skateboarding Championship Finals", "dates": "2024-11-20", "event_status": "COMPLETED", "location": "Barcelona, Spain", "tier": "World Championship"}
 affiliate_products: [{"title": "Pro Skateboard Complete Set", "subtitle": "Amazon 官方直送・全球職業選手信賴", "search_term": "skateboard pro deck trucks bearings", "amazon_url": "https://www.amazon.com/s?k=skateboard%20pro%20deck%20trucks%20bearings&tag=kait02bc-20", "recommended_for": "採用頂級加拿大楓木與精密軸承，提供極佳彈性與順滑度，助你輕鬆駕馭高難度街頭花式。", "badge_text": "Una 編輯推薦"}]
 ---
 
@@ -33,3 +33,8 @@ affiliate_products: [{"title": "Pro Skateboard Complete Set", "subtitle": "Amazo
 🛒 *專業裝備選購指南*:
 👉 [Skateboard Pro Deck Trucks Bearings Amazon 直送門市](https://www.amazon.com/s?k=skateboard%20pro%20deck%20trucks%20bearings&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*
+
+---
+
+### 🏆 賽事最新結果速報
+👉 最新戰況直擊：[極限滑板世界大賽震撼落幕！頂尖好手解鎖全新高難度動作點燃全場](/posts/2026-10-25_skate_skate_news/)
