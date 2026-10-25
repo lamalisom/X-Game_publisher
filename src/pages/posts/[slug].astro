@@ -31,7 +31,7 @@ const relatedPosts = allPosts
   title={`${post.data.title} | xGame Radar Magazine`}
   description={post.data.subtitle || post.data.title}
   image={post.data.cover_image}
-  category={post.data.category}
+  category={post.data.category === 'CLIMB' ? '🧗 攀岩' : post.data.category === 'SKATE' ? '🛹 滑板' : post.data.category === 'BMX' ? '🚲 極限小輪' : post.data.category === 'SURF' ? '🏄 衝浪' : post.data.category === 'SNOW' ? '🏂 單板滑雪' : post.data.category}
 >
   <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
     
@@ -53,7 +53,7 @@ const relatedPosts = allPosts
           {post.data.category}
         </span>
         <span class="px-3 py-1 rounded-full bg-xcard border border-xborder text-cyan-400 text-xs font-bold font-mono">
-          {post.data.topic_type} · {post.data.city_tag}
+          {post.data.topic_type === 'EVENT' ? '🏆 賽事戰報' : post.data.topic_type === 'FORECAST' ? '🗓️ 賽事預報' : post.data.topic_type} · {post.data.city_tag === 'GLOBAL' ? '全球' : post.data.city_tag}
         </span>
         {post.data.cover_image_source && (
           <span class="text-[11px] text-gray-500 font-mono ml-auto">

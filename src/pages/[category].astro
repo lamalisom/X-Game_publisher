@@ -11,7 +11,7 @@ export async function getStaticPaths() {
     { params: { category: 'surf' }, props: { title: '🏄 極限衝浪 SURFING', filterKey: 'SURF', desc: 'WSL 世界衝浪巡迴賽、大浪征服者、全球頂級浪點導覽與防寒衣/衝浪板推薦。' } },
     { params: { category: 'climb' }, props: { title: '🧗 運動攀岩 CLIMBING', filterKey: 'CLIMB', desc: '抱石、先鋒攀登、IFSC 世界盃賽事速報、天然岩場指南與攀岩鞋/粉袋指南。' } },
     { params: { category: 'snow' }, props: { title: '🏂 單板滑雪 SNOWBOARD', filterKey: 'SNOW', desc: '單板大跳台 (Big Air)、U型池 (Halfpipe)、世界級雪場導覽與雪鏡/防摔褲評測。' } },
-    { params: { category: 'events' }, props: { title: '🗓️ 全球賽事雷達 (2026-2027)', filterKey: 'EVENT', desc: '未來 3-12 個月 X Games、SLS、WSL、UCI 與奧運積分賽最新賽程、時間表與賽果。' } },
+    { params: { category: 'events' }, props: { title: '🏆 全球極限比賽專區 (即時戰報與賽程預報)', filterKey: 'EVENT', desc: '未來 3-12 個月 X Games、SLS、WSL、UCI 與奧運積分賽最新賽程、時間表與賽果。' } },
     { params: { category: 'spots' }, props: { title: '📍 全球與亞洲場地導覽', filterKey: 'SPOT', desc: '滑板場、碗池、浪點、岩館難度評級、開放時間與玩家攻略。' } },
     { params: { category: 'athletes' }, props: { title: '🏆 焦點專家與選手專題', filterKey: 'ATHLETE', desc: 'Pro 極限運動員檔案、招牌動作、個人專用裝備配置與賽事生平。' } },
     { params: { category: 'tricks' }, props: { title: '🎯 花式技巧與攻略庫', filterKey: 'TRICKS', desc: '滑板、BMX、衝浪動作分解教學、難度星級評定與常見練習錯誤解析。' } },
@@ -31,7 +31,7 @@ const categoryPosts = allPosts.filter((post) => {
   const key = filterKey.toUpperCase();
 
   if (key === 'EVENT') {
-    return cat === 'EVENT' || topic === 'EVENT' || post.data.event_info !== undefined;
+    return cat === 'EVENT' || topic === 'EVENT' || topic === 'FORECAST' || topic === 'NEWS' || post.data.event_info !== undefined || post.slug.includes('_news') || post.data.title.includes('賽') || post.data.title.includes('戰報') || post.data.title.includes('預報');
   }
   if (key === 'SPOT') {
     return cat === 'SPOT' || topic === 'SPOT' || post.data.spot_info !== undefined;

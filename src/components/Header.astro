@@ -1,12 +1,13 @@
 ---
 const categories = [
   { name: '🔥 全部焦點', href: '/' },
+  { name: '🏆 比賽專區', href: '/events' },
   { name: '🛹 滑板 SKATE', href: '/skate' },
   { name: '🚲 極限小輪 BMX', href: '/bmx' },
   { name: '🏄 衝浪 SURF', href: '/surf' },
   { name: '🧗 攀岩 CLIMB', href: '/climb' },
   { name: '🏂 單板 SNOW', href: '/snow' },
-  { name: '🗓️ 賽事雷達', href: '/events' },
+  
   { name: '📍 場地導覽', href: '/spots' },
   { name: '🛡️ 裝備與花式', href: '/tricks' },
 ];
@@ -53,7 +54,7 @@ const currentPath = Astro.url.pathname;
 
       <!-- Desktop Category Links -->
       <nav class="hidden lg:flex items-center space-x-1">
-        {categories.slice(0, 7).map((item) => {
+        {categories.slice(0, 8).map((item) => {
           const isActive = currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href));
           return (
             <a
