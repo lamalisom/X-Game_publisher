@@ -28,3 +28,9 @@ slug: "2026-10-25_climb_global"
 ### 🛒 裝備焦點推薦
 
 👉 [點此前往 Amazon 查看推薦裝備: aggressive climbing shoes chalk bag](https://www.amazon.com/s?k=aggressive%20climbing%20shoes%20chalk%20bag&tag=) *(含聯盟連結 #ad)*
+
+
+---
+
+### 🏆 賽事最新結果速報
+👉 最新戰況直擊：[極限攀岩界震撼彈！Jonathan Siegrist 狂掃百條 5.14d 頂峰，視障奇迹 Justin Salas 突破極限制霸 5.13c](/posts/2026-10-26_climb_climb_news/)
