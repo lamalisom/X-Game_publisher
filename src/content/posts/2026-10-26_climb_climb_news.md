@@ -32,3 +32,9 @@ slug: "2026-10-26_climb_climb_news"
 ### 🛒 裝備焦點推薦
 
 👉 [點此前往 Amazon 查看推薦裝備: climbing shoes chalk bag quickdraws](https://www.amazon.com/s?k=climbing%20shoes%20chalk%20bag%20quickdraws&tag=) *(含聯盟連結 #ad)*
+
+
+---
+
+### 🏆 賽事最新結果速報
+👉 最新戰況直擊：[意大利奇蹟！Pietro Vidi 成功解鎖世界最難傳統攀登 Drifter's Escape 震撼全球攀岩界](/posts/2026-10-27_climb_climb_news/)
