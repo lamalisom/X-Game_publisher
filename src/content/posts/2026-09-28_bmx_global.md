@@ -14,7 +14,7 @@ youtube_video_id: "_iPnkCtRF1k"
 youtube_video_title: "Highlights | 2026 UCI BMX Racing World Challenge | Brisbane, Australia."
 expert_info: {"name": "Miharu Ozawa & Josh Dove", "country": "Japan / Australia", "stance_or_style": "BMX Freestyle Pro", "signature_tricks": ["Bowl Airs", "Freestyle Spins"], "setup_breakdown": "Huffy Pro Team custom BMX freestyle setup optimized for high-impact bowl riding."}
 spot_info: {"name": "Scarborough Beach Bowl", "location": "Scarborough Beach, Australia", "difficulty": "Advanced", "features": ["Australia's Biggest Bowl", "High Transition Vert"], "fee": "Free / Event registration applies"}
-event_info: {"event_name": "BMX Bowl Battle & 2026 Global Calendar Events", "dates": "Upcoming 2024-2026", "event_status": "UPCOMING", "location": "Global / Scarborough Beach", "tier": "X-Games Tier"}
+event_info: {"event_name": "BMX Bowl Battle & 2026 Global Calendar Events", "dates": "Upcoming 2024-2026", "event_status": "COMPLETED", "location": "Global / Scarborough Beach", "tier": "X-Games Tier"}
 trick_info: {"trick_name": "Bowl Carve Grind", "difficulty_rating": 4, "prerequisites": ["Basic Drop-in", "Pump Control"]}
 safety_gear_info: {"gear_type": "BMX Full Face Helmet", "certification": "ASTM F1492 / CPSC"}
 affiliate_products: [{"title": "Pro-Tec Full Cut Certified BMX Skate Helmet", "subtitle": "Amazon 官方直送・全球職業選手信賴", "search_term": "bmx freestyle helmet pro", "amazon_url": "https://www.amazon.com/s?k=bmx%20freestyle%20helmet%20pro&tag=kait02bc-20", "recommended_for": "極限運動員信賴嘅頂級防護頭盔，提供全方位包覆與極高抗衝擊能力，係挑戰碗池與街頭極限嘅必備安全裝備。", "badge_text": "Una 編輯推薦"}]
@@ -34,3 +34,8 @@ affiliate_products: [{"title": "Pro-Tec Full Cut Certified BMX Skate Helmet", "s
 🛒 *專業裝備選購指南*:
 👉 [Bmx Freestyle Helmet Pro Amazon 直送門市](https://www.amazon.com/s?k=bmx%20freestyle%20helmet%20pro&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*
+
+---
+
+### 🏆 賽事最新結果速報
+👉 最新戰況直擊：[BMX 轉會市場大地震！國際頂尖車手動向與 2027 賽季焦點全解析](/posts/2026-10-28_bmx_bmx_news/)
