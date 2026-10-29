@@ -12,7 +12,7 @@ featured: true
 gear_keyword: "snowboard helmet goggles pro"
 youtube_video_id: "wppYNB0GnlE"
 youtube_video_title: "这片雪场从不缺天才滑雪滑雪的100种玩法"
-event_info: {"event_name": "World Snowboard Tour & X-Games Series", "dates": "2024-2025 Winter Season", "event_status": "UPCOMING", "location": "Aspen / Verbier / Whistler", "tier": "World Championship / X-Games Tier"}
+event_info: {"event_name": "World Snowboard Tour & X-Games Series", "dates": "2024-2025 Winter Season", "event_status": "COMPLETED", "location": "Aspen / Verbier / Whistler", "tier": "World Championship / X-Games Tier"}
 safety_gear_info: {"gear_type": "Snowboard Helmet & Goggles", "certification": "CE EN1078 / ASTM F2040"}
 affiliate_products: [{"title": "Oakley Line Miner Pro 雪鏡與 Anon Merak WaveCel 頭盔組合", "subtitle": "Amazon 官方直送・全球職業選手信賴", "search_term": "snowboard helmet goggles pro", "amazon_url": "https://www.amazon.com/s?k=snowboard%20helmet%20goggles%20pro&tag=kait02bc-20", "recommended_for": "職業選手應對極端雪況與高空衝擊的頂級防護與視野配置，確保全天候清晰度與最高安全性。", "badge_text": "Una 編輯推薦"}]
 ---
@@ -35,3 +35,8 @@ affiliate_products: [{"title": "Oakley Line Miner Pro 雪鏡與 Anon Merak WaveC
 🛒 *專業裝備選購指南*:
 👉 [Snowboard Helmet Goggles Pro Amazon 直送門市](https://www.amazon.com/s?k=snowboard%20helmet%20goggles%20pro&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*
+
+---
+
+### 🏆 賽事最新結果速報
+👉 最新戰況直擊：[極限雪山震撼彈！國際滑雪大賽巔峰對決點燃極速狂潮](/posts/2026-10-29_snow_snow_news/)
