@@ -1,3 +1,73 @@
+def generate_chinese_hashtags(category, topic_type="NEWS", city_tag="", title=""):
+    """根據文章項目、主題、城市與標題，自動生成 4-6 個精準高關聯度的中文 Hashtag"""
+    cat = str(category).upper() if category else "SKATE"
+    top = str(topic_type).upper() if topic_type else "NEWS"
+    
+    sport_map = {
+        "SKATE": ["#滑板", "#極限滑板", "#街式滑板", "#板仔日常"],
+        "SURF": ["#衝浪", "#極限衝浪", "#浪人日常", "#浪點推薦"],
+        "SNOW": ["#單板滑雪", "#滑雪", "#極限雪上", "#雪季日常"],
+        "CLIMB": ["#攀岩", "#抱石", "#極限攀爬", "#岩壁挑戰"],
+        "BMX": ["#極限小輪車", "#BMX單車", "#泵道", "#特技單車"]
+    }
+    
+    topic_map = {
+        "SPOT": ["#極限探索地圖", "#場地指南", "#據點實測", "#朝聖地標"],
+        "EVENT": ["#賽事雷達", "#賽事實況", "#世界盃直擊"],
+        "NEWS": ["#最新戰報", "#極限速報", "#即時焦點"],
+        "FORECAST": ["#賽事預報", "#賽程時間表", "#日程雷達"],
+        "ATHLETE": ["#頂尖選手", "#職業選手"],
+        "SAFETY": ["#裝備評測", "#護具指南"],
+        "TRICKS": ["#動作分解", "#花式技巧"]
+    }
+
+    city_map = {
+        "GLOBAL": "#全球極限",
+        "HONG KONG": "#香港",
+        "TOKYO": "#東京",
+        "LOS ANGELES": "#洛杉磯",
+        "CALIFORNIA": "#加州",
+        "PARIS": "#巴黎",
+        "INNSBRUCK": "#因斯布魯克",
+        "CHUR": "#瑞士庫爾",
+        "YANGYANG": "#韓國襄陽",
+        "KOREA": "#韓國",
+        "WOLFURT": "#奧地利"
+    }
+
+    tags = ["#xGameRadar"]
+    tags.extend(sport_map.get(cat, ["#極限運動", f"#{cat}"])[:2])
+    tags.extend(topic_map.get(top, ["#極限專題"])[:1])
+    
+    if city_tag:
+        c_clean = str(city_tag).strip().upper()
+        if c_clean in city_map:
+            tags.append(city_map[c_clean])
+        elif len(c_clean) <= 12 and c_clean != "GLOBAL":
+            tags.append(f"#{c_clean.title()}")
+            
+    t_upper = str(title).upper()
+    if "X GAMES" in t_upper or "XGAMES" in t_upper:
+        tags.append("#XGames")
+    elif "WSL" in t_upper:
+        tags.append("#WSL衝浪世界盃")
+    elif "SLS" in t_upper:
+        tags.append("#SLS街式滑板")
+    elif "IFSC" in t_upper:
+        tags.append("#IFSC攀岩世界盃")
+    elif "FIS" in t_upper:
+        tags.append("#FIS滑雪世界盃")
+
+    tags.append("#極限運動")
+    
+    seen = set()
+    res = []
+    for t in tags:
+        if t not in seen:
+            seen.add(t)
+            res.append(t)
+    return " ".join(res[:7])
+
 
 def get_r2_history(r2_client, bucket_name):
     """從 Cloudflare R2 讀取已發布的歷史文章與圖片清單"""
@@ -1041,6 +1111,11 @@ def upload_to_r2(local_file_path, r2_object_name):
 # 8. MARKDOWN POST GENERATOR (100% ASTRO & YAML SAFE)
 # ==========================================
 def save_post_as_markdown(post_data, image_url, source_label="Official / Editorial"):
+    # 自動在文章末尾附加精準中文標籤列（強化 SEO 長尾詞檢索）
+    if "🏷️ **熱門標籤**:" not in post_data.get("content", ""):
+        ch_tags = generate_chinese_hashtags(category_key, "SPOT", city_tag, title)
+        post_data["content"] = post_data.get("content", "").rstrip() + f"\n\n---\n\n🏷️ **熱門標籤**: {ch_tags}\n"
+
     # 徹底清除第一人稱自介口頭禪與贅詞
     for field in ["content", "website_full_content", "telegram_caption"]:
         if field in post_data and isinstance(post_data[field], str):
@@ -1307,6 +1382,7 @@ async def main_async():
     save_post_as_markdown(post_data, img_link_for_record, source_label)
 
     # 9. 推送至 Telegram 頻道 (帶地圖直達連結)
+    ch_tags = generate_chinese_hashtags(category, "SPOT", city_tag, title)
     tg_message = (
         f"🏆 *{title}*\n"
         f"⚡ _{subtitle}_\n\n"
@@ -1317,7 +1393,7 @@ async def main_async():
         f"👉 [{gear_kw.title()} Amazon 直送門市]({amazon_search_url})\n\n"
         f"🌐 *閱讀本期完整深度專題*:\n"
         f"👉 [點擊進入 xGame Magazine 官方專題]({post_web_url})\n\n"
-        f"#xGameRadar #{category} #SpotsMap #Una_next"
+        f"{ch_tags}"
     )
     send_telegram_post(tg_message, image_path=card_filename)
 
