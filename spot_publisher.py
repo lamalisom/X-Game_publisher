@@ -400,6 +400,19 @@ TOP_PRESET_SPOTS = {
     ]
 }
 
+def is_real_named_spot(s):
+    """嚴格校驗場地名稱，徹底排除無意義純數字編號 (如 Spot #727290408) 與無城市據點"""
+    name = str(s.get("name", "")).strip()
+    if not name or re.search(r"Spot\s*#\d+", name, re.IGNORECASE):
+        return False
+    if name.lower() in ["unnamed", "skatepark", "skate park", "spot", "global"]:
+        return False
+    city = str(s.get("city", "")).strip()
+    country = str(s.get("country", "")).strip()
+    if (not city or city.lower() in ["global", ""]) and (not country or country.lower() in ["global", ""]):
+        return False
+    return True
+
 def get_daily_featured_spot(category_key="SKATE"):
     cat = category_key.upper() if category_key else "SKATE"
     candidates = []
@@ -411,7 +424,7 @@ def get_daily_featured_spot(category_key="SKATE"):
                 with open(jp, "r", encoding="utf-8") as f:
                     spots = json.load(f)
                     for s in spots:
-                        if s.get("category", "").upper() == cat and s.get("name"):
+                        if s.get("category", "").upper() == cat and is_real_named_spot(s):
                             candidates.append(s)
                 if candidates:
                     print(f"🗺️ 成功從 {jp} 讀取到 {len(candidates)} 個【{cat}】場地資料！")
@@ -657,6 +670,10 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 - 場地核心設施：{featured_spot['facilities']}
 - 難度等級參考：{featured_spot['difficulty']}
 {rss_context}
+
+【任務核心禁令】:
+1. 嚴禁在標題或內文中輸出無意義的純數字編號（如 Spot #727290408）。場地必須具備真實名稱與明確所在城市。
+2. 嚴禁在內文中出現「我是 Una (@Una_next)」、「Una (@Una_next) 今日帶嚟嘅」等第一人稱自我介紹贅詞，直接以專業極限運動專欄角度切入！
 
 【任務要求】:
 請生成一篇具備深度專業度、極限運動熱血感、同時極具旅行指南實用價值的文章資料，語言格式：完全使用 **{selected_lang_desc}**。
@@ -990,6 +1007,14 @@ def upload_to_r2(local_file_path, r2_object_name):
 # 8. MARKDOWN POST GENERATOR (100% ASTRO & YAML SAFE)
 # ==========================================
 def save_post_as_markdown(post_data, image_url, source_label="Official / Editorial"):
+    # 徹底清除第一人稱自介口頭禪與贅詞
+    for field in ["content", "website_full_content", "telegram_caption"]:
+        if field in post_data and isinstance(post_data[field], str):
+            val = post_data[field]
+            val = re.sub(r"我是\s*Una\s*(?:\(@Una_next\)|@Una_next)?[，。、\s]*", "", val, flags=re.IGNORECASE)
+            val = re.sub(r"Una\s*\(@Una_next\)\s*今日帶嚟嘅", "今日帶大家探索嘅", val, flags=re.IGNORECASE)
+            val = re.sub(r"Una\s*\(@Una_next\)\s*", "", val, flags=re.IGNORECASE)
+            post_data[field] = val
     timestamp = datetime.now().strftime("%Y-%m-%d")
     category_key = post_data.get("category", "SKATE").upper()
     topic_type = post_data.get("topic_type", "GENERAL").upper()
