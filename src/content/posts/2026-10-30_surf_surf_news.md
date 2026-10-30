@@ -30,3 +30,9 @@ slug: "2026-10-30_surf_surf_news"
 ### 🛒 裝備焦點推薦
 
 👉 [點此前往 Amazon 查看推薦裝備: high performance surfboards carbon leash pro wetsuit](https://www.amazon.com/s?k=high%20performance%20surfboards%20carbon%20leash%20pro%20wetsuit&tag=) *(含聯盟連結 #ad)*
+
+
+---
+
+### 🏆 賽事最新結果速報
+👉 最新戰況直擊：[2024 WSL Championship Tour 決戰直擊：年度世界冠軍榮耀誰屬](/posts/2026-10-30_surf_lower_trestles/)
