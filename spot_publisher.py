@@ -454,7 +454,40 @@ def get_daily_featured_spot(category_key="SKATE"):
         photos = chosen.get("photos") or []
         spot_img = photos[0] if photos and photos[0].startswith("http") else None
         
-        preset_hotels = [{"name": f"{s_city} Boutique Resort", "distance": "車程 5 分鐘", "features": "極限運動裝備存放空間、運動後舒緩泳池、交通便利"}]
+        cat_configs = {
+            "SURF": {
+                "facilities": "優質海濱細砂沙灘浪點（Beach Break）、專業衝浪板租借與熱水淋浴沖洗室、防寒衣專用洗滌整備區與海景觀浪露台",
+                "difficulty": "初階白水推浪入門至中高階起壁推浪（Green Wave）與斜跑切浪皆宜",
+                "hotel_name": f"{s_city} Surf Beach Resort" if s_city != "양양군" else "Corallo by Josun (襄陽朝遜科拉洛酒店)",
+                "hotel_feat": "專屬衝浪板與防寒衣清洗保管區、無邊際露天溫水泳池、直通海灘浪點"
+            },
+            "SKATE": {
+                "facilities": "全平整澆築無縫混凝土、標準街式階梯磨桿與過渡弧坡（Quarterpipe）、夜間泛光照明與休息維護區",
+                "difficulty": "初階平地滑行至進階街式弧面動作皆宜",
+                "hotel_name": f"{s_city} Skate & Lifestyle Hotel",
+                "hotel_feat": "滑板裝備安全存放室、近市中心街頭聚點、運動肌肉舒緩水療"
+            },
+            "CLIMB": {
+                "facilities": "天然花崗岩/石灰岩天然岩壁、標準先鋒快扣掛片錨點、抱石保護墊鋪設區與繩索整備台",
+                "difficulty": "5.7 入門休閒攀登至 5.13+ 專業先鋒挑戰級",
+                "hotel_name": f"{s_city} Alpine Lodge",
+                "hotel_feat": "登山攀岩重裝安全保管箱、戶外嚮導諮詢服務、溫泉桑拿肌肉放鬆"
+            },
+            "SNOW": {
+                "facilities": "天然粉雪與機壓雪道、地形公園跳台道具區（Park & Pipe）、高速纜車索道與雪具租賃大廳",
+                "difficulty": "綠道初學者練習區至黑道自由式道外野雪皆宜",
+                "hotel_name": f"{s_city} Ski Resort & Spa",
+                "hotel_feat": "Ski-in/Ski-out 直通雪道、雪具烘乾除濕雪櫃、高溫溫泉水療 SPA"
+            },
+            "BMX": {
+                "facilities": "標準泥地土坡起伏賽道（Pumptrack）、金屬包邊碗池與街式跳台、專業防護圍欄與夜間泛光照明",
+                "difficulty": "初階泵道壓抬至職業空中轉體全級別",
+                "hotel_name": f"{s_city} Rider Lodge",
+                "hotel_feat": "專業單車組裝維修工作間、特大車輛與零配件鎖櫃、高蛋白營養餐飲"
+            }
+        }
+        cfg = cat_configs.get(cat, cat_configs["SKATE"])
+        preset_hotels = [{"name": cfg["hotel_name"], "distance": "車程 5 分鐘", "features": cfg["hotel_feat"]}]
         return {
             "name": s_name,
             "city": s_city,
@@ -463,8 +496,8 @@ def get_daily_featured_spot(category_key="SKATE"):
             "lng": s_lng,
             "category": cat,
             "spot_photo": spot_img,
-            "facilities": "專業滑行道、標準規格坡道與障礙地形、夜間照明與休息維護區",
-            "difficulty": "初階入門至進階技術流皆宜",
+            "facilities": cfg["facilities"],
+            "difficulty": cfg["difficulty"],
             "hotels": preset_hotels
         }
 
@@ -672,6 +705,7 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 {rss_context}
 
 【任務核心禁令】:
+1. 嚴禁運動項目術語混淆！例如 SURF（衝浪）嚴禁出現「滑行道」、「坡道」、「護具頭盔防跌」等滑板術語，必須使用浪點（Beach/Point Break）、浪高、潮汐、起壁、衝浪板（Longboard/Shortboard）等衝浪專業術語！
 1. 嚴禁在標題或內文中輸出無意義的純數字編號（如 Spot #727290408）。場地必須具備真實名稱與明確所在城市。
 2. 嚴禁在內文中出現「我是 Una (@Una_next)」、「Una (@Una_next) 今日帶嚟嘅」等第一人稱自我介紹贅詞，直接以專業極限運動專欄角度切入！
 
@@ -1026,8 +1060,9 @@ def save_post_as_markdown(post_data, image_url, source_label="Official / Editori
     gear_kw = post_data.get("gear_keyword", "extreme sports gear").strip()
     
     clean_slug = re.sub(r'[^a-zA-Z0-9]', '_', city_tag.lower())[:15]
-    if not clean_slug or clean_slug == "_":
-        clean_slug = "global"
+    clean_slug = re.sub(r'_+', '_', clean_slug).strip('_')
+    if not clean_slug:
+        clean_slug = "korea" if any(ord(c) > 127 for c in city_tag) else "global"
     
     posts_dir = os.path.join("src", "content", "posts")
     os.makedirs(posts_dir, exist_ok=True)
@@ -1197,8 +1232,9 @@ async def main_async():
 
     today_date_str = datetime.now().strftime("%Y-%m-%d")
     clean_slug = re.sub(r'[^a-zA-Z0-9]', '_', city_tag.lower())[:15]
-    if not clean_slug or clean_slug == "_":
-        clean_slug = "global"
+    clean_slug = re.sub(r'_+', '_', clean_slug).strip('_')
+    if not clean_slug:
+        clean_slug = "korea" if any(ord(c) > 127 for c in city_tag) else "global"
     post_slug = f"{today_date_str}_{category.lower()}_{clean_slug}"
     post_web_url = f"https://unanext.fans/posts/{post_slug}/"
     amazon_search_url = f"https://www.amazon.com/s?k={quote(gear_kw)}&tag={AMAZON_AFFILIATE_ID}"
