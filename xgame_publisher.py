@@ -420,6 +420,11 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
    - 冠軍、亞軍、季軍等關鍵選手姓名（附英文原名）與官方決賽得分/成績。
    - 選手決勝時施展的關鍵動作招式名稱（如 Cab 1800、Double Cork 1080、Backside Triple 等）。
 
+【重大時間錨點與防穿越禁令】:
+1. 當前現實年份為 **2026 年**（賽事週期涵蓋 2026–2027 賽季）。
+2. 嚴禁在標題或內文中輸出任何已過期年份（如 2024、2023 或更早年份）的「未來預報」或「年度大賽即將開打」！
+3. 所有賽事名稱、巡迴賽季度與前瞻必須嚴格鎖定在 2026–2027 最新賽季！
+
 【任務要求】:
 請生成一篇具備深度專業度、高社群傳播力與極限運動熱血感的文章資料，語言格式：完全使用 **{selected_lang_desc}**。
 必須以嚴格的 JSON 格式回傳，包含以下欄位：
@@ -780,6 +785,14 @@ def check_content_authenticity(content_text):
     return True
 
 def save_post_as_markdown(post_data, image_url, source_label="Official / Editorial"):
+    # 自動清除過期年份穿越 (如 2024年度 -> 2026年度)
+    for field in ["title", "subtitle", "content", "website_full_content", "telegram_caption"]:
+        if field in post_data and isinstance(post_data[field], str):
+            val = post_data[field]
+            val = re.sub(r'202[0-4]年度', f'2026年度', val)
+            val = re.sub(r'202[0-4]賽季', f'2026賽季', val)
+            val = re.sub(r'202[0-4]年', f'2026年', val)
+            post_data[field] = val
     timestamp = datetime.now().strftime("%Y-%m-%d")
     category_key = post_data.get("category", "SKATE").upper()
     topic_type = post_data.get("topic_type", "GENERAL").upper()
