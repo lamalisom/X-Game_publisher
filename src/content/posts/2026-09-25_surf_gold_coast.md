@@ -12,7 +12,7 @@ featured: true
 gear_keyword: "high performance surfboard traction pad"
 youtube_video_id: "0SuBJzaZsFI"
 youtube_video_title: "名古屋亞運！台灣 VS 中國【看球閒聊直播】"
-event_info: {"event_name": "Gold Coast Surf Showdown", "dates": "2024-11-15", "event_status": "UPCOMING", "location": "Gold Coast, Australia", "tier": "World Championship"}
+event_info: {"event_name": "Gold Coast Surf Showdown", "dates": "2024-11-15", "event_status": "COMPLETED", "location": "Gold Coast, Australia", "tier": "World Championship"}
 affiliate_products: [{"title": "Pro-Lite Surfboard Traction Pad - 3-Piece Deck Grip", "subtitle": "Amazon 官方直送・全球職業選手信賴", "search_term": "high performance surfboard traction pad", "amazon_url": "https://www.amazon.com/s?k=high%20performance%20surfboard%20traction%20pad&tag=kait02bc-20", "recommended_for": "呢款專業級防滑墊採用高密度 EVA 泡棉同極深嘅鑽石紋路設計，可以喺衝大浪時提供無與倫比嘅抓地力同腳感回饋，係世界級浪人嘅不二之選！", "badge_text": "Una 編輯推薦"}]
 ---
 
@@ -33,3 +33,8 @@ Hello 各位浪人！今日同大家直擊呢場震撼全球衝浪界嘅頂級�
 🛒 *專業裝備選購指南*:
 👉 [High Performance Surfboard Traction Pad Amazon 直送門市](https://www.amazon.com/s?k=high%20performance%20surfboard%20traction%20pad&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*
+
+---
+
+### 🏆 賽事最新結果速報
+👉 最新戰況直擊：[WSL 國際浪人狂熱爆發！世界頂尖好手直擊巨浪迎戰極限決賽 (Vol. 06:09)](/posts/2026-10-30_surf_surf_news/)

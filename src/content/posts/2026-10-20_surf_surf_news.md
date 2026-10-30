@@ -28,3 +28,9 @@ slug: "2026-10-20_surf_surf_news"
 ### 🛒 裝備焦點推薦
 
 👉 [點此前往 Amazon 查看推薦裝備: surfboard leash wetsuit](https://www.amazon.com/s?k=surfboard%20leash%20wetsuit&tag=) *(含聯盟連結 #ad)*
+
+
+---
+
+### 🏆 賽事最新結果速報
+👉 最新戰況直擊：[WSL 國際浪人狂熱爆發！世界頂尖好手直擊巨浪迎戰極限決賽 (Vol. 06:09)](/posts/2026-10-30_surf_surf_news/)

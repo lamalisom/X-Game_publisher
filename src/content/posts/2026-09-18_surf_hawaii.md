@@ -12,7 +12,7 @@ featured: true
 gear_keyword: "high performance surfboard"
 youtube_video_id: "x0A9rd-hVvo"
 youtube_video_title: "The 20 BEST Waves of Paris 2024! | Men's Surfing"
-event_info: {"event_name": "Pipeline Pro Championship", "dates": "2024-12-15", "event_status": "UPCOMING", "location": "Banzai Pipeline, Hawaii", "tier": "World Championship"}
+event_info: {"event_name": "Pipeline Pro Championship", "dates": "2024-12-15", "event_status": "COMPLETED", "location": "Banzai Pipeline, Hawaii", "tier": "World Championship"}
 affiliate_products: [{"title": "Pro-Lite Rhyno Surfboard Day Bag & Heavy Duty Leash", "subtitle": "Amazon 官方直送・全球職業選手信賴", "search_term": "high performance surfboard", "amazon_url": "https://www.amazon.com/s?k=high%20performance%20surfboard&tag=kait02bc-20", "recommended_for": "征服大浪必備嘅專業級防撞滑浪板袋同高強度腳繩，提供全方位保護，確保你喺極限浪況中安全甩身！", "badge_text": "Una 編輯推薦"}]
 ---
 
@@ -33,3 +33,8 @@ affiliate_products: [{"title": "Pro-Lite Rhyno Surfboard Day Bag & Heavy Duty Le
 🛒 *專業裝備選購指南*:
 👉 [High Performance Surfboard Amazon 直送門市](https://www.amazon.com/s?k=high%20performance%20surfboard&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*
+
+---
+
+### 🏆 賽事最新結果速報
+👉 最新戰況直擊：[WSL 國際浪人狂熱爆發！世界頂尖好手直擊巨浪迎戰極限決賽 (Vol. 06:09)](/posts/2026-10-30_surf_surf_news/)

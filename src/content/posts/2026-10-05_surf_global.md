@@ -12,7 +12,7 @@ featured: true
 gear_keyword: "high performance surfboard high performance wetsuit"
 youtube_video_id: "cL1_J8kGlq8"
 youtube_video_title: "中國史上最慘烈越野賽！172人出發，為什麼21人沒能活著回來？"
-event_info: {"event_name": "WSL Championship Tour & Global Big Wave Events", "dates": "未來 3-12 個月", "event_status": "UPCOMING", "location": "全球頂級浪點 (Global)", "tier": "World Championship"}
+event_info: {"event_name": "WSL Championship Tour & Global Big Wave Events", "dates": "未來 3-12 個月", "event_status": "COMPLETED", "location": "全球頂級浪點 (Global)", "tier": "World Championship"}
 affiliate_products: [{"title": "Pro-Level High Performance Surfboard and Wetsuit", "subtitle": "Amazon 官方直送・全球職業選手信賴", "search_term": "high performance surfboard high performance wetsuit", "amazon_url": "https://www.amazon.com/s?k=high%20performance%20surfboard%20high%20performance%20wetsuit&tag=kait02bc-20", "recommended_for": "職業級選手征服巨浪與極限管浪嘅首選配置，提供頂級浮力、極致靈活性同抗寒保護，助你喺每次衝浪中發揮百分百實力。", "badge_text": "Una 編輯推薦"}]
 ---
 
@@ -34,3 +34,8 @@ Hello 各位極限運動狂迷！今日同大家聚焦全球 Surf 浪壇最新�
 🛒 *專業裝備選購指南*:
 👉 [High Performance Surfboard High Performance Wetsuit Amazon 直送門市](https://www.amazon.com/s?k=high%20performance%20surfboard%20high%20performance%20wetsuit&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*
+
+---
+
+### 🏆 賽事最新結果速報
+👉 最新戰況直擊：[WSL 國際浪人狂熱爆發！世界頂尖好手直擊巨浪迎戰極限決賽 (Vol. 06:09)](/posts/2026-10-30_surf_surf_news/)

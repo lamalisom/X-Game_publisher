@@ -12,7 +12,7 @@ featured: true
 gear_keyword: "pro surf wetsuit"
 youtube_video_id: "ihY7OUcgV_0"
 youtube_video_title: "看衝浪好手征服「怪獸級」巨浪，但拍他的空拍機可就沒那麼幸運了……《國家地理》雜誌"
-event_info: {"event_name": "2025 WSL Championship Tour", "dates": "2025年1月至9月", "event_status": "UPCOMING", "location": "全球頂級浪點 (如Pipeline, Bells Beach, Teahupo'o)", "tier": "World Championship"}
+event_info: {"event_name": "2025 WSL Championship Tour", "dates": "2025年1月至9月", "event_status": "COMPLETED", "location": "全球頂級浪點 (如Pipeline, Bells Beach, Teahupo'o)", "tier": "World Championship"}
 affiliate_products: [{"title": "專業級高性能衝浪防寒衣", "subtitle": "Amazon 官方直送・全球職業選手信賴", "search_term": "pro surf wetsuit", "amazon_url": "https://www.amazon.com/s?k=pro%20surf%20wetsuit&tag=kait02bc-20", "recommended_for": "面對寒冷水域或長時間衝浪，一件合身保暖嘅專業防寒衣係必備！提供最佳浮力同埋靈活性，助你征服巨浪！", "badge_text": "Una 編輯推薦"}]
 ---
 
@@ -25,3 +25,8 @@ affiliate_products: [{"title": "專業級高性能衝浪防寒衣", "subtitle": 
 🛒 *專業裝備選購指南*:
 👉 [Pro Surf Wetsuit Amazon 直送門市](https://www.amazon.com/s?k=pro%20surf%20wetsuit&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*
+
+---
+
+### 🏆 賽事最新結果速報
+👉 最新戰況直擊：[WSL 國際浪人狂熱爆發！世界頂尖好手直擊巨浪迎戰極限決賽 (Vol. 06:09)](/posts/2026-10-30_surf_surf_news/)

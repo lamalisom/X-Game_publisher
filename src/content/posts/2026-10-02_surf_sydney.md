@@ -12,7 +12,7 @@ featured: true
 gear_keyword: "surfboard high performance shortboard"
 youtube_video_id: "y5SkDtPVgIg"
 youtube_video_title: "WSL葡萄牙衝浪賽 夏威夷男女選手雙奪冠 - 極限運動 - 國際新聞"
-event_info: {"event_name": "WSL Waverley Pro Championship", "dates": "2024-11-15 to 2024-11-22", "event_status": "UPCOMING", "location": "Sydney, Australia", "tier": "World Championship"}
+event_info: {"event_name": "WSL Waverley Pro Championship", "dates": "2024-11-15 to 2024-11-22", "event_status": "COMPLETED", "location": "Sydney, Australia", "tier": "World Championship"}
 affiliate_products: [{"title": "Pro Performance Carbon Surfboard", "subtitle": "Amazon 官方直送・全球職業選手信賴", "search_term": "surfboard high performance shortboard", "amazon_url": "https://www.amazon.com/s?k=surfboard%20high%20performance%20shortboard&tag=kait02bc-20", "recommended_for": "專為世界級大浪挑戰而設，具備極致輕量化碳纖維結構與強大抓地力，助你在巨浪中完美發揮極限技巧！", "badge_text": "Una 編輯推薦"}]
 ---
 
@@ -30,3 +30,8 @@ Hello 各位極限運動狂迷！我係Una (@Una_next)。今日要同大家瘋�
 🛒 *專業裝備選購指南*:
 👉 [Surfboard High Performance Shortboard Amazon 直送門市](https://www.amazon.com/s?k=surfboard%20high%20performance%20shortboard&tag=kait02bc-20)
 *(透過連結購買可支持本頻道與網站運作)*
+
+---
+
+### 🏆 賽事最新結果速報
+👉 最新戰況直擊：[WSL 國際浪人狂熱爆發！世界頂尖好手直擊巨浪迎戰極限決賽 (Vol. 06:09)](/posts/2026-10-30_surf_surf_news/)
