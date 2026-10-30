@@ -412,6 +412,14 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 - 必須包含具體賽事名稱、開賽日期、主辦場館/城市、3 大奪冠熱門焦點選手，以及官方免費直播平台（如 Red Bull TV / YouTube / 大會官網）。
 - 必須完整填寫 event_info 結構化欄位（event_name, dates, location, tier）。
 
+【核心事實與實名制要求（嚴禁假大空套話）】:
+1. 嚴禁使用「今日國際大賽」、「全球頂尖好手」、「雪國之巔」等毫無實質內容的空泛套話！
+2. 必須具體寫出：
+   - 賽事正式全名與所屬機構（如 FIS、X Games、Dew Tour、SLS、WSL、IFSC 等）。
+   - 舉辦城市、國家與具體賽場/雪場名稱（如瑞士庫爾 Chur、奧地利 Sölden）。
+   - 冠軍、亞軍、季軍等關鍵選手姓名（附英文原名）與官方決賽得分/成績。
+   - 選手決勝時施展的關鍵動作招式名稱（如 Cab 1800、Double Cork 1080、Backside Triple 等）。
+
 【任務要求】:
 請生成一篇具備深度專業度、高社群傳播力與極限運動熱血感的文章資料，語言格式：完全使用 **{selected_lang_desc}**。
 必須以嚴格的 JSON 格式回傳，包含以下欄位：
@@ -755,6 +763,21 @@ def ensure_traditional_chinese(text):
         '频': '頻', '图': '圖'
     }
     return text.translate(str.maketrans(sc_tc_pairs))
+
+
+def check_content_authenticity(content_text):
+    """檢查文章是否包含嚴重泛化的空話套話"""
+    forbidden_generic_patterns = [
+        r"今日國際滑雪大賽迎來最為白熱化",
+        r"全球頂尖滑雪好手齊聚雪國之巔",
+        r"多位奪冠熱門選手在跳台區使出渾身解數",
+        r"完美演繹了極限雪上運動的力與美"
+    ]
+    for pat in forbidden_generic_patterns:
+        if re.search(pat, content_text):
+            print(f"⚠️ 警告：文章觸發空話黑名單 [{pat}]，將自動進行實名制過濾！")
+            return False
+    return True
 
 def save_post_as_markdown(post_data, image_url, source_label="Official / Editorial"):
     timestamp = datetime.now().strftime("%Y-%m-%d")
