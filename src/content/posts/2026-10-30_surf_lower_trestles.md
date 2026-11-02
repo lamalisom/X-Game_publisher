@@ -33,3 +33,9 @@ slug: "2026-10-30_surf_lower_trestles"
 
 🛒 **Una 裝備焦點推薦**:
 👉 [點此前往 Amazon 查看推薦裝備: High Performance Thruster Surfboard](https://www.amazon.com/s?k=high%20performance%20thruster%20surfboard&tag=) (含聯盟連結 #ad)
+
+
+---
+
+### 🏆 賽事最新結果速報
+👉 最新戰況直擊：[WSL 國際衝浪巡迴賽高潮迭起 頂尖好手巨浪中展現極限美學](/posts/2026-11-02_surf_surf_news/)
