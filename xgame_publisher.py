@@ -1,3 +1,12 @@
+
+# 運動官方核心管理機構與旗艦賽事实體庫（杜絕無名無姓空話）
+OFFICIAL_ORGANIZATIONS = {
+    "SNOW": "國際滑雪與單板滑雪總會（FIS - International Ski and Snowboard Federation）世界盃大跳台/U型池賽",
+    "SURF": "世界衝浪聯盟（WSL - World Surf League）Championship Tour 冠軍巡迴賽",
+    "SKATE": "世界滑板聯盟（World Skate）與 SLS (Street League Skateboarding) 街式超級王冠賽",
+    "CLIMB": "國際運動攀登總會（IFSC - International Federation of Sport Climbing）抱石與難度世界盃",
+    "BMX": "國際自行車聯盟（UCI - Union Cycliste Internationale）自由式小輪車世界盃"
+}
 def generate_chinese_hashtags(category, topic_type="NEWS", city_tag="", title=""):
     """根據文章項目、主題、城市與標題，自動生成 4-6 個精準高關聯度的中文 Hashtag"""
     cat = str(category).upper() if category else "SKATE"
@@ -540,6 +549,15 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
    - 據點介紹必須詳實描述真實地形、設施規格（如混凝土平整度、拋台規格、浪型特點），嚴禁跨項目術語混淆。
 3. 內容透明度（Who, How, Why）：
    - 由 xGame Radar 專業編輯團隊整理，旨在提供客觀、詳實的全球極限賽事實況與器材專業評測。
+
+【核心事實約束：必須具備 5W1H 實名制數據，嚴禁空話套話】:
+1. 第一段【🏆 賽況復盤與焦點直擊】第一句必須明確寫出：
+   - 【主辦官方機構】：如 FIS 國際雪聯、WSL 世界衝浪聯盟、IFSC 國際攀登總會 等全名。
+   - 【賽事具體全名】：如 FIS 單板滑雪大跳台世界盃瑞士庫爾站、WSL 冠軍巡迴賽下棧橋站 等。
+   - 【舉辦日期與季度】：清楚標明年份賽季（如 2024-2025 賽季開鑼站）。
+   - 【舉辦城市與具體場地/雪場】：具體國家、城市與雪場名稱。
+   - 【奪冠與得獎選手】：具體寫出金牌、銀牌選手全名（附英文名）與官方決賽得分。
+2. 嚴禁使用「今次賽事」、「各路頂尖好手」、「多位選手」、「幾位高手」等泛泛之談，每一次動作點評必須指名道姓！
 
 【任務要求】:
 請生成一篇具備深度專業度、高社群傳播力與極限運動熱血感的文章資料，語言格式：完全使用 **{selected_lang_desc}**。
