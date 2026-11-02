@@ -51,7 +51,7 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install -y fonts-noto-cjk fonts-noto-color-emoji
           python -m pip install --upgrade pip
-          pip install google-genai requests pillow pydantic boto3 playwright
+          pip install google-genai feedparser requests pillow pydantic boto3 playwright
           playwright install --with-deps chromium
 
       - name: 🚀 執行 5,178 熱點地圖與住宿指南生成 (Run Spot Publisher)
