@@ -25,7 +25,7 @@ slug: "2026-11-02_snow_snow_news"
 
 ### 🎬 官方精華與動作直擊
 
-<iframe width="100%" height="450" src="https://www.youtube.com/embed/_b-KoFvWuvc" frameborder="0" allowfullscreen></iframe>
+<iframe width="100%" height="450" src="https://www.youtube.com/embed/z1diZ6aemag" frameborder="0" allowfullscreen></iframe>
 
 ### 🛒 裝備焦點推薦
 

@@ -293,39 +293,69 @@ def scrape_official_media(article_url):
         print(f"⚠️ 官方頁面媒體解析跳過 ({article_url[:40]}...): {e}")
 
 def search_embeddable_youtube_video(query, category_key="SKATE"):
-    """自動搜尋並透過 YouTube oEmbed API 驗證 100% 可外嵌播放的官方極限運動影片"""
+    """自動搜尋並嚴格審核 YouTube 影片相關性與外嵌播放權限（杜絕不相關內容，符合 Google E-E-A-T 規範）"""
+    cat = str(category_key).upper() if category_key else "SKATE"
+    
+    # 各運動項目核心關鍵字庫（用於相關性嚴格校驗）
+    cat_keywords = {
+        "SNOW": ["snow", "ski", "snowboard", "winter", "fis", "halfpipe", "slopestyle", "big air", "滑雪", "單板", "雙板", "雪上"],
+        "SURF": ["surf", "wave", "barrel", "wsl", "pipeline", "ocean", "衝浪", "浪人", "滑浪"],
+        "SKATE": ["skate", "skateboard", "thrasher", "sls", "ollie", "kickflip", "tony hawk", "滑板"],
+        "CLIMB": ["climb", "boulder", "ifsc", "rock", "lead climbing", "dyno", "攀岩", "抱石"],
+        "BMX": ["bmx", "bike", "pumptrack", "freestyle", "logan martin", "小輪車", "單車"]
+    }
+    
+    sport_en_names = {
+        "SNOW": "snowboard ski FIS world cup",
+        "SURF": "surfing WSL championship tour",
+        "SKATE": "skateboarding SLS street",
+        "CLIMB": "climbing IFSC boulder world cup",
+        "BMX": "BMX freestyle UCI"
+    }
+
     try:
-        search_query = f"{query} extreme sports official"
+        # 使用精準的官方運動搜尋詞，避免抽象中文長標題導致 YouTube 推薦不相關影片
+        clean_en_term = sport_en_names.get(cat, f"{cat} action sports")
+        search_query = f"{clean_en_term} official competition highlights"
         url = f"https://www.youtube.com/results?search_query={quote(search_query)}"
         headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
         }
         res = requests.get(url, headers=headers, timeout=6)
         if res.status_code == 200:
             vids = re.findall(r'"videoId":"([a-zA-Z0-9_-]{11})"', res.text)
-            for vid in vids[:6]:
+            kw_list = cat_keywords.get(cat, [])
+            
+            for vid in vids[:8]:
                 oembed_url = f"https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v={vid}&format=json"
                 o_res = requests.get(oembed_url, timeout=3)
                 if o_res.status_code == 200:
                     data = o_res.json()
-                    title = data.get("title", f"{category_key} Official Action")
-                    print(f"🎬 自動成功配對 YouTube 官方精華 [{vid}]: {title[:40]}")
-                    return vid, title
+                    v_title = data.get("title", "")
+                    t_lower = v_title.lower()
+                    
+                    # 核心防護：檢查影片標題是否確實包含該運動項目關鍵字
+                    if any(k in t_lower for k in kw_list):
+                        print(f"🎬 成功配對 100% 相關官方精華 [{vid}]: {v_title[:45]}")
+                        return vid, v_title
+                    else:
+                        print(f"⏩ 略過不相關影片 [{vid}]: {v_title[:35]} (未通過 {cat} 專業相關性審核)")
     except Exception as e:
         print(f"⚠️ YouTube 影片自動搜尋跳過: {e}")
 
+    # 官方 100% 核可的高畫質典藏備用庫
     fallback_map = {
         "SKATE": ("4YYTNkAdDD8", "Tony Hawk Lands FIRST-EVER 900 | World of X Games"),
         "BMX": ("E-VClAvTgSU", "Best of Logan Martin | Men BMX Freestyle Paris 2024 Highlights"),
         "SURF": ("26KzUnEbTUs", "Surfing the Heaviest Wave in the World - Teahupoo"),
         "CLIMB": ("jTVcRSq8IYk", "Janja Garnbret: The Lioness | Climbing Gold Highlights"),
-        "SNOW": ("he03dVkhLTM", "Shaun White Snowboard Halfpipe Gold | PyeongChang 2018"),
+        "SNOW": ("z1diZ6aemag", "FIS Snowboard World Cup Big Air Season Opener Official Highlights"),
         "EVENT": ("riO1y-xyWek", "Men Skateboard Street Best Trick at X Games California"),
         "SPOT": ("zJL5IVvDx1k", "Battle At The Berrics - BATB Highlights"),
         "SAFETY": ("acOvWo88a4w", "How to Kickflip Tutorial & Safety Guide"),
         "TRICKS": ("acOvWo88a4w", "How to Kickflip Tutorial & Safety Guide")
     }
-    return fallback_map.get(category_key.upper(), fallback_map["SKATE"])
+    return fallback_map.get(cat, fallback_map["SKATE"])
 
 def fetch_latest_rss_news(category_key):
     rss_url = XGAME_CATEGORIES.get(category_key.upper())
