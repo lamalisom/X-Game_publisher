@@ -1,4 +1,11 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://unanext.fans/sitemap.xml
+# 禁止爬取後台或內部檔案
+Disallow: /api/
+Disallow: /admin/
+Disallow: /scratch/
+
+# Google 與各大搜尋引擎 Sitemap 索引入口
+Sitemap: https://unanext.fans/sitemap-index.xml
+Sitemap: https://unanext.fans/sitemap-0.xml

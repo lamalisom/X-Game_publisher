@@ -95,6 +95,35 @@ const gaId = import.meta.env.PUBLIC_GA_ID || '';
     }
     </script>
 
+  <!-- 🚀 Google Schema.org 結構化資料 (Rich Snippets & Topical Authority) -->
+    <script type="application/ld+json" is:inline>
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://unanext.fans/#website",
+          "url": "https://unanext.fans/",
+          "name": "xGame Radar Magazine",
+          "description": "全球極限運動雷達、賽事戰報、裝備指南與 3,400+ 熱點地圖",
+          "publisher": {
+            "@id": "https://unanext.fans/#organization"
+          },
+          "inLanguage": "zh-HK"
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://unanext.fans/#organization",
+          "name": "xGame Radar Magazine 專業編輯部",
+          "url": "https://unanext.fans/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://unanext.fans/favicon.svg"
+          }
+        }
+      ]
+    }
+    </script>
   </head>
   <body class="min-h-screen flex flex-col bg-gradient-to-b from-xblack via-[#0d0e12] to-xblack">
     <Header />
