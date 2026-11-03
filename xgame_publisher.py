@@ -926,6 +926,7 @@ def save_post_as_markdown(post_data, image_url, source_label="Official / Editori
     title = sanitize_single_line_text(post_data.get("title", f"{category_key} 特刊"))
     subtitle = sanitize_single_line_text(post_data.get("subtitle", ""))
     city_tag = sanitize_single_line_text(post_data.get("city_tag", "GLOBAL"))
+    gear_kw = str(post_data.get("gear_keyword", "extreme sports gear")).strip()
 
     # 自動在文章末尾附加精準中文標籤列（強化 SEO 長尾詞檢索）
     if "🏷️ **熱門標籤**:" not in post_data.get("content", ""):
