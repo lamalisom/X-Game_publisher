@@ -54,74 +54,63 @@ OFFICIAL_ORGANIZATIONS = {
 }
 
 def generate_chinese_hashtags(category, topic_type="NEWS", city_tag="", title=""):
-    """根據文章項目、主題、城市與標題，自動生成 4-6 個精準高關聯度的中文 Hashtag"""
+    """
+    全方位 SEO 標籤矩陣：涵蓋 BMX、各類賽事比拼、實體場地評測與全運動長尾詞
+    """
     cat = str(category).upper() if category else "SKATE"
     top = str(topic_type).upper() if topic_type else "NEWS"
     
+    # 1. 運動項目專屬高轉化長尾詞
     sport_map = {
-        "SKATE": ["#滑板", "#極限滑板", "#街式滑板", "#板仔日常"],
-        "SURF": ["#衝浪", "#極限衝浪", "#浪人日常", "#浪點推薦"],
-        "SNOW": ["#單板滑雪", "#滑雪", "#極限雪上", "#雪季日常"],
-        "CLIMB": ["#攀岩", "#抱石", "#極限攀爬", "#岩壁挑戰"],
-        "BMX": ["#極限小輪車", "#BMX單車", "#泵道", "#特技單車"]
+        "BMX": ["#BMX", "#極限單車", "#小輪車", "#泵道", "#特技單車", "#土坡騰躍", "#PumpTrack"],
+        "SKATE": ["#滑板", "#街式滑板", "#碗池", "#滑板公園", "#板仔日常", "#極限滑板"],
+        "SNOW": ["#單板滑雪", "#雙板滑雪", "#雪場攻略", "#粉雪聖地", "#野雪Freeride", "#滑雪場"],
+        "CLIMB": ["#抱石", "#攀岩", "#室內岩館", "#天然岩場", "#先鋒攀登", "#岩壁挑戰"],
+        "SURF": ["#衝浪", "#世界浪點", "#浪人日常", "#浪點推薦", "#衝浪教學", "#大浪征服者"]
     }
     
+    # 2. 內容型態專屬標籤（重點補強：比賽與場地）
     topic_map = {
-        "SPOT": ["#極限探索地圖", "#場地指南", "#據點實測", "#朝聖地標"],
-        "EVENT": ["#賽事雷達", "#賽事實況", "#世界盃直擊"],
-        "NEWS": ["#最新戰報", "#極限速報", "#即時焦點"],
-        "FORECAST": ["#賽事預報", "#賽程時間表", "#日程雷達"],
-        "ATHLETE": ["#頂尖選手", "#職業選手"],
-        "SAFETY": ["#裝備評測", "#護具指南"],
-        "TRICKS": ["#動作分解", "#花式技巧"]
-    }
-
-    city_map = {
-        "GLOBAL": "#全球極限",
-        "HONG KONG": "#香港",
-        "TOKYO": "#東京",
-        "LOS ANGELES": "#洛杉磯",
-        "CALIFORNIA": "#加州",
-        "PARIS": "#巴黎",
-        "INNSBRUCK": "#因斯布魯克",
-        "CHUR": "#瑞士庫爾",
-        "YANGYANG": "#韓國襄陽",
-        "KOREA": "#韓國",
-        "WOLFURT": "#奧地利"
+        "SPOT": ["#極限運動場地", "#場地攻略", "#極限探索地圖", "#據點實測", "#朝聖地標", "#滑板公園指南"],
+        "EVENT": ["#國際賽事實況", "#賽事雷達", "#世界盃直擊", "#決賽焦點", "#極限大賽", "#頒獎台戰報"],
+        "NEWS": ["#最新戰報", "#極限速報", "#即時焦點", "#熱門話題"],
+        "FORECAST": ["#賽程時間表", "#賽事預報", "#日程雷達", "#年度巡迴前瞻"],
+        "ATHLETE": ["#頂尖選手", "#職業選手專訪", "#奪冠熱門"],
+        "SAFETY": ["#裝備評測", "#安全護具指南", "#防護裝備"],
+        "TRICKS": ["#動作分解", "#花式技巧", "#進階技術教學"]
     }
 
     tags = ["#xGameRadar"]
     tags.extend(sport_map.get(cat, ["#極限運動", f"#{cat}"])[:2])
-    tags.extend(topic_map.get(top, ["#極限專題"])[:1])
+    tags.extend(topic_map.get(top, ["#極限專題"])[:2])
     
     if city_tag:
         c_clean = str(city_tag).strip().upper()
-        if c_clean in city_map:
-            tags.append(city_map[c_clean])
-        elif len(c_clean) <= 12 and c_clean != "GLOBAL":
+        if len(c_clean) <= 15 and c_clean != "GLOBAL":
             tags.append(f"#{c_clean.title()}")
             
     t_upper = str(title).upper()
     if "X GAMES" in t_upper or "XGAMES" in t_upper:
         tags.append("#XGames")
     elif "WSL" in t_upper:
-        tags.append("#WSL衝浪世界盃")
+        tags.append("#WSL衝浪巡迴賽")
     elif "SLS" in t_upper:
-        tags.append("#SLS街式滑板")
+        tags.append("#SLS街式滑板聯賽")
     elif "IFSC" in t_upper:
         tags.append("#IFSC攀岩世界盃")
     elif "FIS" in t_upper:
         tags.append("#FIS滑雪世界盃")
+    elif "UCI" in t_upper:
+        tags.append("#UCI自由式小輪車")
 
-    tags.append("#極限運動")
-    
     seen = set()
     res = []
     for t in tags:
         if t not in seen:
             seen.add(t)
             res.append(t)
-    return " ".join(res[:7])
+            
+    return " ".join(res[:6])
 
 def generate_rich_hashtags(category_key, topic_type="GENERAL"):
     """自動依運動項目與內容型態產生專業、精準的中英雙語社群標籤"""
