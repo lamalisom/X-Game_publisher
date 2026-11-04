@@ -34,7 +34,7 @@ jobs:
           R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          AMAZON_AFFILIATE_ID: ${{ secrets.AMAZON_AFFILIATE_ID }}
+          AMAZON_AFFILIATE_ID: ${{ secrets.AMAZON_AFFILIATE_TAG || 'kait02bc-20' }}
         run: |
           if [ -n "${{ github.event.inputs.filename }}" ]; then
             python repost_from_r2.py "${{ github.event.inputs.filename }}"
