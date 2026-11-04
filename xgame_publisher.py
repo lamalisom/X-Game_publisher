@@ -1,5 +1,50 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
-# 運動官方核心管理機構與旗艦賽事实體庫（杜絕無名無姓空話）
+import os
+import re
+import sys
+import json
+import random
+import sqlite3
+import base64
+import requests
+import asyncio
+import time
+import html
+from datetime import datetime
+from urllib.parse import quote, urlparse
+
+try:
+    import feedparser
+except ImportError:
+    feedparser = None
+
+try:
+    from bs4 import BeautifulSoup
+except ImportError:
+    BeautifulSoup = None
+
+try:
+    import boto3
+except ImportError:
+    boto3 = None
+
+try:
+    from google import genai
+    from google.genai import types
+except ImportError:
+    genai = None
+    types = None
+
+try:
+    from playwright.async_api import async_playwright
+except ImportError:
+    async_playwright = None
+
+# ==========================================
+# 運動官方核心管理機構與旗艦賽事實體庫（杜絕無名無姓空話）
+# ==========================================
 OFFICIAL_ORGANIZATIONS = {
     "SNOW": "國際滑雪與單板滑雪總會（FIS - International Ski and Snowboard Federation）世界盃大跳台/U型池賽",
     "SURF": "世界衝浪聯盟（WSL - World Surf League）Championship Tour 冠軍巡迴賽",
@@ -7,6 +52,7 @@ OFFICIAL_ORGANIZATIONS = {
     "CLIMB": "國際運動攀登總會（IFSC - International Federation of Sport Climbing）抱石與難度世界盃",
     "BMX": "國際自行車聯盟（UCI - Union Cycliste Internationale）自由式小輪車世界盃"
 }
+
 def generate_chinese_hashtags(category, topic_type="NEWS", city_tag="", title=""):
     """根據文章項目、主題、城市與標題，自動生成 4-6 個精準高關聯度的中文 Hashtag"""
     cat = str(category).upper() if category else "SKATE"
@@ -77,7 +123,6 @@ def generate_chinese_hashtags(category, topic_type="NEWS", city_tag="", title=""
             res.append(t)
     return " ".join(res[:7])
 
-
 def generate_rich_hashtags(category_key, topic_type="GENERAL"):
     """自動依運動項目與內容型態產生專業、精準的中英雙語社群標籤"""
     cat = category_key.upper() if category_key else "SKATE"
@@ -101,78 +146,14 @@ def generate_rich_hashtags(category_key, topic_type="GENERAL"):
     selected_topic = TOPIC_TAGS.get(topic_type.upper() if topic_type else "", ["#極限運動"])
     
     all_tags = ["#xGameRadar"] + selected_sport[:3] + selected_topic[:1] + ["#ActionSports"]
-    # 保持唯一性
     unique_tags = []
     for t in all_tags:
         if t not in unique_tags:
             unique_tags.append(t)
     return " ".join(unique_tags)
 
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-import os
-import re
-import sys
-import json
-import random
-import sqlite3
-import base64
-import requests
-import asyncio
-import time
-import html
-from datetime import datetime
-from urllib.parse import quote, urlparse
-
-try:
-    import feedparser
-except ImportError:
-    feedparser = None
-
-try:
-    from bs4 import BeautifulSoup
-except ImportError:
-    BeautifulSoup = None
-
-try:
-    import boto3
-except ImportError:
-    boto3 = None
-
-try:
-    from google import genai
-    from google.genai import types
-except ImportError:
-    genai = None
-    types = None
-
-try:
-    from playwright.async_api import async_playwright
-except ImportError:
-    async_playwright = None
-
 # ==========================================
-def get_r2_history(r2_client, bucket_name):
-    """從 Cloudflare R2 讀取已發布的歷史文章與圖片清單"""
-    history = {'titles': set(), 'images': set(), 'slugs': set()}
-    if not r2_client or not bucket_name:
-        return history
-    try:
-        paginator = r2_client.get_paginator('list_objects_v2')
-        for page in paginator.paginate(Bucket=bucket_name, Prefix='posts/'):
-            for obj in page.get('Contents', []):
-                key = obj.get('Key', '')
-                history['slugs'].add(key.replace('posts/', '').replace('.json', ''))
-        for page in paginator.paginate(Bucket=bucket_name, Prefix='cards/'):
-            for obj in page.get('Contents', []):
-                key = obj.get('Key', '')
-                history['images'].add(key.replace('cards/', ''))
-        print(f"📡 從 Cloudflare R2 成功同步歷史資料庫：{len(history['slugs'])} 篇文章, {len(history['images'])} 張歷史圖片")
-    except Exception as e:
-        print(f"⚠️ 讀取 R2 歷史記錄失敗 (將使用本地比對): {e}")
-    return history
-
+# 工具函式
 # ==========================================
 def clean_token_or_url(val):
     """徹底清理 Token 與字串，移除所有括號、中括號、引號與多餘空白"""
@@ -197,6 +178,12 @@ def sanitize_single_line_text(val):
     cleaned = str(val).replace('\r', ' ').replace('\n', ' ').strip()
     return re.sub(r'\s+', ' ', cleaned)
 
+def sanitize_gear_keyword(kw):
+    """清理並精簡裝備關鍵字，截取核心 4 個單字以確保 Amazon 搜尋命中率"""
+    clean_k = clean_token_or_url(kw).replace(',', ' ')
+    words = clean_k.split()
+    return " ".join(words[:4]) if len(words) > 4 else clean_k
+
 def url_to_base64(image_url):
     clean_url = extract_clean_url(image_url)
     try:
@@ -210,7 +197,12 @@ def url_to_base64(image_url):
         print(f"⚠️ 圖片 Base64 轉換失敗 ({clean_url}): {e}")
         return clean_url
 
-AMAZON_AFFILIATE_ID = clean_token_or_url(os.getenv("AMAZON_AFFILIATE_ID", "kait02bc-20"))
+# 🛡️ 雙重容錯：相容 AMAZON_AFFILIATE_ID 與 AMAZON_AFFILIATE_TAG，若為空強制帶入 kait02bc-20
+AMAZON_AFFILIATE_ID = (
+    clean_token_or_url(os.getenv("AMAZON_AFFILIATE_ID")) or 
+    clean_token_or_url(os.getenv("AMAZON_AFFILIATE_TAG")) or 
+    "kait02bc-20"
+)
 
 XGAME_CATEGORIES = {
     "SKATE": "https://www.skateboarding.com/rss",
@@ -221,13 +213,15 @@ XGAME_CATEGORIES = {
 }
 
 DEFAULT_GEAR_KEYWORDS = {
-    "SKATE": "skateboarding shoes helmet protective gear",
-    "CLIMB": "climbing shoes chalk bag harness",
+    "SKATE": "skateboarding shoes helmet pads",
+    "CLIMB": "climbing shoes chalk harness",
     "BMX": "bmx helmet gloves pads",
-    "SURF": "surfing wetsuit leash traction pad",
+    "SURF": "surfing wetsuit leash traction",
     "SNOW": "snowboard goggles gloves helmet"
 }
 
+# ==========================================
+# 本地 SQLite 資料庫記錄判重
 # ==========================================
 DB_FILE = "xgame_radar.db"
 
@@ -302,7 +296,6 @@ def search_embeddable_youtube_video(query, category_key="SKATE"):
     """自動搜尋並嚴格審核 YouTube 影片相關性與外嵌播放權限（杜絕不相關內容，符合 Google E-E-A-T 規範）"""
     cat = str(category_key).upper() if category_key else "SKATE"
     
-    # 各運動項目核心關鍵字庫（用於相關性嚴格校驗）
     cat_keywords = {
         "SNOW": ["snow", "ski", "snowboard", "winter", "fis", "halfpipe", "slopestyle", "big air", "滑雪", "單板", "雙板", "雪上"],
         "SURF": ["surf", "wave", "barrel", "wsl", "pipeline", "ocean", "衝浪", "浪人", "滑浪"],
@@ -320,7 +313,6 @@ def search_embeddable_youtube_video(query, category_key="SKATE"):
     }
 
     try:
-        # 使用精準的官方運動搜尋詞，避免抽象中文長標題導致 YouTube 推薦不相關影片
         clean_en_term = sport_en_names.get(cat, f"{cat} action sports")
         search_query = f"{clean_en_term} official competition highlights"
         url = f"https://www.youtube.com/results?search_query={quote(search_query)}"
@@ -340,7 +332,6 @@ def search_embeddable_youtube_video(query, category_key="SKATE"):
                     v_title = data.get("title", "")
                     t_lower = v_title.lower()
                     
-                    # 核心防護：檢查影片標題是否確實包含該運動項目關鍵字
                     if any(k in t_lower for k in kw_list):
                         print(f"🎬 成功配對 100% 相關官方精華 [{vid}]: {v_title[:45]}")
                         return vid, v_title
@@ -349,7 +340,6 @@ def search_embeddable_youtube_video(query, category_key="SKATE"):
     except Exception as e:
         print(f"⚠️ YouTube 影片自動搜尋跳過: {e}")
 
-    # 官方 100% 核可的高畫質典藏備用庫
     fallback_map = {
         "SKATE": ("4YYTNkAdDD8", "Tony Hawk Lands FIRST-EVER 900 | World of X Games"),
         "BMX": ("E-VClAvTgSU", "Best of Logan Martin | Men BMX Freestyle Paris 2024 Highlights"),
@@ -491,7 +481,7 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
   "title": "精煉且具震撼力的新聞頭條大標題（約 20-35 字，嚴禁換行與【】符號，包含選手名或賽事名）",
   "subtitle": "一句話新聞副標題或勝負關鍵亮點（約 28-50 字）",
   "city_tag": "{display_category}_NEWS",
-  "gear_keyword": "純英文裝備關鍵字（如: surf leash wetsuit / skate shoes pro）",
+  "gear_keyword": "純英文裝備關鍵字（例如: surf leash wetsuit / skate shoes pro）",
   "telegram_caption": "【📱 Telegram 即時快訊】：約 100-150 字，熱血 Emoji 列點總結 3 大賽況/事件焦點，帶有強烈社群討論號召！",
   "website_full_content": "【🌐 官方網站長篇深度戰報專題】：約 500-700 字，Markdown 結構化排版，包含章節副標題（如：### 🏆 賽況復盤與焦點直擊、### ⚡ 關鍵技術亮點與動作分解、### ⚙️ 頂級選手賽事專用裝備評測），段落分明！",
   "content": "填入 telegram_caption 備用",
@@ -506,7 +496,6 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 今日專欄主題：【{active_title}】（項目類別：{display_category}，主題類型：{active_topic}）
 {rss_context}
 
-
 【運動項目術語硬性規範】：
 - 若類別為 CLIMB（攀岩）：核心環境必須為「天然岩壁 (Crag) / 抱石 (Bouldering) / 先鋒運動攀 (Sport Climbing)」，抓點多為微小岩點 (Crimps) 或石縫。嚴禁出現「滑行道」、「坡道 (Ramps)」、「障礙地形」等滑板術語！
 - 若類別為 SURF（衝浪）：必須為浪點、礁石浪或沙灘浪，嚴禁陸地坡道。
@@ -515,17 +504,10 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 - 嚴禁捏造「車程只需 10 分鐘」等虛假距離！
 - 若推薦周邊住宿，必須是該場地所在的同一城鎮或車程 30 分鐘內的地區；若是野外天然場地，請客觀建議下榻「鄰近主要城鎮之湖區木屋營地或 B&B」，嚴禁跨區推薦數百公里外的極光奢華酒店！
 
-
 【專題寫作語氣與開頭絕對禁令】：
 - 嚴禁以「我是 Una (@Una_next)」或「Hello 各位極限狂迷！我是 Una」等個人問候語開頭！
 - 文章必須以頂級極限運動雜誌（xGame Radar Magazine）客觀、熱血、權威的編輯部專題視角，直接開門見山切入賽況或場地核心亮點！
 - 內文嚴禁頻繁自我重複「Una 推薦」、「Una 強力建議」等贅詞，改以「編輯部推薦」或「職業選手配置建議」。
-
-
-【若為賽事預報 (EVENT/FORECAST) 核心要求】：
-- 盤點未來 1-3 個月內即將開打的世界頂級賽事（如 SLS、X Games、WSL CT、IFSC 世界盃、UCI BMX 等）。
-- 必須包含具體賽事名稱、開賽日期、主辦場館/城市、3 大奪冠熱門焦點選手，以及官方免費直播平台（如 Red Bull TV / YouTube / 大會官網）。
-- 必須完整填寫 event_info 結構化欄位（event_name, dates, location, tier）。
 
 【核心事實與實名制要求（嚴禁假大空套話）】:
 1. 嚴禁使用「今日國際大賽」、「全球頂尖好手」、「雪國之巔」等毫無實質內容的空泛套話！
@@ -539,25 +521,6 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 1. 當前現實年份為 **2026 年**（賽事週期涵蓋 2026–2027 賽季）。
 2. 嚴禁在標題或內文中輸出任何已過期年份（如 2024、2023 或更早年份）的「未來預報」或「年度大賽即將開打」！
 3. 所有賽事名稱、巡迴賽季度與前瞻必須嚴格鎖定在 2026–2027 最新賽季！
-
-【Google E-E-A-T 與「以使用者為優先 (People-First)」內容品質核心標準】：
-1. 原創深度與實質價值（Substantial & Practical）：
-   - 拒絕空泛公關套話！必須提供讀者真正需要的「實用乾貨」（如新手避坑指南、裝備挑選具體參數、動作發力要領、浪型潮汐、雪場纜車與雪道特性）。
-   - 讀者讀完後能獲得完整解答與實戰指引，無需再返回 Google 重新搜尋。
-2. 事實準確性與專業度（Expertise & Trustworthiness）：
-   - 賽事戰報必須具備 5W1H（官方大賽正式全名、舉辦城市、關鍵選手全名與官方成績、決勝動作招式名稱）。
-   - 據點介紹必須詳實描述真實地形、設施規格（如混凝土平整度、拋台規格、浪型特點），嚴禁跨項目術語混淆。
-3. 內容透明度（Who, How, Why）：
-   - 由 xGame Radar 專業編輯團隊整理，旨在提供客觀、詳實的全球極限賽事實況與器材專業評測。
-
-【核心事實約束：必須具備 5W1H 實名制數據，嚴禁空話套話】:
-1. 第一段【🏆 賽況復盤與焦點直擊】第一句必須明確寫出：
-   - 【主辦官方機構】：如 FIS 國際雪聯、WSL 世界衝浪聯盟、IFSC 國際攀登總會 等全名。
-   - 【賽事具體全名】：如 FIS 單板滑雪大跳台世界盃瑞士庫爾站、WSL 冠軍巡迴賽下棧橋站 等。
-   - 【舉辦日期與季度】：清楚標明年份賽季（如 2024-2025 賽季開鑼站）。
-   - 【舉辦城市與具體場地/雪場】：具體國家、城市與雪場名稱。
-   - 【奪冠與得獎選手】：具體寫出金牌、銀牌選手全名（附英文名）與官方決賽得分。
-2. 嚴禁使用「今次賽事」、「各路頂尖好手」、「多位選手」、「幾位高手」等泛泛之談，每一次動作點評必須指名道姓！
 
 【任務要求】:
 請生成一篇具備深度專業度、高社群傳播力與極限運動熱血感的文章資料，語言格式：完全使用 **{selected_lang_desc}**。
@@ -642,8 +605,12 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
 # 4. AMAZON 聯盟行銷與圖片管理
 # ==========================================
 def attach_affiliate_link(keyword, affiliate_id="kait02bc-20"):
-    clean_kw = clean_token_or_url(keyword)
-    clean_tag = clean_token_or_url(affiliate_id)
+    """
+    產生精準且帶有佣金 Tag 的 Amazon 官方搜尋網址
+    【核心防護】絕對強制帶入 kait02bc-20，絕不允許輸出 &tag= 為空
+    """
+    clean_kw = sanitize_gear_keyword(keyword)
+    clean_tag = clean_token_or_url(affiliate_id) or "kait02bc-20"
     encoded_kw = quote(clean_kw)
     return f"https://www.amazon.com/s?k={encoded_kw}&tag={clean_tag}"
 
@@ -665,6 +632,26 @@ def record_used_photo(photo_id, photo_url, category):
         conn.close()
     except Exception as e:
         print(f"⚠️ 記錄相片失敗: {e}")
+
+def get_r2_history(r2_client, bucket_name):
+    """從 Cloudflare R2 讀取已發布的歷史文章與圖片清單"""
+    history = {'titles': set(), 'images': set(), 'slugs': set()}
+    if not r2_client or not bucket_name:
+        return history
+    try:
+        paginator = r2_client.get_paginator('list_objects_v2')
+        for page in paginator.paginate(Bucket=bucket_name, Prefix='posts/'):
+            for obj in page.get('Contents', []):
+                key = obj.get('Key', '')
+                history['slugs'].add(key.replace('posts/', '').replace('.json', ''))
+        for page in paginator.paginate(Bucket=bucket_name, Prefix='cards/'):
+            for obj in page.get('Contents', []):
+                key = obj.get('Key', '')
+                history['images'].add(key.replace('cards/', ''))
+        print(f"📡 從 Cloudflare R2 成功同步歷史資料庫：{len(history['slugs'])} 篇文章, {len(history['images'])} 張歷史圖片")
+    except Exception as e:
+        print(f"⚠️ 讀取 R2 歷史記錄失敗 (將使用本地比對): {e}")
+    return history
 
 def get_action_sports_image(query_category, pexels_api_key=None, r2_history=None):
     clean_cat = clean_token_or_url(query_category).upper()
@@ -903,7 +890,6 @@ def ensure_traditional_chinese(text):
     }
     return text.translate(str.maketrans(sc_tc_pairs))
 
-
 def check_content_authenticity(content_text):
     """檢查文章是否包含嚴重泛化的空話套話"""
     forbidden_generic_patterns = [
@@ -919,6 +905,10 @@ def check_content_authenticity(content_text):
     return True
 
 def save_post_as_markdown(post_data, image_url, source_label="Official / Editorial"):
+    """
+    【100% YAML 安全鎖】生成標準 Astro Markdown
+    補齊 description, city_tag, featured, tags 等 SEO 與列表渲染必備欄位
+    """
     timestamp = datetime.now().strftime("%Y-%m-%d")
     category_key = str(post_data.get("category", "SKATE")).upper()
     topic_type = str(post_data.get("topic_type", "GENERAL")).upper()
@@ -932,6 +922,8 @@ def save_post_as_markdown(post_data, image_url, source_label="Official / Editori
     if "🏷️ **熱門標籤**:" not in post_data.get("content", ""):
         ch_tags = generate_chinese_hashtags(category_key, topic_type, city_tag, title)
         post_data["content"] = post_data.get("content", "").rstrip() + "\n\n---\n\n🏷️ **熱門標籤**: " + str(ch_tags) + "\n"
+
+    # 清理 slug，只保留英數底線
     clean_slug = re.sub(r'[^a-zA-Z0-9]', '_', city_tag.lower())[:15]
     if not clean_slug or clean_slug == "_":
         clean_slug = "global"
@@ -941,15 +933,23 @@ def save_post_as_markdown(post_data, image_url, source_label="Official / Editori
     filename = f"{timestamp}_{category_key.lower()}_{clean_slug}.md"
     filepath = os.path.join(posts_dir, filename)
 
+    # 提取純標籤陣列供 Astro Collections 使用
+    tag_list = [t.replace("#", "") for t in ch_tags.split() if t.startswith("#")][:6]
+
     frontmatter_dict = {
         "title": title,
         "subtitle": subtitle,
+        "description": subtitle if subtitle else title,
         "date": datetime.now().isoformat(),
         "category": category_key if category_key in ["SKATE", "BMX", "SURF", "CLIMB", "SNOW", "EVENT", "SPOT", "ATHLETE", "SAFETY", "TRICKS"] else "SKATE",
         "topic_type": topic_type if topic_type in ["EVENT", "SPOT", "ATHLETE", "SAFETY", "RECORD", "TIPS", "GEAR", "GENERAL"] else "GENERAL",
         "cover_image": image_url,
         "cover_image_source": source_label,
         "author": "Una (@Una_next)",
+        "city_tag": city_tag,
+        "featured": True,
+        "gear_keyword": gear_kw,
+        "tags": tag_list,
         "slug": f"{timestamp}_{category_key.lower()}_{clean_slug}"
     }
 
@@ -1002,7 +1002,7 @@ def send_telegram_post(title, subtitle, caption_text, website_url, affiliate_url
     if affiliate_url:
         msg_html += f'⚙️ <a href="{affiliate_url}">專業裝備選購</a>\n'
 
-    current_topic = topic_type if 'topic_type' in locals() and topic_type else 'GENERAL'
+    current_topic = topic_type if topic_type else 'GENERAL'
     msg_html += f"\n{generate_rich_hashtags(category, current_topic)}"
 
     if len(msg_html) > 1000:
@@ -1118,15 +1118,20 @@ async def main_async():
     formatted_web_article = f"{web_content}\n\n"
     if official_yt:
         formatted_web_article += f"### 🎬 官方精華與動作直擊\n\n"
-        formatted_web_article += f'<iframe width="100%" height="450" src="https://www.youtube.com/embed/{official_yt}" frameborder="0" allowfullscreen></iframe>\n\n'
+        # 📱 採用 16:9 RWD 自適應容器，徹底解決手機瀏覽排版破裂問題
+        formatted_web_article += (
+            f'<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin:20px 0;">'
+            f'<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" src="https://www.youtube.com/embed/{official_yt}" allowfullscreen></iframe>'
+            f'</div>\n\n'
+        )
 
     formatted_web_article += f"### 🛒 裝備焦點推薦\n\n"
     formatted_web_article += f"👉 [點此前往 Amazon 查看推薦裝備: {gear_kw}]({affiliate_url}) *(含聯盟連結 #ad)*\n"
 
     post_data["content"] = formatted_web_article
     post_data["category"] = category
-        # 自動過濾 AI 偶發的個人自我介紹贅詞
-        # 自動將簡體殘體字轉換為香港正體字
+
+    # 自動過濾 AI 偶發的個人自我介紹贅詞並轉繁體
     if lang_arg == "zh-hk":
         for k in ["title", "subtitle", "content"]:
             if k in post_data and isinstance(post_data[k], str):
@@ -1139,10 +1144,10 @@ async def main_async():
         post_data["content"] = re.sub(r'我是\s*Una\s*(?:\(@Una_next\)|@Una_next)?[，。、\s]*', '', post_data["content"], flags=re.IGNORECASE)
 
     save_post_as_markdown(post_data, final_image_url, "Official / Editorial")
+
     # 若發布的是賽事新聞或預報，自動關聯並更新歷史預報文章
     if str(topic_type).upper() in ["EVENT", "NEWS", "FORECAST"]:
         backfill_results_to_forecast(title, post_slug, category)
-
 
     json_filename = f"{post_slug}.json"
     r2_json_payload = {
@@ -1161,7 +1166,7 @@ async def main_async():
 
     upload_to_r2(json_filename, f"posts/{json_filename}")
 
-    # 8. 推送至 Telegram 頻道 (使用抗底線 HTML 模式發布)
+    # 推送至 Telegram 頻道
     send_telegram_post(
         title=title,
         subtitle=subtitle,
@@ -1169,7 +1174,8 @@ async def main_async():
         website_url=website_article_url,
         affiliate_url=affiliate_url,
         category=category,
-        image_path=card_filename
+        image_path=card_filename,
+        topic_type=topic_type
     )
 
     record_posted_article(title, category, topic_type)
