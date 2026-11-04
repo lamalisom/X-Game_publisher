@@ -57,6 +57,9 @@ jobs:
           else
             python3 scripts/etl_osm_spots.py --category "$CATEGORY_PARAM"
           fi
+      - name: 🛡️ Verify Astro Build before Push
+        run: npm run build
+
 
       - name: Commit & Push Updated Datasets
         run: |

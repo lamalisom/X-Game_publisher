@@ -40,6 +40,8 @@ jobs:
       - name: Run Competition Forecast Publisher
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          AMAZON_AFFILIATE_TAG: ${{ secrets.AMAZON_AFFILIATE_TAG || 'kait02bc-20' }}
+          AMAZON_AFFILIATE_ID: ${{ secrets.AMAZON_AFFILIATE_TAG || 'kait02bc-20' }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
           AMAZON_AFFILIATE_ID: ${{ secrets.AMAZON_AFFILIATE_ID }}
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
@@ -54,6 +56,9 @@ jobs:
         run: |
           echo "🗓️ 啟動【全球極限賽事預報與日程雷達】發布引擎..."
           python xgame_publisher.py "$CAT_INPUT" "$LANG_INPUT" "FORECAST"
+      - name: 🛡️ Verify Astro Build before Push
+        run: npm run build
+
 
       - name: Save & Commit Website Posts
         run: |

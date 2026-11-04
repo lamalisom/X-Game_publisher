@@ -57,6 +57,8 @@ jobs:
       - name: 🚀 執行純賽事新聞戰報生成 (Run News Publisher)
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          AMAZON_AFFILIATE_TAG: ${{ secrets.AMAZON_AFFILIATE_TAG || 'kait02bc-20' }}
+          AMAZON_AFFILIATE_ID: ${{ secrets.AMAZON_AFFILIATE_TAG || 'kait02bc-20' }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
           AMAZON_AFFILIATE_ID: ${{ secrets.AMAZON_AFFILIATE_ID }}
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
@@ -71,6 +73,9 @@ jobs:
         run: |
           echo "🔥 啟動【純即時賽事與選手新聞】發布引擎..."
           python xgame_publisher.py "$CAT_INPUT" "$LANG_INPUT" "NEWS"
+      - name: 🛡️ Verify Astro Build before Push
+        run: npm run build
+
 
       - name: 💾 自動提交並觸發 Cloudflare Pages 部署 (Commit & Push)
         run: |
