@@ -5,7 +5,7 @@ date: "2026-11-04T12:00:00"
 category: "SKATE"
 topic_type: "SPOT"
 draft: false
-cover_image: "https://pub-a1dfaa7bc52a4b1187e528bd4b2da12b.r2.dev/cards/xgame_20261104_skate.png"
+cover_image: ""https://pub-a1dfaa7bc52a4b1187e528bd4b2da12b.r2.dev/cards/xgame_20261104_skate.png"
 cover_image_source: "Official Spot / OSM"
 author: "Una (@Una_next)"
 city_tag: "CALIFORNIA"
