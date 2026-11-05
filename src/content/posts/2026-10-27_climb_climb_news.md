@@ -28,3 +28,9 @@ slug: "2026-10-27_climb_climb_news"
 ### 🛒 裝備焦點推薦
 
 👉 [點此前往 Amazon 查看推薦裝備: trad climbing cams helmet](https://www.amazon.com/s?k=trad%20climbing%20cams%20helmet&tag=) *(含聯盟連結 #ad)*
+
+
+---
+
+### 🏆 賽事最新結果速報
+👉 最新戰況直擊：[攀岩巔峰賽季前瞻：從極限力量訓練到生死邊緣的極地攀登實錄](/posts/2026-11-05_climb_global/)
