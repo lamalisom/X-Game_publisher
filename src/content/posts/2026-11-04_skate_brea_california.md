@@ -5,8 +5,8 @@ date: "2026-11-04T12:00:00"
 category: "SKATE"
 topic_type: "SPOT"
 draft: false
-cover_image: "https://pub-a1dfaa7bc52a4b1187e528bd4b2da12b.r2.dev/cards/xgame_20261104_skate.png"
-cover_image_source: "Official Spot / OSM"
+cover_image: "https://www.newlineskateparks.com/wp-content/uploads/2022/11/DJI_0158.jpg"
+cover_image_source: "New Line Skateparks Official Archive"
 author: "Una (@Una_next)"
 city_tag: "CALIFORNIA"
 featured: true
@@ -15,7 +15,7 @@ spot_info: {"name": "Brea Skate Park (Arovista Park)", "location": "500 W Elm St
 affiliate_products: [{"title": "街式滑板必備：耐磨板鞋與專業護具套裝", "subtitle": "Amazon 官方直送・滑手日常防護推薦", "search_term": "skateboard shoes helmet knee pads", "amazon_url": "https://www.amazon.com/s?k=skateboard+shoes+helmet+knee+pads&tag=kait02bc-20", "recommended_for": "在加州混凝土滑板場練習，抓地力優秀的生膠大底板鞋與通過安全認證的防撞頭盔是必不可少的基本裝備。", "badge_text": "Una 編輯推薦"}]
 ---
 
-![加州橘郡 Brea Skate Park](https://pub-a1dfaa7bc52a4b1187e528bd4b2da12b.r2.dev/cards/xgame_20261104_skate.png)
+![加州橘郡 Brea Skate Park 官方實景](https://www.newlineskateparks.com/wp-content/uploads/2022/11/DJI_0158.jpg)
 
 ### 📍 今日精選極限據點：Brea Skate Park（美國加州橘郡）
 
