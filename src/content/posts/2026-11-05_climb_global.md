@@ -73,3 +73,9 @@ tags: ["攀岩", "抱石", "BrittanyChadbourne", "殘障攀岩", "TomRandall", "
 ---
 
 🏷️ **熱門標籤**: #xGameRadar #攀岩 #抱石 #室內岩館 #天然岩場 #指力訓練 #BrittanyChadbourne #TomRandall #Huascaran
+
+
+---
+
+### 🏆 賽事最新結果速報
+👉 最新戰況直擊：[極限攀登兩週戰報狂飆四項紀錄與驚世無繩獨攀震撼全球攀岩界](/posts/2026-11-06_climb_climb_news/)
