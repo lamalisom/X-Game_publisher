@@ -5,7 +5,7 @@ date: "2026-11-05T08:30:00"
 category: "SNOW"
 topic_type: "SPOT"
 draft: false
-cover_image: "https://images.unsplash.com/photo-1546707012-0c9f63da0cb2?auto=format&fit=crop&w=1200&q=80"
+cover_image: "https://images.unsplash.com/photo-1640894439126-9985920b77c4?auto=format&fit=crop&w=1200&q=80"
 cover_image_source: "Unsplash / Korea Winter Skiing Collection"
 author: "Una (@Una_next)"
 city_tag: "GLOBAL"
@@ -13,8 +13,9 @@ featured: true
 gear_keyword: "low light yellow lens ski goggles snowboard wrist guards"
 tags: ["韓國滑雪", "芝山滑雪場", "首爾自由行", "單板滑雪", "雙板滑雪", "夜間滑雪", "雪場攻略"]
 ---
+cover_image: "https://images.unsplash.com/photo-1640894439126-9985920b77c4?auto=format&fit=crop&w=1200&q=80"
 
-![韓國芝山森林滑雪度假村實測](https://images.unsplash.com/photo-1546707012-0c9f63da0cb2?auto=format&fit=crop&w=1200&q=80)
+![韓國芝山森林滑雪度假村實測](https://images.unsplash.com/photo-1640894439126-9985920b77c4?auto=format&fit=crop&w=1200&q=80)
 
 > 💡 **編輯部透明聲明**：本篇攻略由 *xGame Radar* 編輯團隊結合韓國觀光公社、芝山度假村官方數據與首爾在板友第一手回饋整理核實，杜絕機器模板套話，提供最真實的自由行下場建議。
 
