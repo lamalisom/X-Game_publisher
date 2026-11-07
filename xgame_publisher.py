@@ -1,3 +1,77 @@
+
+def ai_fact_check_and_refine(post_data: dict, api_key: str) -> dict:
+    """
+    【AI 事實審查官】：在文章存檔前進行二次核對，杜絕時空錯位、虛構酒店、跨界裝備與模板垃圾
+    """
+    if not api_key:
+        return post_data
+
+    print("🕵️‍♂️ 啟動【AI 事實審查官】進行嚴格的事實核對與邏輯自檢...")
+    checker_prompt = f"""
+你是一位極度嚴苛的極限運動體育新聞總編輯兼事實查核官。
+請審查以下剛剛生成的文章草稿資料，並進行修正：
+
+【待審核資料】：
+標題: {post_data.get('title')}
+副標: {post_data.get('subtitle')}
+項目: {post_data.get('category')}
+主題: {post_data.get('topic_type')}
+城市標籤: {post_data.get('city_tag')}
+推薦裝備: {post_data.get('gear_keyword')}
+完整內文:
+{post_data.get('website_full_content') or post_data.get('content')}
+
+【審查與修正硬性紅線（必須嚴格執行）】：
+1. 嚴禁運動類別錯位：
+   - 若為攀岩（CLIMB/岩壁攀登），內文與裝備推薦絕對禁止出現「冰攀、冰鎬、冰爪（Ice climbing tools/crampons）」！必須修正為攀岩鞋、粉袋、頭盔或機械塞。
+   - 若為滑雪（SNOW），絕對禁止混入滑板或衝浪術語。
+2. 嚴禁實體屬性造假：
+   - 街頭店鋪（Skate Shop）絕不能描寫成擁有碗池的大型滑板場（Skatepark）！
+   - 公立社區公園絕不能捏造虛構的主題奢華酒店（如 "Skate Hotel"）！若周邊無名宿，直接改為大眾市區交通與生活機能建議。
+3. 嚴禁時空與地點錯配：
+   - 若城市標籤或網址涉及某一國家（如 KOREA），內文主題絕對不能變成其他國家（如西班牙或美國）！兩者必須完全一致。
+4. 徹底清除所有模板垃圾：
+   - 嚴禁出現「SPONSORED ADVERTISEMENT」、「(Google AdSense Ready)」等任何開發者佔位文字！
+
+請回傳 100% 修正後合規的 JSON 格式（嚴禁 markdown 外框）：
+{{
+  "title": "核實修正後的標題",
+  "subtitle": "核實修正後的副標",
+  "city_tag": "與內文地點 100% 相符的英文城市或國家",
+  "gear_keyword": "與該運動項目 100% 吻合的純英文裝備關鍵字",
+  "telegram_caption": "修正後的社群摘要",
+  "website_full_content": "修正後的完整 Markdown 內文（專業乾淨、無虛構事實）",
+  "content": "修正後的完整 Markdown 內文"
+}}
+"""
+    try:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
+        headers = {"Content-Type": "application/json"}
+        payload = {
+            "contents": [{"parts": [{"text": checker_prompt}]}],
+            "generationConfig": {"temperature": 0.2, "maxOutputTokens": 2048}
+        }
+        res = requests.post(url, headers=headers, json=payload, timeout=20)
+        if res.status_code == 200:
+            resp_txt = res.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
+            if resp_txt.startswith("```"):
+                resp_txt = re.sub(r"^```(?:json)?
+", "", resp_txt)
+                resp_txt = re.sub(r"
+```$", "", resp_txt)
+            verified_data = json.loads(resp_txt)
+            for k in ["title", "subtitle", "city_tag", "gear_keyword", "telegram_caption", "website_full_content", "content"]:
+                if k in verified_data and verified_data[k]:
+                    post_data[k] = verified_data[k]
+            print("✅ 【AI 事實審查官】自檢完畢：已自動過濾幻覺並糾正事實！")
+        else:
+            print(f"⚠️ AI 事實驗證略過 ({res.status_code})")
+    except Exception as e:
+        print(f"⚠️ AI 事實驗證連線略過: {e}")
+
+    return post_data
+
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
@@ -1042,6 +1116,8 @@ async def main_async():
     category = category_arg.strip().upper() if category_arg and category_arg.upper() != "AUTO" else random.choice(list(XGAME_CATEGORIES.keys()))
 
     post_data = generate_xgame_content(category_key=category, topic_type=topic_arg, target_lang=lang_arg)
+    api_key_check = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY") or ""
+    post_data = ai_fact_check_and_refine(post_data, clean_token_or_url(api_key_check))
     title = post_data.get("title", f"{category} 極限特刊")
     subtitle = post_data.get("subtitle", "")
     city_tag = post_data.get("city_tag", "GLOBAL")
