@@ -55,7 +55,9 @@ def ai_fact_check_and_refine(post_data: dict, api_key: str) -> dict:
         if res.status_code == 200:
             resp_txt = res.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
             if resp_txt.startswith("```"):
-                resp_txt = re.sub(r"^```(?:json)?
+                resp_txt = resp_txt.strip('`').strip()
+                if resp_txt.startswith('json'):
+                    resp_txt = resp_txt[4:].strip()
 ", "", resp_txt)
                 resp_txt = re.sub(r"
 ```$", "", resp_txt)
@@ -646,8 +648,9 @@ def generate_xgame_content(category_key="", topic_type="", topic_desc="", target
                     text_resp = res.json()["candidates"][0]["content"]["parts"][0]["text"]
                     clean_json_str = text_resp.strip()
                     if clean_json_str.startswith("```"):
-                        clean_json_str = re.sub(r"^```(?:json)?\n", "", clean_json_str)
-                        clean_json_str = re.sub(r"\n```$", "", clean_json_str)
+                        resp_txt = resp_txt.strip('`').strip()
+                        if resp_txt.startswith('json'):
+                            resp_txt = resp_txt[4:].strip()
 
                     data = json.loads(clean_json_str)
                     data["title"] = sanitize_single_line_text(data.get("title", ""))
