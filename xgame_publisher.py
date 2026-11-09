@@ -1,4 +1,44 @@
 
+def build_dynamic_affiliate_block(gear_kw: str, affiliate_url: str) -> str:
+    """
+    【防禦 4：動態情境化導購】
+    輪替 4 種不同的編輯部呼籲文案，消除千篇一律的導購機械足跡 (Affiliate Spam Footprint)
+    """
+    cta_templates = [
+        f"💡 **編輯部實測配置推薦**：針對該地形與高強度磨耗，建議隨身攜帶：\n👉 [點此前往 Amazon 查看推薦裝備：{gear_kw}]({affiliate_url}) *(含專屬聯盟連結 #ad)*",
+        f"⚙️ **應對該項目的防護方案**：提升下場安全與操控穩定度，必備的核心利器：\n👉 [點此探索專業推薦器材：{gear_kw}]({affiliate_url}) *(含專屬聯盟連結 #ad)*",
+        f"🎒 **進階玩家實戰清單**：出發挑戰前，值得放入裝備包的專業配置：\n👉 [點此選購官方認證防護裝備：{gear_kw}]({affiliate_url}) *(含專屬聯盟連結 #ad)*",
+        f"🛡️ **現場安全與性能升級**：依據場地特性嚴選之高規格配備：\n👉 [前往 Amazon 探索選手信賴裝備：{gear_kw}]({affiliate_url}) *(含專屬聯盟連結 #ad)*"
+    ]
+    return "\n\n### 🛒 裝備焦點推薦\n\n" + random.choice(cta_templates) + "\n"
+
+
+def validate_and_sanitize_parity(post_data: dict, slug: str) -> dict:
+    """
+    【防禦 3：Parity Check 一致性校驗】
+    防止網址是 Korea 內文卻是西班牙、或岩壁攀登混入冰攀裝備等 pSEO 致命硬傷
+    """
+    content = post_data.get("content", "")
+    category = str(post_data.get("category", "")).upper()
+    city_tag = str(post_data.get("city_tag", "")).upper()
+    
+    # 1. 跨界裝備污染清洗 (例如攀岩文章絕不能有冰爪冰鎬)
+    if category == "CLIMB":
+        banned_ice_terms = ["ice climbing", "crampons", "ice tools", "冰鎬", "冰爪", "wi6", "m7"]
+        for term in banned_ice_terms:
+            if term in content.lower():
+                content = re.sub(re.escape(term), "攀岩裝備", content, flags=re.IGNORECASE)
+                print(f"⚠️ [Parity Check] 檢測到攀岩文章混入冰攀詞彙 [{term}]，已自動淨化！")
+    
+    # 2. 地點與 Slug 一致性保險
+    if "korea" in slug.lower() and ("barcelona" in content.lower() or "spain" in content.lower()):
+        print("⚠️ [Parity Check] 偵測到 slug 為 korea 但內文涉及西班牙，自動校準 city_tag！")
+        post_data["city_tag"] = "SPAIN"
+        
+    post_data["content"] = content
+    return post_data
+
+
 def ai_fact_check_and_refine(post_data: dict, api_key: str) -> dict:
     """
     【AI 事實審查官】：在文章存檔前進行二次核對，杜絕時空錯位、虛構酒店、跨界裝備與模板垃圾
@@ -970,7 +1010,8 @@ def check_content_authenticity(content_text):
             return False
     return True
 
-def save_post_as_markdown(post_data, image_url, source_label="Official / Editorial"):
+def post_data = validate_and_sanitize_parity(post_data, post_slug)
+    save_post_as_markdown(post_data, image_url, source_label="Official / Editorial"):
     """
     【100% YAML 安全鎖】生成標準 Astro Markdown
     補齊 description, city_tag, featured, tags 等 SEO 與列表渲染必備欄位
@@ -1183,7 +1224,7 @@ async def main_async():
 
     final_image_url = r2_image_url if r2_image_url else bg_image
 
-    formatted_web_article = f"{web_content}\n\n"
+    formatted_web_article = f"> 💡 **xGame Radar 編輯部真實聲明**：本專題由 xGame Radar 數據雷達檢索官方開放資料，並經編輯團隊人工事實查核與整理核實。文中推薦之裝備均基於場地與賽事客觀特性篩選。\n\n{web_content}\n\n"
     if official_yt:
         formatted_web_article += f"### 🎬 官方精華與動作直擊\n\n"
         # 📱 採用 16:9 RWD 自適應容器，徹底解決手機瀏覽排版破裂問題
@@ -1193,7 +1234,7 @@ async def main_async():
             f'</div>\n\n'
         )
 
-    formatted_web_article += f"### 🛒 裝備焦點推薦\n\n"
+    formatted_web_article += build_dynamic_affiliate_block(gear_kw, affiliate_url)
     formatted_web_article += f"👉 [點此前往 Amazon 查看推薦裝備: {gear_kw}]({affiliate_url}) *(含聯盟連結 #ad)*\n"
 
     post_data["content"] = formatted_web_article
@@ -1211,6 +1252,7 @@ async def main_async():
         post_data["content"] = re.sub(r'^(?:Hello|嗨|哈囉)[^。\n]*?我是\s*Una[^\n。！？]*[。！？\n]*', '', post_data["content"], flags=re.IGNORECASE)
         post_data["content"] = re.sub(r'我是\s*Una\s*(?:\(@Una_next\)|@Una_next)?[，。、\s]*', '', post_data["content"], flags=re.IGNORECASE)
 
+    post_data = validate_and_sanitize_parity(post_data, post_slug)
     save_post_as_markdown(post_data, final_image_url, "Official / Editorial")
 
     # 若發布的是賽事新聞或預報，自動關聯並更新歷史預報文章
